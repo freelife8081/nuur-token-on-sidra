@@ -77,7 +77,7 @@
       color: #ccc;
       font-size: 1rem;
     }
-    .buy-btn {
+    .buy-btn, .add-btn {
       margin-top: 1.5rem;
       background: #ffd700;
       color: #121e29;
@@ -94,8 +94,15 @@
       background: #555;
       cursor: not-allowed;
     }
-    .buy-btn:hover:not(:disabled) {
+    .buy-btn:hover:not(:disabled),
+    .add-btn:hover {
       background: #e6c300;
+    }
+    #statusMessage {
+      margin-top: 1rem;
+      color: #fff;
+      line-height: 1.4;
+      word-break: break-word;
     }
 
     footer {
@@ -116,7 +123,7 @@
 <body>
 
   <header>
-    <img src="logo.png" alt="Nuur Token Logo" class="logo">
+    <img src="https://nuurtoken.site/logo.png" alt="Nuur Token Logo" class="logo">
     <button id="connectBtn" class="connect-btn">Connect Wallet</button>
   </header>
 
@@ -127,6 +134,8 @@
       <input type="number" id="sdaInput" min="1" max="100" step="1" placeholder="e.g. 10">
       <p>You will receive <strong><span id="nuurAmount">0</span> NUUR</strong></p>
       <button id="buyBtn" class="buy-btn" disabled>Buy NUUR</button>
+      <div id="statusMessage"></div>
+      <button id="addTokenBtn" class="add-btn" style="display:none;">Add NUUR to MetaMask</button>
     </div>
   </div>
 
@@ -136,18 +145,16 @@
   </footer>
 
   <script>
-    // Configuration
+    // Config
     const presaleAddress = '0x814bc34460590413664747336cCB5e54141cD8dA';
     const tokenAddress   = '0x3f2C99C23eE666096d2cFda162A4bFBcC4AE8de8';
     const presaleABI     = [{"inputs":[{"internalType":"address","name":"_noorToken","type":"address"},{"internalType":"address","name":"_devWallet","type":"address"}],"stateMutability":"nonpayable","type":"constructor"},{"inputs":[{"internalType":"address","name":"owner","type":"address"}],"name":"OwnableInvalidOwner","type":"error"},{"inputs":[{"internalType":"address","name":"account","type":"address"}],"name":"OwnableUnauthorizedAccount","type":"error"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"previousOwner","type":"address"},{"indexed":true,"internalType":"address","name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"buyer","type":"address"},{"indexed":false,"internalType":"uint256","name":"sdaAmount","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"noorAmount","type":"uint256"}],"name":"TokensPurchased","type":"event"},{"inputs":[],"name":"buyNoor","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[],"name":"devWallet","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"noorToken","outputs":[{"internalType":"contract IERC20","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"rate","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"renounceOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"newRate","type":"uint256"}],"name":"setRate","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"withdrawETH","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"withdrawNoor","outputs":[],"stateMutability":"nonpayable","type":"function"},{"stateMutability":"payable","type":"receive"}];
 
     let web3, accounts, presaleContract, rate;
 
+    // Connect wallet and fetch rate
     async function connectWallet() {
-      if (!window.ethereum) {
-        alert('Please install MetaMask!');
-        return;
-      }
+      if (!window.ethereum) return showStatus('Please install MetaMask!');
       web3 = new Web3(window.ethereum);
       try {
         accounts = await ethereum.request({ method: 'eth_requestAccounts' });
@@ -155,50 +162,51 @@
         presaleContract = new web3.eth.Contract(presaleABI, presaleAddress);
         rate = await presaleContract.methods.rate().call();
         document.getElementById('buyBtn').disabled = false;
-        updateCalculator(); // in case input already has value
+        updateCalculator();
       } catch (err) {
         console.error(err);
+        showStatus('Error connecting wallet.');
       }
     }
 
+    // Update NUUR amount display
     function updateCalculator() {
       const sda = parseFloat(document.getElementById('sdaInput').value) || 0;
       const nuur = rate ? (sda * parseInt(rate)) : 0;
       document.getElementById('nuurAmount').innerText = nuur.toLocaleString();
     }
 
+    // Display status below button
+    function showStatus(msg, isError = false) {
+      const el = document.getElementById('statusMessage');
+      el.style.color = isError ? '#ff4d4f' : '#fff';
+      el.innerHTML = msg;
+    }
+
+    // Handle buy
     async function buyTokens() {
       const sdaAmount = parseFloat(document.getElementById('sdaInput').value);
-      if (!accounts || !presaleContract) {
-        alert('Connect your wallet first!');
-        return;
-      }
+      if (!accounts || !presaleContract) return showStatus('Connect your wallet first!', true);
       if (!sdaAmount || sdaAmount < 1 || sdaAmount > 100) {
-        alert('Amount must be between 1 and 100 SDA.');
-        return;
+        return showStatus('Amount must be between 1 and 100 SDA.', true);
       }
-
       const value = web3.utils.toWei(sdaAmount.toString(), 'ether');
       try {
-        const tx = await presaleContract.methods.buyNoor().send({
-          from: accounts[0],
-          value
-        });
+        const tx = await presaleContract.methods.buyNoor().send({ from: accounts[0], value });
         const hash = tx.transactionHash;
         const url = `https://ledger.sidrachain.com/tx/${hash}`;
-        alert(
-          `Transaction successful! You bought ${(sdaAmount * parseInt(rate)).toLocaleString()} NUUR.\n` +
-          `Check it on the ledger:\n${url}`
+        showStatus(
+          `✅ Bought ${(sdaAmount * parseInt(rate)).toLocaleString()} NUUR!<br>` +
+          `View on ledger: <a href="${url}" target="_blank">${hash.slice(0,10)}…</a>`
         );
-        if (confirm('Add NUUR token to your MetaMask?')) {
-          await addTokenToWallet();
-        }
+        document.getElementById('addTokenBtn').style.display = 'block';
       } catch (err) {
         console.error(err);
-        alert('Transaction failed: ' + (err.message || 'Unknown error.'));
+        showStatus('Transaction failed: ' + (err.message || 'Unknown error'), true);
       }
     }
 
+    // Add token button
     async function addTokenToWallet() {
       try {
         const wasAdded = await ethereum.request({
@@ -206,23 +214,25 @@
           params: {
             type: 'ERC20',
             options: {
-              address: tokenAddress,
+              address: 0x3f2C99C23eE666096d2cFda162A4bFBcC4AE8de8,
               symbol: 'NUUR',
               decimals: 18,
-              image: window.location.origin + '/logo.png'
+              image: 'https://nuurtoken.site/logo.png'
             },
           },
         });
-        alert(wasAdded ? 'NUUR token added!' : 'Token not added.');
+        showStatus(wasAdded ? '✅ NUUR token added to MetaMask!' : 'Token addition failed.', !wasAdded);
       } catch (err) {
         console.error(err);
-        alert('Could not add token.');
+        showStatus('Failed to add token.', true);
       }
     }
 
-    document.getElementById('connectBtn').addEventListener('click', connectWallet);
+    // Listen for input change to update calculator
     document.getElementById('sdaInput').addEventListener('input', updateCalculator);
     document.getElementById('buyBtn').addEventListener('click', buyTokens);
+    document.getElementById('addTokenBtn').addEventListener('click', addTokenToWallet);
+    document.getElementById('connectBtn').addEventListener('click', connectWallet);
   </script>
 
 </body>
