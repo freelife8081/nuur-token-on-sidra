@@ -2,138 +2,58 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>NUUR Token Airdrop</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      font-family: 'Poppins', sans-serif;
-      background: linear-gradient(135deg, #0a0f14, #121e29);
-      color: #eee;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      min-height: 100vh;
-      padding: 2rem;
-    }
-    .logo { width: 80px; margin-bottom: 1rem; }
-    h1 {
-      color: #ffd700;
-      margin-bottom: 1rem;
-    }
-    .button {
-      background: #ffd700;
-      color: #121e29;
-      border: none;
-      padding: 1rem 2rem;
-      font-size: 1.2rem;
-      font-weight: 600;
-      border-radius: 50px;
-      cursor: pointer;
-      transition: background 0.3s;
-      margin: 0.5rem 0;
-    }
-    .button:hover { background: #e6c300; }
-    .button:disabled {
-      background: #555;
-      cursor: not-allowed;
-    }
-    .info {
-      margin: 1rem 0;
-      font-size: 1rem;
-      text-align: center;
-      line-height: 1.4;
-    }
-    footer {
-      margin-top: 2rem;
-      font-size: 0.9rem;
-      color: #ccc;
-      text-align: center;
-    }
-    footer a { color: #ffd700; text-decoration: none; }
-    footer a:hover { text-decoration: underline; }
-  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Nuur Airdrop Checker</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+  <script defer src="script.js"></script>
 </head>
 <body>
+  <header>
+    <img src="logo.png" alt="Nuur Logo" class="logo" />
+    <button id="connectBtn">Connect Wallet</button>
+  </header>
 
-  <img src="https://nuurtoken.site/logo.png" alt="NUUR Token Logo" class="logo">
-  <h1>NUUR Token Airdrop</h1>
+  <main>
+    <h1 class="animated">Check Nuur Airdrop Eligibility</h1>
+    <button id="checkEligibilityBtn" disabled>Check Eligibility</button>
+    
+    <!-- Airdrop eligibility instructions section -->
+    <section id="eligibilityInstructions">
+      <h2>How to Become Eligible for the Nuur Airdrop</h2>
+      <p>To be eligible for the Nuur Airdrop, you must meet the following criteria:</p>
+      <ul>
+        <li><strong>Step 1:</strong> You must have bought Nuur tokens during the presale market.</li>
+        <li><strong>Step 2:</strong> You must have held at least 500,000 Nuur tokens in your wallet for more than a month.</li>
+        <li><strong>Step 3:</strong> You must use the same wallet address that was used to purchase the tokens during the presale.</li>
+      </ul>
+      <p>If you meet all the above criteria, you can check your eligibility and claim your airdrop tokens!</p>
+    </section>
 
-  <button id="connectBtn" class="button">Connect Wallet</button>
+    <!-- Airdrop eligibility result -->
+    <div id="eligibilityResult" style="display:none;">
+      <h3>Your Airdrop Eligibility Status</h3>
+      <p id="eligibilityText"></p>
+    </div>
 
-  <div id="airdropArea" style="display:none; width:100%; max-width:400px; text-align:center;">
-    <p id="eligibilityMsg" class="info"></p>
-    <button id="claimBtn" class="button" style="display:none;">Claim Airdrop</button>
-    <div id="claimStatus" class="info"></div>
-  </div>
+    <p id="result"></p>
+    <button id="claimBtn" style="display:none;">Claim Airdrop</button>
+  </main>
 
   <footer>
-    <p><strong>Disclaimer:</strong> Only eligible wallets may claim. This airdrop is final.</p>
-    <p>Donate SDA: <a href="https://ledger.sidrachain.com/address/0x8F6FfB7B6BbfbBa563897B27FB784C5C5A8830E8" target="_blank">0x8F6FfB7B6BbfbBa563897B27FB784C5C5A8830E8</a></p>
+    <section class="footer-section">
+      <h3>About Us</h3>
+      <p>Nuur is a decentralized community-driven project on the Sidra Chain. Our mission is to reward long-term holders through fair airdrops.</p>
+    </section>
+    <section class="footer-section">
+      <h3>Community</h3>
+      <a href="https://twitter.com/NuurTokenSidra" target="_blank">Twitter</a>
+      <a href="https://t.me/NoorTokenCommunity_81" target="_blank">Telegram</a>
+    </section>
+    <section class="footer-section">
+      <h3>Donate Sidra</h3>
+      <p>0x767CA5453E12BbCC3859E4d05c868b07b24F675B</p>
+    </section>
   </footer>
-
-  <script>
-    const airdropAddress = '0x2B5dB4de40A5C6b6055F7a81764d02CD4c14F8eE'; // Replace with your deployed airdrop contract address
-    const airdropABI = [
-      { "inputs":[{"internalType":"address","name":"account","type":"address"}],"name":"isEligible","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function" },
-      { "inputs":[],"name":"claim","outputs":[],"stateMutability":"nonpayable","type":"function" }
-    ];
-
-    let web3, account, airdropContract;
-
-    async function connectWallet() {
-      if (!window.ethereum) {
-        alert('Please install MetaMask!');
-        return;
-      }
-      web3 = new Web3(window.ethereum);
-      try {
-        const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
-        account = accounts[0];
-        document.getElementById('connectBtn').innerText = 'Wallet Connected';
-        document.getElementById('connectBtn').disabled = true;
-        airdropContract = new web3.eth.Contract(airdropABI, airdropAddress);
-        document.getElementById('airdropArea').style.display = 'block';
-        checkEligibility();
-      } catch (err) {
-        console.error(err);
-      }
-    }
-
-    async function checkEligibility() {
-      const msgEl = document.getElementById('eligibilityMsg');
-      try {
-        const eligible = await airdropContract.methods.isEligible(account).call();
-        if (eligible) {
-          msgEl.innerText = '🎉 You are eligible for the airdrop!';
-          document.getElementById('claimBtn').style.display = 'inline-block';
-        } else {
-          msgEl.innerText = '❌ You are not eligible for this airdrop.';
-        }
-      } catch (err) {
-        console.error(err);
-        msgEl.innerText = 'Error checking eligibility.';
-      }
-    }
-
-    async function claimAirdrop() {
-      const statusEl = document.getElementById('claimStatus');
-      statusEl.innerText = '⏳ Claiming...';
-      try {
-        const tx = await airdropContract.methods.claim().send({ from: account });
-        const hash = tx.transactionHash;
-        statusEl.innerHTML = `✅ Claimed! <a href="https://ledger.sidrachain.com/tx/${hash}" target="_blank">View Transaction</a>`;
-        document.getElementById('claimBtn').disabled = true;
-      } catch (err) {
-        console.error(err);
-        statusEl.innerText = '❌ Claim failed. Try again later.';
-      }
-    }
-
-    document.getElementById('connectBtn').addEventListener('click', connectWallet);
-    document.getElementById('claimBtn').addEventListener('click', claimAirdrop);
-  </script>
 </body>
 </html>
