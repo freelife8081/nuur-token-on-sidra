@@ -1,274 +1,52 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Nuur Airdrop Checker</title>
-  <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+  <meta charset="UTF-8">
+  <title>Airdrop Postponed Alert</title>
   <style>
     body {
+      background-color: #fff;
       font-family: Arial, sans-serif;
-      background-color: #f8f9fa;
-      color: #333;
-      margin: 0;
-      padding: 0;
-    }
-
-    header {
-      background-color: #343a40;
-      color: white;
-      padding: 20px;
       display: flex;
-      justify-content: space-between;
       align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
     }
-
-    .logo {
-      height: 50px;
-    }
-
-    #connectBtn {
-      padding: 10px 20px;
-      background-color: #28a745;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-
-    #connectBtn:hover {
-      background-color: #218838;
-    }
-
-    main {
+    .alert {
+      background-color: #f8d7da;
+      border: 2px solid #f5c2c7;
+      padding: 30px;
+      max-width: 500px;
       text-align: center;
-      margin: 40px 10%;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      border-radius: 10px;
+      animation: shake 0.5s infinite alternate;
     }
-
-    h1 {
-      font-size: 2rem;
-      color: #007bff;
-    }
-
-    #eligibilityInstructions {
-      background-color: #e9ecef;
-      padding: 20px;
-      border-radius: 5px;
-      margin-top: 20px;
-      text-align: left;
-      max-width: 600px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-
-    #eligibilityInstructions ul {
-      list-style: none;
-      padding-left: 0;
-    }
-
-    #eligibilityInstructions li {
-      margin-bottom: 10px;
-    }
-
-    #checkEligibilityBtn {
-      background-color: #007bff;
-      color: white;
-      padding: 10px 20px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-
-    #checkEligibilityBtn:disabled {
-      background-color: #ccc;
-    }
-
-    #claimBtn {
-      background-color: #28a745;
-      color: white;
-      padding: 10px 20px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-
-    #claimBtn:hover {
-      background-color: #218838;
-    }
-
-    footer {
-      background-color: #343a40;
-      color: white;
-      padding: 20px;
-      margin-top: 40px;
-      text-align: center;
-    }
-
-    footer a {
-      color: white;
-      text-decoration: none;
-      margin: 0 10px;
-    }
-
-    footer .footer-section {
+    .alert h1 {
+      color: #721c24;
       margin-bottom: 20px;
+      font-size: 28px;
     }
-
-    #eligibilityResult {
-      background-color: #e9ecef;
-      padding: 20px;
-      border-radius: 5px;
-      margin-top: 20px;
-      text-align: center;
+    .alert p {
+      color: #721c24;
+      font-size: 18px;
+      line-height: 1.5;
+    }
+    @keyframes shake {
+      0% { transform: translateX(-2px); }
+      100% { transform: translateX(2px); }
     }
   </style>
-  <script>
-    const connectBtn = document.getElementById("connectBtn");
-    const checkBtn = document.getElementById("checkEligibilityBtn");
-    const claimBtn = document.getElementById("claimBtn");
-    const result = document.getElementById("result");
-    const eligibilityResult = document.getElementById("eligibilityResult");
-    const eligibilityText = document.getElementById("eligibilityText");
-    const networkStatus = document.getElementById("networkStatus");
-
-    const NUR_TOKEN_ADDRESS = "0x3f2C99C23eE666096d2cFda162A4bFBcC4AE8de8";
-    const AIRDROP_CONTRACT_ADDRESS = "0x2B5dB4de40A5C6b6055F7a81764d02CD4c14F8eE";
-    const AIRDROP_ABI = [{"inputs":[{"internalType":"address","name":"_nurTokenAddress","type":"address"},{"internalType":"uint256","name":"_claimStartTime","type":"uint256"},{"internalType":"uint256","name":"_claimEndTime","type":"uint256"},{"internalType":"address","name":"_presaleContract","type":"address"}],"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"AirdropClaimed","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"to","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"Withdrawn","type":"event"},{"inputs":[],"name":"claimAirdrop","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"claimEndTime","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"claimStartTime","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"hasClaimed","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"hasReceivedFromPresale","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"nurToken","outputs":[{"internalType":"contract IERC20","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"presaleContract","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"user","type":"address"}],"name":"setReceivedFromPresale","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"withdrawUnclaimed","outputs":[],"stateMutability":"nonpayable","type":"function"}];
-
-    let provider;
-    let signer;
-    let userAddress;
-
-    connectBtn.onclick = async () => {
-      if (window.ethereum) {
-        try {
-          await ethereum.request({ method: "eth_requestAccounts" });
-          provider = new ethers.providers.Web3Provider(window.ethereum);
-          signer = provider.getSigner();
-          userAddress = await signer.getAddress();
-          checkBtn.disabled = false;
-        } catch (err) {
-          console.error(err);
-          networkStatus.textContent = "Connection failed.";
-        }
-      } else {
-        alert("MetaMask not found!");
-      }
-    };
-
-    checkBtn.onclick = async () => {
-      eligibilityResult.style.display = "block";
-      eligibilityText.textContent = "Checking eligibility...";
-
-      try {
-        const nurContract = new ethers.Contract(
-          NUR_TOKEN_ADDRESS,
-          ["function balanceOf(address owner) view returns (uint256)"],
-          provider
-        );
-
-        const balance = await nurContract.balanceOf(userAddress);
-        const humanReadable = Number(ethers.utils.formatUnits(balance, 18));
-
-        let reward = 0;
-
-        if (humanReadable >= 500000 && humanReadable < 1000000) {
-          reward = 500;
-        } else if (humanReadable >= 1000000 && humanReadable <= 1500000) {
-          reward = 1000;
-        } else if (humanReadable >= 1600000) {
-          reward = 5000;
-        }
-
-        const airdropContract = new ethers.Contract(
-          AIRDROP_CONTRACT_ADDRESS,
-          AIRDROP_ABI,
-          provider
-        );
-        const hasClaimed = await airdropContract.hasClaimed(userAddress);
-        const hasBoughtFromPresale = await airdropContract.hasReceivedFromPresale(userAddress);
-
-        if (hasClaimed) {
-          eligibilityText.textContent = "You have already claimed your airdrop.";
-        } else if (!hasBoughtFromPresale) {
-          eligibilityText.textContent = "You need to have participated in the presale to be eligible.";
-        } else if (reward > 0) {
-          eligibilityText.textContent = `You are eligible for a ${reward} Nuur token airdrop!`;
-          claimBtn.style.display = "inline-block";
-        } else {
-          eligibilityText.textContent = "You are not eligible for the airdrop.";
-        }
-      } catch (err) {
-        console.error(err);
-        eligibilityText.textContent = "Error checking eligibility.";
-      }
-    };
-
-    claimBtn.onclick = async () => {
-      eligibilityText.textContent = "Claiming airdrop...";
-
-      try {
-        const airdropContract = new ethers.Contract(
-          AIRDROP_CONTRACT_ADDRESS,
-          AIRDROP_ABI,
-          signer
-        );
-        const tx = await airdropContract.claimAirdrop();
-        await tx.wait();
-        eligibilityText.textContent = "Airdrop claimed successfully!";
-      } catch (err) {
-        console.error(err);
-        eligibilityText.textContent = "Error claiming airdrop.";
-      }
-    };
-  </script>
 </head>
 <body>
-  <header>
-    <img src="logo.png" alt="Nuur Logo" class="logo" />
-    <button id="connectBtn">Connect Wallet</button>
-  </header>
 
-  <main>
-    <h1 class="animated">Check Nuur Airdrop Eligibility</h1>
-    <button id="checkEligibilityBtn" disabled>Check Eligibility</button>
-    
-    <!-- Airdrop eligibility instructions section -->
-    <section id="eligibilityInstructions">
-      <h2>How to Become Eligible for the Nuur Airdrop</h2>
-      <p>To be eligible for the Nuur Airdrop, you must meet the following criteria:</p>
-      <ul>
-        <li><strong>Step 1:</strong> You must have bought Nuur tokens during the presale market.</li>
-        <li><strong>Step 2:</strong> You must have held at least 500,000 Nuur tokens in your wallet for more than a month.</li>
-        <li><strong>Step 3:</strong> You must use the same wallet address that was used to purchase the tokens during the presale.</li>
-      </ul>
-      <p>If you meet all the above criteria, you can check your eligibility and claim your airdrop tokens!</p>
-    </section>
+<div class="alert">
+  <h1>!!! Airdrop Postponed !!!</h1>
+  <p>Due to a cyber attack, the airdrop has been postponed.  
+  <br>We will announce the new schedule once the situation is fully secured.  
+  <br>Thank you for your patience and support.</p>
+</div>
 
-    <!-- Airdrop eligibility result -->
-    <div id="eligibilityResult" style="display:none;">
-      <h3>Your Airdrop Eligibility Status</h3>
-      <p id="eligibilityText"></p>
-    </div>
-
-    <p id="result"></p>
-    <button id="claimBtn" style="display:none;">Claim Airdrop</button>
-  </main>
-
-  <footer>
-    <section class="footer-section">
-      <h3>About Us</h3>
-      <p>Nuur is a decentralized community-driven project on the Sidra Chain. Our mission is to reward long-term holders through fair airdrops.</p>
-    </section>
-    <section class="footer-section">
-      <h3>Community</h3>
-      <a href="https://twitter.com/NuurTokenSidra" target="_blank">Twitter</a>
-      <a href="https://t.me/NoorTokenCommunity_81" target="_blank">Telegram</a>
-    </section>
-    <section class="footer-section">
-      <h3>Donate Sidra</h3>
-      <p>0x767CA5453E12BbCC3859E4d05c868b07b24F675B</p>
-    </section>
-  </footer>
 </body>
 </html>
