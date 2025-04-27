@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Nuur Token – Sharia-Compliant Utility Token</title>
+  <link rel="icon" href="logo.png" type="image/x-icon">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #0a0f14, #121e29);
+      color: #eee;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    h1, h2 {
+      font-weight: 700;
+    }
+
+    .hero {
+      max-width: 900px;
+      margin: auto;
+      padding: 2rem;
+      text-align: center;
+    }
+
+    .logo {
+      width: 100px;
+      margin-bottom: 1rem;
+      animation: spin 20s linear infinite;
+      border-radius: 50;
+      object-fit: cover;
+    }
+
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to   { transform: rotate(360deg); }
+    }
+
+    .description {
+      font-size: 1.1rem;
+      margin-bottom: 2rem;
+      color: #ccc;
+    }
+
+    .token-info p {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid #333;
+      padding: 0.8rem;
+      margin: 0.4rem 0;
+      border-radius: 6px;
+    }
+
+    .btn, .whitepaper-link {
+      display: inline-block;
+      margin: 1rem 0.5rem;
+      background: linear-gradient(135deg, #0f0, #0c0);
+      color: #000;
+      font-weight: bold;
+      padding: 0.7rem 1.5rem;
+      border-radius: 50px;
+      text-decoration: none;
+      box-shadow: 0 4px 12px rgba(0,255,0,0.2);
+      transition: 0.3s;
+    }
+
+    .btn:hover, .whitepaper-link:hover {
+      transform: scale(1.05);
+      background: linear-gradient(135deg, #0c0, #090);
+    }
+
+    .contract-box {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid #555;
+      padding: 1rem;
+      border-radius: 10px;
+      color: #0f0;
+      font-family: monospace;
+      position: relative;
+      margin-top: 2rem;
+    }
+
+    .copy-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: #0f0;
+      color: #000;
+      border: none;
+      padding: 0.4rem 0.8rem;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .divider {
+      border: none;
+      height: 2px;
+      margin: 2rem auto;
+      width: 80%;
+      background: linear-gradient(to right, transparent, #0f0, transparent);
+    }
+
+    section {
+      margin: 3rem 0;
+      text-align: center;
+    }
+
+    footer {
+      background: #0a0f14;
+      color: #bbb;
+      text-align: center;
+      padding: 2rem 1rem;
+      font-size: 0.95rem;
+    }
+
+    footer a {
+      color: #0f0;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    a:hover {
+      opacity: 0.8;
+    }
+
+    .fade-in {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+    }
+
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body>
+  <div class="hero fade-in">
+    <img src="logo.png" alt="Nuur Token Logo" class="logo"/>
+    <h1>Nuur Token (NUR)</h1>
+    <p class="description">
+      NUR is a Sharia-compliant utility token built on the Sidra Chain, inspired by the Arabic word for "light."
+      It represents clarity, guidance, and ethical innovation in the blockchain space.
+      NUR empowers a new wave of decentralized applications aligned with Islamic values,
+      promoting transparency, fairness, and trust across the ecosystem.
+    </p>
+
+    <div class="token-info fade-in">
+      <p><strong>Total Supply:</strong> 100,000,000,000 NUR</p>
+      <p><strong>Presale Allocation:</strong> 50,000,000,000 NUR</p>
+      <p><strong>Liquidity Allocation:</strong> 20,000,000,000 NUR</p>
+      <p><strong>Charity Allocation:</strong> 15,000,000,000 NUR</p>
+      <p><strong>Developer Allocation:</strong> 15,000,000,000 NUR</p>
+      <p><strong>Presale Price:</strong> 1 NUR = 0.001 SDA</p>
+      <p><strong>Listing:</strong> NUR will be listed on Sidra DEX once SDA is listed</p>
+    </div>
+
+    <div class="fade-in">
+      <a href="presale.html" class="btn">Join Presale</a>
+      <a href="whitepaper.html" class="whitepaper-link" target="_blank">Read Whitepaper</a>
+    </div>
+
+    <div class="contract-box fade-in">
+      Contract Address:<br>
+      0x3f2C99C23eE666096d2cFda162A4bFBcC4AE8de8
+      <button class="copy-btn" onclick="copyContract()">Copy</button>
+    </div>
+
+    <hr class="divider fade-in">
+
+    <div class="fade-in" style="position: relative; width: 100%; padding-top: 56.25%;">
+      <iframe src="https://www.youtube.com/embed/ogYpHyGLyLE?si=1luU1GwDTZ5qw2hP"
+          title="YouTube video player"
+          style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          referrerpolicy="strict-origin-when-cross-origin"
+          allowfullscreen>
+      </iframe>
+    </div>
+
+    <section class="fade-in">
+      <h2>About Us</h2>
+      <p>
+        We are a team of blockchain developers, scholars, and entrepreneurs focused on building ethical decentralized finance solutions.
+        Nuur Token is our vision of a halal, transparent, and accessible digital future on the Sidra blockchain.
+      </p>
+    </section>
+
+    <section class="fade-in">
+      <h2>Contact</h2>
+      <p>Email: <a href="mailto:freelife8081@gmail.com">team@nuurtoken.org</a></p>
+      <p>Twitter: <a href="https://twitter.com/NuurTokenSidra" target="_blank">Follow our Twitter</a></p>
+      <p>Telegram: <a href="https://t.me/NoorTokenCommunity_81" target="_blank">Join our TG chat</a></p>
+    </section>
+  </div>
+
+  <footer class="fade-in">
+    <a href="https://ledger.sidrachain.com/address/0x767CA5453E12BbCC3859E4d05c868b07b24F675B">
+      Donate Sidra
+    </a>
+    <p style="margin-top: 1rem;">
+      Disclaimer: Trading cryptocurrencies involves risk. We are not responsible for any loss of funds. Please trade responsibly.
+    </p>
+  </footer>
+
+  <script>
+    function copyContract() {
+      const text = "0x3f2C99C23eE666096d2cFda162A4bFBcC4AE8de8";
+      navigator.clipboard.writeText(text).then(() => {
+        alert("Contract address copied!");
+      });
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, {
+      threshold: 0.1
+    });
+
+    document.querySelectorAll('.fade-in').forEach(el => {
+      observer.observe(el);
+    });
+  </script>
+</body>
+</html>
