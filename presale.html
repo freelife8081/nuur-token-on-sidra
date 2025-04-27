@@ -27,8 +27,7 @@
       background: #ffd700;
       color: #121e29;
       border: none;
-      padding: 1rem 2rem;
-      font-size: 1.2rem;
+      padding: 0.6rem 1.2rem;
       font-weight: 600;
       border-radius: 50px;
       cursor: pointer;
@@ -83,8 +82,8 @@
       background: #ffd700;
       color: #121e29;
       border: none;
-      padding: 1.2rem 2rem;
-      font-size: 1.3rem;
+      padding: 1rem;
+      font-size: 1.1rem;
       font-weight: 600;
       border-radius: 8px;
       cursor: pointer;
@@ -105,37 +104,7 @@
       line-height: 1.4;
       word-break: break-word;
     }
-    /* Transaction History */
-    #txnHistory {
-      margin-top: 2rem;
-      text-align: left;
-    }
-    #txnHistory h3 {
-      color: #ffd700;
-      margin-bottom: 0.5rem;
-      font-size: 1.1rem;
-    }
-    #txnHistoryList {
-      list-style: none;
-      max-height: 150px;
-      overflow-y: auto;
-      padding: 0;
-    }
-    #txnHistoryList li {
-      background: rgba(255,255,255,0.1);
-      padding: 0.8rem;
-      border-radius: 6px;
-      margin-bottom: 0.5rem;
-      font-size: 0.9rem;
-      line-height: 1.3;
-    }
-    #txnHistoryList a {
-      color: #ffd700;
-      text-decoration: none;
-    }
-    #txnHistoryList a:hover {
-      text-decoration: underline;
-    }
+
     footer {
       text-align: center;
       padding: 1rem;
@@ -148,6 +117,22 @@
     }
     footer a:hover {
       text-decoration: underline;
+    }
+    .txn-history {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 1.5rem;
+      margin-top: 2rem;
+      border-radius: 12px;
+      width: 90%;
+      max-width: 500px;
+      color: #fff;
+    }
+
+    .txn-item {
+      margin-bottom: 1rem;
+    }
+    .txn-item hr {
+      border: 1px solid #333;
     }
   </style>
 </head>
@@ -166,13 +151,12 @@
       <p>You will receive <strong><span id="nuurAmount">0</span> NUUR</strong></p>
       <button id="buyBtn" class="buy-btn" disabled>Buy NUUR</button>
       <div id="statusMessage"></div>
-      <button id="addTokenBtn" class="add-btn" style="display:none;">Add NUUR to MetaMask</button>
-
-      <!-- Transaction History -->
-      <div id="txnHistory">
+      <div id="txnHistory" class="txn-history">
         <h3>Transaction History</h3>
-        <ul id="txnHistoryList"></ul>
+        <!-- Transaction history will be rendered here -->
       </div>
+
+      <button id="addTokenBtn" class="add-btn" style="display:none;">Add NUUR to MetaMask</button>
     </div>
   </div>
 
@@ -185,10 +169,20 @@
     // Config
     const presaleAddress = '0x814bc34460590413664747336cCB5e54141cD8dA';
     const tokenAddress   = '0x3f2C99C23eE666096d2cFda162A4bFBcC4AE8de8';
-    const presaleABI     = [{"inputs":[{"internalType":"address","name":"_noorToken","type":"address"},{"internalType":"address","name":"_devWallet","type":"address"}],"stateMutability":"nonpayable","type":"constructor"},{"inputs":[{"internalType":"address","name":"owner","type":"address"}],"name":"OwnableInvalidOwner","type":"error"},{"inputs":[{"internalType":"address","name":"account","type":"address"}],"name":"OwnableUnauthorizedAccount","type":"error"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"previousOwner","type":"address"},{"indexed":true,"internalType":"address","name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"buyer","type":"address"},{"indexed":false,"internalType":"uint256","name":"sdaAmount","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"noorAmount","type":"uint256"}],"name":"TokensPurchased","type":"event"},{"inputs":[],"name":"buyNoor","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[],"name":"devWallet","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"noorToken","outputs":[{"internalType":"contract IERC20","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"rate","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"renounceOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"newRate","type":"uint256"}],"name":"setRate","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"withdrawETH","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"withdrawNoor","outputs":[],"stateMutability":"nonpayable","type":"function"},{"stateMutability":"payable","type":"receive"}];
+    const presaleABI     = [{"inputs":[{"internalType":"address","name":"_noorToken","type":"address"},{"internalType":"address","name":"_devWallet","type":"address"}],"stateMutability":"nonpayable","type":"constructor"},{"inputs":[{"internalType":"address","name":"owner","type":"address"}],"name":"OwnableInvalidOwner","type":"error"},{"inputs":[{"internalType":"address","name":"account","type":"address"}],"name":"OwnableUnauthorizedAccount","type":"error"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"previousOwner","type":"address"},{"indexed":true,"internalType":"address","name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"buyer","type":"address"},{"indexed":false,"internalType":"uint256","name":"sdaAmount","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"noorAmount","type":"uint256"}],"name":"TokensPurchased","type":"event"},{"inputs":[],"name":"buyNoor","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[],"name":"devWallet","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"noorToken","outputs":[{"internalType":"contract IERC20","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"rate","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"renounceOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"newRate","type":"uint256"}],"name":"setRate","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"withdrawETH","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"withdrawNoor","outputs":[],"stateMutability":"nonpayable","type":"function"},{"stateMutability":"payable","type":"receive"},  {
+    "anonymous": false,
+    "inputs": [
+      { "indexed": true, "internalType": "address", "name": "buyer", "type": "address" },
+      { "indexed": false, "internalType": "uint256", "name": "sdaAmount", "type": "uint256" },
+      { "indexed": false, "internalType": "uint256", "name": "noorAmount", "type": "uint256" }
+    ],
+    "name": "TokensPurchased",
+    "type": "event"
+  }];
 
     let web3, accounts, presaleContract, rate;
 
+    // Connect wallet and fetch rate
     async function connectWallet() {
       if (!window.ethereum) return showStatus('Please install MetaMask!');
       web3 = new Web3(window.ethereum);
@@ -201,22 +195,25 @@
         updateCalculator();
       } catch (err) {
         console.error(err);
-        showStatus('Error connecting wallet.', true);
+        showStatus('Error connecting wallet.');
       }
     }
 
+    // Update NUUR amount display
     function updateCalculator() {
       const sda = parseFloat(document.getElementById('sdaInput').value) || 0;
       const nuur = rate ? (sda * parseInt(rate)) : 0;
       document.getElementById('nuurAmount').innerText = nuur.toLocaleString();
     }
 
+    // Display status below button
     function showStatus(msg, isError = false) {
       const el = document.getElementById('statusMessage');
       el.style.color = isError ? '#ff4d4f' : '#fff';
       el.innerHTML = msg;
     }
 
+    // Handle buy
     async function buyTokens() {
       const sdaAmount = parseFloat(document.getElementById('sdaInput').value);
       if (!accounts || !presaleContract) return showStatus('Connect your wallet first!', true);
@@ -227,26 +224,19 @@
       try {
         const tx = await presaleContract.methods.buyNoor().send({ from: accounts[0], value });
         const hash = tx.transactionHash;
-        const nuurAmount = (sdaAmount * parseInt(rate)).toLocaleString();
         const url = `https://ledger.sidrachain.com/tx/${hash}`;
-
         showStatus(
-          `✅ Bought ${nuurAmount} NUUR!<br>` +
+          `✅ Bought ${(sdaAmount * parseInt(rate)).toLocaleString()} NUUR!<br>` +
           `View on ledger: <a href="${url}" target="_blank">${hash.slice(0,10)}…</a>`
         );
         document.getElementById('addTokenBtn').style.display = 'block';
-
-        // Add to history
-        const li = document.createElement('li');
-        li.innerHTML = `SDA: ${sdaAmount}, NUUR: ${nuurAmount} — <a href="${url}" target="_blank">${hash.slice(0,10)}…</a>`;
-        document.getElementById('txnHistoryList').prepend(li);
-
       } catch (err) {
         console.error(err);
         showStatus('Transaction failed: ' + (err.message || 'Unknown error'), true);
       }
     }
 
+    // Add token button
     async function addTokenToWallet() {
       try {
         const wasAdded = await ethereum.request({
@@ -254,7 +244,7 @@
           params: {
             type: 'ERC20',
             options: {
-              address: tokenAddress,
+              address: 0x3f2C99C23eE666096d2cFda162A4bFBcC4AE8de8,
               symbol: 'NUUR',
               decimals: 18,
               image: 'https://nuurtoken.site/logo.png'
@@ -268,10 +258,50 @@
       }
     }
 
-    document.getElementById('connectBtn').addEventListener('click', connectWallet);
+    // Listen for input change to update calculator
     document.getElementById('sdaInput').addEventListener('input', updateCalculator);
     document.getElementById('buyBtn').addEventListener('click', buyTokens);
     document.getElementById('addTokenBtn').addEventListener('click', addTokenToWallet);
+    document.getElementById('connectBtn').addEventListener('click', connectWallet);
+
+    // Event listener for TokensPurchased event
+    presaleContract.events.TokensPurchased({ fromBlock: 'latest' })
+      .on('data', (event) => {
+        const { buyer, sdaAmount, noorAmount } = event.returnValues;
+        addTransactionToHistory(buyer, sdaAmount, noorAmount);
+      })
+      .on('error', console.error);
+
+    const txnHistory = [];
+    
+    function addTransactionToHistory(buyer, sdaAmount, noorAmount) {
+      const txn = {
+        buyer,
+        sdaAmount: web3.utils.fromWei(sdaAmount, 'ether'),
+        noorAmount: noorAmount
+      };
+      txnHistory.push(txn);
+      renderTxnHistory();
+    }
+    
+    function renderTxnHistory() {
+      const historyContainer = document.getElementById('txnHistory');
+      historyContainer.innerHTML = ''; // Clear previous history
+      txnHistory.forEach((txn, index) => {
+        const txnElement = document.createElement('div');
+        txnElement.classList.add('txn-item');
+        txnElement.innerHTML = `
+        <p><strong>Transaction ${index + 1}</strong></p>
+        <p>Buyer: ${txn.buyer}</p>
+        <p>SDA Amount: ${txn.sdaAmount}</p>
+        <p>NUUR Amount: ${txn.noorAmount}</p>
+        <hr />
+        `;
+        historyContainer.appendChild(txnElement);
+      });
+    }
+
   </script>
+
 </body>
 </html>
