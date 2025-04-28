@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0 user-scalable=no"/>
   <title>Nuur Token – Sharia-Compliant Utility Token</title>
   <link rel="icon" href="logo.png" type="image/x-icon">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
@@ -161,8 +161,8 @@
     </div>
 
     <div class="fade-in">
-      <a href="presale.html" class="btn">Join Presale</a>
-      <a href="whitepaper.html" class="whitepaper-link" target="_blank">Project Whitepaper</a>
+      <a href="presale" class="btn">Join Presale</a>
+      <a href="whitepaper" class="whitepaper-link" target="_blank">Project Whitepaper</a>
       <a href="airdrop" class="btn">Claim airdrop</a>
     </div>
 
@@ -184,6 +184,75 @@
           allowfullscreen>
       </iframe>
     </div>
+    <div style="width: 100%; max-width: 500px; margin: 20px auto; background: #1a1a1a; border-radius: 12px; padding: 12px; box-shadow: 0 0 8px rgba(0, 255, 255, 0.2); font-family: 'Poppins', sans-serif; color: #fff; text-align: center;">
+  <h2 style="font-size: 1.4rem; margin-bottom: 12px;">NUR Sale Progress</h2>
+
+  <div style="width: 100%; background: #222; border-radius: 16px; overflow: hidden; height: 18px; position: relative; margin-bottom: 12px;">
+    <div id="progress-bar" style="height: 100%; width: 0%; background: linear-gradient(90deg, #00f0ff, #ff00f7, #00ff73); background-size: 300% 300%; animation: gradientMove 5s ease infinite, fillBar 2s ease forwards; border-radius: 16px 0 0 16px;"></div>
+  </div>
+
+  <div id="progress-text" style="font-size: 0.9rem; color: #ccc; letter-spacing: 0.5px;"></div>
+</div>
+
+<style>
+@keyframes gradientMove {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes fillBar {
+  from { width: 0%; }
+  to { width: var(--progress); }
+}
+
+@media (max-width: 768px) {
+  h2 {
+    font-size: 1.2rem;
+  }
+  #progress-bar {
+    height: 16px;
+  }
+  #progress-text {
+    font-size: 0.8rem;
+  }
+  .container {
+    padding: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  h2 {
+    font-size: 1rem;
+  }
+  #progress-bar {
+    height: 14px;
+  }
+  #progress-text {
+    font-size: 0.7rem;
+  }
+  .container {
+    padding: 8px;
+  }
+}
+</style>
+
+<script>
+// === CONFIGURABLE VALUES ===
+const totalSupply = 50_000_000_000; // 50 billion
+const boughtAmount = 29_000_700_000; // 700k manually update
+
+const progress = (boughtAmount / totalSupply) * 100;
+
+// Apply progress
+const progressBar = document.getElementById('progress-bar');
+progressBar.style.setProperty('--progress', progress.toFixed(6) + '%');
+
+// Update text
+const progressText = document.getElementById('progress-text');
+progressText.innerText = `Bought: ${boughtAmount.toLocaleString()} NUR of ${totalSupply.toLocaleString()} NUR (${progress.toFixed(6)}% completed)`;
+</script>
+
 
     <section class="fade-in">
       <h2>About Us</h2>
