@@ -10,11 +10,15 @@
       font-family: 'Segoe UI', sans-serif;
       background: linear-gradient(135deg, #000000, #1a1a1a);
       color: #ffd700;
-      overflow: hidden;
+      overflow-y: auto;
+      height: 100vh;
     }
     .container {
       text-align: center;
-      padding: 100px 20px;
+      padding: 50px 20px;
+      max-width: 100%;
+      margin-left: auto;
+      margin-right: auto;
     }
     h1 {
       font-size: 4em;
@@ -29,7 +33,8 @@
       }
     }
     .nav {
-      margin-top: 50px;
+      margin-top: 30px;
+      text-align: center;
     }
     .nav a {
       margin: 0 15px;
@@ -69,11 +74,39 @@
     .input-box {
       margin-top: 20px;
     }
+    .input-box select,
+    .input-box input {
+      padding: 10px;
+      font-size: 1.1em;
+      margin: 5px 0;
+      width: 100%;
+    }
+    #walletInfo {
+      margin-top: 20px;
+    }
+    #priceDisplay {
+      font-size: 1.2em;
+      margin-top: 10px;
+    }
+    #status {
+      margin-top: 10px;
+      color: #ff0000;
+    }
+    .link {
+      color: #ffd700;
+      font-size: 1.2em;
+      margin-top: 20px;
+      display: inline-block;
+    }
+    .link:hover {
+      color: #ffffff;
+    }
   </style>
 </head>
 <body>
   <div class="container">
     <h1>NUUR DEX</h1>
+    
     <div class="nav">
       <a href="about">About Us</a>
       <a href="donate">Donate</a>
@@ -112,6 +145,11 @@
       <div id="priceDisplay"></div>
       <button id="swapButton" class="btn">Swap</button>
       <p id="status"></p>
+    </div>
+
+    <!-- Link to Liquidity Page -->
+    <div class="box">
+      <a href="liquidity.html" class="link">Go to Liquidity Page</a>
     </div>
   </div>
 
