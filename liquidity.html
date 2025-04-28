@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liquidity | NuurDex</title>
+    <link rel="stylesheet" href="dex.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>NuurDex Liquidity</h1>
+            <p>Provide or remove liquidity to earn rewards on NuurDex</p>
+        </header>
+
+        <div class="wallet-section">
+            <button id="connect-wallet" onclick="connectWallet()">Connect Wallet</button>
+            <p id="wallet-address"></p>
+        </div>
+
+        <div class="liquidity-section">
+            <h2>Add Liquidity</h2>
+            <div class="liquidity-form">
+                <label for="token1">Token 1:</label>
+                <select id="token1" class="token-select">
+                    <option value="SDA">SDA</option>
+                    <option value="WSDA">WSDA</option>
+                    <option value="NUR">NUR</option>
+                </select>
+                <input type="number" id="amount1" placeholder="Amount" class="input-amount">
+                <br>
+                <label for="token2">Token 2:</label>
+                <select id="token2" class="token-select">
+                    <option value="SDA">SDA</option>
+                    <option value="WSDA">WSDA</option>
+                    <option value="NUR">NUR</option>
+                </select>
+                <input type="number" id="amount2" placeholder="Amount" class="input-amount">
+                <br>
+                <button onclick="addLiquidity()">Add Liquidity</button>
+            </div>
+
+            <h2>Remove Liquidity & Claim Fees</h2>
+            <div class="liquidity-form">
+                <label for="remove-token1">Token 1:</label>
+                <select id="remove-token1" class="token-select">
+                    <option value="SDA">SDA</option>
+                    <option value="WSDA">WSDA</option>
+                    <option value="NUR">NUR</option>
+                </select>
+                <input type="number" id="remove-amount1" placeholder="Amount" class="input-amount">
+                <br>
+                <label for="remove-token2">Token 2:</label>
+                <select id="remove-token2" class="token-select">
+                    <option value="SDA">SDA</option>
+                    <option value="WSDA">WSDA</option>
+                    <option value="NUR">NUR</option>
+                </select>
+                <input type="number" id="remove-amount2" placeholder="Amount" class="input-amount">
+                <br>
+                <button onclick="removeLiquidity()">Remove Liquidity</button>
+                <button onclick="claimFees()">Claim Fees</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.5.2/dist/web3.min.js"></script>
+    <script>
+        let web3;
+        let userAccount;
+        let uniswapRouter;
+        const routerABI = [{"inputs":[{"internalType":"address","name":"_WSDA","type":"address"},{"internalType":"address","name":"_NUR","type":"address"}],"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"fromToken","type":"address"},{"indexed":false,"internalType":"address","name":"toToken","type":"address"},{"indexed":false,"internalType":"uint256","name":"amountIn","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"amountOut","type":"uint256"}],"name":"SwapExecuted","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"token","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"TokensWithdrawn","type":"event"},{"inputs":[],"name":"NUR","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"WSDA","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"fromToken","type":"address"},{"internalType":"address","name":"toToken","type":"address"},{"internalType":"uint256","name":"amountIn","type":"uint256"},{"internalType":"uint256","name":"amountOutMin","type":"uint256"}],"name":"swapTokens","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[{"internalType":"address","name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"token","type":"address"},{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"withdrawTokens","outputs":[],"stateMutability":"nonpayable","type":"function"},{"stateMutability":"payable","type":"receive"}];  // Replace with your ABI
+        const routerAddress = '0x6F9796FBdc084EBeD6f6Ab16c3B8d2CA292D248f';  // Replace with your router contract address
+
+        // Initialize web3 and contract
+        async function initWeb3() {
+            if (window.ethereum) {
+                web3 = new Web3(window.ethereum);
+                try {
+                    await window.ethereum.enable();
+                    const accounts = await web3.eth.getAccounts();
+                    userAccount = accounts[0];
+                    document.getElementById('wallet-address').textContent = `Connected: ${userAccount}`;
+                    initUniswapRouter();
+                } catch (error) {
+                    console.error('User denied account access');
+                }
+            } else {
+                alert('Please install MetaMask!');
+            }
+        }
+
+        function initUniswapRouter() {
+            uniswapRouter = new web3.eth.Contract(routerABI, routerAddress);
+        }
+
+        async function connectWallet() {
+            await initWeb3();
+        }
+
+        // Function to add liquidity
+        async function addLiquidity() {
+            const token1 = document.getElementById('token1').value;
+            const token2 = document.getElementById('token2').value;
+            const amount1 = document.getElementById('amount1').value;
+            const amount2 = document.getElementById('amount2').value;
+
+            // Approve token transfers if needed before adding liquidity
+            // You will need to call the approve function on the token contracts to allow the router to transfer tokens on behalf of the user
+
+            const token1Address = token1 === "SDA" ? null : '0xE4095a910209D7BE03B55D02F40d4554B1666182';  // Replace with token contract address
+            const token2Address = token2 === "NUR" ? null : '0x3f2C99C23eE666096d2cFda162A4bFBcC4AE8de8';  // Replace with token contract address
+
+            if (token1 === "SDA") {
+                await uniswapRouter.methods.addLiquidityETH(
+                    token2Address,
+                    web3.utils.toWei(amount2, 'ether'),
+                    0, 0, userAccount, Math.floor(Date.now() / 1000) + 60 * 20
+                ).send({ from: userAccount, value: web3.utils.toWei(amount1, 'ether') });
+            } else if (token2 === "SDA") {
+                await uniswapRouter.methods.addLiquidityETH(
+                    token1Address,
+                    web3.utils.toWei(amount1, 'ether'),
+                    0, 0, userAccount, Math.floor(Date.now() / 1000) + 60 * 20
+                ).send({ from: userAccount, value: web3.utils.toWei(amount2, 'ether') });
+            } else {
+                await uniswapRouter.methods.addLiquidity(
+                    token1Address,
+                    token2Address,
+                    web3.utils.toWei(amount1, 'ether'),
+                    web3.utils.toWei(amount2, 'ether'),
+                    0, 0, userAccount, Math.floor(Date.now() / 1000) + 60 * 20
+                ).send({ from: userAccount });
+            }
+        }
+
+        // Function to remove liquidity and claim fees
+        async function removeLiquidity() {
+            const token1 = document.getElementById('remove-token1').value;
+            const token2 = document.getElementById('remove-token2').value;
+            const amount1 = document.getElementById('remove-amount1').value;
+            const amount2 = document.getElementById('remove-amount2').value;
+
+            const token1Address = token1 === "SDA" ? null : 'TOKEN1_ADDRESS';  // Replace with token contract address
+            const token2Address = token2 === "SDA" ? null : 'TOKEN2_ADDRESS';  // Replace with token contract address
+
+            // Assuming liquidity is being removed from a pool (handle LP tokens accordingly)
+            await uniswapRouter.methods.removeLiquidity(
+                token1Address,
+                token2Address,
+                web3.utils.toWei(amount1, 'ether'),
+                web3.utils.toWei(amount2, 'ether'),
+                0, 0, userAccount, Math.floor(Date.now() / 1000) + 60 * 20
+            ).send({ from: userAccount });
+        }
+
+        // Claim fees: Fees are automatically included when liquidity is removed
+        function claimFees() {
+            alert("Fees are automatically included when you withdraw liquidity.");
+        }
+    </script>
+</body>
+</html>
