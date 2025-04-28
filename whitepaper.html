@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>NUR Token Whitepaper</title>
+  <style>
+    /* General styles */
+    body {
+      margin: 0;
+      padding: 20px;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      background-size: 400% 400%;
+      animation: gradientBG 15s ease infinite;
+      color: #eee;
+      overflow-x: hidden;
+    }
+
+    .container {
+      max-width: 850px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.05);
+      padding: 30px;
+      border-radius: 16px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      animation: float 6s ease-in-out infinite;
+    }
+
+    h1, h2 {
+      text-align: center;
+      color: #00f0ff;
+    }
+
+    h1 {
+      margin-bottom: 25px;
+      font-size: 2.5rem;
+      text-shadow: 0 0 10px #00f0ff;
+    }
+
+    h2 {
+      margin-top: 40px;
+      margin-bottom: 20px;
+      font-size: 1.6rem;
+      color: #00d9ff;
+    }
+
+    p, li {
+      font-size: 1rem;
+      line-height: 1.8;
+      color: #ddd;
+    }
+
+    ul {
+      padding-left: 20px;
+      margin-bottom: 20px;
+    }
+
+    li::marker {
+      color: #00ff99;
+    }
+
+    /* Button styles */
+    .download-button {
+      display: block;
+      margin: 30px auto;
+      padding: 12px 24px;
+      background: linear-gradient(90deg, #00c6ff, #0072ff);
+      border: none;
+      border-radius: 50px;
+      color: white;
+      font-size: 1.1rem;
+      cursor: pointer;
+      text-align: center;
+      text-decoration: none;
+      transition: background 0.5s, transform 0.3s;
+      box-shadow: 0 4px 15px rgba(0, 198, 255, 0.5);
+    }
+
+    .download-button:hover {
+      background: linear-gradient(90deg, #0072ff, #00c6ff);
+      transform: scale(1.05);
+    }
+
+    /* Animations */
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    @keyframes float {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+      100% { transform: translateY(0px); }
+    }
+
+    /* Fade in on scroll */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 1s ease, transform 1s ease;
+    }
+
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        padding: 20px;
+      }
+      h1 {
+        font-size: 2rem;
+      }
+      h2 {
+        font-size: 1.4rem;
+      }
+      p, li {
+        font-size: 0.95rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h1 class="fade-in">NUR Token Whitepaper</h1>
+
+    <a href="whitepaper.pdf" download class="download-button fade-in">Download Whitepaper (PDF)</a>
+
+    <h2 class="fade-in">Introduction</h2>
+    <p class="fade-in">
+      Welcome to the future of decentralized finance. NUR Token is designed to enable fast, transparent, and secure digital transactions globally.
+    </p>
+
+    <h2 class="fade-in">Problem Statement</h2>
+    <p class="fade-in">
+      Traditional finance is slow, expensive, and often excludes many. NUR offers a decentralized solution to empower individuals with true financial freedom.
+    </p>
+
+    <h2 class="fade-in">Vision & Mission</h2>
+    <p class="fade-in">
+      Our vision is a world where digital value flows freely and safely. Our mission is to build a decentralized ecosystem that brings opportunities to everyone, everywhere.
+    </p>
+
+    <h2 class="fade-in">Tokenomics</h2>
+    <ul class="fade-in">
+      <li><strong>Total Supply:</strong> 50,000,000,000 NUR</li>
+      <li><strong>Presale:</strong> 30%</li>
+      <li><strong>Liquidity:</strong> 40%</li>
+      <li><strong>Team:</strong> 15%</li>
+      <li><strong>Marketing:</strong> 10%</li>
+      <li><strong>Reserve:</strong> 5%</li>
+    </ul>
+
+    <h2 class="fade-in">Roadmap</h2>
+    <ul class="fade-in">
+      <li><strong>Phase 1:</strong> Launch NUR Token, Whitepaper Release</li>
+      <li><strong>Phase 2:</strong> Public Presale, Listing on DEX</li>
+      <li><strong>Phase 3:</strong> CEX Listings, Staking Program</li>
+      <li><strong>Phase 4:</strong> Major Partnerships, Ecosystem Expansion</li>
+      <li><strong>Phase 5:</strong> Global Adoption & Community Governance</li>
+    </ul>
+
+    <h2 class="fade-in">Disclaimer</h2>
+    <p class="fade-in">
+      This whitepaper is not investment advice. Participating in the NUR project carries inherent risks. Please consult your financial advisor and do your own research.
+    </p>
+  </div>
+
+  <script>
+    // Fade in on scroll
+    const faders = document.querySelectorAll('.fade-in');
+
+    const appearOptions = {
+      threshold: 0.2,
+      rootMargin: "0px 0px -50px 0px"
+    };
+
+    const appearOnScroll = new IntersectionObserver(function(entries, observer) {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      });
+    }, appearOptions);
+
+    faders.forEach(fader => {
+      appearOnScroll.observe(fader);
+    });
+  </script>
+</body>
+</html>
