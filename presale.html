@@ -129,7 +129,7 @@
 
   <div class="presale-container">
     <div class="form-box">
-      <h2>Nuur Token Presale</h2>
+      <h2>Nuurcoin Presale</h2>
       <label for="sdaInput">Enter SDA Amount (1–1000):</label>
       <input type="number" id="sdaInput" min="1" max="1000" step="1" placeholder="e.g. 10">
       <p>You will receive <strong><span id="nuurAmount">0</span> NUUR</strong></p>
@@ -148,7 +148,7 @@
   <script>
     // Config
     const presaleAddress = '0x814bc34460590413664747336cCB5e54141cD8dA';
-    const tokenAddress   = '0x3f2C99C23eE666096d2cFda162A4bFBcC4AE8de8';
+    const tokenAddress   = '0x96b79E07D681a166a775d4ae8079d3A87B73f732';
     const presaleABI     = [{"inputs":[{"internalType":"address","name":"_noorToken","type":"address"},{"internalType":"address","name":"_devWallet","type":"address"}],"stateMutability":"nonpayable","type":"constructor"},{"inputs":[{"internalType":"address","name":"owner","type":"address"}],"name":"OwnableInvalidOwner","type":"error"},{"inputs":[{"internalType":"address","name":"account","type":"address"}],"name":"OwnableUnauthorizedAccount","type":"error"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"previousOwner","type":"address"},{"indexed":true,"internalType":"address","name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"buyer","type":"address"},{"indexed":false,"internalType":"uint256","name":"sdaAmount","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"noorAmount","type":"uint256"}],"name":"TokensPurchased","type":"event"},{"inputs":[],"name":"buyNoor","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[],"name":"devWallet","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"noorToken","outputs":[{"internalType":"contract IERC20","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"rate","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"renounceOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"newRate","type":"uint256"}],"name":"setRate","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"withdrawETH","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"withdrawNoor","outputs":[],"stateMutability":"nonpayable","type":"function"},{"stateMutability":"payable","type":"receive"},  {
     "anonymous": false,
     "inputs": [
@@ -224,7 +224,7 @@
           params: {
             type: 'ERC20',
             options: {
-              address: 0x3f2C99C23eE666096d2cFda162A4bFBcC4AE8de8,
+              address: 0x96b79E07D681a166a775d4ae8079d3A87B73f732,
               symbol: 'NUUR',
               decimals: 18,
             },
