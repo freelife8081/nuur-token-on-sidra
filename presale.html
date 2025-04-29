@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0 user-scalable=no"/>
   <title>NUUR Presale | Sidra Chain</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
@@ -82,7 +82,7 @@
         });
 
         const explorerLink = `https://ledger.sidrachain.com/tx/${txHash}`;
-        document.getElementById("statusMessage").innerHTML = `✅ Transaction sent. <a href="${explorerLink}" target="_blank" class="underline text-green-300">View on Ledger</a>`;
+        document.getElementById("statusMessage").innerHTML = `✅ Transaction sent. <a href="${explorerLink}" target="_blank" class="underline text-green-300">View on Explorer</a>`;
         await showContractBalance();
       } catch (err) {
         document.getElementById("statusMessage").innerText = "❌ Transaction failed.";
