@@ -269,7 +269,7 @@ progressText.innerText = `Bought: ${boughtAmount.toLocaleString()} NUR of ${tota
       <p>Telegram: <a href="https://t.me/NoorTokenCommunity_81" target="_blank">Join our TG chat</a></p>
     </section>
   </div>
-  <!-- Popup Div -->
+  <!-- Draggable Popup -->
 <div id="nuurPopup" style="
   position: fixed;
   bottom: 20px;
@@ -284,6 +284,7 @@ progressText.innerText = `Bought: ${boughtAmount.toLocaleString()} NUR of ${tota
   font-family: Arial, sans-serif;
   display: none;
   z-index: 9999;
+  cursor: move;
 ">
   <span onclick="dismissPopup()" style="
     position: absolute;
@@ -294,13 +295,70 @@ progressText.innerText = `Bought: ${boughtAmount.toLocaleString()} NUR of ${tota
     color: #aaa;
   ">✖</span>
 
-  <h4 style="margin: 0 0 10px; font-size: 18px;">📢 Nuurcoin Upgrade Complete!</h4>
+  <h4 id="popupHeader" style="margin: 0 0 10px; font-size: 18px;">📢 Nuurcoin Upgrade Complete!</h4>
   <p style="margin: 5px 0; font-size: 14px;">✅ Name changed: <strong>Nuur ➝ Nuurcoin (NUUR)</strong></p>
-  <p style="margin: 5px 0; font-size: 14px;">New CA: <strong>0x96b79E07D681a166a775d4ae8079d3A87B73f732</strong></p>
+  <p style="margin: 5px 0; font-size: 14px;">🔻 New CA: <strong>0x96b79E07D681a166a775d4ae8079d3A87B73f732</strong></p>
   <p style="margin: 5px 0; font-size: 14px;">🔻 Supply reduced: <strong>100B ➝ 10M</strong></p>
   <p style="margin: 5px 0; font-size: 14px;">🎉 New tokens have been distributed fairly.</p>
   <p style="margin: 5px 0; font-size: 14px;">🔥 Burn your old tokens — they are now useless.</p>
 </div>
+
+<!-- Script -->
+<script>
+  // Show the popup after 5 seconds
+  window.addEventListener('load', function () {
+    setTimeout(function () {
+      document.getElementById('nuurPopup').style.display = 'block';
+    }, 5000);
+  });
+
+  // Close popup
+  function dismissPopup() {
+    document.getElementById('nuurPopup').style.display = 'none';
+  }
+
+  // Make the popup draggable
+  dragElement(document.getElementById("nuurPopup"));
+
+  function dragElement(elmnt) {
+    const header = document.getElementById("popupHeader");
+    let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+    if (header) {
+      header.onmousedown = dragMouseDown;
+    }
+
+    function dragMouseDown(e) {
+      e = e || window.event;
+      e.preventDefault();
+      // get the mouse cursor position at startup
+      pos3 = e.clientX;
+      pos4 = e.clientY;
+      document.onmouseup = closeDragElement;
+      document.onmousemove = elementDrag;
+    }
+
+    function elementDrag(e) {
+      e = e || window.event;
+      e.preventDefault();
+      // calculate the new cursor position
+      pos1 = pos3 - e.clientX;
+      pos2 = pos4 - e.clientY;
+      pos3 = e.clientX;
+      pos4 = e.clientY;
+      // set the element's new position
+      elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
+      elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+      elmnt.style.bottom = "auto";
+      elmnt.style.right = "auto";
+    }
+
+    function closeDragElement() {
+      document.onmouseup = null;
+      document.onmousemove = null;
+    }
+  }
+</script>
+
 
 <!-- JavaScript -->
 <script>
