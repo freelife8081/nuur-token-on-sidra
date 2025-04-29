@@ -193,7 +193,7 @@
       }
       const value = web3.utils.toWei(sdaAmount.toString(), 'ether');
       try {
-        const tx = await presaleContract.methods.buyNoor().send({ from: accounts[0], value });
+        const tx = await presaleContract.methods.buyNuur().send({ from: accounts[0], value });
         const hash = tx.transactionHash;
         const url = `https://ledger.sidrachain.com/tx/${hash}`;
         showStatus(
