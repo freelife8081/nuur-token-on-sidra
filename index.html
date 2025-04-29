@@ -269,6 +269,54 @@ progressText.innerText = `Bought: ${boughtAmount.toLocaleString()} NUR of ${tota
       <p>Telegram: <a href="https://t.me/NoorTokenCommunity_81" target="_blank">Join our TG chat</a></p>
     </section>
   </div>
+  <!-- Popup Div -->
+<div id="nuurPopup" style="
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  max-width: 350px;
+  background-color: #1a1a1a;
+  color: #fff;
+  border-left: 5px solid #0af;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  font-family: Arial, sans-serif;
+  display: none;
+  z-index: 9999;
+">
+  <span onclick="dismissPopup()" style="
+    position: absolute;
+    top: 8px;
+    right: 12px;
+    cursor: pointer;
+    font-weight: bold;
+    color: #aaa;
+  ">✖</span>
+
+  <h4 style="margin: 0 0 10px; font-size: 18px;">📢 Nuurcoin Upgrade Complete!</h4>
+  <p style="margin: 5px 0; font-size: 14px;">✅ Name changed: <strong>Nuur ➝ Nuurcoin (NUUR)</strong></p>
+  <p style="margin: 5px 0; font-size: 14px;">New CA: <strong>0x96b79E07D681a166a775d4ae8079d3A87B73f732</strong></p>
+  <p style="margin: 5px 0; font-size: 14px;">🔻 Supply reduced: <strong>100B ➝ 10M</strong></p>
+  <p style="margin: 5px 0; font-size: 14px;">🎉 New tokens have been distributed fairly.</p>
+  <p style="margin: 5px 0; font-size: 14px;">🔥 Burn your old tokens — they are now useless.</p>
+</div>
+
+<!-- JavaScript -->
+<script>
+  // Show the popup after 5 seconds
+  window.addEventListener('load', function () {
+    setTimeout(function () {
+      document.getElementById('nuurPopup').style.display = 'block';
+    }, 5000);
+  });
+
+  // Dismiss the popup
+  function dismissPopup() {
+    document.getElementById('nuurPopup').style.display = 'none';
+  }
+</script>
+
 
   <footer class="fade-in">
     <a href="https://ledger.sidrachain.com/address/0x767CA5453E12BbCC3859E4d05c868b07b24F675B">
