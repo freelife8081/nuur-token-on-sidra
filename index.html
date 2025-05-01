@@ -183,6 +183,141 @@
           referrerpolicy="strict-origin-when-cross-origin"
           allowfullscreen>
       </iframe>
+      <div id="presaleContainer">
+    <h2>NUUR Presale Progress</h2>
+  
+    <p id="boughtAmount">Loading...</p>
+    <p id="boughtPercent">Loading...</p>
+    <p id="remainingTokens">Loading...</p>
+    <p id="countdown">Countdown: --</p>
+  
+    <div class="progressBar">
+      <div class="progressFill" id="progressFill"></div>
+    </div>
+  </div>
+  
+  <style>
+    body {
+      background-color: #000;
+      font-family: 'Segoe UI', sans-serif;
+      color: #0ff;
+      text-align: center;
+      padding: 50px;
+    }
+  
+    #presaleContainer {
+      background: #111;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 0 15px #0ff;
+      max-width: 500px;
+      margin: auto;
+    }
+  
+    h2 {
+      font-size: 28px;
+      margin-bottom: 20px;
+      color: #0ff;
+      text-shadow: 0 0 5px #0ff, 0 0 10px #0ff;
+    }
+  
+    #boughtAmount,
+    #boughtPercent,
+    #remainingTokens,
+    #countdown {
+      font-size: 20px;
+      margin: 10px 0;
+      color: #fff;
+      text-shadow: 0 0 5px #0ff;
+    }
+  
+    .progressBar {
+      width: 100%;
+      height: 25px;
+      background: #222;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 0 5px #0ff;
+      margin-top: 20px;
+    }
+  
+    .progressFill {
+      height: 100%;
+      background: linear-gradient(90deg, #0ff, #0f0, #0ff);
+      width: 0%;
+      border-radius: 20px;
+      transition: width 1s ease-in-out;
+      box-shadow: 0 0 10px #0ff, 0 0 20px #0f0;
+    }
+  </style>
+  
+  <script src="https://cdn.jsdelivr.net/npm/web3@1.10.0/dist/web3.min.js"></script>
+  <script>
+    const presaleAddress = "0x858024C3c8179Ed448A9133190f991cfA9873657"; // Replace with your real address
+    const abi = [
+      {
+        "constant": true,
+        "inputs": [],
+        "name": "nuurToken",
+        "outputs": [{ "name": "", "type": "address" }],
+        "type": "function"
+      }
+    ];
+  
+    const presaleEndDate = new Date("2025-07-01T23:59:59Z"); // Change to your presale end time
+  
+    async function showContractProgress() {
+      const web3 = new Web3("https://node.sidrachain.com");
+      const contract = new web3.eth.Contract(abi, presaleAddress);
+  
+      try {
+        const nuur = await contract.methods.nuurToken().call();
+        const nuurContract = new web3.eth.Contract([
+          { "constant": true, "inputs": [], "name": "decimals", "outputs": [{ "name": "", "type": "uint8" }], "type": "function" },
+          { "constant": true, "inputs": [{ "name": "account", "type": "address" }], "name": "balanceOf", "outputs": [{ "name": "", "type": "uint256" }], "type": "function" }
+        ], nuur);
+  
+        const decimals = await nuurContract.methods.decimals().call();
+        const balanceRaw = await nuurContract.methods.balanceOf(presaleAddress).call();
+        const balance = parseFloat(balanceRaw / 10 ** decimals);
+        const totalSupply = 5_000_000;
+        const bought = totalSupply - balance;
+        const percent = ((bought / totalSupply) * 100).toFixed(2);
+  
+        document.getElementById("boughtAmount").innerText = `${bought.toLocaleString()} / 5,000,000 NUUR bought`;
+        document.getElementById("boughtPercent").innerText = `${percent}% / 100% completed`;
+        document.getElementById("remainingTokens").innerText = `${balance.toLocaleString()} NUUR remaining`;
+        document.getElementById("progressFill").style.width = `${percent}%`;
+      } catch (err) {
+        console.error("Error fetching progress:", err);
+        document.getElementById("boughtAmount").innerText = "Unavailable";
+        document.getElementById("boughtPercent").innerText = "";
+        document.getElementById("remainingTokens").innerText = "";
+      }
+    }
+  
+    function updateCountdown() {
+      const now = new Date();
+      const diff = presaleEndDate - now;
+  
+      if (diff <= 0) {
+        document.getElementById("countdown").innerText = "Presale ended";
+        return;
+      }
+  
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hrs = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+      const secs = Math.floor((diff % (1000 * 60)) / 1000);
+  
+      document.getElementById("countdown").innerText =
+        `Countdown: ${days}d ${hrs}h ${mins}m ${secs}s`;
+    }
+  
+    showContractProgress();
+    setInterval(updateCountdown, 1000);
+  </script>
+  
     </div>
     <section class="fade-in">
       <h2>About Us</h2>
