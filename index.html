@@ -317,33 +317,47 @@
   position: fixed;
   bottom: 20px;
   right: 20px;
-  max-width: 350px;
-  background-color: #1a1a1a;
-  color: #fff;
-  border-left: 5px solid #0af;
-  padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-  font-family: Arial, sans-serif;
+  max-width: 90%;
+  width: 340px;
+  background: #121212;
+  color: #f1f1f1;
+  border-left: 6px solid #00bfff;
+  padding: 20px 20px 16px;
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+  font-family: 'Segoe UI', sans-serif;
   display: none;
   z-index: 9999;
-  cursor: move;
+  cursor: grab;
+  transition: transform 0.2s ease;
+  #nuurPopup:active {
+    cursor: grabbing;
+  }
 ">
+
   <span onclick="dismissPopup()" style="
     position: absolute;
-    top: 8px;
-    right: 12px;
+    top: 10px;
+    right: 14px;
     cursor: pointer;
+    font-size: 18px;
     font-weight: bold;
-    color: #aaa;
-  ">✖</span>
+    color: #999;
+    transition: color 0.2s ease;
+  " onmouseover="this.style.color='#f44'" onmouseout="this.style.color='#999'">✖</span>
 
-  <h4 id="popupHeader" style="margin: 0 0 10px; font-size: 18px;">📢 Nuurcoin Upgrade Complete!</h4>
-  <p style="margin: 5px 0; font-size: 14px;">✅ Name changed: <strong>Nuur ➝ Nuurcoin (NUUR)</strong></p>
-  <p style="margin: 5px 0; font-size: 14px;">🔻 New CA: <strong>0x003BEc2e6ef4369f9d968eCD288d31B59fD9c2CD</strong></p>
-  <p style="margin: 5px 0; font-size: 14px;">🔻 Supply reduced: <strong>100B ➝ 10M</strong></p>
-  <p style="margin: 5px 0; font-size: 14px;">🎉 New tokens have been distributed fairly.</p>
-  <p style="margin: 5px 0; font-size: 14px;">🔥 Burn your old tokens — they are now useless.</p>
+  <h4 id="popupHeader" style="
+    margin: 0 0 12px;
+    font-size: 17px;
+    font-weight: 600;
+    color: #00bfff;
+  ">📢 Nuurcoin Upgrade Complete!</h4>
+
+  <p style="margin: 8px 0; font-size: 14px;">✅ Name changed: <strong>Nuur ➝ Nuurcoin (NUUR)</strong></p>
+  <p style="margin: 8px 0; font-size: 14px;">🔻 New CA: <strong style="word-break: break-all;">0x003BEc2e6ef4369f9d968eCD288d31B59fD9c2CD</strong></p>
+  <p style="margin: 8px 0; font-size: 14px;">🔻 Supply reduced: <strong>100B ➝ 10M</strong></p>
+  <p style="margin: 8px 0; font-size: 14px;">🎉 New tokens have been distributed fairly.</p>
+  <p style="margin: 8px 0; font-size: 14px;">🔥 Burn your old tokens — they are now useless.</p>
 </div>
 
 <!-- Script -->
