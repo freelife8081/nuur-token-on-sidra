@@ -55,21 +55,21 @@
 
   <script>
     let userAddress;
-    const presaleAddress = "0x858024C3c8179Ed448A9133190f991cfA9873657"; // Replace with your contract
+    const presaleAddress = "0x858024C3c8179Ed448A9133190f991cfA9873657"; // Replace with your Sidra Chain contract address
     const rate = 1000;
-    const supportedChainId = "0x1"; // Replace with your desired chain ID. Example: 0x1 for Ethereum Mainnet
+    const supportedChainId = "0x17CD"; // Sidra Chain ID in hexadecimal
 
-    const abi = [{"inputs":[{"internalType":"address","name":"_nuurToken","type":"address"},{"internalType":"address","name":"_devWallet","type":"address"},{"internalType":"address","name":"initialOwner","type":"address"}],"stateMutability":"nonpayable","type":"constructor"},{"inputs":[{"internalType":"address","name":"owner","type":"address"}],"name":"OwnableInvalidOwner","type":"error"},{"inputs":[{"internalType":"address","name":"account","type":"address"}],"name":"OwnableUnauthorizedAccount","type":"error"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"to","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"NUURWithdrawn","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"previousOwner","type":"address"},{"indexed":true,"internalType":"address","name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"to","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"SDAWithdrawn","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"buyer","type":"address"},{"indexed":false,"internalType":"uint256","name":"sdaAmount","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"nuurAmount","type":"uint256"}],"name":"TokensPurchased","type":"event"},{"inputs":[],"name":"RATE","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"buyTokens","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[],"name":"devWallet","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"nuurToken","outputs":[{"internalType":"contract IERC20","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"renounceOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"newDevWallet","type":"address"}],"name":"updateDevWallet","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"withdrawNUUR","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"withdrawSDA","outputs":[],"stateMutability":"nonpayable","type":"function"},{"stateMutability":"payable","type":"receive"}]; // Replace with full ABI
+    const abi = [{"inputs":[{"internalType":"address","name":"_nuurToken","type":"address"},{"internalType":"address","name":"_devWallet","type":"address"},{"internalType":"address","name":"initialOwner","type":"address"}],"stateMutability":"nonpayable","type":"constructor"},{"inputs":[{"internalType":"address","name":"owner","type":"address"}],"name":"OwnableInvalidOwner","type":"error"},{"inputs":[{"internalType":"address","name":"account","type":"address"}],"name":"OwnableUnauthorizedAccount","type":"error"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"to","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"NUURWithdrawn","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"previousOwner","type":"address"},{"indexed":true,"internalType":"address","name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"to","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"SDAWithdrawn","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"buyer","type":"address"},{"indexed":false,"internalType":"uint256","name":"sdaAmount","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"nuurAmount","type":"uint256"}],"name":"TokensPurchased","type":"event"},{"inputs":[],"name":"RATE","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"buyTokens","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[],"name":"devWallet","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"nuurToken","outputs":[{"internalType":"contract IERC20","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"renounceOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"stateMutability":"nonpayable"},{"inputs":[{"internalType":"address","name":"newDevWallet","type":"address"}],"name":"updateDevWallet","outputs":[],"stateMutability":"nonpayable"}]; // Replace with full ABI for Sidra Chain
 
     const provider = window.ethereum;
 
     async function detectNetwork() {
-      if (!provider) return alert("Please install MetaMask!");
+      if (!provider) return alert("Please install a Web3 wallet like MetaMask!");
 
       try {
         const chainId = await provider.request({ method: "eth_chainId" });
         if (chainId !== supportedChainId) {
-          document.getElementById("statusMessage").innerText = `Unsupported network! Please switch to the Sidra network.`;
+          document.getElementById("statusMessage").innerText = `Wrong network! Please switch to Sidra Chain.`;
           await switchNetwork();
         } else {
           document.getElementById("statusMessage").innerText = `✅ Connected to Sidra Chain.`;
@@ -85,7 +85,7 @@
           method: "wallet_switchEthereumChain",
           params: [{ chainId: supportedChainId }],
         });
-        document.getElementById("statusMessage").innerText = `✅ Network switched successfully.`;
+        document.getElementById("statusMessage").innerText = `✅ Network switched to Sidra Chain successfully.`;
       } catch (switchError) {
         if (switchError.code === 4902) {
           try {
@@ -95,14 +95,14 @@
                 {
                   chainId: supportedChainId,
                   chainName: "Sidra Chain",
-                  rpcUrls: ["https://node.sidrachain.com"],
-                  nativeCurrency: { name: "Sidra Chain", symbol: "SDA", decimals: 18 },
-                  blockExplorerUrls: ["https://ledger.sidrachain.com"],
+                  rpcUrls: ["https://node.sidrachain.com"], // Sidra Chain RPC URL
+                  nativeCurrency: { name: "Sidra", symbol: "SDA", decimals: 18 },
+                  blockExplorerUrls: ["https://ledger.sidrachain.com"], // Sidra Chain block explorer URL
                 },
               ],
             });
           } catch (addError) {
-            console.error("Failed to add network:", addError);
+            console.error("Failed to add Sidra Chain network:", addError);
           }
         } else {
           console.error("Failed to switch network:", switchError);
@@ -111,7 +111,7 @@
     }
 
     async function connectWallet() {
-      if (!provider) return alert("Please install MetaMask!");
+      if (!provider) return alert("Please install a Web3 wallet like MetaMask!");
 
       try {
         const accounts = await provider.request({ method: "eth_requestAccounts" });
@@ -140,12 +140,12 @@
           params: [{
             from: userAddress,
             to: presaleAddress,
-            value: (sdaAmount * 1e18).toString(16),
+            value: (sdaAmount * 1e18).toString(16), // SDA has 18 decimals
           }],
         });
 
-        const explorerLink = `https://ledger.sidrachain.com/tx/${txHash}`;
-        document.getElementById("statusMessage").innerHTML = `✅ Transaction sent. <a href="${explorerLink}" target="_blank" class="underline text-green-300">View on Explorer</a>`;
+        const explorerLink = `https://ledger.sidrachain.com/tx/${txHash}`; // Sidra Chain block explorer
+        document.getElementById("statusMessage").innerHTML = `✅ Transaction successful. <a href="${explorerLink}" target="_blank" class="underline text-green-300">View on Explorer</a>`;
         await showContractBalance();
       } catch (err) {
         document.getElementById("statusMessage").innerText = "❌ Transaction failed.";
