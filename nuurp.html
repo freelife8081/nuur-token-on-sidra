@@ -3,135 +3,72 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0 user-scalable=no"/>
-  <title>NUUR Presale | Sidra Chain</title>
+  <title>nuurtoken.site/presale</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gradient-to-r from-indigo-900 to-purple-900 text-white min-h-screen flex items-center justify-center px-4">
-  <!-- Top-right Connect Wallet Button -->
+  <!-- Connect Wallet Button at the top-right -->
   <div class="absolute top-4 right-4">
-    <button onclick="connectWallet()" 
-            class="px-5 py-2 text-sm font-medium bg-indigo-600 text-white rounded-lg shadow-md hover:bg-indigo-700 transition focus:outline-none focus:ring-2 focus:ring-indigo-400">
+    <button onclick="connectWallet()"
+            class="px-5 py-2 bg-indigo-600 rounded-lg hover:bg-indigo-700 transition text-sm">
       Connect Wallet
     </button>
   </div>
 
   <div class="max-w-lg w-full bg-white/10 backdrop-blur-md shadow-lg rounded-2xl p-8 space-y-6">
-    <!-- Header Section -->
     <div class="text-center">
-      <img src="logo.png" alt="NUUR Logo" class="mx-auto h-16 w-16 mb-4" />
-      <h1 class="text-4xl font-extrabold text-white">NUUR Token Presale</h1>
-      <p class="text-sm text-gray-300 mt-2">1 NUUR = 0.001 SDA | 1000 NUUR per SDA</p>
+      <img src="logo.png" alt="NUUR Logo" class="mx-auto h-16 w-16 mb-2"/>
+      <h1 class="text-3xl font-bold">NUUR Token Presale</h1>
+      <p class="text-sm text-gray-300">1 NUUR = 0.001 SDA | 1000 NUUR per SDA</p>
     </div>
 
-    <!-- Contract Balance Section -->
-    <div class="bg-white/5 p-4 rounded-lg text-center">
-      <p class="text-sm font-medium text-gray-200">
-        $NUUR left to purchase: 
-        <span id="contractBalance" class="font-semibold text-white">Loading...</span> NUUR
-      </p>
+    <div class="text-sm text-gray-200 text-center mb-4">
+      $NUUR left to purchase: <span id="contractBalance">Loading...</span> NUUR
     </div>
 
-    <!-- Input Section -->
     <div>
-      <label for="sdaAmount" class="block mb-2 text-sm font-medium text-gray-200">Enter SDA Amount:</label>
+      <label class="block mb-2 text-sm font-medium">Enter SDA Amount:</label>
       <input id="sdaAmount" type="number" min="0" step="0.001" placeholder="e.g. 1"
-             class="w-full p-3 rounded-lg bg-white/20 text-white placeholder-gray-400 border border-white/30 focus:outline-none focus:ring-2 focus:ring-indigo-400"/>
-      <p class="mt-2 text-xs text-gray-300">You'll receive 
-        <span id="nuurEstimate" class="font-semibold text-indigo-300">0</span> NUUR
-      </p>
+             class="w-full p-3 rounded-lg bg-white/20 text-white border border-white/30 focus:outline-none"/>
+      <p class="mt-1 text-xs text-gray-300">You'll receive <span id="nuurEstimate">0</span> NUUR</p>
     </div>
 
-    <!-- Action Buttons -->
-    <div class="flex justify-center items-center space-x-4">
-      <button onclick="buyTokens()" 
-              class="w-full px-5 py-3 font-medium bg-green-600 text-white rounded-lg shadow-md hover:bg-green-700 transition focus:outline-none focus:ring-2 focus:ring-green-400">
+    <div class="flex justify-center items-center">
+      <button onclick="buyTokens()"
+              class="px-5 py-2 bg-green-600 rounded-lg hover:bg-green-700 transition">
         Buy NUUR
       </button>
     </div>
 
-    <!-- Status Message -->
     <div class="text-sm text-center mt-4 text-yellow-400" id="statusMessage"></div>
   </div>
 
   <script>
     let userAddress;
-    const presaleAddress = "0x858024C3c8179Ed448A9133190f991cfA9873657"; // Replace with your Sidra Chain contract address
+    const presaleAddress = "0x858024C3c8179Ed448A9133190f991cfA9873657"; // Replace with your contract
     const rate = 1000;
-    const supportedChainId = "0x17CD"; // Sidra Chain ID in hexadecimal
 
-    const abi = [{"inputs":[{"internalType":"address","name":"_nuurToken","type":"address"},{"internalType":"address","name":"_devWallet","type":"address"},{"internalType":"address","name":"initialOwner","type":"address"}],"stateMutability":"nonpayable","type":"constructor"},{"inputs":[{"internalType":"address","name":"owner","type":"address"}],"name":"OwnableInvalidOwner","type":"error"},{"inputs":[{"internalType":"address","name":"account","type":"address"}],"name":"OwnableUnauthorizedAccount","type":"error"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"to","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"NUURWithdrawn","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"previousOwner","type":"address"},{"indexed":true,"internalType":"address","name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"to","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"SDAWithdrawn","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"buyer","type":"address"},{"indexed":false,"internalType":"uint256","name":"sdaAmount","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"nuurAmount","type":"uint256"}],"name":"TokensPurchased","type":"event"},{"inputs":[],"name":"RATE","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"buyTokens","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[],"name":"devWallet","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"nuurToken","outputs":[{"internalType":"contract IERC20","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"renounceOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"newDevWallet","type":"address"}],"name":"updateDevWallet","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"withdrawNUUR","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"withdrawSDA","outputs":[],"stateMutability":"nonpayable","type":"function"},{"stateMutability":"payable","type":"receive"}]; // Replace with the full ABI for your contract
+    const abi = [{"inputs":[{"internalType":"address","name":"_nuurToken","type":"address"},{"internalType":"address","name":"_devWallet","type":"address"},{"internalType":"address","name":"initialOwner","type":"address"}],"stateMutability":"nonpayable","type":"constructor"},{"inputs":[{"internalType":"address","name":"owner","type":"address"}],"name":"OwnableInvalidOwner","type":"error"},{"inputs":[{"internalType":"address","name":"account","type":"address"}],"name":"OwnableUnauthorizedAccount","type":"error"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"to","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"NUURWithdrawn","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"previousOwner","type":"address"},{"indexed":true,"internalType":"address","name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"to","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"SDAWithdrawn","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"buyer","type":"address"},{"indexed":false,"internalType":"uint256","name":"sdaAmount","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"nuurAmount","type":"uint256"}],"name":"TokensPurchased","type":"event"},{"inputs":[],"name":"RATE","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"buyTokens","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[],"name":"devWallet","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"nuurToken","outputs":[{"internalType":"contract IERC20","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"renounceOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"newDevWallet","type":"address"}],"name":"updateDevWallet","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"withdrawNUUR","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"withdrawSDA","outputs":[],"stateMutability":"nonpayable","type":"function"},{"stateMutability":"payable","type":"receive"}]; // Replace with full ABI
+
     const provider = window.ethereum;
 
-    async function detectNetwork() {
-      if (!provider) return alert("Please install a Web3 wallet like MetaMask!");
-
-      try {
-        const chainId = await provider.request({ method: "eth_chainId" });
-        if (chainId !== supportedChainId) {
-          document.getElementById("statusMessage").innerText = `Wrong network detected. Switching to Sidra Chain...`;
-          await switchNetwork();
-        } else {
-          document.getElementById("statusMessage").innerText = `✅ Connected to Sidra Chain.`;
-        }
-      } catch (err) {
-        console.error("Network detection failed:", err);
-      }
-    }
-
-    async function switchNetwork() {
-      try {
-        // Attempt to switch to Sidra Chain
-        await provider.request({
-          method: "wallet_switchEthereumChain",
-          params: [{ chainId: supportedChainId }],
-        });
-        document.getElementById("statusMessage").innerText = `✅ Switched to Sidra Chain successfully.`;
-      } catch (switchError) {
-        // If the chain is not added to MetaMask, add it
-        if (switchError.code === 4902) {
-          try {
-            await provider.request({
-              method: "wallet_addEthereumChain",
-              params: [
-                {
-                  chainId: supportedChainId,
-                  chainName: "Sidra Chain",
-                  rpcUrls: ["https://node.sidrachain.com"], // Sidra Chain RPC URL
-                  nativeCurrency: { name: "Sidra", symbol: "SDA", decimals: 18 },
-                  blockExplorerUrls: ["https://ledger.sidrachain.com"], // Sidra Chain block explorer URL
-                },
-              ],
-            });
-            document.getElementById("statusMessage").innerText = `✅ Sidra Chain added and switched successfully.`;
-          } catch (addError) {
-            console.error("Failed to add Sidra Chain network:", addError);
-            document.getElementById("statusMessage").innerText = `❌ Failed to add Sidra Chain. Please add it manually in your wallet.`;
-          }
-        } else {
-          console.error("Failed to switch network:", switchError);
-          document.getElementById("statusMessage").innerText = `❌ Failed to switch network. Please switch manually to Sidra Chain.`;
-        }
-      }
-    }
-
     async function connectWallet() {
-      if (!provider) return alert("Please install a Web3 wallet like MetaMask!");
+      if (!provider) return alert("Please install MetaMask!");
 
       try {
         const accounts = await provider.request({ method: "eth_requestAccounts" });
         userAddress = accounts[0];
         document.getElementById("statusMessage").innerText = `Wallet: ${userAddress.slice(0, 6)}...${userAddress.slice(-4)}`;
-        await detectNetwork();
         await showContractBalance();
       } catch {
         document.getElementById("statusMessage").innerText = "Wallet connection failed.";
       }
     }
 
-    async function showContractBalance() {
-      // Implementation for showing the contract balance of NUUR tokens
-      document.getElementById("contractBalance").innerText = "Unavailable"; // Placeholder
-    }
+    document.getElementById("sdaAmount").addEventListener("input", function () {
+      const sda = parseFloat(this.value || "0");
+      document.getElementById("nuurEstimate").innerText = sda * rate;
+    });
 
     async function buyTokens() {
       const sdaAmount = parseFloat(document.getElementById("sdaAmount").value);
@@ -147,6 +84,7 @@
             value: (sdaAmount * 1e18).toString(16), // SDA has 18 decimals
           }],
         });
+
         const explorerLink = `https://ledger.sidrachain.com/tx/${txHash}`;
         document.getElementById("statusMessage").innerHTML = `✅ Transaction sent. <a href="${explorerLink}" target="_blank" class="underline text-green-300">View on Explorer</a>`;
         await showContractBalance();
@@ -155,10 +93,26 @@
       }
     }
 
-    window.onload = detectNetwork;
+    async function showContractBalance() {
+      if (!provider) return;
+      const web3 = new window.Web3(provider);
+      const contract = new web3.eth.Contract(abi, presaleAddress);
 
-    if (provider) {
-      provider.on("chainChanged", (chainId) => detectNetwork());
+      try {
+        const nuur = await contract.methods.nuurToken().call();
+        const nuurContract = new web3.eth.Contract([
+          { "constant": true, "inputs": [], "name": "decimals", "outputs": [{ "name": "", "type": "uint8" }], "type": "function" },
+          { "constant": true, "inputs": [{ "name": "account", "type": "address" }], "name": "balanceOf", "outputs": [{ "name": "", "type": "uint256" }], "type": "function" }
+        ], nuur);
+
+        const decimals = await nuurContract.methods.decimals().call();
+        const balance = await nuurContract.methods.balanceOf(presaleAddress).call();
+        const formatted = parseFloat(balance / 10 ** decimals).toLocaleString();
+
+        document.getElementById("contractBalance").innerText = formatted;
+      } catch {
+        document.getElementById("contractBalance").innerText = "Unavailable";
+      }
     }
   </script>
 
