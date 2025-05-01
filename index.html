@@ -173,84 +173,62 @@
     </div>
 
     <hr class="divider fade-in">
+    <div id="presaleContainer">
+      <h2>NUUR Presale Progress</h2>
 
-    <div class="fade-in" style="position: relative; width: 100%; padding-top: 56.25%;">
-      <iframe src="https://www.youtube.com/embed/ogYpHyGLyLE?si=1luU1GwDTZ5qw2hP"
-          title="YouTube video player"
-          style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
-          frameborder="0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-          referrerpolicy="strict-origin-when-cross-origin"
-          allowfullscreen>
-      </iframe>
+      <p id="boughtAmount">Loading...</p>
+      <p id="boughtPercent">Loading...</p>
+      <p id="remainingTokens">Loading...</p>
+      <p id="countdown">Countdown: --</p>
+      <div class="progressBar">
+        <div class="progressFill" id="progressFill"></div>
+      </div>
     </div>
-      <div id="presaleContainer">
-  <h2>NUUR Presale Progress</h2>
-
-  <p id="boughtAmount">Loading...</p>
-  <p id="boughtPercent">Loading...</p>
-  <p id="remainingTokens">Loading...</p>
-  <p id="countdown">Countdown: --</p>
-
-  <div class="progressBar">
-    <div class="progressFill" id="progressFill"></div>
-  </div>
-</div>
-
-<style>
-  body {
-    background-color: #000;
-    font-family: 'Segoe UI', sans-serif;
-    color: #0ff;
-    text-align: center;
-    padding: 20px;
-  }
-
-  #presaleContainer {
-    background: #111;
-    padding: 15px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px #0ff;
-    max-width: 350px; /* Reduced width */
-    margin: auto;
-  }
-
-  h2 {
-    font-size: 20px; /* Reduced font size */
-    margin-bottom: 15px;
-    color: #0ff;
-    text-shadow: 0 0 3px #0ff, 0 0 6px #0ff;
-  }
-
-  #boughtAmount,
-  #boughtPercent,
-  #remainingTokens,
-  #countdown {
-    font-size: 14px; /* Reduced font size */
-    margin: 5px 0;
-    color: #fff;
-    text-shadow: 0 0 3px #0ff;
-  }
-
-  .progressBar {
-    width: 100%;
-    height: 15px; /* Reduced height */
-    background: #222;
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 0 5px #0ff;
-    margin-top: 15px;
-  }
-
-  .progressFill {
-    height: 100%;
-    background: linear-gradient(90deg, #0ff, #0f0, #0ff);
-    width: 0%;
-    border-radius: 12px;
-    transition: width 1s ease-in-out;
-    box-shadow: 0 0 10px #0ff, 0 0 15px #0f0;
-  }
-</style>
+    <style>
+      #presaleContainer {
+        background: #111;
+        padding: 15px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px #0ff;
+        max-width: 350px; /* Reduced width */
+        margin: auto;
+      }
+      
+      h2 {
+        font-size: 20px; /* Reduced font size */
+        margin-bottom: 15px;
+        color: #0ff;
+        text-shadow: 0 0 3px #0ff, 0 0 6px #0ff;
+      }
+      
+      #boughtAmount,
+      #boughtPercent,
+      #remainingTokens,
+      #countdown {
+        font-size: 14px; /* Reduced font size */
+        margin: 5px 0;
+        color: #fff;
+        text-shadow: 0 0 3px #0ff;
+      }
+      
+      .progressBar {
+        width: 100%;
+        height: 15px; /* Reduced height */
+        background: #222;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 0 5px #0ff;
+        margin-top: 15px;
+      }
+      .progressFill {
+        height: 100%;
+        background: linear-gradient(90deg, #0ff, #0f0, #0ff);
+        width: 0%;
+        border-radius: 12px;
+        transition: width 1s ease-in-out;
+        box-shadow: 0 0 10px #0ff, 0 0 15px #0f0;
+      }
+    </style>
 
 <script src="https://cdn.jsdelivr.net/npm/web3@1.10.0/dist/web3.min.js"></script>
 <script>
