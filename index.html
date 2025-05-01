@@ -360,35 +360,53 @@
     document.getElementById('nuurPopup').style.display = 'none';
   }
 
-  // Make the popup draggable
+  // Make the popup draggable on both PC and mobile
   dragElement(document.getElementById("nuurPopup"));
 
   function dragElement(elmnt) {
     const header = document.getElementById("popupHeader");
     let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+
     if (header) {
       header.onmousedown = dragMouseDown;
+      header.ontouchstart = dragTouchStart;
     }
 
     function dragMouseDown(e) {
-      e = e || window.event;
       e.preventDefault();
-      // get the mouse cursor position at startup
       pos3 = e.clientX;
       pos4 = e.clientY;
       document.onmouseup = closeDragElement;
       document.onmousemove = elementDrag;
     }
 
-    function elementDrag(e) {
-      e = e || window.event;
+    function dragTouchStart(e) {
       e.preventDefault();
-      // calculate the new cursor position
+      pos3 = e.touches[0].clientX;
+      pos4 = e.touches[0].clientY;
+      document.ontouchend = closeTouchDragElement;
+      document.ontouchmove = elementTouchDrag;
+    }
+
+    function elementDrag(e) {
+      e.preventDefault();
       pos1 = pos3 - e.clientX;
       pos2 = pos4 - e.clientY;
       pos3 = e.clientX;
       pos4 = e.clientY;
-      // set the element's new position
+      moveElement();
+    }
+
+    function elementTouchDrag(e) {
+      e.preventDefault();
+      pos1 = pos3 - e.touches[0].clientX;
+      pos2 = pos4 - e.touches[0].clientY;
+      pos3 = e.touches[0].clientX;
+      pos4 = e.touches[0].clientY;
+      moveElement();
+    }
+
+    function moveElement() {
       elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
       elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
       elmnt.style.bottom = "auto";
@@ -399,22 +417,11 @@
       document.onmouseup = null;
       document.onmousemove = null;
     }
-  }
-</script>
 
-
-<!-- JavaScript -->
-<script>
-  // Show the popup after 5 seconds
-  window.addEventListener('load', function () {
-    setTimeout(function () {
-      document.getElementById('nuurPopup').style.display = 'block';
-    }, 5000);
-  });
-
-  // Dismiss the popup
-  function dismissPopup() {
-    document.getElementById('nuurPopup').style.display = 'none';
+    function closeTouchDragElement() {
+      document.ontouchend = null;
+      document.ontouchmove = null;
+    }
   }
 </script>
 
