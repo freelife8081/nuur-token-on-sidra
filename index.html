@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0 user-scalable=no"/>
-  <title>Nuur Coin – Sharia-Compliant Utility Token</title>
-  <link rel="icon" href="logo.png" type="image/x-icon">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nuur Coin – Loading</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
   <style>
     body {
@@ -12,197 +11,32 @@
       padding: 0;
       font-family: 'Poppins', sans-serif;
       background: linear-gradient(135deg, #0a0f14, #121e29);
-      color: #eee;
-      line-height: 1.6;
-      overflow-x: hidden;
+      color: #FFD700;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
     }
 
-    h1, h2 {
-      font-weight: 700;
-    }
-
-    .hero {
-      max-width: 900px;
-      margin: auto;
-      padding: 2rem;
+    #loader {
       text-align: center;
+      animation: fadeIn 1s ease-in, fadeOut 1s ease-out 9s forwards;
     }
 
-    .logo {
-      width: 100px;
-      margin-bottom: 1rem;
-      animation: spin 20s linear infinite;
-      border-radius: 50;
-      object-fit: cover;
+    #loader img {
+      width: 150px;
+      height: auto;
+      margin-bottom: 20px;
+      animation: pulse 2s infinite;
     }
 
-    @keyframes spin {
-      from { transform: rotate(0deg); }
-      to   { transform: rotate(360deg); }
+    #loader p {
+      font-size: 18px;
+      margin: 0;
     }
 
-    .description {
-      font-size: 1.1rem;
-      margin-bottom: 2rem;
-      color: #ccc;
-    }
-
-    .token-info p {
-      background: rgba(255,255,255,0.05);
-      border: 1px solid #333;
-      padding: 0.8rem;
-      margin: 0.4rem 0;
-      border-radius: 6px;
-    }
-
-    .btn, .whitepaper-link {
-      display: inline-block;
-      margin: 1rem 0.5rem;
-      background: linear-gradient(135deg, #0f0, #0c0);
-      color: #000;
-      font-weight: bold;
-      padding: 0.7rem 1.5rem;
-      border-radius: 50px;
-      text-decoration: none;
-      box-shadow: 0 4px 12px rgba(0,255,0,0.2);
-      transition: 0.3s;
-    }
-
-    .btn:hover, .whitepaper-link:hover {
-      transform: scale(1.05);
-      background: linear-gradient(135deg, #0c0, #090);
-    }
-
-    .contract-box {
-      background: rgba(255,255,255,0.05);
-      border: 1px solid #555;
-      padding: 1rem;
-      border-radius: 10px;
-      color: #0f0;
-      font-family: monospace;
-      position: relative;
-      margin-top: 2rem;
-    }
-
-    .copy-btn {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      background: #0f0;
-      color: #000;
-      border: none;
-      padding: 0.4rem 0.8rem;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-
-    .divider {
-      border: none;
-      height: 2px;
-      margin: 2rem auto;
-      width: 80%;
-      background: linear-gradient(to right, transparent, #0f0, transparent);
-    }
-
-    section {
-      margin: 3rem 0;
-      text-align: center;
-    }
-
-    footer {
-      background: #0a0f14;
-      color: #bbb;
-      text-align: center;
-      padding: 2rem 1rem;
-      font-size: 0.95rem;
-    }
-
-    footer a {
-      color: #0f0;
-      text-decoration: none;
-      font-weight: bold;
-    }
-
-    a:hover {
-      opacity: 0.8;
-    }
-
-    .fade-in {
-      opacity: 0;
-      transform: translateY(20px);
-      transition: opacity 0.8s ease-out, transform 0.8s ease-out;
-    }
-
-    .fade-in.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  </style>
-</head>
-<body>
-  <!-- Loading Screen -->
-  <div id="loader" style="
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: #0a0f14;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    z-index: 9999;
-    opacity: 0;
-    animation: fadeIn 1s forwards;
-  ">
-    <!-- Animated SVG -->
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none" style="
-      width: 150px; 
-      height: 150px; 
-      animation: spin 2s linear infinite;
-    ">
-      <circle cx="100" cy="100" r="90" stroke="#FFD700" stroke-width="10" />
-      <path d="M100 40 L130 100 L70 100 Z" fill="#FFD700" />
-      <text x="50%" y="55%" text-anchor="middle" fill="#FFD700" font-family="Poppins, sans-serif" font-size="50px">N</text>
-    </svg>
-    <!-- Loading Text -->
-    <p style="margin-top: 20px; font-size: 20px; color: #FFD700;">Welcome to NuurCoin </p>
-    <p>We wish you financial success</p>
-    <p style="margin-top: 20px; font-size: 20px; color: #FFD600; font-family: sans-serif;">Please wait as we load the screen for you</p>
-  </div>
-
-  <!-- JavaScript -->
-  <script>
-    // Wait for the DOM to load
-    window.addEventListener('load', function () {
-      // Remove the loader after 5 seconds
-      setTimeout(() => {
-        const loader = document.getElementById('loader');
-        loader.style.animation = "fadeOut 1s forwards"; // Trigger fade-out animation
-
-        // After fade-out animation, hide the loader and show main content
-        loader.addEventListener('animationend', () => {
-          loader.style.display = 'none';
-          const mainContent = document.getElementById('main-content');
-          mainContent.style.display = 'block';
-          mainContent.style.animation = "fadeIn 1s forwards"; // Trigger fade-in animation for main content
-        });
-      }, 7000);
-    });
-  </script>
-
-  <!-- CSS for Animations -->
-  <style>
-    @keyframes spin {
-      from {
-        transform: rotate(0deg);
-      }
-      to {
-        transform: rotate(360deg);
-      }
-    }
-
+    /* Keyframes for animations */
     @keyframes fadeIn {
       from {
         opacity: 0;
@@ -220,339 +54,31 @@
         opacity: 0;
       }
     }
+
+    @keyframes pulse {
+      0%, 100% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.1);
+      }
+    }
   </style>
-  <div class="hero fade-in">
-    <img src="logo.png" alt="Nuur Token Logo" class="logo"/>
-    <h1>Nuur Coin (NUUR)</h1>
-    <p class="description">
-      NUUR is a Sharia-compliant utility token built on the Sidra Chain.
-      It represents clarity, guidance, and ethical innovation in the blockchain space.
-      NUUR empowers a new wave of decentralized applications aligned with Islamic values,
-      promoting transparency, fairness, and trust across the ecosystem.
-    </p>
-
-    <div class="token-info fade-in">
-      <p><strong>Total Supply:</strong> 10,000,000</p>
-      <p><strong>Presale Allocation:</strong> 5,000,000</p>
-      <p><strong>Liquidity Allocation:</strong> 2,000,000</p>
-      <p><strong>Community Airdrop:</strong> 1,000,000</p>
-      <p><strong>Founders Allocation:</strong> 2,000,000</p>
-      <p><strong>Presale Price:</strong> 1 NUR = 0.001 SDA</p>
-      <p><strong>Presale fund wallet:</strong><a href="https://ledger.sidrachain.com/address/0x8d336F633c287192626E6912cb45bdBe697902C9" style="text-decoration:none; color: white; background-color:red;" target="_blank"> View wallet</a></p>
-      <p><strong>Listing:</strong> NUR will be listed on Sidra DEX once SDA is listed</p>
-    </div>
-
-    <div class="fade-in">
-      <a href="presale" class="btn">Join Presale</a>
-      <a href="whitepaper" class="whitepaper-link" target="_blank">Project Whitepaper</a>
-      <a href="https://www.sidrachain.com/swap" class="btn" target=_blank>Trade on SidraSwap(Coming soon)</a>
-    </div>
-
-    <div class="contract-box fade-in">
-      Contract Address:<br>
-      0x003BEc2e6ef4369f9d968eCD288d31B59fD9c2CD
-      <button class="copy-btn" onclick="copyContract()">Copy</button>
-    </div>
-
-    <hr class="divider fade-in">
-    <div id="presaleContainer">
-      <h2>NUUR Presale Progress</h2>
-
-      <p id="boughtAmount">Loading...</p>
-      <p id="boughtPercent">Loading...</p>
-      <p id="remainingTokens">Loading...</p>
-      <p id="countdown">Presale ends in: --</p>
-      <div class="progressBar">
-        <div class="progressFill" id="progressFill"></div>
-      </div>
-    </div>
-    <style>
-      #presaleContainer {
-        background: #111;
-        padding: 15px;
-        border-radius: 8px;
-        box-shadow: 0 0 10px #0ff;
-        max-width: 350px; /* Reduced width */
-        margin: auto;
-      }
-      
-      h2 {
-        font-size: 20px; /* Reduced font size */
-        margin-bottom: 15px;
-        color: #0ff;
-        text-shadow: 0 0 3px #0ff, 0 0 6px #0ff;
-      }
-      
-      #boughtAmount,
-      #boughtPercent,
-      #remainingTokens,
-      #countdown {
-        font-size: 14px; /* Reduced font size */
-        margin: 5px 0;
-        color: #fff;
-        text-shadow: 0 0 3px #0ff;
-      }
-      
-      .progressBar {
-        width: 100%;
-        height: 15px; /* Reduced height */
-        background: #222;
-        border-radius: 12px;
-        overflow: hidden;
-        box-shadow: 0 0 5px #0ff;
-        margin-top: 15px;
-      }
-      .progressFill {
-        height: 100%;
-        background: linear-gradient(90deg, #0ff, #0f0, #0ff);
-        width: 0%;
-        border-radius: 12px;
-        transition: width 1s ease-in-out;
-        box-shadow: 0 0 10px #0ff, 0 0 15px #0f0;
-      }
-    </style>
-
-<script src="https://cdn.jsdelivr.net/npm/web3@1.10.0/dist/web3.min.js"></script>
-<script>
-  const presaleAddress = "0x858024C3c8179Ed448A9133190f991cfA9873657"; // Replace with your real address
-  const abi = [
-    {
-      "constant": true,
-      "inputs": [],
-      "name": "nuurToken",
-      "outputs": [{ "name": "", "type": "address" }],
-      "type": "function"
-    }
-  ];
-
-  const presaleEndDate = new Date("2025-07-01T23:59:59Z"); // Change to your presale end time
-
-  async function showContractProgress() {
-    const web3 = new Web3("https://node.sidrachain.com");
-    const contract = new web3.eth.Contract(abi, presaleAddress);
-
-    try {
-      const nuur = await contract.methods.nuurToken().call();
-      const nuurContract = new web3.eth.Contract([
-        { "constant": true, "inputs": [], "name": "decimals", "outputs": [{ "name": "", "type": "uint8" }], "type": "function" },
-        { "constant": true, "inputs": [{ "name": "account", "type": "address" }], "name": "balanceOf", "outputs": [{ "name": "", "type": "uint256" }], "type": "function" }
-      ], nuur);
-
-      const decimals = await nuurContract.methods.decimals().call();
-      const balanceRaw = await nuurContract.methods.balanceOf(presaleAddress).call();
-      const balance = parseFloat(balanceRaw / 10 ** decimals);
-      const totalSupply = 5_000_000;
-      const bought = totalSupply - balance;
-      const percent = ((bought / totalSupply) * 100).toFixed(2);
-
-      document.getElementById("boughtAmount").innerText = `${bought.toLocaleString()} / 5,000,000 NUUR bought`;
-      document.getElementById("boughtPercent").innerText = `${percent}% / 100% completed`;
-      document.getElementById("remainingTokens").innerText = `${balance.toLocaleString()} NUUR remaining`;
-      document.getElementById("progressFill").style.width = `${percent}%`;
-    } catch (err) {
-      console.error("Error fetching progress:", err);
-      document.getElementById("boughtAmount").innerText = "Unavailable";
-      document.getElementById("boughtPercent").innerText = "";
-      document.getElementById("remainingTokens").innerText = "";
-    }
-  }
-
-  function updateCountdown() {
-    const now = new Date();
-    const diff = presaleEndDate - now;
-
-    if (diff <= 0) {
-      document.getElementById("countdown").innerText = "Presale ended";
-      return;
-    }
-
-    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-    const hrs = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-    const secs = Math.floor((diff % (1000 * 60)) / 1000);
-
-    document.getElementById("countdown").innerText =
-      `Countdown: ${days}d ${hrs}h ${mins}m ${secs}s`;
-  }
-
-  showContractProgress();
-  setInterval(updateCountdown, 1000);
-</script>
-
-    <section class="fade-in">
-      <h2>About Us</h2>
-      <p>
-        We are a team of blockchain developers, scholars, and entrepreneurs focused on building ethical decentralized finance solutions.
-        Nuur Token is our vision of a halal, transparent, and accessible digital future on the Sidra blockchain.
-      </p>
-    </section>
-
-    <section class="fade-in">
-      <h2>Contact</h2>
-      <p>Email: <a href="mailto:freelife8081@gmail.com">team@nuurtoken.org</a></p>
-      <p>Twitter: <a href="https://twitter.com/NuurTokenSidra" target="_blank">Follow our Twitter</a></p>
-      <p>Telegram: <a href="https://t.me/NoorTokenCommunity_81" target="_blank">Join our TG chat</a></p>
-    </section>
+</head>
+<body>
+  <!-- Loading Screen -->
+  <div id="loader">
+    <!-- Replace 'logo.png' with the path to your image -->
+    <img src="logo.png" alt="Nuur Token Logo">
+    <p>Loading... Please wait</p>
   </div>
-  <!-- Draggable Popup -->
-<div id="nuurPopup" style="
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  max-width: 90%;
-  width: 340px;
-  background: #121212;
-  color: #f1f1f1;
-  border-left: 6px solid #00bfff;
-  padding: 20px 20px 16px;
-  border-radius: 16px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-  font-family: 'Segoe UI', sans-serif;
-  display: none;
-  z-index: 9999;
-  cursor: grab;
-  transition: transform 0.2s ease;
-  #nuurPopup:active {
-    cursor: grabbing;
-  }
-">
 
-  <span onclick="dismissPopup()" style="
-    position: absolute;
-    top: 10px;
-    right: 14px;
-    cursor: pointer;
-    font-size: 18px;
-    font-weight: bold;
-    color: #999;
-    transition: color 0.2s ease;
-  " onmouseover="this.style.color='#f44'" onmouseout="this.style.color='#999'">✖</span>
-
-  <h4 id="popupHeader" style="
-    margin: 0 0 12px;
-    font-size: 17px;
-    font-weight: 600;
-    color: #00bfff;
-  ">📢 Nuurcoin Upgrade Complete!</h4>
-
-  <p style="margin: 8px 0; font-size: 14px;">✅ Name changed: <strong>Nuur ➝ Nuurcoin (NUUR)</strong></p>
-  <p style="margin: 8px 0; font-size: 14px;">🔻 New CA: <strong style="word-break: break-all;">0x003BEc2e6ef4369f9d968eCD288d31B59fD9c2CD</strong></p>
-  <p style="margin: 8px 0; font-size: 14px;">🔻 Supply reduced: <strong>100B ➝ 10M</strong></p>
-  <p style="margin: 8px 0; font-size: 14px;">🎉 New tokens have been distributed fairly.</p>
-  <p style="margin: 8px 0; font-size: 14px;">🔥 Burn your old tokens — they are now useless.</p>
-</div>
-
-<!-- Script -->
-<script>
-  // Show the popup after 5 seconds
-  window.addEventListener('load', function () {
-    setTimeout(function () {
-      document.getElementById('nuurPopup').style.display = 'block';
-    }, 15000);
-  });
-
-  // Close popup
-  function dismissPopup() {
-    document.getElementById('nuurPopup').style.display = 'none';
-  }
-
-  // Make the popup draggable on both PC and mobile
-  dragElement(document.getElementById("nuurPopup"));
-
-  function dragElement(elmnt) {
-    const header = document.getElementById("popupHeader");
-    let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
-
-    if (header) {
-      header.onmousedown = dragMouseDown;
-      header.ontouchstart = dragTouchStart;
-    }
-
-    function dragMouseDown(e) {
-      e.preventDefault();
-      pos3 = e.clientX;
-      pos4 = e.clientY;
-      document.onmouseup = closeDragElement;
-      document.onmousemove = elementDrag;
-    }
-
-    function dragTouchStart(e) {
-      e.preventDefault();
-      pos3 = e.touches[0].clientX;
-      pos4 = e.touches[0].clientY;
-      document.ontouchend = closeTouchDragElement;
-      document.ontouchmove = elementTouchDrag;
-    }
-
-    function elementDrag(e) {
-      e.preventDefault();
-      pos1 = pos3 - e.clientX;
-      pos2 = pos4 - e.clientY;
-      pos3 = e.clientX;
-      pos4 = e.clientY;
-      moveElement();
-    }
-
-    function elementTouchDrag(e) {
-      e.preventDefault();
-      pos1 = pos3 - e.touches[0].clientX;
-      pos2 = pos4 - e.touches[0].clientY;
-      pos3 = e.touches[0].clientX;
-      pos4 = e.touches[0].clientY;
-      moveElement();
-    }
-
-    function moveElement() {
-      elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
-      elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
-      elmnt.style.bottom = "auto";
-      elmnt.style.right = "auto";
-    }
-
-    function closeDragElement() {
-      document.onmouseup = null;
-      document.onmousemove = null;
-    }
-
-    function closeTouchDragElement() {
-      document.ontouchend = null;
-      document.ontouchmove = null;
-    }
-  }
-</script>
-
-
-  <footer class="fade-in">
-    <a href="https://ledger.sidrachain.com/address/0x767CA5453E12BbCC3859E4d05c868b07b24F675B">
-      Donate Sidra
-    </a>
-    <p style="margin-top: 1rem;">
-      Disclaimer: Trading cryptocurrencies involves risk. We are not responsible for any loss of funds. Please trade responsibly.
-    </p>
-  </footer>
-
+  <!-- JavaScript to handle redirection -->
   <script>
-    function copyContract() {
-      const text = "0x003BEc2e6ef4369f9d968eCD288d31B59fD9c2CD";
-      navigator.clipboard.writeText(text).then(() => {
-        alert("Contract address copied!");
-      });
-    }
-
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-          observer.unobserve(entry.target);
-        }
-      });
-    }, {
-      threshold: 0.1
-    });
-
-    document.querySelectorAll('.fade-in').forEach(el => {
-      observer.observe(el);
-    });
+    // Redirect to home.html after 10 seconds
+    setTimeout(() => {
+      window.location.href = "home";
+    }, 10000);
   </script>
 </body>
 </html>
