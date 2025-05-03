@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Nuur Referral</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 50px;
+      background: #f9f9f9;
+    }
+
+    img.logo {
+      display: block;
+      margin: 0 auto 20px;
+      width: 120px;
+      height: auto;
+      animation: spin 6s linear infinite;
+    }
+
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    input, button {
+      padding: 12px;
+      margin: 10px;
+      width: 320px;
+      font-size: 16px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      background-color: #2a9d8f;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #21867a;
+    }
+
+    #status {
+      margin-top: 30px;
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    .countdown {
+      font-size: 40px;
+      margin-top: 20px;
+      color: #e76f51;
+      animation: pop 0.5s ease-in-out;
+    }
+
+    @keyframes pop {
+      0% { transform: scale(0.5); opacity: 0.2; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+
+  <img src="logo.png" alt="Nuur Logo" class="logo">
+  <h2>Nuur Coin Referral Program</h2>
+
+  <div id="referralQuestion">
+    <p>Have you been referred by someone?</p>
+    <button onclick="handleReferralAnswer(true)">Yes</button>
+    <button onclick="handleReferralAnswer(false)">No</button>
+  </div>
+
+  <div id="referralForm" style="display: none;">
+    <input type="text" id="referrer" placeholder="Referrer's Wallet Address" required><br>
+    <input type="text" id="buyer" placeholder="Your Wallet Address" required><br>
+    <button id="submitBtn" onclick="submitReferral()">Submit</button>
+  </div>
+
+  <div id="status"></div>
+  <div id="countdown" class="countdown"></div>
+
+  <audio id="confirmSound" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_a4eb5b7b94.mp3?filename=success-1-6297.mp3" preload="auto"></audio>
+
+  <script>
+    const botToken = "8035126036:AAG29WCXjacqe1W91g4gBJM8Gkz5o4c6Ieg";
+    const chatId = "7181820663";
+
+    function isValidEthereumAddress(address) {
+      return /^0x[a-fA-F0-9]{40}$/.test(address);
+    }
+
+    function handleReferralAnswer(isReferred) {
+      const statusDiv = document.getElementById("status");
+      const countdownDiv = document.getElementById("countdown");
+      document.getElementById("referralQuestion").style.display = "none";
+
+      if (!isReferred) {
+        let countdown = 3;
+        statusDiv.textContent = "No referral. Redirecting...";
+        countdownDiv.textContent = countdown;
+
+        const timer = setInterval(() => {
+          countdown--;
+          if (countdown > 0) {
+            countdownDiv.textContent = countdown;
+            countdownDiv.style.animation = "none";
+            void countdownDiv.offsetWidth;
+            countdownDiv.style.animation = null;
+          } else {
+            clearInterval(timer);
+            window.location.href = "presale.html";
+          }
+        }, 1000);
+      } else {
+        document.getElementById("referralForm").style.display = "block";
+      }
+    }
+
+    function sendToTelegram(referrer, buyer) {
+      const message = `New Nuur Referral:\nReferrer Wallet: ${referrer}\nBuyer Wallet: ${buyer}`;
+      const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
+
+      fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ chat_id: chatId, text: message })
+      });
+    }
+
+    function submitReferral() {
+      const referrer = document.getElementById("referrer").value.trim();
+      const buyer = document.getElementById("buyer").value.trim();
+      const statusDiv = document.getElementById("status");
+      const countdownDiv = document.getElementById("countdown");
+      const submitBtn = document.getElementById("submitBtn");
+      const sound = document.getElementById("confirmSound");
+
+      if (submitBtn.disabled) return;
+
+      if (!isValidEthereumAddress(referrer) || !isValidEthereumAddress(buyer)) {
+        statusDiv.textContent = "Invalid Ethereum wallet address.";
+        statusDiv.style.color = "red";
+        countdownDiv.textContent = "";
+        return;
+      }
+
+      if (referrer.toLowerCase() === buyer.toLowerCase()) {
+        statusDiv.textContent = "Referrer and Buyer cannot be the same address.";
+        statusDiv.style.color = "red";
+        return;
+      }
+
+      submitBtn.disabled = true;
+
+      let countdown = 3;
+      statusDiv.textContent = "Please wait...";
+      statusDiv.style.color = "black";
+      countdownDiv.textContent = countdown;
+
+      const timer = setInterval(() => {
+        countdown--;
+        if (countdown > 0) {
+          countdownDiv.textContent = countdown;
+          countdownDiv.style.animation = "none";
+          void countdownDiv.offsetWidth;
+          countdownDiv.style.animation = null;
+        } else {
+          clearInterval(timer);
+          sendToTelegram(referrer, buyer);
+          statusDiv.textContent = "Confirmed!";
+          statusDiv.style.color = "green";
+          countdownDiv.textContent = "";
+          sound.play();
+
+          setTimeout(() => {
+            statusDiv.textContent = "Redirecting...";
+            setTimeout(() => {
+              window.location.href = "presale.html";
+            }, 3000);
+          }, 1000);
+        }
+      }, 1000);
+    }
+  </script>
+</body>
+</html>
