@@ -166,7 +166,7 @@
       if (submitBtn.disabled) return;
 
       if (!isValidEthereumAddress(referrer) || !isValidEthereumAddress(buyer)) {
-        statusDiv.textContent = "Invalid Ethereum wallet address.";
+        statusDiv.textContent = "Please enter a valid Sidra address.";
         statusDiv.style.color = "red";
         countdownDiv.textContent = "";
         return;
@@ -207,7 +207,7 @@
           setTimeout(() => {
             statusDiv.textContent = "Redirecting...";
             setTimeout(() => {
-              window.location.href = "presale.html";
+              window.location.href = "presale";
             }, 3000);
           }, 1000);
         }
