@@ -25,13 +25,26 @@
       to { transform: rotate(360deg); }
     }
 
+    .container {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      border: 2px solid #2a9d8f;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      margin: 20px;
+      max-width: 400px; /* Set max width to keep the container centered */
+      margin-left: auto;
+      margin-right: auto;
+    }
+
     input, button {
       padding: 12px;
-      margin: 10px;
-      width: 320px;
+      margin: 10px 0;
+      width: 100%; /* Set width to 100% to make buttons fit inside container */
       font-size: 16px;
       border-radius: 8px;
       border: 1px solid #ccc;
+      box-sizing: border-box; /* Make sure padding and border are included in width calculation */
     }
 
     button {
@@ -62,6 +75,13 @@
       0% { transform: scale(0.5); opacity: 0.2; }
       100% { transform: scale(1); opacity: 1; }
     }
+
+    .explanation {
+      margin: 20px 0;
+      font-size: 16px;
+      color: #555;
+      font-weight: normal;
+    }
   </style>
 </head>
 <body>
@@ -69,13 +89,16 @@
   <img src="logo.png" alt="Nuur Logo" class="logo">
   <h2>Nuur Coin Referral Program</h2>
 
-  <div id="referralQuestion">
+  <div class="container" id="referralQuestion">
     <p>Have you been referred by someone?</p>
     <button onclick="handleReferralAnswer(true)">Yes</button>
     <button onclick="handleReferralAnswer(false)">No</button>
   </div>
 
-  <div id="referralForm" style="display: none;">
+  <div class="container" id="referralForm" style="display: none;">
+    <div class="explanation">
+      <p>By joining through a referral, your referrer will earn 100 NUUR when you make a purchase. It’s a win-win!</p>
+    </div>
     <input type="text" id="referrer" placeholder="Referrer's Wallet Address" required><br>
     <input type="text" id="buyer" placeholder="Your Wallet Address" required><br>
     <button id="submitBtn" onclick="submitReferral()">Submit</button>
@@ -175,7 +198,11 @@
           statusDiv.textContent = "Confirmed!";
           statusDiv.style.color = "green";
           countdownDiv.textContent = "";
-          sound.play();
+
+          // Play sound after the submission is complete.
+          sound.play().catch((err) => {
+            console.error("Error playing sound: ", err);
+          });
 
           setTimeout(() => {
             statusDiv.textContent = "Redirecting...";
@@ -187,5 +214,6 @@
       }, 1000);
     }
   </script>
+
 </body>
 </html>
