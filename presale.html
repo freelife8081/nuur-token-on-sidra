@@ -20,7 +20,7 @@
   </div>
 
   <!-- Main Content -->
-  <div class="max-w-sm w-full bg-gray-800/90 backdrop-blur-md shadow-lg rounded-lg p-6 space-y-6 mx-auto">
+  <div class="max-w-sm w-full bg-gray-800/90 backdrop-blur-md shadow-lg rounded-lg p-6 space-y-6 mx-auto mt-20">
     <div class="text-center">
       <img src="logo.png" alt="NUUR Logo" class="mx-auto h-16 w-16 mb-4"/>
       <h1 class="text-3xl font-extrabold tracking-wide">NUUR Token Presale</h1>
@@ -152,96 +152,6 @@
       }
     }
   </script>
-  <div>
-    <!-- Transaction History for NUUR Token -->
-<div id="txnHistoryContainer" class="mt-6 hidden">
-  <p class="text-base text-gray-200 font-medium">NUUR Token Transaction History:</p>
-  <ul id="nuurTxnHistory" class="text-sm text-gray-300 mt-2 space-y-2">
-    <!-- NUUR token transaction history will be dynamically added here -->
-  </ul>
-</div>
-
-<script>
-  async function fetchNuurTxnHistory() {
-    if (!userAddress) {
-      document.getElementById("txnHistoryContainer").classList.add("hidden");
-      return;
-    }
-
-    try {
-      // SidraChain JSON-RPC URL
-      const rpcUrl = "https://node.sidrachain.com";
-      const nuurTokenAddress = "0x003BEc2e6ef4369f9d968eCD288d31B59fD9c2CD"; // Replace with NUUR token contract address
-      const transferTopic = "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef"; // Keccak-256 hash of "Transfer(address,address,uint256)"
-
-      // JSON-RPC payload to fetch logs for the Transfer event
-      const payload = {
-        jsonrpc: "2.0",
-        method: "eth_getLogs",
-        params: [
-          {
-            address: nuurTokenAddress,
-            topics: [
-              transferTopic,
-              null, // From address (null means any address)
-              `0x${userAddress.slice(2).padStart(64, "0")}` // To address formatted as a 32-byte topic
-            ],
-            fromBlock: "0x0", // Start from the first block
-            toBlock: "latest" // Up to the latest block
-          }
-        ],
-        id: 1
-      };
-
-      // Fetch logs from SidraChain
-      const response = await fetch(rpcUrl, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload)
-      });
-
-      const data = await response.json();
-      const logs = data.result;
-
-      if (!logs || logs.length === 0) {
-        document.getElementById("nuurTxnHistory").innerHTML = "<li>No transactions found for your wallet.</li>";
-        document.getElementById("txnHistoryContainer").classList.remove("hidden");
-        return;
-      }
-
-      // Generate HTML for each transaction
-      const txnHtml = logs
-        .map((log) => {
-          const txHash = log.transactionHash;
-          const value = parseInt(log.data, 16) / Math.pow(10, 18); // Assuming NUUR has 18 decimals
-          const explorerLink = `https://ledger.sidrachain.com/tx/${txHash}`;
-
-          return `<li>
-                    <a href="${explorerLink}" target="_blank" class="text-green-300 underline">
-                      ${value.toFixed(4)} NUUR transferred (Tx: ${txHash.slice(0, 6)}...${txHash.slice(-4)})
-                    </a>
-                  </li>`;
-        })
-        .join("");
-
-      document.getElementById("nuurTxnHistory").innerHTML = txnHtml;
-      document.getElementById("txnHistoryContainer").classList.remove("hidden");
-    } catch (error) {
-      console.error("Error fetching NUUR transaction history:", error);
-      document.getElementById("nuurTxnHistory").innerHTML = "<li>Unable to fetch transaction history.</li>";
-      document.getElementById("txnHistoryContainer").classList.remove("hidden");
-    }
-  }
-
-  // Call the function when the wallet is connected
-  async function onWalletConnected() {
-    document.getElementById("txnHistoryContainer").classList.add("hidden"); // Hide initially
-    if (userAddress) {
-      await fetchNuurTxnHistory();
-    }
-  }
-        </script>
-  </div>
 
   <script src="https://cdn.jsdelivr.net/npm/web3@1.10.0/dist/web3.min.js"></script>
 </body>
