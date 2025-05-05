@@ -335,7 +335,112 @@
   setInterval(updateCountdown, 1000);
   
 </script>
+<div class="chart-container">
+  <h2 class="section-header">Presale Progress</h2>
+  <div id="progressChartContainer">
+    <canvas id="progressChart"></canvas>
+  </div>
+</div>
 
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  async function showContractProgress() {
+    const web3 = new Web3("https://node.sidrachain.com");
+    const contract = new web3.eth.Contract(abi, presaleAddress);
+
+    try {
+      const nuur = await contract.methods.nuurToken().call();
+      const nuurContract = new web3.eth.Contract([
+        { "constant": true, "inputs": [], "name": "decimals", "outputs": [{ "name": "", "type": "uint8" }], "type": "function" },
+        { "constant": true, "inputs": [{ "name": "account", "type": "address" }], "name": "balanceOf", "outputs": [{ "name": "", "type": "uint256" }], "type": "function" }
+      ], nuur);
+
+      const decimals = await nuurContract.methods.decimals().call();
+      const balanceRaw = await nuurContract.methods.balanceOf(presaleAddress).call();
+      const balance = parseFloat(balanceRaw / 10 ** decimals);
+      const totalSupply = 5_000_000;
+      const bought = totalSupply - balance;
+      const percent = ((bought / totalSupply) * 100).toFixed(2);
+
+      // Data for the chart
+      const progressData = {
+        labels: ['Bought', 'Remaining'],
+        datasets: [{
+          data: [bought, balance],
+          backgroundColor: ['#00c6ff', '#0072ff'],
+          borderColor: '#fff',
+          borderWidth: 1
+        }]
+      };
+
+      // Create the chart
+      const ctx = document.getElementById('progressChart').getContext('2d');
+      new Chart(ctx, {
+        type: 'doughnut',
+        data: progressData,
+        options: {
+          responsive: true,
+          animation: {
+            duration: 3000, // Slow animation
+            easing: 'easeInOutCubic'
+          },
+          plugins: {
+            legend: {
+              position: 'top',
+              labels: {
+                color: '#ddd'
+              }
+            },
+            tooltip: {
+              callbacks: {
+                label: (context) => `${context.label}: ${context.raw.toLocaleString()}`
+              }
+            }
+          }
+        }
+      });
+    } catch (err) {
+      console.error("Error fetching progress:", err);
+    }
+  }
+
+  // Call the function to display progress
+  showContractProgress();
+</script>
+
+<style>
+  .chart-container {
+    margin: 40px auto;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 16px;
+    max-width: 600px;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  }
+
+  .section-header {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: #00d1ff;
+    text-shadow: 0 0 10px rgba(0, 209, 255, 0.7);
+    margin-bottom: 20px;
+  }
+
+  #progressChartContainer {
+    position: relative;
+    height: 400px;
+    width: 100%;
+  }
+
+  #progressChart {
+    display: block;
+    margin: 0 auto;
+    max-height: 100%;
+    max-width: 100%;
+  }
+</style>
     <section class="fade-in">
       <h2><a href="about" style="text-decoration:none;" target=_blank>About Us</a></h2>
       <p>
