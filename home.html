@@ -137,6 +137,37 @@
       opacity: 1;
       transform: translateY(0);
     }
+  .chart-container {
+    margin: 40px auto;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 16px;
+    max-width: 600px;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  }
+
+  .section-header {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: #00d1ff;
+    text-shadow: 0 0 10px rgba(0, 209, 255, 0.7);
+    margin-bottom: 20px;
+  }
+
+  #tokenomicsChartContainer {
+    position: relative;
+    height: 400px;
+    width: 100%;
+  }
+
+  #tokenomicsChart {
+    display: block;
+    margin: 0 auto;
+    max-height: 100%;
+    max-width: 100%;
+  }
   </style>
 </head>
 <body>
@@ -159,6 +190,12 @@
       <p><strong>Presale fund wallet:</strong><a href="https://ledger.sidrachain.com/address/0x8375694cD94480d715727758a7fd863bC00Afe90" style="text-decoration:none; color: white; background-color:red;" target="_blank"> View wallet</a></p>
       <p><strong>Listing:</strong> NUUR will be listed on SidraSwap once SDA is listed</p>
     </div>
+    <div class="chart-container">
+  <h2 class="section-header">Tokenomics</h2>
+  <div id="tokenomicsChartContainer">
+    <canvas id="tokenomicsChart"></canvas>
+  </div>
+</div>
 
     <div class="fade-in">
       <a href="ref" class="btn">Join Presale</a>
@@ -231,6 +268,7 @@
     </style>
 
 <script src="https://cdn.jsdelivr.net/npm/web3@1.10.0/dist/web3.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
   const presaleAddress = "0x858024C3c8179Ed448A9133190f991cfA9873657"; // Replace with your real address
   const abi = [
@@ -295,6 +333,7 @@
 
   showContractProgress();
   setInterval(updateCountdown, 1000);
+  
 </script>
 
     <section class="fade-in">
@@ -344,6 +383,45 @@
     document.querySelectorAll('.fade-in').forEach(el => {
       observer.observe(el);
     });
+      // Tokenomics Chart
+  const ctx = document.getElementById('tokenomicsChart').getContext('2d');
+  const tokenomicsChart = new Chart(ctx, {
+    type: 'pie', // You can change this to 'doughnut' if you prefer
+    data: {
+      labels: ['Presale', 'Liquidity', 'Team', 'Airdrop'], // Labels for each segment
+      datasets: [{
+        data: [50, 20, 20, 10], // Data values representing percentages
+        backgroundColor: [
+          '#00c6ff', // Color for Presale
+          '#0072ff', // Color for Liquidity
+          '#00ff99', // Color for Team
+          '#ff6f61'  // Color for Airdrop
+        ],
+        borderColor: '#fff', // Border color for each segment
+        borderWidth: 1       // Border width
+      }]
+    },
+    options: {
+      responsive: true,      // Makes the chart responsive
+      animation: {
+        duration: 3000,      // Adjust the duration in milliseconds (3000ms = 3 seconds)
+        easing: 'easeInOutCubic' // Smooth animation easing
+      },
+      plugins: {
+        legend: {
+          position: 'top',   // Positions the legend at the top
+          labels: {
+            color: '#ddd'    // Legend text color
+          }
+        },
+        tooltip: {
+          callbacks: {
+            label: (context) => `${context.label}: ${context.raw}%` // Tooltip format
+          }
+        }
+      }
+    }
+  });
   </script>
 </body>
 </html>
