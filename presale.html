@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
-  <title>NUUR Presale</title>
+  <title>NUUR Presale | Sidra Chain</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gradient-to-br from-gray-900 via-purple-900 to-indigo-900 text-white min-h-screen flex flex-col justify-center px-4 relative">
@@ -20,10 +20,10 @@
   </div>
 
   <!-- Main Content -->
-  <div class="max-w-sm w-full bg-gray-800/90 backdrop-blur-md shadow-lg rounded-lg p-6 space-y-6 mx-auto mt-20">
+  <div class="max-w-sm w-full bg-gray-800/90 backdrop-blur-md shadow-lg rounded-lg p-6 space-y-6 mx-auto">
     <div class="text-center">
       <img src="logo.png" alt="NUUR Logo" class="mx-auto h-16 w-16 mb-4"/>
-      <h1 class="text-3xl font-extrabold tracking-wide">NUUR Coin Presale</h1>
+      <h1 class="text-3xl font-extrabold tracking-wide">NUUR Token Presale</h1>
       <p class="text-sm text-gray-300 mt-2">1 NUUR = 0.001 SDA | 1000 NUUR per SDA</p>
     </div>
 
@@ -33,9 +33,8 @@
     </div>
 
     <div class="text-center">
-      <p class="text-base text-gray-200 font-medium">Your Wallet Balances:</p>
-      <p id="walletBalance" class="text-lg font-bold text-green-400 mt-2">Not Connected</p>
-      <p id="nuurBalance" class="text-lg font-bold text-blue-400 mt-2">Not Connected</p>
+      <p class="text-base text-gray-200 font-medium">Your Wallet Balance:</p>
+      <p id="walletBalance" class="text-xl font-bold text-green-400 mt-2">Not Connected</p>
     </div>
 
     <div>
@@ -45,19 +44,11 @@
       <p class="mt-2 text-sm text-gray-300">You'll receive <span id="nuurEstimate" class="font-semibold text-yellow-400">0</span> NUUR</p>
     </div>
 
-    <!-- Dynamic Sections -->
-    <div id="connectedFeatures" style="display: none;">
-      <div>
-        <p class="text-base text-gray-200 font-medium">Gas Fee Estimate:</p>
-        <p id="gasFee" class="text-lg font-bold text-red-400 mt-2">Calculating...</p>
-      </div>
-
-      <div>
-        <p class="text-base text-gray-200 font-medium">Recent Transactions:</p>
-        <ul id="transactionHistory" class="text-sm text-gray-300 space-y-2">
-          <li>Loading...</li>
-        </ul>
-      </div>
+    <div class="flex flex-col space-y-4">
+      <button onclick="buyTokens()"
+              class="w-full px-6 py-3 bg-green-600 text-white rounded-lg text-sm font-semibold shadow-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-400 transition">
+        Buy NUUR
+      </button>
     </div>
 
     <div id="statusMessage" class="text-sm text-center mt-4 text-yellow-400"></div>
@@ -65,15 +56,10 @@
 
   <script>
     let userAddress;
-    const presaleAddress = "0x858024C3c8179Ed448A9133190f991cfA9873657"; // Replace with your Presale contract address
-    const nuurTokenAddress = "0x003BEc2e6ef4369f9d968eCD288d31B59fD9c2CD"; // Replace with your NUUR token contract address
+    const presaleAddress = "0x858024C3c8179Ed448A9133190f991cfA9873657"; // Replace with your contract
     const rate = 1000;
 
-    // Placeholders for ABIs
-    const presaleAbi = [{"inputs":[{"internalType":"address","name":"_nuurToken","type":"address"},{"internalType":"address","name":"_devWallet","type":"address"},{"internalType":"address","name":"initialOwner","type":"address"}],"stateMutability":"nonpayable","type":"constructor"},{"inputs":[{"internalType":"address","name":"owner","type":"address"}],"name":"OwnableInvalidOwner","type":"error"},{"inputs":[{"internalType":"address","name":"account","type":"address"}],"name":"OwnableUnauthorizedAccount","type":"error"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"to","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"NUURWithdrawn","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"previousOwner","type":"address"},{"indexed":true,"internalType":"address","name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"to","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"SDAWithdrawn","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"buyer","type":"address"},{"indexed":false,"internalType":"uint256","name":"sdaAmount","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"nuurAmount","type":"uint256"}],"name":"TokensPurchased","type":"event"},{"inputs":[],"name":"RATE","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"buyTokens","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[],"name":"devWallet","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"nuurToken","outputs":[{"internalType":"contract IERC20","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"renounceOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"newDevWallet","type":"address"}],"name":"updateDevWallet","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"withdrawNUUR","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"withdrawSDA","outputs":[],"stateMutability":"nonpayable","type":"function"},{"stateMutability":"payable","type":"receive"}]; 
-
-    const tokenAbi = [{"inputs":[{"internalType":"address","name":"recipient","type":"address"},{"internalType":"address","name":"initialOwner","type":"address"}],"stateMutability":"nonpayable","type":"constructor"},{"inputs":[{"internalType":"address","name":"spender","type":"address"},{"internalType":"uint256","name":"value","type":"uint256"}],"name":"ERC1363ApproveFailed","type":"error"},{"inputs":[{"internalType":"address","name":"receiver","type":"address"}],"name":"ERC1363InvalidReceiver","type":"error"},{"inputs":[{"internalType":"address","name":"spender","type":"address"}],"name":"ERC1363InvalidSpender","type":"error"},{"inputs":[{"internalType":"address","name":"receiver","type":"address"},{"internalType":"uint256","name":"value","type":"uint256"}],"name":"ERC1363TransferFailed","type":"error"},{"inputs":[{"internalType":"address","name":"sender","type":"address"},{"internalType":"address","name":"receiver","type":"address"},{"internalType":"uint256","name":"value","type":"uint256"}],"name":"ERC1363TransferFromFailed","type":"error"},{"inputs":[{"internalType":"address","name":"spender","type":"address"},{"internalType":"uint256","name":"allowance","type":"uint256"},{"internalType":"uint256","name":"needed","type":"uint256"}],"name":"ERC20InsufficientAllowance","type":"error"},{"inputs":[{"internalType":"address","name":"sender","type":"address"},{"internalType":"uint256","name":"balance","type":"uint256"},{"internalType":"uint256","name":"needed","type":"uint256"}],"name":"ERC20InsufficientBalance","type":"error"},{"inputs":[{"internalType":"address","name":"approver","type":"address"}],"name":"ERC20InvalidApprover","type":"error"},{"inputs":[{"internalType":"address","name":"receiver","type":"address"}],"name":"ERC20InvalidReceiver","type":"error"},{"inputs":[{"internalType":"address","name":"sender","type":"address"}],"name":"ERC20InvalidSender","type":"error"},{"inputs":[{"internalType":"address","name":"spender","type":"address"}],"name":"ERC20InvalidSpender","type":"error"},{"inputs":[],"name":"EnforcedPause","type":"error"},{"inputs":[],"name":"ExpectedPause","type":"error"},{"inputs":[{"internalType":"address","name":"owner","type":"address"}],"name":"OwnableInvalidOwner","type":"error"},{"inputs":[{"internalType":"address","name":"account","type":"address"}],"name":"OwnableUnauthorizedAccount","type":"error"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"owner","type":"address"},{"indexed":true,"internalType":"address","name":"spender","type":"address"},{"indexed":false,"internalType":"uint256","name":"value","type":"uint256"}],"name":"Approval","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"previousOwner","type":"address"},{"indexed":true,"internalType":"address","name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"account","type":"address"}],"name":"Paused","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"from","type":"address"},{"indexed":true,"internalType":"address","name":"to","type":"address"},{"indexed":false,"internalType":"uint256","name":"value","type":"uint256"}],"name":"Transfer","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"account","type":"address"}],"name":"Unpaused","type":"event"},{"inputs":[{"internalType":"address","name":"owner","type":"address"},{"internalType":"address","name":"spender","type":"address"}],"name":"allowance","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"spender","type":"address"},{"internalType":"uint256","name":"value","type":"uint256"}],"name":"approve","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"spender","type":"address"},{"internalType":"uint256","name":"value","type":"uint256"}],"name":"approveAndCall","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"spender","type":"address"},{"internalType":"uint256","name":"value","type":"uint256"},{"internalType":"bytes","name":"data","type":"bytes"}],"name":"approveAndCall","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"account","type":"address"}],"name":"balanceOf","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"value","type":"uint256"}],"name":"burn","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"account","type":"address"},{"internalType":"uint256","name":"value","type":"uint256"}],"name":"burnFrom","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"decimals","outputs":[{"internalType":"uint8","name":"","type":"uint8"}],"stateMutability":"pure","type":"function"},{"inputs":[{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"mint","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"name","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"pause","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"paused","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"renounceOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"bytes4","name":"interfaceId","type":"bytes4"}],"name":"supportsInterface","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"symbol","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"totalSupply","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256","name":"value","type":"uint256"}],"name":"transfer","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256","name":"value","type":"uint256"}],"name":"transferAndCall","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256","name":"value","type":"uint256"},{"internalType":"bytes","name":"data","type":"bytes"}],"name":"transferAndCall","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"from","type":"address"},{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256","name":"value","type":"uint256"}],"name":"transferFrom","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"from","type":"address"},{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256","name":"value","type":"uint256"},{"internalType":"bytes","name":"data","type":"bytes"}],"name":"transferFromAndCall","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"from","type":"address"},{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256","name":"value","type":"uint256"}],"name":"transferFromAndCall","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"unpause","outputs":[],"stateMutability":"nonpayable","type":"function"}];
-
+    const abi = [{"inputs":[{"internalType":"address","name":"_nuurToken","type":"address"},{"internalType":"address","name":"_devWallet","type":"address"},{"internalType":"address","name":"initialOwner","type":"address"}],"stateMutability":"nonpayable","type":"constructor"},{"inputs":[{"internalType":"address","name":"owner","type":"address"}],"name":"OwnableInvalidOwner","type":"error"},{"inputs":[{"internalType":"address","name":"account","type":"address"}],"name":"OwnableUnauthorizedAccount","type":"error"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"to","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"NUURWithdrawn","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"previousOwner","type":"address"},{"indexed":true,"internalType":"address","name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"to","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"SDAWithdrawn","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"buyer","type":"address"},{"indexed":false,"internalType":"uint256","name":"sdaAmount","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"nuurAmount","type":"uint256"}],"name":"TokensPurchased","type":"event"},{"inputs":[],"name":"RATE","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"buyTokens","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[],"name":"devWallet","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"nuurToken","outputs":[{"internalType":"contract IERC20","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"renounceOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"newDevWallet","type":"address"}],"name":"updateDevWallet","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"withdrawNUUR","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"withdrawSDA","outputs":[],"stateMutability":"nonpayable","type":"function"},{"stateMutability":"payable","type":"receive"}]; // Replace with full ABI
     const provider = window.ethereum;
 
     async function connectWallet() {
@@ -87,13 +73,8 @@
         document.getElementById("connectWalletButton").style.display = "none";
         document.getElementById("disconnectWalletButton").style.display = "inline-block";
 
-        // Show connected features
-        document.getElementById("connectedFeatures").style.display = "block";
-
         await showContractBalance();
-        await showWalletBalances();
-        await estimateGasFee();
-        await fetchTransactionHistory();
+        await showWalletBalance();
       } catch {
         document.getElementById("statusMessage").innerText = "Wallet connection failed.";
       }
@@ -104,72 +85,19 @@
       document.getElementById("statusMessage").innerText = "Wallet disconnected.";
       document.getElementById("connectWalletButton").style.display = "inline-block";
       document.getElementById("disconnectWalletButton").style.display = "none";
-
-      document.getElementById("connectedFeatures").style.display = "none"; // Hide connected features
       document.getElementById("walletBalance").innerText = "Not Connected";
-      document.getElementById("nuurBalance").innerText = "Not Connected";
     }
 
-    async function showWalletBalances() {
+    async function showWalletBalance() {
       if (!provider || !userAddress) return;
 
       const web3 = new window.Web3(provider);
       try {
-        // Fetch native coin balance
-        const balance = await web3.eth.getBalance(userAddress);
+        const balance = await web3.eth.getBalance(userAddress); // Fetch native coin balance
         const formattedBalance = parseFloat(web3.utils.fromWei(balance, "ether")).toFixed(4);
         document.getElementById("walletBalance").innerText = `${formattedBalance} SDA`;
-
-        // Fetch NUUR token balance
-        const nuurContract = new web3.eth.Contract(tokenAbi, nuurTokenAddress);
-        const decimals = await nuurContract.methods.decimals().call();
-        const nuurBalance = await nuurContract.methods.balanceOf(userAddress).call();
-        const formattedNuurBalance = parseFloat(nuurBalance / Math.pow(10, decimals)).toFixed(2);
-        document.getElementById("nuurBalance").innerText = `${formattedNuurBalance} NUUR`;
       } catch {
         document.getElementById("walletBalance").innerText = "Unavailable";
-        document.getElementById("nuurBalance").innerText = "Unavailable";
-      }
-    }
-
-    async function estimateGasFee() {
-      if (!provider || !userAddress) return;
-
-      const web3 = new window.Web3(provider);
-      try {
-        const gasPrice = await web3.eth.getGasPrice(); // Fetch current gas price
-        const estimatedGas = 21000; // Typical gas limit for simple transfers
-        const gasFee = web3.utils.fromWei((gasPrice * estimatedGas).toString(), "ether");
-        document.getElementById("gasFee").innerText = `${parseFloat(gasFee).toFixed(6)} SDA`;
-      } catch {
-        document.getElementById("gasFee").innerText = "Unavailable";
-      }
-    }
-
-    async function fetchTransactionHistory() {
-      if (!provider || !userAddress) return;
-
-      const web3 = new window.Web3(provider);
-      try {
-        const latestBlock = await web3.eth.getBlockNumber();
-        const txHistory = [];
-        for (let i = latestBlock; i >= latestBlock - 10; i--) {
-          const block = await web3.eth.getBlock(i, true);
-          block.transactions.forEach((tx) => {
-            if (tx.from.toLowerCase() === userAddress.toLowerCase() || tx.to?.toLowerCase() === userAddress.toLowerCase()) {
-              txHistory.push(tx);
-            }
-          });
-        }
-
-        const txList = txHistory.map(
-          (tx) =>
-            `<li>Tx Hash: <a href="https://ledger.sidrachain.com/tx/${tx.hash}" target="_blank" class="text-yellow-300">${tx.hash.slice(0, 10)}...</a>
-             | Value: ${web3.utils.fromWei(tx.value, "ether")} SDA</li>`
-        );
-        document.getElementById("transactionHistory").innerHTML = txList.join("");
-      } catch {
-        document.getElementById("transactionHistory").innerHTML = "<li>Unavailable</li>";
       }
     }
 
@@ -178,18 +106,45 @@
       document.getElementById("nuurEstimate").innerText = sda * rate;
     });
 
+    async function buyTokens() {
+      const sdaAmount = parseFloat(document.getElementById("sdaAmount").value);
+      if (!sdaAmount || sdaAmount <= 0) return alert("Enter a valid SDA amount.");
+      if (!userAddress) return alert("Connect wallet first.");
+
+      try {
+        const txHash = await provider.request({
+          method: "eth_sendTransaction",
+          params: [{
+            from: userAddress,
+            to: presaleAddress,
+            value: (sdaAmount * 1e18).toString(16), // SDA has 18 decimals
+          }],
+        });
+
+        const explorerLink = `https://ledger.sidrachain.com/tx/${txHash}`;
+        document.getElementById("statusMessage").innerHTML = `✅ Transaction sent. <a href="${explorerLink}" target="_blank" class="underline text-green-300">View on Explorer</a>`;
+        await showContractBalance();
+        await showWalletBalance();
+      } catch (err) {
+        document.getElementById("statusMessage").innerText = "❌ Transaction failed.";
+      }
+    }
+
     async function showContractBalance() {
       if (!provider) return;
       const web3 = new window.Web3(provider);
-      const contract = new web3.eth.Contract(presaleAbi, presaleAddress);
+      const contract = new web3.eth.Contract(abi, presaleAddress);
 
       try {
         const nuur = await contract.methods.nuurToken().call();
-        const nuurContract = new web3.eth.Contract(tokenAbi, nuur);
+        const nuurContract = new web3.eth.Contract([
+          { "constant": true, "inputs": [], "name": "decimals", "outputs": [{ "name": "", "type": "uint8" }], "type": "function" },
+          { "constant": true, "inputs": [{ "name": "account", "type": "address" }], "name": "balanceOf", "outputs": [{ "name": "", "type": "uint256" }], "type": "function" }
+        ], nuur);
 
         const decimals = await nuurContract.methods.decimals().call();
         const balance = await nuurContract.methods.balanceOf(presaleAddress).call();
-        const formatted = parseFloat(balance / Math.pow(10, decimals)).toLocaleString();
+        const formatted = parseFloat(balance / 10 ** decimals).toLocaleString();
 
         document.getElementById("contractBalance").innerText = formatted;
       } catch {
