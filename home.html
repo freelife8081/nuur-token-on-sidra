@@ -457,6 +457,79 @@
       <p><a href="https://www.facebook.com/share/1C6FKkHESJ/" style="color: white; text-decoration: none;" target="_blank">Facebook</a></p>
     </section>
   </div>
+  <style>
+    /* Notification Styles */
+    #notification {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        background-color: #ff4d4d; /* Red for offline */
+        color: white;
+        text-align: center;
+        padding: 15px;
+        font-size: 16px;
+        display: none; /* Initially hidden */
+        z-index: 1000;
+    }
+
+    #notification.online {
+        background-color: #4CAF50; /* Green for back online */
+    }
+
+    #refresh-button {
+        margin-left: 10px;
+        background-color: white;
+        color: #4CAF50;
+        border: none;
+        padding: 5px 10px;
+        cursor: pointer;
+        font-size: 14px;
+    }
+</style>
+
+<div id="notification"></div>
+
+<script>
+    const notification = document.getElementById('notification');
+
+    // Function to show notification
+    function showNotification(message, type) {
+        notification.innerText = message;
+        notification.className = type; // Apply 'online' or no class for offline
+        notification.style.display = 'block';
+
+        // If back online, add a refresh button
+        if (type === 'online') {
+            const refreshButton = document.createElement('button');
+            refreshButton.id = 'refresh-button';
+            refreshButton.innerText = 'Refresh';
+            refreshButton.onclick = () => location.reload(); // Reload the page
+            notification.appendChild(refreshButton);
+        }
+    }
+
+    // Function to hide notification
+    function hideNotification() {
+        notification.style.display = 'none';
+        notification.innerHTML = ''; // Clear content
+    }
+
+    // Detect initial connection status
+    if (!navigator.onLine) {
+        showNotification('You are offline. Check your internet connection.', '');
+    }
+
+    // Listen for offline event
+    window.addEventListener('offline', () => {
+        showNotification('Connction lost! Please check your internet.', '');
+    });
+
+    // Listen for online event
+    window.addEventListener('online', () => {
+        showNotification('You are back online. Refresh to continue.', 'online');
+    });
+</script>
   <footer class="fade-in">
     <a href="https://ledger.sidrachain.com/address/0x8375694cD94480d715727758a7fd863bC00Afe90">
       Click To Donate Sidra
