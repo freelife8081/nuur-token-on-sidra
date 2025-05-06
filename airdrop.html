@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0 user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>NUUR Airdrop Eligibility</title>
   <link rel="stylesheet" href="airdrop.css">
   <script src="https://cdn.jsdelivr.net/npm/web3@1.10.0/dist/web3.min.js"></script>
@@ -16,8 +16,10 @@
       <h1>NUUR Airdrop Eligibility</h1>
       <p>Connect your wallet to check if you're eligible for the NUUR airdrop.</p>
       <button id="connectWalletButton" class="btn">Connect Wallet</button>
+      <div id="loadingMessage" class="loading-message"></div>
       <div id="statusMessage" class="status-message"></div>
-      <a href="https://nuurtoken.site/presale" target="_blank" class="presale-link">Go to NUUR Presale</a>
+      <div id="balanceMessage" class="balance-message"></div>
+      <a href="https://presale.nuurtoken.com" target="_blank" class="presale-link">Go to NUUR Presale</a>
     </div>
   </div>
 
