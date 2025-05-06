@@ -601,5 +601,66 @@
     }
   });
   </script>
+  <div id="draggable-alert" style="
+  display: none;
+  position: fixed;
+  top: 100px;
+  left: 100px;
+  width: 320px;
+  background-color: #fff4e5;
+  border: 1px solid #ffc107;
+  color: #664d03;
+  padding: 15px 20px;
+  border-radius: 8px;
+  cursor: move;
+  z-index: 9999;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+">
+  <button onclick="this.parentElement.remove()" style="
+    float: right;
+    background: none;
+    border: none;
+    font-size: 18px;
+    font-weight: bold;
+    color: #664d03;
+    cursor: pointer;
+  ">&times;</button>
+  <strong>📢 NUUR Presale Alert:</strong><br>
+  Price increases from <strong>0.001 SDA</strong> to <strong>0.01 SDA</strong> in 7 days.<br>
+  <strong>Don't miss this opportunity!</strong>
+</div>
+
+<script>
+  // Show the alert after 5 seconds
+  setTimeout(() => {
+    document.getElementById("draggable-alert").style.display = "block";
+  }, 5000);
+
+  // Make the alert draggable
+  const alertBox = document.getElementById("draggable-alert");
+  let offsetX, offsetY, isDragging = false;
+
+  alertBox.addEventListener("mousedown", function(e) {
+    if (e.target.tagName !== 'BUTTON') {
+      isDragging = true;
+      offsetX = e.clientX - alertBox.offsetLeft;
+      offsetY = e.clientY - alertBox.offsetTop;
+      document.body.style.userSelect = "none";
+    }
+  });
+
+  document.addEventListener("mousemove", function(e) {
+    if (isDragging) {
+      alertBox.style.left = (e.clientX - offsetX) + "px";
+      alertBox.style.top = (e.clientY - offsetY) + "px";
+    }
+  });
+
+  document.addEventListener("mouseup", function() {
+    isDragging = false;
+    document.body.style.userSelect = "auto";
+  });
+</script>
+
 </body>
 </html>
