@@ -40,15 +40,15 @@ connectWalletButton.addEventListener("click", async () => {
 
     // Display sequential loading messages
     loadingMessage.innerText = "Checking Connected Wallet...";
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    await new Promise((resolve) => setTimeout(resolve, 2000));
 
     loadingMessage.innerText = "Checking NUUR Balance...";
     const balance = await nuurContract.methods.balanceOf(userAddress).call();
     const formattedBalance = balance / Math.pow(10, 18); // Assuming NUUR token has 18 decimals
 
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    await new Promise((resolve) => setTimeout(resolve, 2000));
     loadingMessage.innerText = "Finalizing Result...";
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    await new Promise((resolve) => setTimeout(resolve, 2000));
 
     // Clear loading message
     loadingMessage.innerText = "";
