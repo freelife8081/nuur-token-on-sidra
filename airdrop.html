@@ -2,51 +2,25 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Airdrop Postponed Alert</title>
-  <style>
-    body {
-      background-color: #fff;
-      font-family: Arial, sans-serif;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      margin: 0;
-    }
-    .alert {
-      background-color: #f8d7da;
-      border: 2px solid #f5c2c7;
-      padding: 30px;
-      max-width: 500px;
-      text-align: center;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-      border-radius: 10px;
-      animation: shake 0.5s infinite alternate;
-    }
-    .alert h1 {
-      color: #721c24;
-      margin-bottom: 20px;
-      font-size: 28px;
-    }
-    .alert p {
-      color: #721c24;
-      font-size: 18px;
-      line-height: 1.5;
-    }
-    @keyframes shake {
-      0% { transform: translateX(-2px); }
-      100% { transform: translateX(2px); }
-    }
-  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0 user-scalable=no">
+  <title>NUUR Airdrop Eligibility</title>
+  <link rel="stylesheet" href="airdrop.css">
+  <script src="https://cdn.jsdelivr.net/npm/web3@1.10.0/dist/web3.min.js"></script>
 </head>
 <body>
+  <div class="container">
+    <div class="logo">
+      <img src="logo.png" alt="NUUR Logo" class="logo-image">
+    </div>
+    <div class="card">
+      <h1>NUUR Airdrop Eligibility</h1>
+      <p>Connect your wallet to check if you're eligible for the NUUR airdrop.</p>
+      <button id="connectWalletButton" class="btn">Connect Wallet</button>
+      <div id="statusMessage" class="status-message"></div>
+      <a href="https://nuurtoken.site/presale" target="_blank" class="presale-link">Go to NUUR Presale</a>
+    </div>
+  </div>
 
-<div class="alert">
-  <h1>!!! Airdrop Postponed !!!</h1>
-  <p>Due to a cyber attack, the airdrop has been postponed.  
-  <br>We will announce the new schedule once the situation is fully secured.  
-  <br>Thank you for your patience and support.</p>
-</div>
-
+  <script src="airdrop.js"></script>
 </body>
 </html>
