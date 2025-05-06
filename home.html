@@ -601,33 +601,35 @@
     }
   });
   </script>
-  <div id="draggable-alert" style="
+ <div id="draggable-alert" style="
   display: none;
   position: fixed;
-  top: 100px;
+  top: 120px;
   left: 100px;
-  width: 320px;
-  background-color: #fff4e5;
-  border: 1px solid #ffc107;
-  color: #664d03;
-  padding: 15px 20px;
-  border-radius: 8px;
-  cursor: move;
+  width: 340px;
+  background-color: #e6f4ff;
+  border: 1px solid #339af0;
+  color: #084298;
+  padding: 18px 20px;
+  border-radius: 10px;
+  cursor: grab;
   z-index: 9999;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+  font-family: sans-serif;
+  transition: all 0.3s ease;
 ">
   <button onclick="this.parentElement.remove()" style="
     float: right;
     background: none;
     border: none;
-    font-size: 18px;
+    font-size: 20px;
     font-weight: bold;
-    color: #664d03;
+    color: #084298;
     cursor: pointer;
   ">&times;</button>
-  <strong>📢 NUUR Presale Alert:</strong><br>
-  Price increases from <strong>0.001 SDA</strong> to <strong>0.01 SDA</strong> in 7 days.<br>
-  <strong>Don't miss this opportunity!</strong>
+  <strong>🚀 NUUR Presale Price is Rising Soon!</strong><br><br>
+  Thousands are already taking advantage of the early rate. In just <strong>7 days</strong>, the price will jump from <strong>0.001 SDA</strong> to <strong>0.01 SDA</strong>.<br><br>
+  ⏳ <em>Smart investors act early—</em><br><strong>Don't miss this one-time chance.</strong>
 </div>
 
 <script>
@@ -636,31 +638,51 @@
     document.getElementById("draggable-alert").style.display = "block";
   }, 5000);
 
-  // Make the alert draggable
+  // Make draggable on desktop and touch devices
   const alertBox = document.getElementById("draggable-alert");
-  let offsetX, offsetY, isDragging = false;
+  let offsetX = 0, offsetY = 0, isDragging = false;
 
-  alertBox.addEventListener("mousedown", function(e) {
-    if (e.target.tagName !== 'BUTTON') {
-      isDragging = true;
-      offsetX = e.clientX - alertBox.offsetLeft;
-      offsetY = e.clientY - alertBox.offsetTop;
-      document.body.style.userSelect = "none";
-    }
-  });
+  function startDrag(x, y) {
+    isDragging = true;
+    offsetX = x - alertBox.offsetLeft;
+    offsetY = y - alertBox.offsetTop;
+    document.body.style.userSelect = "none";
+  }
 
-  document.addEventListener("mousemove", function(e) {
+  function doDrag(x, y) {
     if (isDragging) {
-      alertBox.style.left = (e.clientX - offsetX) + "px";
-      alertBox.style.top = (e.clientY - offsetY) + "px";
+      alertBox.style.left = (x - offsetX) + "px";
+      alertBox.style.top = (y - offsetY) + "px";
     }
-  });
+  }
 
-  document.addEventListener("mouseup", function() {
+  function endDrag() {
     isDragging = false;
     document.body.style.userSelect = "auto";
+  }
+
+  // Desktop
+  alertBox.addEventListener("mousedown", (e) => {
+    if (e.target.tagName !== 'BUTTON') startDrag(e.clientX, e.clientY);
   });
+
+  document.addEventListener("mousemove", (e) => doDrag(e.clientX, e.clientY));
+  document.addEventListener("mouseup", endDrag);
+
+  // Touch
+  alertBox.addEventListener("touchstart", (e) => {
+    const touch = e.touches[0];
+    startDrag(touch.clientX, touch.clientY);
+  });
+
+  document.addEventListener("touchmove", (e) => {
+    const touch = e.touches[0];
+    doDrag(touch.clientX, touch.clientY);
+  });
+
+  document.addEventListener("touchend", endDrag);
 </script>
+
 
 </body>
 </html>
