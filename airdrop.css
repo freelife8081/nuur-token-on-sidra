@@ -51,11 +51,18 @@ p {
   cursor: pointer;
 }
 
-.btn:hover {
+.btn:disabled {
+  background: gray;
+  cursor: not-allowed;
+}
+
+.btn:hover:enabled {
   background: #45a049;
 }
 
-.status-message {
+.loading-message, 
+.status-message, 
+.balance-message {
   margin-top: 20px;
   font-size: 16px;
 }
