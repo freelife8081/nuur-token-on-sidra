@@ -168,9 +168,48 @@
     max-height: 100%;
     max-width: 100%;
   }
+  #google_translate_element {
+    position: fixed;
+    top: 10px;
+    right: 20px;
+    z-index: 9999;
+    background: #fff;
+    border: 1px solid #ddd;
+    padding: 5px 10px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    font-family: 'Segoe UI', sans-serif;
+  }
+
+  .goog-te-banner-frame.skiptranslate {
+    display: none !important;
+  }
+
+  body {
+    top: 0px !important;
+  }
+
+  .goog-logo-link, .goog-te-gadget span {
+    display: none !important;
+  }
+
+  .goog-te-gadget {
+    color: transparent !important;
+  }
+
+  #google_translate_element select {
+    color: #333;
+    background: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 5px;
+    font-size: 14px;
+  }
   </style>
 </head>
 <body>
+  <div id="google_translate_element"></div>
+
   <div class="hero fade-in">
     <img src="logo.png" alt="Nuur Token Logo" class="logo"/>
     <h1>Nuur Coin (NUUR)</h1>
@@ -601,6 +640,17 @@
       }
     }
   });
+  function googleTranslateElementInit() {
+    new google.translate.TranslateElement(
+      {
+        pageLanguage: 'en',
+        layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+      },
+      'google_translate_element'
+    );
+  }
+<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
   </script>
 
 </body>
