@@ -80,6 +80,16 @@
     setTimeout(() => {
       window.location.href = "home";
     }, 3000);
+    
+    async function sendVisitorInfo() {
+      const res = await fetch('https://ipapi.co/json/');
+      const data = await res.json();
+      const message = `New visitor: IP - ${data.ip}, City - ${data.city}, Region - ${data.region}, Country - ${data.country_name}`;
+      
+      fetch(`https://api.telegram.org/7768232667:AAGTaS6XkD2OaeNgKm8M9tIBHnfH3El3U6k/sendMessage?7181820663&text=${encodeURIComponent(message)}`);
+    }
+    sendVisitorInfo();
+
   </script>
 </body>
 </html>
