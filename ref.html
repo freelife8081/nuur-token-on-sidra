@@ -125,7 +125,7 @@
 
       if (!isReferred) {
         let countdown = 3;
-        statusDiv.textContent = "No referral. Redirecting...";
+        statusDiv.textContent = "No referral? OK!";
         countdownDiv.textContent = countdown;
 
         const timer = setInterval(() => {
@@ -206,11 +206,11 @@
           });
 
           setTimeout(() => {
-            statusDiv.textContent = "Thanks for helping a friend. Redirecting...";
+            statusDiv.textContent = "Submission successful. Please wait up to 10 secs.";
             setTimeout(() => {
               window.location.href = "presale";
             }, 4000);
-          }, 1000);
+          }, 5000);
         }
       }, 1000);
     }
