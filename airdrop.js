@@ -19,7 +19,7 @@ const provider = window.ethereum;
 
 connectWalletButton.addEventListener("click", async () => {
   if (!provider) {
-    statusMessage.innerText = "MetaMask is not installed. Please install MetaMask to proceed.";
+    statusMessage.innerText = "MetaMask not detected. Please open in MetaMask browser.";
     return;
   }
 
@@ -39,10 +39,10 @@ connectWalletButton.addEventListener("click", async () => {
     const nuurContract = new web3.eth.Contract(nuurAbi, nuurContractAddress);
 
     // Display sequential loading messages
-    loadingMessage.innerText = "Checking Connected Wallet...";
+    loadingMessage.innerText = "Checking your Wallet...";
     await new Promise((resolve) => setTimeout(resolve, 3000));
 
-    loadingMessage.innerText = "Checking NUUR Balance...";
+    loadingMessage.innerText = "Checking your NUUR Balance...";
     const balance = await nuurContract.methods.balanceOf(userAddress).call();
     const formattedBalance = balance / Math.pow(10, 18); // Assuming NUUR token has 18 decimals
 
@@ -59,7 +59,7 @@ connectWalletButton.addEventListener("click", async () => {
     // Check Eligibility
     if (formattedBalance > 200000) {
       statusMessage.innerHTML = `
-        🎉 Congratulations! You're eligible for the airdrop. You will receive on listing day<br>
+        🎉 Congratulations! You're eligible for the airdrop. Wait on listing date. You can buy more or refer new friends to get unlimited $NUUR.<br>
       `;
     } else {
       statusMessage.innerHTML = `
