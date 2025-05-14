@@ -55,6 +55,60 @@
     <div id="statusMessage" class="text-sm text-center mt-4 text-yellow-400"></div>
   </div>
 
+  <div id="popup" style="
+  position: fixed;
+  bottom: -100px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #111;
+  color: #fff;
+  padding: 16px 24px;
+  border: 3px solid #00f2ff;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  transition: bottom 0.5s ease, opacity 0.5s ease;
+  font-family: sans-serif;
+  z-index: 1000;
+  animation: blink-border 1s infinite;
+  max-width: 90%;
+  box-sizing: border-box;
+  opacity: 1;
+">
+  <button onclick="dismissPopup()" style="
+    position: absolute;
+    top: 6px;
+    right: 10px;
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+  ">&times;</button>
+  Watch this quick <a href="https://youtube.com/shorts/fJLqjQVc3gQ?si=ZFZSm0JK6Pb6Q5lZ" target="_blank" style="color: #00f2ff; text-decoration: underline;">video</a> to learn how to buy $NUUR coin
+</div>
+
+<style>
+@keyframes blink-border {
+  0%   { border-color: #00f2ff; }
+  50%  { border-color: #ff0080; }
+  100% { border-color: #00f2ff; }
+}
+</style>
+
+<script>
+  setTimeout(function() {
+    document.getElementById('popup').style.bottom = '30px';
+  }, 5000);
+
+  function dismissPopup() {
+    const popup = document.getElementById('popup');
+    popup.style.opacity = '0';
+    setTimeout(() => {
+      popup.style.display = 'none';
+    }, 500); // matches the CSS transition duration
+  }
+</script>
+
   <script>
     let userAddress;
     const presaleAddress = "0x858024C3c8179Ed448A9133190f991cfA9873657"; // Replace with your contract
