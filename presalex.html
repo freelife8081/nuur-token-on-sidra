@@ -148,6 +148,40 @@
       document.getElementById("contractBalance").innerText = "Unavailable";
     }
   }
+  async function buyTokens() {
+  const sdaInput = document.getElementById("sdaAmount");
+  const status = document.getElementById("statusMessage");
+
+  if (!signer || !provider || !userAddress) {
+    status.innerText = "Please connect your wallet first.";
+    return;
+  }
+
+  const sdaAmount = parseFloat(sdaInput.value);
+  if (isNaN(sdaAmount) || sdaAmount <= 0) {
+    status.innerText = "Enter a valid SDA amount.";
+    return;
+  }
+
+  try {
+    const valueInWei = ethers.parseEther(sdaAmount.toString());
+    const contract = new ethers.Contract(presaleAddress, abi, signer);
+    const tx = await contract.buyTokens({ value: valueInWei });
+
+    status.innerText = "⏳ Waiting for transaction confirmation...";
+    const receipt = await tx.wait();
+
+    const explorerLink = `https://ledger.sidrachain.com/tx/${receipt.hash}`;
+    status.innerHTML = `✅ Transaction confirmed. <a href="${explorerLink}" target="_blank" class="underline text-green-300">View on Explorer</a>`;
+
+    await showWalletBalance();
+    await showContractBalance();
+  } catch (err) {
+    console.error("Transaction error:", err);
+    status.innerText = err.reason || "❌ Transaction failed or rejected.";
+  }
+}
+
 </script>
 </body>
 </html>
