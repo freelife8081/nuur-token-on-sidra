@@ -2,132 +2,10 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0 user-scalable=no"/>
-  <title>NUUR Presale</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background: #0d111c;
-      color: #fff;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    .top-bar {
-      width: 100%;
-      display: flex;
-      justify-content: flex-end;
-      padding: 1rem 2rem;
-      box-sizing: border-box;
-    }
-
-    .top-bar button {
-      padding: 0.5rem 1rem;
-      background: #2a2f45;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 0.9rem;
-    }
-
-    .card {
-      background: #1e2539;
-      padding: 2rem;
-      border-radius: 20px;
-      box-shadow: 0 0 15px rgba(0,0,0,0.3);
-      width: 100%;
-      max-width: 400px;
-      margin-top: 4rem;
-    }
-
-    h1 {
-      text-align: center;
-      margin-bottom: 1.5rem;
-      font-size: 1.75rem;
-    }
-
-    .token-row {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 1.25rem;
-    }
-
-    .token-row img {
-      width: 24px;
-      height: 24px;
-    }
-
-    input[type="number"] {
-      width: 100%;
-      padding: 0.75rem;
-      border-radius: 10px;
-      border: none;
-      margin-bottom: 1rem;
-      font-size: 1rem;
-    }
-    .input-line {
-  background: #2a2f45;
-  border-radius: 12px;
-  padding: 0.5rem 1rem;
-  justify-content: space-between;
-}
-   .input-line input {
-    flex: 1;
-    margin: 0 10px;
-    background: transparent;
-    border: none;
-    color: white;
-    font-size: 1rem;
-    text-align: right;
-}
-   .input-line input:focus {
-    outline: none;
-}
-    
-    .button {
-      width: 100%;
-      padding: 0.75rem;
-      background: #5b78f6;
-      border: none;
-      border-radius: 10px;
-      color: white;
-      font-weight: bold;
-      font-size: 1rem;
-      cursor: pointer;
-      transition: background 0.3s ease;
-    }
-
-    .button:hover {
-      background: #3a56d9;
-    }
-
-    .status {
-      margin-top: 1rem;
-      font-size: 0.9rem;
-      text-align: center;
-    }
-
-    .balance {
-      text-align: center;
-      font-size: 0.9rem;
-      margin-bottom: 1rem;
-      color: #ccc;
-    }
-
-    a {
-      color: #5bffad;
-      text-decoration: underline;
-    }
-
-    .hidden {
-      display: none;
-    }
-  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NUUR Token Presale</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/web3@1.10.0/dist/web3.min.js"></script>
 </head>
 <body class="bg-gray-900 text-white font-sans min-h-screen">
   <!-- Top Bar -->
@@ -149,7 +27,7 @@
         <label for="sdaAmount" class="block text-sm text-gray-300">SDA Amount</label>
         <div class="flex items-center space-x-2">
           <img src="sidra.jpeg" alt="SDA" class="w-6 h-6">
-          <input id="sdaAmount" type="number" placeholder="0.0" class="flex-1 px-3 py-2 rounded-md bg-gray-700 text-white text-sm focus:outline-none" />
+          <input id="sdaAmount" type="number" placeholder="0.0" class="w-24 px-3 py-2 rounded-md bg-gray-700 text-white text-sm focus:outline-none" />
         </div>
       </div>
 
@@ -158,7 +36,7 @@
         <label for="nuurEstimate" class="block text-sm text-gray-300">You Get</label>
         <div class="flex items-center space-x-2">
           <img src="logo.png" alt="NUUR" class="w-6 h-6">
-          <input id="nuurEstimate" type="text" readonly class="flex-1 px-3 py-2 rounded-md bg-gray-700 text-white text-sm focus:outline-none" />
+          <input id="nuurEstimate" type="text" readonly class="w-24 px-3 py-2 rounded-md bg-gray-700 text-white text-sm focus:outline-none" />
         </div>
       </div>
 
@@ -171,13 +49,12 @@
       </div>
     </div>
   </div>
-  <script src="https://cdn.jsdelivr.net/npm/web3@1.10.0/dist/web3.min.js"></script>
+
   <script>
     let userAddress;
     const presaleAddress = "0x858024C3c8179Ed448A9133190f991cfA9873657";
     const rate = 1000;
     const provider = window.ethereum;
-    const abi = [{"inputs":[],"name":"buyTokens","outputs":[],"stateMutability":"payable","type":"function"}];
 
     async function connectWallet() {
       if (!provider) return alert("Please install MetaMask!");
@@ -187,8 +64,8 @@
         userAddress = accounts[0];
 
         document.getElementById("statusMessage").innerText = `Wallet Connected: ${userAddress.slice(0, 6)}...${userAddress.slice(-4)}`;
-        document.getElementById("connectWalletButton").classList.add("hidden");
-        document.getElementById("disconnectWalletButton").classList.remove("hidden");
+        document.getElementById("connectWalletButton").style.display = "none";
+        document.getElementById("disconnectWalletButton").style.display = "inline-block";
 
         await showWalletBalance();
       } catch {
@@ -199,8 +76,8 @@
     async function disconnectWallet() {
       userAddress = null;
       document.getElementById("statusMessage").innerText = "Wallet disconnected.";
-      document.getElementById("connectWalletButton").classList.remove("hidden");
-      document.getElementById("disconnectWalletButton").classList.add("hidden");
+      document.getElementById("connectWalletButton").style.display = "inline-block";
+      document.getElementById("disconnectWalletButton").style.display = "none";
       document.getElementById("walletBalance").innerText = "Not Connected";
     }
 
@@ -218,10 +95,9 @@
     }
 
     document.getElementById("sdaAmount").addEventListener("input", function () {
-  const sda = parseFloat(this.value || "0");
-  document.getElementById("nuurEstimate").value = (sda * rate).toFixed(2);
-});
-
+      const sda = parseFloat(this.value || "0");
+      document.getElementById("nuurEstimate").value = (sda * rate).toString();
+    });
 
     async function buyTokens() {
       const sdaAmount = parseFloat(document.getElementById("sdaAmount").value);
@@ -234,12 +110,12 @@
           params: [{
             from: userAddress,
             to: presaleAddress,
-            value: (sdaAmount * 1e18).toString(16),
-          }],
+            value: (sdaAmount * 1e18).toString(16)
+          }]
         });
 
         const explorerLink = `https://ledger.sidrachain.com/tx/${txHash}`;
-        document.getElementById("statusMessage").innerHTML = `✅ Transaction sent. <a href="${explorerLink}" target="_blank">View on Explorer</a>`;
+        document.getElementById("statusMessage").innerHTML = `✅ Transaction sent. <a href="${explorerLink}" target="_blank" class="underline text-green-300">View on Explorer</a>`;
         await showWalletBalance();
       } catch (err) {
         document.getElementById("statusMessage").innerText = "❌ Transaction failed.";
