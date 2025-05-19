@@ -57,7 +57,13 @@
   
   <script src="https://cdn.jsdelivr.net/npm/web3@1.10.0/dist/web3.min.js"></script>
   <script>
-    // Constants and Global Variables
+    /*
+* Last Updated: 2025-05-19 09:05:41 UTC
+* Updated by: freelife8081
+* Changes: Simplified transaction handling for MetaMask Android compatibility
+*/
+
+// Constants and Global Variables
 const presaleAddress = "0x858024C3c8179Ed448A9133190f991cfA9873657";
 const rate = 1000;
 let userAddress = null;
@@ -141,6 +147,9 @@ async function connectWallet() {
     try {
         const accounts = await provider.request({ method: "eth_requestAccounts" });
         userAddress = accounts[0];
+        
+        const connectTime = new Date().toISOString();
+        console.log(`Wallet connected at ${connectTime} UTC`);
 
         document.getElementById("statusMessage").innerText = 
             `Wallet Connected: ${userAddress.slice(0, 6)}...${userAddress.slice(-4)}`;
@@ -212,7 +221,7 @@ function validateSDAAmount(amount) {
     }
 }
 
-// Buy Tokens
+// Buy Tokens - Simplified for MetaMask Android Compatibility
 async function buyTokens() {
     const sdaAmount = parseFloat(document.getElementById("sdaAmount").value);
     if (!sdaAmount || sdaAmount <= 0) {
@@ -231,50 +240,18 @@ async function buyTokens() {
         const web3 = new Web3(provider);
         const weiValue = web3.utils.toWei(sdaAmount.toString(), 'ether');
 
-        // Get the chain ID to determine transaction type support
-        const chainId = await web3.eth.getChainId();
-        console.log('Chain ID:', chainId);
-
-        // Base transaction parameters
+        // Simple transaction parameters
         const txParams = {
             from: userAddress,
             to: presaleAddress,
             value: web3.utils.toHex(weiValue)
         };
 
-        try {
-            // First try EIP-1559
-            const block = await web3.eth.getBlock('latest');
-            if (block.baseFeePerGas) {
-                // Network supports EIP-1559
-                const maxPriorityFeePerGas = await web3.eth.getMaxPriorityFeePerGas();
-                const maxFeePerGas = web3.utils.toBN(block.baseFeePerGas)
-                    .muln(2)
-                    .add(web3.utils.toBN(maxPriorityFeePerGas))
-                    .toString();
+        // Get gas price
+        const gasPrice = await web3.eth.getGasPrice();
+        txParams.gasPrice = web3.utils.toHex(gasPrice);
 
-                Object.assign(txParams, {
-                    type: '0x2',
-                    maxFeePerGas: web3.utils.toHex(maxFeePerGas),
-                    maxPriorityFeePerGas: web3.utils.toHex(maxPriorityFeePerGas)
-                });
-            } else {
-                // Network doesn't support EIP-1559, use legacy transaction
-                const gasPrice = await web3.eth.getGasPrice();
-                Object.assign(txParams, {
-                    gasPrice: web3.utils.toHex(gasPrice)
-                });
-            }
-        } catch (error) {
-            console.warn('Error getting EIP-1559 parameters, falling back to legacy:', error);
-            // Fallback to legacy transaction type
-            const gasPrice = await web3.eth.getGasPrice();
-            Object.assign(txParams, {
-                gasPrice: web3.utils.toHex(gasPrice)
-            });
-        }
-
-        // Estimate gas limit
+        // Estimate gas
         const estimatedGas = await web3.eth.estimateGas({
             from: userAddress,
             to: presaleAddress,
@@ -283,7 +260,7 @@ async function buyTokens() {
 
         txParams.gas = web3.utils.toHex(Math.floor(estimatedGas * 1.2));
 
-        console.log('Final transaction parameters:', txParams);
+        console.log('Transaction Parameters:', txParams);
 
         const txHash = await provider.request({
             method: "eth_sendTransaction",
@@ -299,7 +276,7 @@ async function buyTokens() {
     }
 }
 
-// Monitor Transaction
+// Monitor Transaction - Simplified for Better Compatibility
 async function monitorTransaction(txHash) {
     const web3 = new Web3(provider);
     const statusElement = document.getElementById("statusMessage");
@@ -307,7 +284,7 @@ async function monitorTransaction(txHash) {
     try {
         setLoading(true);
         statusElement.innerHTML = `
-            ⏳ Confirming transaction... 
+            ⏳ Processing transaction... 
             <a href="https://ledger.sidrachain.com/tx/${txHash}" 
                target="_blank" 
                class="underline text-yellow-300">
@@ -323,22 +300,20 @@ async function monitorTransaction(txHash) {
             try {
                 receipt = await web3.eth.getTransactionReceipt(txHash);
                 if (receipt) {
-                    if (receipt.status) {
-                        await showContractBalance();
-                        await showWalletBalance();
+                    console.log('Transaction receipt:', receipt);
+                    
+                    await showContractBalance();
+                    await showWalletBalance();
 
-                        statusElement.innerHTML = `
-                            ✅ Transaction confirmed successfully! 
-                            <a href="https://ledger.sidrachain.com/tx/${txHash}" 
-                               target="_blank" 
-                               class="underline text-green-300">
-                                View on Explorer
-                            </a>
-                        `;
-                        return;
-                    } else {
-                        throw new Error("Transaction failed on blockchain");
-                    }
+                    statusElement.innerHTML = `
+                        ✅ Transaction processed! 
+                        <a href="https://ledger.sidrachain.com/tx/${txHash}" 
+                           target="_blank" 
+                           class="underline text-green-300">
+                            View on Explorer
+                        </a>
+                    `;
+                    return;
                 }
             } catch (error) {
                 console.warn('Error checking transaction:', error);
@@ -381,6 +356,9 @@ document.addEventListener("DOMContentLoaded", function() {
             window.location.reload();
         });
     }
+
+    // Log initialization
+    console.log('Presale DApp initialized at:', new Date().toISOString());
 });
   </script>
 </body>
