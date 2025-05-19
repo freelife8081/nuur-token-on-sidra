@@ -205,9 +205,10 @@
     }
 
     document.getElementById("sdaAmount").addEventListener("input", function () {
-      const sda = parseFloat(this.value || "0");
-      document.getElementById("nuurEstimate").innerText = `${sda * rate} NUUR`;
-    });
+  const sda = parseFloat(this.value || "0");
+  document.getElementById("nuurEstimate").value = (sda * rate).toFixed(2);
+});
+
 
     async function buyTokens() {
       const sdaAmount = parseFloat(document.getElementById("sdaAmount").value);
