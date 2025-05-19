@@ -2,58 +2,83 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>NUUR Token Presale</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>NUUR Coin Presale</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/web3@1.10.0/dist/web3.min.js"></script>
+  <style>
+    /* Simple spinner animation */
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    .spinner {
+      border: 3px solid rgba(255, 255, 255, 0.25);
+      border-top-color: #22c55e; /* Tailwind green-500 */
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      animation: spin 1s linear infinite;
+    }
+  </style>
 </head>
-<body class="bg-gray-900 text-white font-sans min-h-screen">
-  <!-- Top Bar -->
-  <div class="flex justify-between items-center p-4 border-b border-gray-700">
-    <h1 class="text-xl font-bold text-white">NUUR Presale</h1>
-    <div>
-      <button id="connectWalletButton" onclick="connectWallet()" class="bg-indigo-600 px-4 py-2 rounded-xl text-sm hover:bg-indigo-500">Connect Wallet</button>
-      <button id="disconnectWalletButton" onclick="disconnectWallet()" class="bg-red-600 px-4 py-2 rounded-xl text-sm hidden hover:bg-red-500">Disconnect</button>
-    </div>
-  </div>
+<body class="bg-[#0D111C] text-white min-h-screen flex flex-col items-center px-4">
+
+  <!-- Header -->
+  <header class="w-full flex justify-end py-4 px-4">
+    <button id="connectWalletButton" onclick="connectWallet()" class="bg-blue-600 text-white px-4 py-2 rounded-xl hover:bg-blue-700 transition">
+      Connect Wallet
+    </button>
+    <button id="disconnectWalletButton" onclick="disconnectWallet()" class="bg-gray-700 text-white px-4 py-2 rounded-xl hidden ml-2 hover:bg-gray-800 transition">
+      Disconnect
+    </button>
+  </header>
 
   <!-- Main Container -->
-  <div class="flex justify-center items-center p-4">
-    <div class="w-full max-w-md bg-gray-800 p-6 rounded-2xl shadow-lg space-y-6">
-      <div id="statusMessage" class="text-sm text-center text-gray-400 mb-4">Not connected</div>
+  <main class="w-full max-w-md bg-[#1A1E2D] rounded-2xl p-6 mt-4 flex flex-col items-center text-center shadow-lg">
+    <h1 class="text-2xl font-semibold mb-4">Buy NUUR</h1>
 
-      <!-- SDA Input -->
-      <div class="space-y-2">
-        <label for="sdaAmount" class="block text-sm text-gray-300">SDA Amount</label>
-        <div class="flex items-center space-x-2">
-          <img src="sidra.jpeg" alt="SDA" class="w-6 h-6">
-          <input id="sdaAmount" type="number" placeholder="0.0" class="w-24 px-3 py-2 rounded-md bg-gray-700 text-white text-sm focus:outline-none" />
-        </div>
+    <!-- SDA Input -->
+    <div class="w-full bg-[#2A2F45] rounded-xl p-3 mb-4 flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <img src="sidra.jpeg" alt="SDA" class="w-6 h-6" />
+        <span class="text-sm">SDA</span>
       </div>
-
-      <!-- NUUR Estimate -->
-      <div class="space-y-2">
-        <label for="nuurEstimate" class="block text-sm text-gray-300">You Get</label>
-        <div class="flex items-center space-x-2">
-          <img src="logo.png" alt="NUUR" class="w-6 h-6">
-          <input id="nuurEstimate" type="text" readonly class="w-24 px-3 py-2 rounded-md bg-gray-700 text-white text-sm focus:outline-none" />
-        </div>
-      </div>
-
-      <!-- Buy Button -->
-      <button onclick="buyTokens()" class="w-full bg-green-600 py-2 rounded-xl hover:bg-green-500 text-white font-semibold">Buy NUUR</button>
-
-      <!-- Wallet Balance -->
-      <div class="text-sm text-center text-gray-400">
-        Wallet Balance: <span id="walletBalance">Not Connected</span>
-      </div>
+      <input id="sdaAmount" type="number" step="any" placeholder="0.00" class="bg-transparent text-right w-24 text-lg outline-none" />
     </div>
+
+    <!-- NUUR Output -->
+    <div class="w-full bg-[#2A2F45] rounded-xl p-3 mb-6 flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <img src="logo.png" alt="NUUR" class="w-6 h-6" />
+        <span class="text-sm">NUUR</span>
+      </div>
+      <span id="nuurEstimate" class="text-right text-lg">0</span>
+    </div>
+
+    <!-- Buy Button and Spinner Container -->
+    <div class="w-full flex justify-center items-center space-x-3">
+      <button id="buyButton" onclick="buyTokens()" class="bg-green-600 w-full py-3 rounded-xl text-white font-medium hover:bg-green-700 transition disabled:opacity-50" >
+        Buy NUUR
+      </button>
+      <div id="spinner" class="spinner hidden"></div>
+    </div>
+
+    <!-- Status -->
+    <div id="statusMessage" class="mt-4 text-sm text-center"></div>
+  </main>
+
+  <!-- Wallet Balance -->
+  <div class="mt-6 text-sm text-center">
+    Wallet Balance: <span id="walletBalance">Not Connected</span>
   </div>
 
   <script>
     let userAddress;
     const presaleAddress = "0x858024C3c8179Ed448A9133190f991cfA9873657";
     const rate = 1000;
+
+    const abi = [{"inputs":[{"internalType":"address","name":"_nuurToken","type":"address"},{"internalType":"address","name":"_devWallet","type":"address"},{"internalType":"address","name":"initialOwner","type":"address"}],"stateMutability":"nonpayable","type":"constructor"},{"inputs":[{"internalType":"address","name":"owner","type":"address"}],"name":"OwnableInvalidOwner","type":"error"},{"inputs":[{"internalType":"address","name":"account","type":"address"}],"name":"OwnableUnauthorizedAccount","type":"error"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"to","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"NUURWithdrawn","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"previousOwner","type":"address"},{"indexed":true,"internalType":"address","name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"to","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"SDAWithdrawn","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"buyer","type":"address"},{"indexed":false,"internalType":"uint256","name":"sdaAmount","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"nuurAmount","type":"uint256"}],"name":"TokensPurchased","type":"event"},{"inputs":[],"name":"RATE","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"buyTokens","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[],"name":"devWallet","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"nuurToken","outputs":[{"internalType":"contract IERC20","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"renounceOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"newDevWallet","type":"address"}],"name":"updateDevWallet","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"withdrawNUUR","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"withdrawSDA","outputs":[],"stateMutability":"nonpayable","type":"function"},{"stateMutability":"payable","type":"receive"}];
+
     const provider = window.ethereum;
 
     async function connectWallet() {
@@ -84,7 +109,7 @@
     async function showWalletBalance() {
       if (!provider || !userAddress) return;
 
-      const web3 = new Web3(provider);
+      const web3 = new window.Web3(provider);
       try {
         const balance = await web3.eth.getBalance(userAddress);
         const formattedBalance = parseFloat(web3.utils.fromWei(balance, "ether")).toFixed(4);
@@ -96,7 +121,7 @@
 
     document.getElementById("sdaAmount").addEventListener("input", function () {
       const sda = parseFloat(this.value || "0");
-      document.getElementById("nuurEstimate").value = (sda * rate).toString();
+      document.getElementById("nuurEstimate").innerText = (sda * rate).toLocaleString();
     });
 
     async function buyTokens() {
@@ -104,14 +129,22 @@
       if (!sdaAmount || sdaAmount <= 0) return alert("Enter a valid SDA amount.");
       if (!userAddress) return alert("Connect wallet first.");
 
+      const buyButton = document.getElementById("buyButton");
+      const spinner = document.getElementById("spinner");
+
+      // Show spinner and disable button
+      buyButton.disabled = true;
+      spinner.classList.remove("hidden");
+      document.getElementById("statusMessage").innerText = "Processing transaction...";
+
       try {
         const txHash = await provider.request({
           method: "eth_sendTransaction",
           params: [{
             from: userAddress,
             to: presaleAddress,
-            value: (sdaAmount * 1e18).toString(16)
-          }]
+            value: (sdaAmount * 1e18).toString(16),
+          }],
         });
 
         const explorerLink = `https://ledger.sidrachain.com/tx/${txHash}`;
@@ -119,6 +152,10 @@
         await showWalletBalance();
       } catch (err) {
         document.getElementById("statusMessage").innerText = "❌ Transaction failed.";
+      } finally {
+        // Hide spinner and enable button regardless of success or failure
+        buyButton.disabled = false;
+        spinner.classList.add("hidden");
       }
     }
   </script>
