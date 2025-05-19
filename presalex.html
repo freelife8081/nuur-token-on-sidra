@@ -158,15 +158,7 @@
             padding: 0.5rem;
             display: none;
         }
-
-        .timestamp {
-            position: fixed;
-            bottom: 1rem;
-            right: 1rem;
-            color: #6B7280;
-            font-size: 0.875rem;
-        }
-
+        
         .error-link {
             display: inline-block;
             margin-top: 0.5rem;
@@ -208,10 +200,6 @@
         </div>
     </div>
 
-    <div class="timestamp">
-        Last updated: 2025-05-19 14:24:27 UTC by @freelife8081
-    </div>
-
     <script>
     console.log('Script loaded');
 window.addEventListener('error', function(e) {
@@ -227,7 +215,7 @@ function checkIfWalletIsInstalled() {
 }
 
 const NETWORK_CONFIG = {
-    chainId: '0x17cad', // ensure this matches Sidra Chain's actual chain ID
+    chainId: '0x17cad', // Verify this matches Sidra Chain's hex ID
     chainName: 'Sidra Chain',
     rpcUrls: ['https://node.sidrachain.com'],
     blockExplorerUrls: ['https://ledger.sidrachain.com'],
@@ -236,7 +224,16 @@ const NETWORK_CONFIG = {
 
 const PRESALE_CONTRACT = {
     address: '0x858024C3c8179Ed448A9133190f991cfA9873657',
-    abi: [{"inputs":[{"internalType":"address","name":"_nuurToken","type":"address"},{"internalType":"address","name":"_devWallet","type":"address"},{"internalType":"address","name":"initialOwner","type":"address"}],"stateMutability":"nonpayable","type":"constructor"},{"inputs":[{"internalType":"address","name":"owner","type":"address"}],"name":"OwnableInvalidOwner","type":"error"},{"inputs":[{"internalType":"address","name":"account","type":"address"}],"name":"OwnableUnauthorizedAccount","type":"error"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"to","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"NUURWithdrawn","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"previousOwner","type":"address"},{"indexed":true,"internalType":"address","name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"to","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"SDAWithdrawn","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"buyer","type":"address"},{"indexed":false,"internalType":"uint256","name":"sdaAmount","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"nuurAmount","type":"uint256"}],"name":"TokensPurchased","type":"event"},{"inputs":[],"name":"RATE","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"buyTokens","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[],"name":"devWallet","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"nuurToken","outputs":[{"internalType":"contract IERC20","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"renounceOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"newDevWallet","type":"address"}],"name":"updateDevWallet","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"withdrawNUUR","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"withdrawSDA","outputs":[],"stateMutability":"nonpayable","type":"function"},{"stateMutability":"payable","type":"receive"}];
+    abi: [
+        {
+            "inputs": [],
+            "name": "buyTokens",
+            "outputs": [],
+            "stateMutability": "payable",
+            "type": "function"
+        }
+    ]
+};
 
 const NUUR_PRICE = 0.001; // 1 NUUR = 0.001 SDA
 
@@ -276,7 +273,7 @@ async function connectWallet() {
         connectBtn.textContent = `${account.slice(0,6)}...${account.slice(-4)}`;
         buyBtn.disabled = false;
 
-        // Attempt network switch, but don\u2019t let failure abort connection
+        // Attempt network switch, but don’t let failure abort connection
         try {
             await checkNetwork();
         } catch (netErr) {
@@ -316,7 +313,6 @@ async function checkNetwork() {
         });
         networkWarning.style.display = 'none';
     } catch (error) {
-        // If chain is not added, try to add it
         if (error.code === 4902) {
             await window.ethereum.request({
                 method: 'wallet_addEthereumChain',
@@ -331,7 +327,6 @@ async function checkNetwork() {
 
 function handleAccountsChanged(accounts) {
     if (accounts.length === 0) {
-        // Disconnected
         account = provider = signer = null;
         connectBtn.textContent = 'Connect Wallet';
         buyBtn.disabled = true;
@@ -367,24 +362,20 @@ async function buyNUUR() {
             signer
         );
 
-        const tx = await contract.buyTokens({
-            value: ethers.utils.parseEther(sdaInput.value)
-        });
-
+        const tx = await contract.buyTokens({ value: ethers.utils.parseEther(sdaInput.value) });
         statusDiv.innerHTML = 'Transaction submitted. Waiting for confirmation...';
         const receipt = await tx.wait();
 
-        statusDiv.innerHTML = `\n            Transaction successful!\n            <a href="${NETWORK_CONFIG.blockExplorerUrls[0]}/tx/${receipt.transactionHash}" target="_blank">View on Ledger</a>\n        `;
+        statusDiv.innerHTML = `Transaction successful! <a href="${NETWORK_CONFIG.blockExplorerUrls[0]}/tx/${receipt.transactionHash}" target="_blank">View on Ledger</a>`;
         statusDiv.className = 'status success';
     } catch (error) {
         console.error('Error buying NUUR:', error);
-        statusDiv.innerHTML = `\n            Transaction failed: ${error.message || 'Unknown error'}<br>\n            <a href=\"error.html\" class=\"error-link\" target=\"_blank\">Report an error</a>\n        `;
+        statusDiv.innerHTML = `Transaction failed: ${error.message || 'Unknown error'}<br><a href="error.html" class="error-link" target="_blank">Report an error</a>`;
         statusDiv.className = 'status error';
     }
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
-    // Auto-connect if already authorized
     if (window.ethereum) {
         try {
             const accounts = await window.ethereum.request({ method: 'eth_accounts' });
@@ -395,13 +386,12 @@ document.addEventListener('DOMContentLoaded', async () => {
             console.error('Error checking initial wallet state:', error);
         }
     }
-
-    // Event bindings
     connectBtn.addEventListener('click', connectWallet);
     sdaInput.addEventListener('input', (e) => calculateNUUR(e.target.value));
     nuurInput.addEventListener('input', (e) => calculateSDA(e.target.value));
     buyBtn.addEventListener('click', buyNUUR);
 });
+
     </script>
 </body>
 </html>
