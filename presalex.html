@@ -54,114 +54,266 @@
 
     <div id="statusMessage" class="text-sm text-center mt-4 text-yellow-400"></div>
   </div>
+  
   <script src="https://cdn.jsdelivr.net/npm/web3@1.10.0/dist/web3.min.js"></script>
 
 <script>
-  let userAddress;
-  const presaleAddress = "0x858024C3c8179Ed448A9133190f991cfA9873657"; // Your presale contract
-  const rate = 1000;
+  // Constants and Global Variables
+const presaleAddress = "0x858024C3c8179Ed448A9133190f991cfA9873657";
+const rate = 1000;
+let userAddress = null;
+let provider = window.ethereum;
 
-  const abi = [{"inputs":[{"internalType":"address","name":"_nuurToken","type":"address"},{"internalType":"address","name":"_devWallet","type":"address"},{"internalType":"address","name":"initialOwner","type":"address"}],"stateMutability":"nonpayable","type":"constructor"},{"inputs":[{"internalType":"address","name":"owner","type":"address"}],"name":"OwnableInvalidOwner","type":"error"},{"inputs":[{"internalType":"address","name":"account","type":"address"}],"name":"OwnableUnauthorizedAccount","type":"error"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"to","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"NUURWithdrawn","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"previousOwner","type":"address"},{"indexed":true,"internalType":"address","name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"to","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"SDAWithdrawn","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"buyer","type":"address"},{"indexed":false,"internalType":"uint256","name":"sdaAmount","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"nuurAmount","type":"uint256"}],"name":"TokensPurchased","type":"event"},{"inputs":[],"name":"RATE","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"buyTokens","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[],"name":"devWallet","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"nuurToken","outputs":[{"internalType":"contract IERC20","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"renounceOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"newDevWallet","type":"address"}],"name":"updateDevWallet","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"withdrawNUUR","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"withdrawSDA","outputs":[],"stateMutability":"nonpayable","type":"function"},{"stateMutability":"payable","type":"receive"}];
-  const provider = window.ethereum;
+// Contract ABI
+const abi = [
+    {"inputs":[{"internalType":"address","name":"_nuurToken","type":"address"},{"internalType":"address","name":"_devWallet","type":"address"},{"internalType":"address","name":"initialOwner","type":"address"}],"stateMutability":"nonpayable","type":"constructor"},
+    {"inputs":[{"internalType":"address","name":"owner","type":"address"}],"name":"OwnableInvalidOwner","type":"error"},
+    {"inputs":[{"internalType":"address","name":"account","type":"address"}],"name":"OwnableUnauthorizedAccount","type":"error"},
+    {"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"to","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"NUURWithdrawn","type":"event"},
+    {"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"previousOwner","type":"address"},{"indexed":true,"internalType":"address","name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"},
+    {"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"to","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"SDAWithdrawn","type":"event"},
+    {"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"buyer","type":"address"},{"indexed":false,"internalType":"uint256","name":"sdaAmount","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"nuurAmount","type":"uint256"}],"name":"TokensPurchased","type":"event"},
+    {"inputs":[],"name":"RATE","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},
+    {"inputs":[],"name":"buyTokens","outputs":[],"stateMutability":"payable","type":"function"},
+    {"inputs":[],"name":"devWallet","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},
+    {"inputs":[],"name":"nuurToken","outputs":[{"internalType":"contract IERC20","name":"","type":"address"}],"stateMutability":"view","type":"function"},
+    {"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},
+    {"inputs":[],"name":"renounceOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},
+    {"inputs":[{"internalType":"address","name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},
+    {"inputs":[{"internalType":"address","name":"newDevWallet","type":"address"}],"name":"updateDevWallet","outputs":[],"stateMutability":"nonpayable","type":"function"},
+    {"inputs":[{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"withdrawNUUR","outputs":[],"stateMutability":"nonpayable","type":"function"},
+    {"inputs":[{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"withdrawSDA","outputs":[],"stateMutability":"nonpayable","type":"function"},
+    {"stateMutability":"payable","type":"receive"}
+];
 
-  async function connectWallet() {
-    if (!provider) return alert("Please install MetaMask!");
+// Error handling
+const ErrorTypes = {
+    WALLET_NOT_CONNECTED: "WALLET_NOT_CONNECTED",
+    INVALID_AMOUNT: "INVALID_AMOUNT",
+    TRANSACTION_FAILED: "TRANSACTION_FAILED",
+    NETWORK_ERROR: "NETWORK_ERROR"
+};
+
+function handleError(error, type) {
+    const errorMessages = {
+        [ErrorTypes.WALLET_NOT_CONNECTED]: "Please connect your wallet first",
+        [ErrorTypes.INVALID_AMOUNT]: "Please enter a valid amount between 0.001 and 5000 SDA",
+        [ErrorTypes.TRANSACTION_FAILED]: "Transaction failed. Please try again",
+        [ErrorTypes.NETWORK_ERROR]: "Network error. Please check your connection"
+    };
+
+    const statusElement = document.getElementById("statusMessage");
+    statusElement.className = "text-sm text-center mt-4 text-red-400";
+    statusElement.innerText = errorMessages[type] || "An unexpected error occurred";
+    console.error("Error details:", error);
+}
+
+// Loading state management
+function setLoading(isLoading) {
+    const buyButton = document.querySelector('button[onclick="buyTokens()"]');
+    if (isLoading) {
+        buyButton.disabled = true;
+        buyButton.innerHTML = `
+            <svg class="animate-spin h-5 w-5 mr-3 inline" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"/>
+            </svg>
+            Processing...
+        `;
+    } else {
+        buyButton.disabled = false;
+        buyButton.innerHTML = "Buy NUUR";
+    }
+}
+
+// Network validation
+async function validateNetwork() {
+    if (!provider) return false;
+    
+    try {
+        const chainId = await provider.request({ method: 'eth_chainId' });
+        // Update this with actual Sidra Chain ID
+        const SIDRA_CHAIN_ID = '0x1234';
+        
+        if (chainId !== SIDRA_CHAIN_ID) {
+            throw new Error('Please switch to Sidra Chain network');
+        }
+        return true;
+    } catch (error) {
+        handleError(error, ErrorTypes.NETWORK_ERROR);
+        return false;
+    }
+}
+
+// Wallet connection
+async function connectWallet() {
+    if (!provider) {
+        alert("Please install MetaMask!");
+        return;
+    }
 
     try {
-      const accounts = await provider.request({ method: "eth_requestAccounts" });
-      userAddress = accounts[0];
+        const accounts = await provider.request({ method: "eth_requestAccounts" });
+        userAddress = accounts[0];
 
-      document.getElementById("statusMessage").innerText = `Wallet Connected: ${userAddress.slice(0, 6)}...${userAddress.slice(-4)}`;
-      document.getElementById("connectWalletButton").style.display = "none";
-      document.getElementById("disconnectWalletButton").style.display = "inline-block";
+        document.getElementById("statusMessage").innerText = 
+            `Wallet Connected: ${userAddress.slice(0, 6)}...${userAddress.slice(-4)}`;
+        document.getElementById("connectWalletButton").style.display = "none";
+        document.getElementById("disconnectWalletButton").style.display = "inline-block";
 
-      await showContractBalance();
-      await showWalletBalance();
-    } catch {
-      document.getElementById("statusMessage").innerText = "Wallet connection failed.";
+        await showContractBalance();
+        await showWalletBalance();
+    } catch (error) {
+        handleError(error, ErrorTypes.WALLET_NOT_CONNECTED);
     }
-  }
+}
 
-  async function disconnectWallet() {
+// Wallet disconnection
+async function disconnectWallet() {
     userAddress = null;
     document.getElementById("statusMessage").innerText = "Wallet disconnected.";
     document.getElementById("connectWalletButton").style.display = "inline-block";
     document.getElementById("disconnectWalletButton").style.display = "none";
     document.getElementById("walletBalance").innerText = "Not Connected";
-  }
+}
 
-  async function showWalletBalance() {
+// Show wallet balance
+async function showWalletBalance() {
     if (!provider || !userAddress) return;
 
     const web3 = new Web3(provider);
     try {
-      const balance = await web3.eth.getBalance(userAddress); // native coin (SDA) balance
-      const formattedBalance = parseFloat(web3.utils.fromWei(balance, "ether")).toFixed(4);
-      document.getElementById("walletBalance").innerText = `${formattedBalance} SDA`;
-    } catch {
-      document.getElementById("walletBalance").innerText = "Unavailable";
+        const balance = await web3.eth.getBalance(userAddress);
+        const formattedBalance = parseFloat(web3.utils.fromWei(balance, "ether")).toFixed(4);
+        document.getElementById("walletBalance").innerText = `${formattedBalance} SDA`;
+    } catch (error) {
+        document.getElementById("walletBalance").innerText = "Unavailable";
+        handleError(error, ErrorTypes.NETWORK_ERROR);
     }
-  }
+}
 
-  document.getElementById("sdaAmount").addEventListener("input", function () {
-    const sda = parseFloat(this.value || "0");
-    document.getElementById("nuurEstimate").innerText = (sda * rate).toLocaleString();
-  });
-
-  async function buyTokens() {
-    const sdaAmount = parseFloat(document.getElementById("sdaAmount").value);
-    if (!sdaAmount || sdaAmount <= 0) return alert("Enter a valid SDA amount.");
-    if (!userAddress) return alert("Connect wallet first.");
-
-    try {
-      // Build transaction params WITHOUT gasPrice or EIP-1559 gas fields
-      const txParams = {
-        from: userAddress,
-        to: presaleAddress,
-        value: (sdaAmount * 1e18).toString(16), // Convert to hex wei string
-      };
-
-      const txHash = await provider.request({
-        method: "eth_sendTransaction",
-        params: [txParams],
-      });
-
-      const explorerLink = `https://ledger.sidrachain.com/tx/${txHash}`;
-      document.getElementById("statusMessage").innerHTML = `✅ Transaction sent. <a href="${explorerLink}" target="_blank" class="underline text-green-300">View on Explorer</a>`;
-
-      await showContractBalance();
-      await showWalletBalance();
-    } catch (err) {
-      console.error(err);
-      document.getElementById("statusMessage").innerText = "❌ Transaction failed.";
-      <a href="error.html" class="underline text-red-600">Report the issue here</a>
-    }
-  }
-
-  async function showContractBalance() {
+// Show contract balance
+async function showContractBalance() {
     if (!provider) return;
 
     const web3 = new Web3(provider);
     const contract = new web3.eth.Contract(abi, presaleAddress);
 
     try {
-      const nuurTokenAddress = await contract.methods.nuurToken().call();
+        const nuurTokenAddress = await contract.methods.nuurToken().call();
+        const nuurContract = new web3.eth.Contract([
+            { "constant": true, "inputs": [], "name": "decimals", "outputs": [{ "name": "", "type": "uint8" }], "type": "function" },
+            { "constant": true, "inputs": [{ "name": "account", "type": "address" }], "name": "balanceOf", "outputs": [{ "name": "", "type": "uint256" }], "type": "function" }
+        ], nuurTokenAddress);
 
-      const nuurContract = new web3.eth.Contract([
-        { "constant": true, "inputs": [], "name": "decimals", "outputs": [{ "name": "", "type": "uint8" }], "type": "function" },
-        { "constant": true, "inputs": [{ "name": "account", "type": "address" }], "name": "balanceOf", "outputs": [{ "name": "", "type": "uint256" }], "type": "function" }
-      ], nuurTokenAddress);
-
-      const decimals = await nuurContract.methods.decimals().call();
-      const balance = await nuurContract.methods.balanceOf(presaleAddress).call();
-
-      const formattedBalance = parseFloat(balance / (10 ** decimals)).toLocaleString();
-
-      document.getElementById("contractBalance").innerText = formattedBalance;
-    } catch {
-      document.getElementById("contractBalance").innerText = "Unavailable";
+        const decimals = await nuurContract.methods.decimals().call();
+        const balance = await nuurContract.methods.balanceOf(presaleAddress).call();
+        const formattedBalance = parseFloat(balance / (10 ** decimals)).toLocaleString();
+        document.getElementById("contractBalance").innerText = formattedBalance;
+    } catch (error) {
+        document.getElementById("contractBalance").innerText = "Unavailable";
+        handleError(error, ErrorTypes.NETWORK_ERROR);
     }
-  }
+}
+
+// Input validation
+function validateSDAAmount(amount) {
+    if (amount < 0.001 || amount > 5000) {
+        throw new Error("Amount must be between 0.001 and 5000 SDA");
+    }
+    if (!/^\d+(\.\d{0,3})?$/.test(amount.toString())) {
+        throw new Error("Amount can have maximum 3 decimal places");
+    }
+}
+
+// Buy tokens
+async function buyTokens() {
+    const sdaAmount = parseFloat(document.getElementById("sdaAmount").value);
+    if (!sdaAmount || sdaAmount <= 0) {
+        handleError(new Error("Invalid amount"), ErrorTypes.INVALID_AMOUNT);
+        return;
+    }
+    if (!userAddress) {
+        handleError(new Error("Wallet not connected"), ErrorTypes.WALLET_NOT_CONNECTED);
+        return;
+    }
+
+    try {
+        validateSDAAmount(sdaAmount);
+        setLoading(true);
+
+        const txParams = {
+            from: userAddress,
+            to: presaleAddress,
+            value: "0x" + (sdaAmount * 1e18).toString(16)
+        };
+
+        const txHash = await provider.request({
+            method: "eth_sendTransaction",
+            params: [txParams]
+        });
+
+        await monitorTransaction(txHash);
+    } catch (error) {
+        handleError(error, ErrorTypes.TRANSACTION_FAILED);
+    } finally {
+        setLoading(false);
+    }
+}
+
+// Monitor transaction
+async function monitorTransaction(txHash) {
+    const web3 = new Web3(provider);
+    const statusElement = document.getElementById("statusMessage");
+    
+    try {
+        const receipt = await web3.eth.getTransactionReceipt(txHash);
+        if (receipt.status) {
+            statusElement.innerHTML = `
+                ✅ Transaction confirmed! 
+                <a href="https://ledger.sidrachain.com/tx/${txHash}" 
+                   target="_blank" 
+                   class="underline text-green-300">
+                    View on Explorer
+                </a>
+            `;
+            await showContractBalance();
+            await showWalletBalance();
+        } else {
+            throw new Error("Transaction failed");
+        }
+    } catch (error) {
+        handleError(error, ErrorTypes.TRANSACTION_FAILED);
+    }
+}
+
+// Event listeners
+document.addEventListener("DOMContentLoaded", function() {
+    // SDA amount input handler
+    const sdaInput = document.getElementById("sdaAmount");
+    if (sdaInput) {
+        sdaInput.addEventListener("input", function() {
+            const sda = parseFloat(this.value || "0");
+            document.getElementById("nuurEstimate").innerText = (sda * rate).toLocaleString();
+        });
+    }
+
+    // Initial setup
+    if (provider) {
+        provider.on("accountsChanged", function(accounts) {
+            if (accounts.length === 0) {
+                disconnectWallet();
+            } else {
+                userAddress = accounts[0];
+                showWalletBalance();
+            }
+        });
+
+        provider.on("chainChanged", function() {
+            window.location.reload();
+        });
+    }
+});
 </script>
 </body>
 </html>
