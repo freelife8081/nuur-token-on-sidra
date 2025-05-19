@@ -54,134 +54,113 @@
 
     <div id="statusMessage" class="text-sm text-center mt-4 text-yellow-400"></div>
   </div>
-  <script src="https://cdn.jsdelivr.net/npm/ethers@6.7.0/dist/ethers.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/web3@1.10.0/dist/web3.min.js"></script>
+
 <script>
-  let provider, signer, userAddress;
-  const presaleAddress = "0x858024C3c8179Ed448A9133190f991cfA9873657";
+  let userAddress;
+  const presaleAddress = "0x858024C3c8179Ed448A9133190f991cfA9873657"; // Your presale contract
   const rate = 1000;
 
   const abi = [{"inputs":[{"internalType":"address","name":"_nuurToken","type":"address"},{"internalType":"address","name":"_devWallet","type":"address"},{"internalType":"address","name":"initialOwner","type":"address"}],"stateMutability":"nonpayable","type":"constructor"},{"inputs":[{"internalType":"address","name":"owner","type":"address"}],"name":"OwnableInvalidOwner","type":"error"},{"inputs":[{"internalType":"address","name":"account","type":"address"}],"name":"OwnableUnauthorizedAccount","type":"error"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"to","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"NUURWithdrawn","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"previousOwner","type":"address"},{"indexed":true,"internalType":"address","name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"to","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"SDAWithdrawn","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"buyer","type":"address"},{"indexed":false,"internalType":"uint256","name":"sdaAmount","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"nuurAmount","type":"uint256"}],"name":"TokensPurchased","type":"event"},{"inputs":[],"name":"RATE","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"buyTokens","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[],"name":"devWallet","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"nuurToken","outputs":[{"internalType":"contract IERC20","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"renounceOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"newDevWallet","type":"address"}],"name":"updateDevWallet","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"withdrawNUUR","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"withdrawSDA","outputs":[],"stateMutability":"nonpayable","type":"function"},{"stateMutability":"payable","type":"receive"}];
-
-  document.addEventListener("DOMContentLoaded", () => {
-    const sdaInput = document.getElementById("sdaAmount");
-    const nuurEstimate = document.getElementById("nuurEstimate");
-
-    if (sdaInput && nuurEstimate) {
-      sdaInput.addEventListener("input", () => {
-        const sdaValue = parseFloat(sdaInput.value) || 0;
-        nuurEstimate.innerText = (sdaValue * rate).toLocaleString();
-      });
-    }
-
-    // Try auto-connect if MetaMask already connected
-    if (window.ethereum?.selectedAddress) {
-      connectWallet();
-    }
-  });
+  const provider = window.ethereum;
 
   async function connectWallet() {
-    if (!window.ethereum) {
-      alert("Please install MetaMask!");
-      return;
-    }
+    if (!provider) return alert("Please install MetaMask!");
 
     try {
-      provider = new ethers.BrowserProvider(window.ethereum);
-      signer = await provider.getSigner();
-      userAddress = await signer.getAddress();
+      const accounts = await provider.request({ method: "eth_requestAccounts" });
+      userAddress = accounts[0];
 
-      document.getElementById("statusMessage").innerText =
-        `Wallet Connected: ${userAddress.slice(0, 6)}...${userAddress.slice(-4)}`;
+      document.getElementById("statusMessage").innerText = `Wallet Connected: ${userAddress.slice(0, 6)}...${userAddress.slice(-4)}`;
       document.getElementById("connectWalletButton").style.display = "none";
       document.getElementById("disconnectWalletButton").style.display = "inline-block";
 
-      await showWalletBalance();
       await showContractBalance();
-    } catch (err) {
-      console.error("Connection error:", err);
+      await showWalletBalance();
+    } catch {
       document.getElementById("statusMessage").innerText = "Wallet connection failed.";
     }
   }
 
-  function disconnectWallet() {
+  async function disconnectWallet() {
     userAddress = null;
-    provider = null;
-    signer = null;
-
     document.getElementById("statusMessage").innerText = "Wallet disconnected.";
     document.getElementById("connectWalletButton").style.display = "inline-block";
     document.getElementById("disconnectWalletButton").style.display = "none";
     document.getElementById("walletBalance").innerText = "Not Connected";
-    document.getElementById("contractBalance").innerText = "Loading...";
   }
 
   async function showWalletBalance() {
     if (!provider || !userAddress) return;
 
+    const web3 = new Web3(provider);
     try {
-      const balance = await provider.getBalance(userAddress);
-      const formatted = ethers.formatEther(balance);
-      document.getElementById("walletBalance").innerText = `${parseFloat(formatted).toFixed(4)} SDA`;
-    } catch (err) {
-      console.error("Failed to fetch wallet balance:", err);
+      const balance = await web3.eth.getBalance(userAddress); // native coin (SDA) balance
+      const formattedBalance = parseFloat(web3.utils.fromWei(balance, "ether")).toFixed(4);
+      document.getElementById("walletBalance").innerText = `${formattedBalance} SDA`;
+    } catch {
       document.getElementById("walletBalance").innerText = "Unavailable";
     }
   }
 
-  async function showContractBalance() {
-    try {
-      const contract = new ethers.Contract(presaleAddress, abi, provider);
-      const nuurTokenAddress = await contract.nuurToken();
-      const nuurToken = new ethers.Contract(
-        nuurTokenAddress,
-        [
-          "function balanceOf(address owner) view returns (uint256)"
-        ],
-        provider
-      );
+  document.getElementById("sdaAmount").addEventListener("input", function () {
+    const sda = parseFloat(this.value || "0");
+    document.getElementById("nuurEstimate").innerText = (sda * rate).toLocaleString();
+  });
 
-      const balance = await nuurToken.balanceOf(presaleAddress);
-      const formatted = ethers.formatUnits(balance, 18);
-      document.getElementById("contractBalance").innerText = `${parseFloat(formatted).toLocaleString()} NUUR`;
+  async function buyTokens() {
+    const sdaAmount = parseFloat(document.getElementById("sdaAmount").value);
+    if (!sdaAmount || sdaAmount <= 0) return alert("Enter a valid SDA amount.");
+    if (!userAddress) return alert("Connect wallet first.");
+
+    try {
+      // Build transaction params WITHOUT gasPrice or EIP-1559 gas fields
+      const txParams = {
+        from: userAddress,
+        to: presaleAddress,
+        value: (sdaAmount * 1e18).toString(16), // Convert to hex wei string
+      };
+
+      const txHash = await provider.request({
+        method: "eth_sendTransaction",
+        params: [txParams],
+      });
+
+      const explorerLink = `https://ledger.sidrachain.com/tx/${txHash}`;
+      document.getElementById("statusMessage").innerHTML = `✅ Transaction sent. <a href="${explorerLink}" target="_blank" class="underline text-green-300">View on Explorer</a>`;
+
+      await showContractBalance();
+      await showWalletBalance();
     } catch (err) {
-      console.error("Failed to fetch contract balance:", err);
+      console.error(err);
+      document.getElementById("statusMessage").innerText = "❌ Transaction failed.";
+    }
+  }
+
+  async function showContractBalance() {
+    if (!provider) return;
+
+    const web3 = new Web3(provider);
+    const contract = new web3.eth.Contract(abi, presaleAddress);
+
+    try {
+      const nuurTokenAddress = await contract.methods.nuurToken().call();
+
+      const nuurContract = new web3.eth.Contract([
+        { "constant": true, "inputs": [], "name": "decimals", "outputs": [{ "name": "", "type": "uint8" }], "type": "function" },
+        { "constant": true, "inputs": [{ "name": "account", "type": "address" }], "name": "balanceOf", "outputs": [{ "name": "", "type": "uint256" }], "type": "function" }
+      ], nuurTokenAddress);
+
+      const decimals = await nuurContract.methods.decimals().call();
+      const balance = await nuurContract.methods.balanceOf(presaleAddress).call();
+
+      const formattedBalance = parseFloat(balance / (10 ** decimals)).toLocaleString();
+
+      document.getElementById("contractBalance").innerText = formattedBalance;
+    } catch {
       document.getElementById("contractBalance").innerText = "Unavailable";
     }
   }
-  async function buyTokens() {
-  const sdaInput = document.getElementById("sdaAmount");
-  const status = document.getElementById("statusMessage");
-
-  if (!signer || !provider || !userAddress) {
-    status.innerText = "Please connect your wallet first.";
-    return;
-  }
-
-  const sdaAmount = parseFloat(sdaInput.value);
-  if (isNaN(sdaAmount) || sdaAmount <= 0) {
-    status.innerText = "Enter a valid SDA amount.";
-    return;
-  }
-
-  try {
-    const valueInWei = ethers.parseEther(sdaAmount.toString());
-    const contract = new ethers.Contract(presaleAddress, abi, signer);
-    const tx = await contract.buyTokens({ value: valueInWei });
-
-    status.innerText = "⏳ Waiting for transaction confirmation...";
-    const receipt = await tx.wait();
-
-    const explorerLink = `https://ledger.sidrachain.com/tx/${receipt.hash}`;
-    status.innerHTML = `✅ Transaction confirmed. <a href="${explorerLink}" target="_blank" class="underline text-green-300">View on Explorer</a>`;
-
-    await showWalletBalance();
-    await showContractBalance();
-  } catch (err) {
-    console.error("Transaction error:", err);
-    status.innerText = err.reason || "❌ Transaction failed or rejected.";
-  }
-}
-
 </script>
 </body>
 </html>
