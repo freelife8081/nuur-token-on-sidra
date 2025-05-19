@@ -1,330 +1,235 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NUUR Coin Presale</title>
-    <script src="https://cdn.ethers.io/lib/ethers-5.7.2.umd.min.js" type="application/javascript"></script>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Arial', sans-serif;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0 user-scalable=no"/>
+  <title>NUUR Presale</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: #0d111c;
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
 
-        body {
-            background-color: #111827;
-            color: white;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
+    .top-bar {
+      width: 100%;
+      display: flex;
+      justify-content: flex-end;
+      padding: 1rem 2rem;
+      box-sizing: border-box;
+    }
 
-        nav {
-            padding: 1rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background-color: #1F2937;
-        }
+    .top-bar button {
+      padding: 0.5rem 1rem;
+      background: #2a2f45;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
 
-        .logo-container {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
+    .card {
+      background: #1e2539;
+      padding: 2rem;
+      border-radius: 20px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.3);
+      width: 100%;
+      max-width: 400px;
+      margin-top: 4rem;
+    }
 
-        .logo {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-        }
+    h1 {
+      text-align: center;
+      margin-bottom: 1.5rem;
+      font-size: 1.75rem;
+    }
 
-        .token-logo {
-            position: absolute;
-            right: 1rem;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-        }
+    .token-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 1.25rem;
+    }
 
-        .connect-btn {
-            background-color: #2563EB;
-            color: white;
-            border: none;
-            padding: 0.5rem 1rem;
-            border-radius: 0.5rem;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
+    .token-row img {
+      width: 24px;
+      height: 24px;
+    }
 
-        .connect-btn:hover {
-            background-color: #1D4ED8;
-        }
+    input[type="number"] {
+      width: 100%;
+      padding: 0.75rem;
+      border-radius: 10px;
+      border: none;
+      margin-bottom: 1rem;
+      font-size: 1rem;
+    }
+    .input-line {
+  background: #2a2f45;
+  border-radius: 12px;
+  padding: 0.5rem 1rem;
+  justify-content: space-between;
+}
+   .input-line input {
+    flex: 1;
+    margin: 0 10px;
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: 1rem;
+    text-align: right;
+}
+   .input-line input:focus {
+    outline: none;
+}
 
-        .container {
-            flex: 1;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 1rem;
-        }
 
-        .swap-box {
-            background-color: #1F2937;
-            padding: 1.5rem;
-            border-radius: 1rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            width: 100%;
-            max-width: 480px;
-        }
+    .button {
+      width: 100%;
+      padding: 0.75rem;
+      background: #5b78f6;
+      border: none;
+      border-radius: 10px;
+      color: white;
+      font-weight: bold;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
 
-        .input-group {
-            margin-bottom: 1rem;
-        }
+    .button:hover {
+      background: #3a56d9;
+    }
 
-        .input-label {
-            display: block;
-            margin-bottom: 0.5rem;
-            color: #9CA3AF;
-        }
+    .status {
+      margin-top: 1rem;
+      font-size: 0.9rem;
+      text-align: center;
+    }
 
-        .input-container {
-            position: relative;
-            margin-bottom: 1rem;
-        }
+    .balance {
+      text-align: center;
+      font-size: 0.9rem;
+      margin-bottom: 1rem;
+      color: #ccc;
+    }
 
-        .token-input {
-            width: 100%;
-            padding: 1rem;
-            padding-right: 3rem;
-            background-color: #374151;
-            border: 1px solid #4B5563;
-            border-radius: 0.5rem;
-            color: white;
-            font-size: 1.1rem;
-        }
+    a {
+      color: #5bffad;
+      text-decoration: underline;
+    }
 
-        .buy-btn {
-            width: 100%;
-            padding: 1rem;
-            background-color: #2563EB;
-            color: white;
-            border: none;
-            border-radius: 0.5rem;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
-        .buy-btn:hover {
-            background-color: #1D4ED8;
-        }
-
-        .buy-btn:disabled {
-            background-color: #4B5563;
-            cursor: not-allowed;
-        }
-
-        .status {
-            margin-top: 1rem;
-            text-align: center;
-        }
-
-        .status.pending {
-            color: #FBBF24;
-        }
-
-        .status.success {
-            color: #34D399;
-        }
-
-        .status.error {
-            color: #EF4444;
-        }
-
-        .status a {
-            color: inherit;
-            text-decoration: underline;
-        }
-
-        .network-warning {
-            background-color: #991B1B;
-            color: white;
-            text-align: center;
-            padding: 0.5rem;
-            display: none;
-        }
-
-        .error-link {
-            display: inline-block;
-            margin-top: 0.5rem;
-            color: #EF4444;
-            text-decoration: underline;
-        }
-    </style>
+    .hidden {
+      display: none;
+    }
+  </style>
 </head>
 <body>
-    <div id="network-warning" class="network-warning">
-        Wrong network! Please switch to Sidra Chain
+  <div class="top-bar">
+    <button id="connectWalletButton" onclick="connectWallet()">Connect Wallet</button>
+    <button id="disconnectWalletButton" class="hidden" onclick="disconnectWallet()">Disconnect</button>
+  </div>
+
+  <div class="card">
+    <h1>NUUR Token Presale</h1>
+
+    <div class="token-row input-line">
+        <img src="sidra.jpeg" alt="SDA" />
+        <input type="number" id="sdaAmount" placeholder="0.0" />
+        <span>SDA</span>
+   </div>
+
+
+    <div class="token-row">
+      <img src="logo.png" alt="NUUR" />
+      <span id="nuurEstimate">0 NUUR</span>
     </div>
-    <nav>
-        <div class="logo-container">
-            <img src="logo.png" alt="NUUR" class="logo">
-            <h1>NUUR Presale</h1>
-        </div>
-        <button id="connect-wallet" class="connect-btn">Connect Wallet</button>
-    </nav>
 
-    <div class="container">
-        <div class="swap-box">
-            <div class="input-group">
-                <label class="input-label">You Pay</label>
-                <div class="input-container">
-                    <input type="number" id="sda-amount" class="token-input" placeholder="0.0">
-                    <img src="sidra.jpeg" alt="SDA" class="token-logo">
-                </div>
-            </div>
-            <div class="input-group">
-                <label class="input-label">You Receive</label>
-                <div class="input-container">
-                    <input type="number" id="nuur-amount" class="token-input" placeholder="0.0">
-                    <img src="logo.png" alt="NUUR" class="token-logo">
-                </div>
-            </div>
-            <button id="buy-btn" class="buy-btn" disabled>Buy NUUR</button>
-            <div id="status" class="status"></div>
-        </div>
-    </div>
-    <script>
-console.log('Script loaded');
+    <button class="button" onclick="buyTokens()">Buy NUUR</button>
 
-function checkIfWalletIsInstalled() {
-    if (typeof window.ethereum === 'undefined') {
-        alert('Please install MetaMask to use this dApp!');
-        return false;
+    <div class="balance" id="walletBalance">Not Connected</div>
+    <div class="status" id="statusMessage">Waiting for wallet connection...</div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/web3@1.10.0/dist/web3.min.js"></script>
+  <script>
+    let userAddress;
+    const presaleAddress = "0x858024C3c8179Ed448A9133190f991cfA9873657";
+    const rate = 1000;
+    const provider = window.ethereum;
+    const abi = [{"inputs":[],"name":"buyTokens","outputs":[],"stateMutability":"payable","type":"function"}];
+
+    async function connectWallet() {
+      if (!provider) return alert("Please install MetaMask!");
+
+      try {
+        const accounts = await provider.request({ method: "eth_requestAccounts" });
+        userAddress = accounts[0];
+
+        document.getElementById("statusMessage").innerText = `Wallet Connected: ${userAddress.slice(0, 6)}...${userAddress.slice(-4)}`;
+        document.getElementById("connectWalletButton").classList.add("hidden");
+        document.getElementById("disconnectWalletButton").classList.remove("hidden");
+
+        await showWalletBalance();
+      } catch {
+        document.getElementById("statusMessage").innerText = "Wallet connection failed.";
+      }
     }
-    return true;
-}
 
-const PRESALE_CONTRACT = {
-    address: '0x858024C3c8179Ed448A9133190f991cfA9873657',
-    abi: [
-        {
-            inputs: [],
-            name: 'buyTokens',
-            outputs: [],
-            stateMutability: 'payable',
-            type: 'function'
-        }
-    ]
-};
-
-const NUUR_PRICE = 0.001; // 1 NUUR = 0.001 SDA
-let provider, signer, account;
-
-// DOM Elements
-const connectBtn = document.getElementById('connect-wallet');
-const sdaInput   = document.getElementById('sda-amount');
-const nuurInput  = document.getElementById('nuur-amount');
-const buyBtn     = document.getElementById('buy-btn');
-const statusDiv  = document.getElementById('status');
-
-async function connectWallet() {
-    if (!checkIfWalletIsInstalled()) return;
-    try {
-        // Request account access
-        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-        if (!accounts || accounts.length === 0) throw new Error('No accounts found');
-
-        account  = accounts[0];
-        provider = new ethers.providers.Web3Provider(window.ethereum);
-        signer   = provider.getSigner();
-
-        // Update UI
-        connectBtn.textContent = `${account.slice(0,6)}...${account.slice(-4)}`;
-        buyBtn.disabled = false;
-
-        // Listen for account changes
-        window.ethereum.on('accountsChanged', handleAccountsChanged);
-
-        console.log('Wallet connected successfully:', account);
-    } catch (error) {
-        console.error('connectWallet error:', error);
-        if (error.code !== 4001) {
-            statusDiv.textContent = 'Failed to connect wallet. Please try again.';
-            statusDiv.className = 'status error';
-        }
+    async function disconnectWallet() {
+      userAddress = null;
+      document.getElementById("statusMessage").innerText = "Wallet disconnected.";
+      document.getElementById("connectWalletButton").classList.remove("hidden");
+      document.getElementById("disconnectWalletButton").classList.add("hidden");
+      document.getElementById("walletBalance").innerText = "Not Connected";
     }
-}
 
-function handleAccountsChanged(accounts) {
-    if (accounts.length === 0) {
-        account = provider = signer = null;
-        connectBtn.textContent = 'Connect Wallet';
-        buyBtn.disabled = true;
-        statusDiv.textContent = '';
-    } else {
-        account = accounts[0];
-        connectBtn.textContent = `${account.slice(0,6)}...${account.slice(-4)}`;
-        buyBtn.disabled = false;
-        console.log('Account changed to', account);
+    async function showWalletBalance() {
+      if (!provider || !userAddress) return;
+
+      const web3 = new Web3(provider);
+      try {
+        const balance = await web3.eth.getBalance(userAddress);
+        const formattedBalance = parseFloat(web3.utils.fromWei(balance, "ether")).toFixed(4);
+        document.getElementById("walletBalance").innerText = `${formattedBalance} SDA`;
+      } catch {
+        document.getElementById("walletBalance").innerText = "Unavailable";
+      }
     }
-}
 
-function calculateNUUR(sdaValue) {
-    const v = parseFloat(sdaValue) / NUUR_PRICE;
-    nuurInput.value = isNaN(v) ? '' : v.toFixed(6);
-}
+    document.getElementById("sdaAmount").addEventListener("input", function () {
+      const sda = parseFloat(this.value || "0");
+      document.getElementById("nuurEstimate").innerText = `${sda * rate} NUUR`;
+    });
 
-function calculateSDA(nuurValue) {
-    const v = parseFloat(nuurValue) * NUUR_PRICE;
-    sdaInput.value = isNaN(v) ? '' : v.toFixed(6);
-}
+    async function buyTokens() {
+      const sdaAmount = parseFloat(document.getElementById("sdaAmount").value);
+      if (!sdaAmount || sdaAmount <= 0) return alert("Enter a valid SDA amount.");
+      if (!userAddress) return alert("Connect wallet first.");
 
-async function buyNUUR() {
-    if (!provider || !signer || !sdaInput.value) return;
-    try {
-        statusDiv.textContent = 'Transaction pending...';
-        statusDiv.className = 'status pending';
+      try {
+        const txHash = await provider.request({
+          method: "eth_sendTransaction",
+          params: [{
+            from: userAddress,
+            to: presaleAddress,
+            value: (sdaAmount * 1e18).toString(16),
+          }],
+        });
 
-        const contract = new ethers.Contract(
-            PRESALE_CONTRACT.address,
-            PRESALE_CONTRACT.abi,
-            signer
-        );
-
-        const tx = await contract.buyTokens({ value: ethers.utils.parseEther(sdaInput.value) });
-        statusDiv.innerHTML = 'Transaction submitted. Waiting for confirmation...';
-        const receipt = await tx.wait();
-
-        statusDiv.innerHTML = `Transaction successful! <a href="https://ledger.sidrachain.com/tx/${receipt.transactionHash}" target="_blank">View on Ledger</a>`;
-        statusDiv.className = 'status success';
-    } catch (error) {
-        console.error('Error buying NUUR:', error);
-        statusDiv.innerHTML = `Transaction failed: ${error.message || 'Unknown error'}<br><a href="error.html" class="error-link" target="_blank">Report an error</a>`;
-        statusDiv.className = 'status error';
+        const explorerLink = `https://ledger.sidrachain.com/tx/${txHash}`;
+        document.getElementById("statusMessage").innerHTML = `✅ Transaction sent. <a href="${explorerLink}" target="_blank">View on Explorer</a>`;
+        await showWalletBalance();
+      } catch (err) {
+        document.getElementById("statusMessage").innerText = "❌ Transaction failed.";
+      }
     }
-}
-
-document.addEventListener('DOMContentLoaded', async () => {
-    if (window.ethereum) {
-        try {
-            const accounts = await window.ethereum.request({ method: 'eth_accounts' });
-            if (accounts.length > 0) connectWallet();
-        } catch (e) {
-            console.error('Error querying accounts on load:', e);
-        }
-    }
-    connectBtn.addEventListener('click', connectWallet);
-    sdaInput.addEventListener('input', e => calculateNUUR(e.target.value));
-    nuurInput.addEventListener('input', e => calculateSDA(e.target.value));
-    buyBtn.addEventListener('click', buyNUUR);
-});
-</script>
-
+  </script>
 </body>
 </html>
