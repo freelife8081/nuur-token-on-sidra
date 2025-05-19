@@ -129,35 +129,48 @@
     }
   </style>
 </head>
-<body>
-  <div class="top-bar">
-    <button id="connectWalletButton" onclick="connectWallet()">Connect Wallet</button>
-    <button id="disconnectWalletButton" class="hidden" onclick="disconnectWallet()">Disconnect</button>
-  </div>
-
-  <div class="card">
-    <h1>NUUR Token Presale</h1>
-
-    <div class="token-row input-line">
-        <img src="sidra.jpeg" alt="SDA" />
-        <input type="number" id="sdaAmount" placeholder="0.0" />
-        <span>SDA</span>
-   </div>
-
-
-    <div class="token-row input-line">
-      <img src="logo.png" alt="NUUR" />
-      <input type="text" id="nuurEstimate" readonly placeholder="0.0" />
-      <span>NUUR</span>
+<body class="bg-gray-900 text-white font-sans min-h-screen">
+  <!-- Top Bar -->
+  <div class="flex justify-between items-center p-4 border-b border-gray-700">
+    <h1 class="text-xl font-bold text-white">NUUR Presale</h1>
+    <div>
+      <button id="connectWalletButton" onclick="connectWallet()" class="bg-indigo-600 px-4 py-2 rounded-xl text-sm hover:bg-indigo-500">Connect Wallet</button>
+      <button id="disconnectWalletButton" onclick="disconnectWallet()" class="bg-red-600 px-4 py-2 rounded-xl text-sm hidden hover:bg-red-500">Disconnect</button>
     </div>
-
-
-    <button class="button" onclick="buyTokens()">Buy NUUR</button>
-
-    <div class="balance" id="walletBalance">Not Connected</div>
-    <div class="status" id="statusMessage">Waiting for wallet connection...</div>
   </div>
 
+  <!-- Main Container -->
+  <div class="flex justify-center items-center p-4">
+    <div class="w-full max-w-md bg-gray-800 p-6 rounded-2xl shadow-lg space-y-6">
+      <div id="statusMessage" class="text-sm text-center text-gray-400 mb-4">Not connected</div>
+
+      <!-- SDA Input -->
+      <div class="space-y-2">
+        <label for="sdaAmount" class="block text-sm text-gray-300">SDA Amount</label>
+        <div class="flex items-center space-x-2">
+          <img src="sidra.jpeg" alt="SDA" class="w-6 h-6">
+          <input id="sdaAmount" type="number" placeholder="0.0" class="flex-1 px-3 py-2 rounded-md bg-gray-700 text-white text-sm focus:outline-none" />
+        </div>
+      </div>
+
+      <!-- NUUR Estimate -->
+      <div class="space-y-2">
+        <label for="nuurEstimate" class="block text-sm text-gray-300">You Get</label>
+        <div class="flex items-center space-x-2">
+          <img src="logo.png" alt="NUUR" class="w-6 h-6">
+          <input id="nuurEstimate" type="text" readonly class="flex-1 px-3 py-2 rounded-md bg-gray-700 text-white text-sm focus:outline-none" />
+        </div>
+      </div>
+
+      <!-- Buy Button -->
+      <button onclick="buyTokens()" class="w-full bg-green-600 py-2 rounded-xl hover:bg-green-500 text-white font-semibold">Buy NUUR</button>
+
+      <!-- Wallet Balance -->
+      <div class="text-sm text-center text-gray-400">
+        Wallet Balance: <span id="walletBalance">Not Connected</span>
+      </div>
+    </div>
+  </div>
   <script src="https://cdn.jsdelivr.net/npm/web3@1.10.0/dist/web3.min.js"></script>
   <script>
     let userAddress;
