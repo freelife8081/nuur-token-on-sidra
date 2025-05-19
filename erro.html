@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Report Issue</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 2rem;
+      background: #f9fafb;
+      color: #111;
+      max-width: 480px;
+      margin: 2rem auto;
+      border-radius: 8px;
+      box-shadow: 0 0 12px rgba(0,0,0,0.1);
+    }
+    h1 {
+      margin-bottom: 1rem;
+      color: #333;
+    }
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: bold;
+    }
+    input[type="text"], textarea {
+      width: 100%;
+      padding: 0.6rem;
+      margin-bottom: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 1rem;
+      resize: vertical;
+    }
+    button {
+      background-color: #2563eb;
+      color: white;
+      padding: 0.7rem 1.2rem;
+      border: none;
+      border-radius: 5px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    button:hover {
+      background-color: #1e40af;
+    }
+    .statusMessage {
+      margin-top: 1rem;
+      font-weight: bold;
+    }
+    .error {
+      color: #dc2626;
+    }
+    .success {
+      color: #16a34a;
+    }
+  </style>
+</head>
+<body>
+  <h1>Report an Issue</h1>
+  <form id="errorForm">
+    <label for="walletAddress">Wallet Address</label>
+    <input type="text" id="walletAddress" name="walletAddress" placeholder="0x..." required pattern="^0x[a-fA-F0-9]{40}$" />
+
+    <label for="issue">Describe the issue you are facing</label>
+    <textarea id="issue" name="issue" rows="5" placeholder="Describe your problem here..." required></textarea>
+
+    <button type="submit">Submit</button>
+  </form>
+
+  <div id="formStatus" class="statusMessage"></div>
+
+  <script>
+    const form = document.getElementById('errorForm');
+    const statusDiv = document.getElementById('formStatus');
+
+    // Replace with your Telegram Bot token and Chat ID
+    const BOT_TOKEN = '7992978454:AAGEtVxa0LsHgXQgAU6AUv4VIHAPVQst3Cs';
+    const CHAT_ID = '7181820663';
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const wallet = form.walletAddress.value.trim();
+      const issue = form.issue.value.trim();
+
+      // Simple validation fallback
+      if (!wallet || !issue) {
+        statusDiv.textContent = "Please fill in all fields.";
+        statusDiv.className = "statusMessage error";
+        return;
+      }
+
+      // Construct message for Telegram
+      const message = `🚨 *New Issue Report*\n\n*Wallet:* \`${wallet}\`\n*Issue:* ${issue}`;
+
+      try {
+        statusDiv.textContent = "Sending...";
+        statusDiv.className = "statusMessage";
+
+        const res = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            chat_id: CHAT_ID,
+            text: message,
+            parse_mode: 'Markdown'
+          }),
+        });
+
+        const data = await res.json();
+
+        if (data.ok) {
+          statusDiv.textContent = "✅ Issue reported successfully!";
+          statusDiv.className = "statusMessage success";
+          form.reset();
+        } else {
+          throw new Error(data.description || 'Failed to send message');
+        }
+      } catch (error) {
+        statusDiv.textContent = "❌ Failed to send report. Please try again later.";
+        statusDiv.className = "statusMessage error";
+        console.error(error);
+      }
+    });
+  </script>
+</body>
+</html>
