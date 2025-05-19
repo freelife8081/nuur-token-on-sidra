@@ -159,14 +159,6 @@
             display: none;
         }
 
-        .timestamp {
-            position: fixed;
-            bottom: 1rem;
-            right: 1rem;
-            color: #6B7280;
-            font-size: 0.875rem;
-        }
-
         .error-link {
             display: inline-block;
             margin-top: 0.5rem;
@@ -207,187 +199,235 @@
             <div id="status" class="status"></div>
         </div>
     </div>
-
     <script>
         console.log('Script loaded');
-        window.addEventListener('error', function(e) {
-            console.log('Global error:', e);
-        });
+window.addEventListener('error', function(e) {
+    console.log('Global error:', e);
+});
 
-        function checkIfWalletIsInstalled() {
-            if (typeof window.ethereum === 'undefined') {
-                alert('Please install MetaMask to use this dApp!');
-                return false;
-            }
-            return true;
-        }
+function checkIfWalletIsInstalled() {
+    if (typeof window.ethereum === 'undefined') {
+        alert('Please install MetaMask to use this dApp!');
+        return false;
+    }
+    return true;
+}
 
-        const NETWORK_CONFIG = {
-            chainId: '0x17cad',
-            chainName: 'Sidra Chain',
-            rpcUrls: ['https://node.sidrachain.com'],
-            blockExplorerUrls: ['https://ledger.sidrachain.com'],
-            nativeCurrency: {
-                name: 'SDA',
-                symbol: 'SDA',
-                decimals: 18
-            }
-        };
+const NETWORK_CONFIG = {
+    chainId: '0x17cad',
+    chainName: 'Sidra Chain',
+    rpcUrls: ['https://node.sidrachain.com'],
+    blockExplorerUrls: ['https://ledger.sidrachain.com'],
+    nativeCurrency: {
+        name: 'SDA',
+        symbol: 'SDA',
+        decimals: 18
+    }
+};
 
-        const PRESALE_CONTRACT = {
-            address: '0x858024C3c8179Ed448A9133190f991cfA9873657',
-            abi: [{"inputs":[{"internalType":"address","name":"_nuurToken","type":"address"},{"internalType":"address","name":"_devWallet","type":"address"},{"internalType":"address","name":"initialOwner","type":"address"}],"stateMutability":"nonpayable","type":"constructor"},{"inputs":[{"internalType":"address","name":"owner","type":"address"}],"name":"OwnableInvalidOwner","type":"error"},{"inputs":[{"internalType":"address","name":"account","type":"address"}],"name":"OwnableUnauthorizedAccount","type":"error"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"to","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"NUURWithdrawn","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"previousOwner","type":"address"},{"indexed":true,"internalType":"address","name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"to","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"SDAWithdrawn","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"buyer","type":"address"},{"indexed":false,"internalType":"uint256","name":"sdaAmount","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"nuurAmount","type":"uint256"}],"name":"TokensPurchased","type":"event"},{"inputs":[],"name":"RATE","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"buyTokens","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[],"name":"devWallet","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"nuurToken","outputs":[{"internalType":"contract IERC20","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"renounceOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"newDevWallet","type":"address"}],"name":"updateDevWallet","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"withdrawNUUR","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"withdrawSDA","outputs":[],"stateMutability":"nonpayable","type":"function"},{"stateMutability":"payable","type":"receive"}]
-        };
+const PRESALE_CONTRACT = {
+    address: '0x858024C3c8179Ed448A9133190f991cfA9873657',
+    abi: [{"inputs":[{"internalType":"address","name":"_nuurToken","type":"address"},{"internalType":"address","name":"_devWallet","type":"address"},{"internalType":"address","name":"initialOwner","type":"address"}],"stateMutability":"nonpayable","type":"constructor"},{"inputs":[{"internalType":"address","name":"owner","type":"address"}],"name":"OwnableInvalidOwner","type":"error"},{"inputs":[{"internalType":"address","name":"account","type":"address"}],"name":"OwnableUnauthorizedAccount","type":"error"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"to","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"NUURWithdrawn","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"previousOwner","type":"address"},{"indexed":true,"internalType":"address","name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"to","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"SDAWithdrawn","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"buyer","type":"address"},{"indexed":false,"internalType":"uint256","name":"sdaAmount","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"nuurAmount","type":"uint256"}],"name":"TokensPurchased","type":"event"},{"inputs":[],"name":"RATE","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"buyTokens","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[],"name":"devWallet","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"nuurToken","outputs":[{"internalType":"contract IERC20","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"renounceOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"newDevWallet","type":"address"}],"name":"updateDevWallet","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"withdrawNUUR","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"withdrawSDA","outputs":[],"stateMutability":"nonpayable","type":"function"},{"stateMutability":"payable","type":"receive"}]
+};
 
-        const NUUR_PRICE = 0.001; // 1 NUUR = 0.001 SDA
+const NUUR_PRICE = 0.001; // 1 NUUR = 0.001 SDA
 
-        let provider, signer, account;
+let provider, signer, account;
 
-        // DOM Elements
-        const connectBtn = document.getElementById('connect-wallet');
-        const sdaInput = document.getElementById('sda-amount');
-        const nuurInput = document.getElementById('nuur-amount');
-        const buyBtn = document.getElementById('buy-btn');
-        const statusDiv = document.getElementById('status');
-        const networkWarning = document.getElementById('network-warning');
+// DOM Elements
+const connectBtn = document.getElementById('connect-wallet');
+const sdaInput = document.getElementById('sda-amount');
+const nuurInput = document.getElementById('nuur-amount');
+const buyBtn = document.getElementById('buy-btn');
+const statusDiv = document.getElementById('status');
+const networkWarning = document.getElementById('network-warning');
 
-        async function connectWallet() {
-            if (!checkIfWalletIsInstalled()) return;
+async function connectWallet() {
+    if (!checkIfWalletIsInstalled()) return;
+    
+    try {
+        // Clear any previous error messages
+        statusDiv.textContent = '';
+        statusDiv.className = '';
+
+        // Request account access
+        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+        
+        if (accounts && accounts.length > 0) {
+            account = accounts[0];
+            provider = new ethers.providers.Web3Provider(window.ethereum);
+            signer = provider.getSigner();
+
+            // Update UI to show connected state
+            connectBtn.textContent = `${account.slice(0, 6)}...${account.slice(-4)}`;
+            buyBtn.disabled = false;
+
+            // Check network after successful connection
+            await checkNetwork();
+
+            // Setup event listeners only once
+            window.ethereum.removeListener('accountsChanged', handleAccountsChanged);
+            window.ethereum.removeListener('chainChanged', () => window.location.reload());
             
-            try {
-                const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-                account = accounts[0];
-                provider = new ethers.providers.Web3Provider(window.ethereum);
-                signer = provider.getSigner();
+            window.ethereum.on('accountsChanged', handleAccountsChanged);
+            window.ethereum.on('chainChanged', () => window.location.reload());
 
-                connectBtn.textContent = `${account.slice(0, 6)}...${account.slice(-4)}`;
-                buyBtn.disabled = false;
-
-                checkNetwork();
-
-                window.ethereum.on('accountsChanged', handleAccountsChanged);
-                window.ethereum.on('chainChanged', () => window.location.reload());
-
-            } catch (error) {
-                console.error('Error connecting wallet:', error);
-                statusDiv.textContent = 'Error connecting wallet';
-                statusDiv.className = 'status error';
-            }
+            console.log('Wallet connected successfully:', account);
+            return true;
+        } else {
+            throw new Error('No accounts found');
         }
 
-        async function checkNetwork() {
-            if (window.ethereum) {
-                const chainId = await window.ethereum.request({ method: 'eth_chainId' });
-                if (chainId !== NETWORK_CONFIG.chainId) {
-                    networkWarning.style.display = 'block';
+    } catch (error) {
+        console.error('Error connecting wallet:', error);
+        
+        // Only show error for actual connection failures
+        if (error.code !== 4001) { // 4001 is user rejected request
+            statusDiv.textContent = 'Failed to connect wallet. Please try again.';
+            statusDiv.className = 'status error';
+        }
+        
+        return false;
+    }
+}
+
+async function checkNetwork() {
+    if (!window.ethereum) return;
+
+    try {
+        const chainId = await window.ethereum.request({ method: 'eth_chainId' });
+        
+        if (chainId !== NETWORK_CONFIG.chainId) {
+            networkWarning.style.display = 'block';
+            try {
+                await window.ethereum.request({
+                    method: 'wallet_switchEthereumChain',
+                    params: [{ chainId: NETWORK_CONFIG.chainId }],
+                });
+                networkWarning.style.display = 'none';
+            } catch (error) {
+                if (error.code === 4902) {
                     try {
                         await window.ethereum.request({
-                            method: 'wallet_switchEthereumChain',
-                            params: [{ chainId: NETWORK_CONFIG.chainId }],
+                            method: 'wallet_addEthereumChain',
+                            params: [NETWORK_CONFIG],
                         });
                         networkWarning.style.display = 'none';
-                    } catch (error) {
-                        if (error.code === 4902) {
-                            try {
-                                await window.ethereum.request({
-                                    method: 'wallet_addEthereumChain',
-                                    params: [NETWORK_CONFIG],
-                                });
-                                networkWarning.style.display = 'none';
-                            } catch (addError) {
-                                console.error('Error adding network:', addError);
-                            }
-                        }
+                    } catch (addError) {
+                        console.error('Error adding network:', addError);
+                        throw addError;
                     }
                 } else {
-                    networkWarning.style.display = 'none';
+                    throw error;
                 }
             }
+        } else {
+            networkWarning.style.display = 'none';
         }
+    } catch (error) {
+        console.error('Error checking/switching network:', error);
+        networkWarning.style.display = 'block';
+    }
+}
 
-        function handleAccountsChanged(accounts) {
-            if (accounts.length === 0) {
-                account = null;
-                connectBtn.textContent = 'Connect Wallet';
-                buyBtn.disabled = true;
-            } else if (accounts[0] !== account) {
-                account = accounts[0];
-                connectBtn.textContent = `${account.slice(0, 6)}...${account.slice(-4)}`;
-            }
-        }
+function handleAccountsChanged(accounts) {
+    if (accounts.length === 0) {
+        // Clear connection state
+        account = null;
+        provider = null;
+        signer = null;
+        connectBtn.textContent = 'Connect Wallet';
+        buyBtn.disabled = true;
+        
+        // Clear any status messages
+        statusDiv.textContent = '';
+        statusDiv.className = '';
+    } else if (accounts[0] !== account) {
+        account = accounts[0];
+        connectBtn.textContent = `${account.slice(0, 6)}...${account.slice(-4)}`;
+        buyBtn.disabled = false;
+    }
+}
 
-        function calculateNUUR(sdaValue) {
-            try {
-                const nuurValue = parseFloat(sdaValue) / NUUR_PRICE;
-                nuurInput.value = isNaN(nuurValue) ? '' : nuurValue.toFixed(6);
-            } catch (error) {
-                console.error('Error calculating NUUR:', error);
-                nuurInput.value = '';
-            }
-        }
+function calculateNUUR(sdaValue) {
+    try {
+        const nuurValue = parseFloat(sdaValue) / NUUR_PRICE;
+        nuurInput.value = isNaN(nuurValue) ? '' : nuurValue.toFixed(6);
+    } catch (error) {
+        console.error('Error calculating NUUR:', error);
+        nuurInput.value = '';
+    }
+}
 
-        function calculateSDA(nuurValue) {
-            try {
-                const sdaValue = parseFloat(nuurValue) * NUUR_PRICE;
-                sdaInput.value = isNaN(sdaValue) ? '' : sdaValue.toFixed(6);
-            } catch (error) {
-                console.error('Error calculating SDA:', error);
-                sdaInput.value = '';
-            }
-        }
+function calculateSDA(nuurValue) {
+    try {
+        const sdaValue = parseFloat(nuurValue) * NUUR_PRICE;
+        sdaInput.value = isNaN(sdaValue) ? '' : sdaValue.toFixed(6);
+    } catch (error) {
+        console.error('Error calculating SDA:', error);
+        sdaInput.value = '';
+    }
+}
 
-        async function buyNUUR() {
-            if (!checkIfWalletIsInstalled()) return;
-            if (!provider || !account || !sdaInput.value) return;
+async function buyNUUR() {
+    if (!checkIfWalletIsInstalled()) return;
+    if (!provider || !account || !sdaInput.value) return;
 
-            try {
-                statusDiv.textContent = 'Transaction pending...';
-                statusDiv.className = 'status pending';
+    try {
+        statusDiv.textContent = 'Transaction pending...';
+        statusDiv.className = 'status pending';
 
-                const contract = new ethers.Contract(
-                    PRESALE_CONTRACT.address,
-                    PRESALE_CONTRACT.abi,
-                    signer
-                );
+        const contract = new ethers.Contract(
+            PRESALE_CONTRACT.address,
+            PRESALE_CONTRACT.abi,
+            signer
+        );
 
-                const tx = await contract.buyTokens({
-                    value: ethers.utils.parseEther(sdaInput.value)
-                });
+        const tx = await contract.buyTokens({
+            value: ethers.utils.parseEther(sdaInput.value)
+        });
 
-                statusDiv.innerHTML = 'Transaction submitted. Waiting for confirmation...';
-                
-                const receipt = await tx.wait();
-                
-                statusDiv.innerHTML = `
-                    Transaction successful! 
-                    <a href="${NETWORK_CONFIG.blockExplorerUrls[0]}/tx/${receipt.transactionHash}" target="_blank">
-                        View on Ledger
-                    </a>
-                `;
-                statusDiv.className = 'status success';
+        statusDiv.innerHTML = 'Transaction submitted. Waiting for confirmation...';
+        
+        const receipt = await tx.wait();
+        
+        statusDiv.innerHTML = `
+            Transaction successful! 
+            <a href="${NETWORK_CONFIG.blockExplorerUrls[0]}/tx/${receipt.transactionHash}" target="_blank">
+                View on Ledger
+            </a>
+        `;
+        statusDiv.className = 'status success';
 
-            } catch (error) {
-                console.error('Error buying NUUR:', error);
-                statusDiv.innerHTML = `
-                    Transaction failed: ${error.message || 'Unknown error'}
-                    <br>
-                    <a href="error.html" class="error-link" target="_blank">Report an error</a>
-                `;
-                statusDiv.className = 'status error';
-            }
-        }
+    } catch (error) {
+        console.error('Error buying NUUR:', error);
+        statusDiv.innerHTML = `
+            Transaction failed: ${error.message || 'Unknown error'}
+            <br>
+            <a href="error.html" class="error-link" target="_blank">Report an error</a>
+        `;
+        statusDiv.className = 'status error';
+    }
+}
 
-        document.addEventListener('DOMContentLoaded', async () => {
-            if (window.ethereum && window.ethereum.selectedAddress) {
+document.addEventListener('DOMContentLoaded', async () => {
+    try {
+        if (window.ethereum) {
+            const accounts = await window.ethereum.request({ method: 'eth_accounts' });
+            if (accounts && accounts.length > 0) {
                 await connectWallet();
             }
+        }
+    } catch (error) {
+        console.error('Error checking initial wallet state:', error);
+    }
 
-            // Event Listeners
-            connectBtn.addEventListener('click', connectWallet);
-            sdaInput.addEventListener('input', (e) => calculateNUUR(e.target.value));
-            nuurInput.addEventListener('input', (e) => calculateSDA(e.target.value));
-            buyBtn.addEventListener('click', buyNUUR);
-        });
+    // Event Listeners
+    connectBtn.addEventListener('click', connectWallet);
+    sdaInput.addEventListener('input', (e) => calculateNUUR(e.target.value));
+    nuurInput.addEventListener('input', (e) => calculateSDA(e.target.value));
+    buyBtn.addEventListener('click', buyNUUR);
+});
     </script>
 </body>
 </html>
