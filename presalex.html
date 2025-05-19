@@ -208,11 +208,20 @@
         </div>
     </div>
 
-    <div class="timestamp">
-        Last updated: 2025-05-19 13:59:04 UTC by @freelife8081
-    </div>
-
     <script>
+        console.log('Script loaded');
+        window.addEventListener('error', function(e) {
+            console.log('Global error:', e);
+        });
+
+        function checkIfWalletIsInstalled() {
+            if (typeof window.ethereum === 'undefined') {
+                alert('Please install MetaMask to use this dApp!');
+                return false;
+            }
+            return true;
+        }
+
         const NETWORK_CONFIG = {
             chainId: '0x17cad',
             chainName: 'Sidra Chain',
@@ -226,8 +235,9 @@
         };
 
         const PRESALE_CONTRACT = {
-            address: '0x858024C3c8179Ed448A9133190f991cfA9873657', // Replace with actual address
-            abi: [{"inputs":[{"internalType":"address","name":"_nuurToken","type":"address"},{"internalType":"address","name":"_devWallet","type":"address"},{"internalType":"address","name":"initialOwner","type":"address"}],"stateMutability":"nonpayable","type":"constructor"},{"inputs":[{"internalType":"address","name":"owner","type":"address"}],"name":"OwnableInvalidOwner","type":"error"},{"inputs":[{"internalType":"address","name":"account","type":"address"}],"name":"OwnableUnauthorizedAccount","type":"error"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"to","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"NUURWithdrawn","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"previousOwner","type":"address"},{"indexed":true,"internalType":"address","name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"to","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"SDAWithdrawn","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"buyer","type":"address"},{"indexed":false,"internalType":"uint256","name":"sdaAmount","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"nuurAmount","type":"uint256"}],"name":"TokensPurchased","type":"event"},{"inputs":[],"name":"RATE","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"buyTokens","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[],"name":"devWallet","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"nuurToken","outputs":[{"internalType":"contract IERC20","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"renounceOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"newDevWallet","type":"address"}],"name":"updateDevWallet","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"withdrawNUUR","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"withdrawSDA","outputs":[],"stateMutability":"nonpayable","type":"function"},{"stateMutability":"payable","type":"receive"}];
+            address: '0x858024C3c8179Ed448A9133190f991cfA9873657',
+            abi: [{"inputs":[{"internalType":"address","name":"_nuurToken","type":"address"},{"internalType":"address","name":"_devWallet","type":"address"},{"internalType":"address","name":"initialOwner","type":"address"}],"stateMutability":"nonpayable","type":"constructor"},{"inputs":[{"internalType":"address","name":"owner","type":"address"}],"name":"OwnableInvalidOwner","type":"error"},{"inputs":[{"internalType":"address","name":"account","type":"address"}],"name":"OwnableUnauthorizedAccount","type":"error"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"to","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"NUURWithdrawn","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"previousOwner","type":"address"},{"indexed":true,"internalType":"address","name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"to","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"SDAWithdrawn","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"buyer","type":"address"},{"indexed":false,"internalType":"uint256","name":"sdaAmount","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"nuurAmount","type":"uint256"}],"name":"TokensPurchased","type":"event"},{"inputs":[],"name":"RATE","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"buyTokens","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[],"name":"devWallet","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"nuurToken","outputs":[{"internalType":"contract IERC20","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"renounceOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"newDevWallet","type":"address"}],"name":"updateDevWallet","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"withdrawNUUR","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"withdrawSDA","outputs":[],"stateMutability":"nonpayable","type":"function"},{"stateMutability":"payable","type":"receive"}]
+        };
 
         const NUUR_PRICE = 0.001; // 1 NUUR = 0.001 SDA
 
@@ -242,6 +252,8 @@
         const networkWarning = document.getElementById('network-warning');
 
         async function connectWallet() {
+            if (!checkIfWalletIsInstalled()) return;
+            
             try {
                 const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
                 account = accounts[0];
@@ -305,24 +317,40 @@
         }
 
         function calculateNUUR(sdaValue) {
-            const nuurValue = parseFloat(sdaValue) / NUUR_PRICE;
-            nuurInput.value = isNaN(nuurValue) ? '' : nuurValue.toFixed(6);
+            try {
+                const nuurValue = parseFloat(sdaValue) / NUUR_PRICE;
+                nuurInput.value = isNaN(nuurValue) ? '' : nuurValue.toFixed(6);
+            } catch (error) {
+                console.error('Error calculating NUUR:', error);
+                nuurInput.value = '';
+            }
         }
 
         function calculateSDA(nuurValue) {
-            const sdaValue = parseFloat(nuurValue) * NUUR_PRICE;
-            sdaInput.value = isNaN(sdaValue) ? '' : sdaValue.toFixed(6);
+            try {
+                const sdaValue = parseFloat(nuurValue) * NUUR_PRICE;
+                sdaInput.value = isNaN(sdaValue) ? '' : sdaValue.toFixed(6);
+            } catch (error) {
+                console.error('Error calculating SDA:', error);
+                sdaInput.value = '';
+            }
         }
 
         async function buyNUUR() {
+            if (!checkIfWalletIsInstalled()) return;
             if (!provider || !account || !sdaInput.value) return;
 
             try {
                 statusDiv.textContent = 'Transaction pending...';
                 statusDiv.className = 'status pending';
 
-                const tx = await signer.sendTransaction({
-                    to: PRESALE_CONTRACT.address,
+                const contract = new ethers.Contract(
+                    PRESALE_CONTRACT.address,
+                    PRESALE_CONTRACT.abi,
+                    signer
+                );
+
+                const tx = await contract.buyTokens({
                     value: ethers.utils.parseEther(sdaInput.value)
                 });
 
@@ -343,22 +371,23 @@
                 statusDiv.innerHTML = `
                     Transaction failed: ${error.message || 'Unknown error'}
                     <br>
-                    <a href="error" class="error-link" target="_blank">Report an error</a>
+                    <a href="error.html" class="error-link" target="_blank">Report an error</a>
                 `;
                 statusDiv.className = 'status error';
             }
         }
 
-        // Event Listeners
-        connectBtn.addEventListener('click', connectWallet);
-        sdaInput.addEventListener('input', (e) => calculateNUUR(e.target.value));
-        nuurInput.addEventListener('input', (e) => calculateSDA(e.target.value));
-        buyBtn.addEventListener('click', buyNUUR);
+        document.addEventListener('DOMContentLoaded', async () => {
+            if (window.ethereum && window.ethereum.selectedAddress) {
+                await connectWallet();
+            }
 
-        // Check if wallet is already connected
-        if (window.ethereum && window.ethereum.selectedAddress) {
-            connectWallet();
-        }
+            // Event Listeners
+            connectBtn.addEventListener('click', connectWallet);
+            sdaInput.addEventListener('input', (e) => calculateNUUR(e.target.value));
+            nuurInput.addEventListener('input', (e) => calculateSDA(e.target.value));
+            buyBtn.addEventListener('click', buyNUUR);
+        });
     </script>
 </body>
 </html>
