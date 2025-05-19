@@ -158,7 +158,7 @@
             padding: 0.5rem;
             display: none;
         }
-        
+
         .error-link {
             display: inline-block;
             margin-top: 0.5rem;
@@ -199,12 +199,8 @@
             <div id="status" class="status"></div>
         </div>
     </div>
-
     <script>
-    console.log('Script loaded');
-window.addEventListener('error', function(e) {
-    console.log('Global error:', e);
-});
+console.log('Script loaded');
 
 function checkIfWalletIsInstalled() {
     if (typeof window.ethereum === 'undefined') {
@@ -214,29 +210,20 @@ function checkIfWalletIsInstalled() {
     return true;
 }
 
-const NETWORK_CONFIG = {
-    chainId: '0x17cad', // Verify this matches Sidra Chain's hex ID
-    chainName: 'Sidra Chain',
-    rpcUrls: ['https://node.sidrachain.com'],
-    blockExplorerUrls: ['https://ledger.sidrachain.com'],
-    nativeCurrency: { name: 'SDA', symbol: 'SDA', decimals: 18 }
-};
-
 const PRESALE_CONTRACT = {
     address: '0x858024C3c8179Ed448A9133190f991cfA9873657',
     abi: [
         {
-            "inputs": [],
-            "name": "buyTokens",
-            "outputs": [],
-            "stateMutability": "payable",
-            "type": "function"
+            inputs: [],
+            name: 'buyTokens',
+            outputs: [],
+            stateMutability: 'payable',
+            type: 'function'
         }
     ]
 };
 
 const NUUR_PRICE = 0.001; // 1 NUUR = 0.001 SDA
-
 let provider, signer, account;
 
 // DOM Elements
@@ -245,26 +232,14 @@ const sdaInput   = document.getElementById('sda-amount');
 const nuurInput  = document.getElementById('nuur-amount');
 const buyBtn     = document.getElementById('buy-btn');
 const statusDiv  = document.getElementById('status');
-const networkWarning = document.getElementById('network-warning');
-
-// Reusable handler for chain change
-const handleChainChanged = () => window.location.reload();
 
 async function connectWallet() {
     if (!checkIfWalletIsInstalled()) return;
-
     try {
-        // Clear previous status
-        statusDiv.textContent = '';
-        statusDiv.className = '';
-
         // Request account access
         const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-        if (!accounts || accounts.length === 0) {
-            throw new Error('No accounts found');
-        }
+        if (!accounts || accounts.length === 0) throw new Error('No accounts found');
 
-        // Set up ethers.js provider & signer
         account  = accounts[0];
         provider = new ethers.providers.Web3Provider(window.ethereum);
         signer   = provider.getSigner();
@@ -273,54 +248,15 @@ async function connectWallet() {
         connectBtn.textContent = `${account.slice(0,6)}...${account.slice(-4)}`;
         buyBtn.disabled = false;
 
-        // Attempt network switch, but don’t let failure abort connection
-        try {
-            await checkNetwork();
-        } catch (netErr) {
-            console.warn('Could not switch network automatically:', netErr);
-        }
-
-        // Register listeners once
+        // Listen for account changes
         window.ethereum.on('accountsChanged', handleAccountsChanged);
-        window.ethereum.on('chainChanged', handleChainChanged);
 
         console.log('Wallet connected successfully:', account);
-        return true;
     } catch (error) {
-        console.error('🔴 connectWallet error:', error);
-        if (error.code !== 4001) { // ignore user rejection
+        console.error('connectWallet error:', error);
+        if (error.code !== 4001) {
             statusDiv.textContent = 'Failed to connect wallet. Please try again.';
             statusDiv.className = 'status error';
-        }
-        return false;
-    }
-}
-
-async function checkNetwork() {
-    if (!window.ethereum) return;
-
-    const chainId = await window.ethereum.request({ method: 'eth_chainId' });
-    if (chainId === NETWORK_CONFIG.chainId) {
-        networkWarning.style.display = 'none';
-        return;
-    }
-
-    networkWarning.style.display = 'block';
-    try {
-        await window.ethereum.request({
-            method: 'wallet_switchEthereumChain',
-            params: [{ chainId: NETWORK_CONFIG.chainId }]
-        });
-        networkWarning.style.display = 'none';
-    } catch (error) {
-        if (error.code === 4902) {
-            await window.ethereum.request({
-                method: 'wallet_addEthereumChain',
-                params: [NETWORK_CONFIG]
-            });
-            networkWarning.style.display = 'none';
-        } else {
-            throw error;
         }
     }
 }
@@ -331,11 +267,11 @@ function handleAccountsChanged(accounts) {
         connectBtn.textContent = 'Connect Wallet';
         buyBtn.disabled = true;
         statusDiv.textContent = '';
-        statusDiv.className = '';
-    } else if (accounts[0] !== account) {
+    } else {
         account = accounts[0];
         connectBtn.textContent = `${account.slice(0,6)}...${account.slice(-4)}`;
         buyBtn.disabled = false;
+        console.log('Account changed to', account);
     }
 }
 
@@ -350,8 +286,7 @@ function calculateSDA(nuurValue) {
 }
 
 async function buyNUUR() {
-    if (!checkIfWalletIsInstalled() || !provider || !account || !sdaInput.value) return;
-
+    if (!provider || !signer || !sdaInput.value) return;
     try {
         statusDiv.textContent = 'Transaction pending...';
         statusDiv.className = 'status pending';
@@ -366,7 +301,7 @@ async function buyNUUR() {
         statusDiv.innerHTML = 'Transaction submitted. Waiting for confirmation...';
         const receipt = await tx.wait();
 
-        statusDiv.innerHTML = `Transaction successful! <a href="${NETWORK_CONFIG.blockExplorerUrls[0]}/tx/${receipt.transactionHash}" target="_blank">View on Ledger</a>`;
+        statusDiv.innerHTML = `Transaction successful! <a href="https://ledger.sidrachain.com/tx/${receipt.transactionHash}" target="_blank">View on Ledger</a>`;
         statusDiv.className = 'status success';
     } catch (error) {
         console.error('Error buying NUUR:', error);
@@ -379,19 +314,17 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (window.ethereum) {
         try {
             const accounts = await window.ethereum.request({ method: 'eth_accounts' });
-            if (accounts && accounts.length > 0) {
-                await connectWallet();
-            }
-        } catch (error) {
-            console.error('Error checking initial wallet state:', error);
+            if (accounts.length > 0) connectWallet();
+        } catch (e) {
+            console.error('Error querying accounts on load:', e);
         }
     }
     connectBtn.addEventListener('click', connectWallet);
-    sdaInput.addEventListener('input', (e) => calculateNUUR(e.target.value));
-    nuurInput.addEventListener('input', (e) => calculateSDA(e.target.value));
+    sdaInput.addEventListener('input', e => calculateNUUR(e.target.value));
+    nuurInput.addEventListener('input', e => calculateSDA(e.target.value));
     buyBtn.addEventListener('click', buyNUUR);
 });
+</script>
 
-    </script>
 </body>
 </html>
