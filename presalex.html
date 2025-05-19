@@ -56,50 +56,105 @@
   </div>
   
   <script src="https://cdn.jsdelivr.net/npm/web3@1.10.0/dist/web3.min.js"></script>
-
-<script>
-  // Constants and Global Variables
+  <script>
+    // Constants and Global Variables
 const presaleAddress = "0x858024C3c8179Ed448A9133190f991cfA9873657";
 const rate = 1000;
 let userAddress = null;
 let provider = window.ethereum;
 
 // Contract ABI
-const abi = [
-    {"inputs":[{"internalType":"address","name":"_nuurToken","type":"address"},{"internalType":"address","name":"_devWallet","type":"address"},{"internalType":"address","name":"initialOwner","type":"address"}],"stateMutability":"nonpayable","type":"constructor"},
-    {"inputs":[{"internalType":"address","name":"owner","type":"address"}],"name":"OwnableInvalidOwner","type":"error"},
-    {"inputs":[{"internalType":"address","name":"account","type":"address"}],"name":"OwnableUnauthorizedAccount","type":"error"},
-    {"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"to","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"NUURWithdrawn","type":"event"},
-    {"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"previousOwner","type":"address"},{"indexed":true,"internalType":"address","name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"},
-    {"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"to","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"SDAWithdrawn","type":"event"},
-    {"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"buyer","type":"address"},{"indexed":false,"internalType":"uint256","name":"sdaAmount","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"nuurAmount","type":"uint256"}],"name":"TokensPurchased","type":"event"},
-    {"inputs":[],"name":"RATE","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},
-    {"inputs":[],"name":"buyTokens","outputs":[],"stateMutability":"payable","type":"function"},
-    {"inputs":[],"name":"devWallet","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},
-    {"inputs":[],"name":"nuurToken","outputs":[{"internalType":"contract IERC20","name":"","type":"address"}],"stateMutability":"view","type":"function"},
-    {"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},
-    {"inputs":[],"name":"renounceOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},
-    {"inputs":[{"internalType":"address","name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},
-    {"inputs":[{"internalType":"address","name":"newDevWallet","type":"address"}],"name":"updateDevWallet","outputs":[],"stateMutability":"nonpayable","type":"function"},
-    {"inputs":[{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"withdrawNUUR","outputs":[],"stateMutability":"nonpayable","type":"function"},
-    {"inputs":[{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"withdrawSDA","outputs":[],"stateMutability":"nonpayable","type":"function"},
-    {"stateMutability":"payable","type":"receive"}
-];
+const abi = [{"inputs":[{"internalType":"address","name":"_nuurToken","type":"address"},{"internalType":"address","name":"_devWallet","type":"address"},{"internalType":"address","name":"initialOwner","type":"address"}],"stateMutability":"nonpayable","type":"constructor"},{"inputs":[{"internalType":"address","name":"owner","type":"address"}],"name":"OwnableInvalidOwner","type":"error"},{"inputs":[{"internalType":"address","name":"account","type":"address"}],"name":"OwnableUnauthorizedAccount","type":"error"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"to","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"NUURWithdrawn","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"previousOwner","type":"address"},{"indexed":true,"internalType":"address","name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"to","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"SDAWithdrawn","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"buyer","type":"address"},{"indexed":false,"internalType":"uint256","name":"sdaAmount","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"nuurAmount","type":"uint256"}],"name":"TokensPurchased","type":"event"},{"inputs":[],"name":"RATE","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"buyTokens","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[],"name":"devWallet","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"nuurToken","outputs":[{"internalType":"contract IERC20","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"renounceOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"newDevWallet","type":"address"}],"name":"updateDevWallet","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"withdrawNUUR","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"withdrawSDA","outputs":[],"stateMutability":"nonpayable","type":"function"},{"stateMutability":"payable","type":"receive"}];
 
-// Error handling
+// Error Types
 const ErrorTypes = {
     WALLET_NOT_CONNECTED: "WALLET_NOT_CONNECTED",
     INVALID_AMOUNT: "INVALID_AMOUNT",
     TRANSACTION_FAILED: "TRANSACTION_FAILED",
-    NETWORK_ERROR: "NETWORK_ERROR"
+    NETWORK_ERROR: "NETWORK_ERROR",
+    GAS_ESTIMATION_FAILED: "GAS_ESTIMATION_FAILED",
+    INSUFFICIENT_FUNDS: "INSUFFICIENT_FUNDS",
+    GAS_PRICE_TOO_HIGH: "GAS_PRICE_TOO_HIGH"
 };
 
+// Gas Utilities
+const GasUtils = {
+    toGwei: (web3, wei) => {
+        return web3.utils.fromWei(wei, 'gwei');
+    },
+    fromGwei: (web3, gwei) => {
+        return web3.utils.toWei(gwei.toString(), 'gwei');
+    },
+    formatGasPrice: (web3, wei) => {
+        const gwei = web3.utils.fromWei(wei, 'gwei');
+        return `${parseFloat(gwei).toFixed(2)} Gwei`;
+    },
+    estimateTotalCost: (web3, gasLimit, maxFeePerGas, value) => {
+        const gasCost = web3.utils.toBN(gasLimit).mul(web3.utils.toBN(maxFeePerGas));
+        const totalCost = gasCost.add(web3.utils.toBN(value));
+        return web3.utils.fromWei(totalCost, 'ether');
+    }
+};
+
+// Transaction Utilities
+const TransactionUtils = {
+    waitForTransaction: async (web3, txHash, maxAttempts = 30) => {
+        let attempts = 0;
+        while (attempts < maxAttempts) {
+            try {
+                const receipt = await web3.eth.getTransactionReceipt(txHash);
+                if (receipt) {
+                    const tx = await web3.eth.getTransaction(txHash);
+                    return { receipt, transaction: tx };
+                }
+            } catch (error) {
+                console.warn('Error checking transaction:', error);
+            }
+            attempts++;
+            await new Promise(resolve => setTimeout(resolve, 2000));
+        }
+        throw new Error('Transaction confirmation timeout');
+    },
+
+    verifyTransactionSuccess: async (web3, txHash, receipt) => {
+        try {
+            const conditions = {
+                receiptStatus: receipt.status === true,
+                hasLogs: receipt.logs && receipt.logs.length > 0,
+                gasUsed: receipt.gasUsed < receipt.cumulativeGasUsed
+            };
+
+            const tx = await web3.eth.getTransaction(txHash);
+            
+            if (tx.input && tx.input.length > 2) {
+                try {
+                    const contract = new web3.eth.Contract(abi, presaleAddress);
+                    const decodedInput = contract.methods.decodeParameter(tx.input);
+                    console.log('Decoded transaction input:', decodedInput);
+                } catch (e) {
+                    console.warn('Could not decode transaction input:', e);
+                }
+            }
+
+            console.log('Transaction verification results:', conditions);
+            return conditions.receiptStatus && (conditions.hasLogs || conditions.gasUsed);
+        } catch (error) {
+            console.error('Error during transaction verification:', error);
+            return false;
+        }
+    }
+};
+
+// Error Handler
 function handleError(error, type) {
     const errorMessages = {
         [ErrorTypes.WALLET_NOT_CONNECTED]: "Please connect your wallet first",
         [ErrorTypes.INVALID_AMOUNT]: "Please enter a valid amount between 0.001 and 5000 SDA",
         [ErrorTypes.TRANSACTION_FAILED]: "Transaction failed. Please try again",
-        [ErrorTypes.NETWORK_ERROR]: "Network error. Please check your connection"
+        [ErrorTypes.NETWORK_ERROR]: "Network error. Please check your connection",
+        [ErrorTypes.GAS_ESTIMATION_FAILED]: "Failed to estimate gas. The transaction might fail.",
+        [ErrorTypes.INSUFFICIENT_FUNDS]: "Insufficient funds to cover gas and value.",
+        [ErrorTypes.GAS_PRICE_TOO_HIGH]: "Gas price is too high. Please try again later."
     };
 
     const statusElement = document.getElementById("statusMessage");
@@ -108,7 +163,7 @@ function handleError(error, type) {
     console.error("Error details:", error);
 }
 
-// Loading state management
+// Loading State Management
 function setLoading(isLoading) {
     const buyButton = document.querySelector('button[onclick="buyTokens()"]');
     if (isLoading) {
@@ -126,14 +181,36 @@ function setLoading(isLoading) {
     }
 }
 
-// Network validation
+// Gas Parameter Estimation
+async function getGasParameters(web3, txParams) {
+    try {
+        const [baseFee, maxPriorityFee] = await Promise.all([
+            web3.eth.getBlock('latest').then(block => block.baseFeePerGas),
+            web3.eth.getMaxPriorityFeePerGas()
+        ]);
+
+        const maxFeePerGas = web3.utils.toBN(baseFee)
+            .muln(2)
+            .add(web3.utils.toBN(maxPriorityFee))
+            .toString();
+
+        return {
+            maxFeePerGas: web3.utils.toHex(maxFeePerGas),
+            maxPriorityFeePerGas: web3.utils.toHex(maxPriorityFee)
+        };
+    } catch (error) {
+        console.error('Error estimating gas parameters:', error);
+        return null;
+    }
+}
+
+// Network Validation
 async function validateNetwork() {
     if (!provider) return false;
     
     try {
         const chainId = await provider.request({ method: 'eth_chainId' });
-        // Update this with actual Sidra Chain ID
-        const SIDRA_CHAIN_ID = '0x1234';
+        const SIDRA_CHAIN_ID = '0x17cad'; // Update with actual Sidra Chain ID
         
         if (chainId !== SIDRA_CHAIN_ID) {
             throw new Error('Please switch to Sidra Chain network');
@@ -145,7 +222,7 @@ async function validateNetwork() {
     }
 }
 
-// Wallet connection
+// Wallet Connection
 async function connectWallet() {
     if (!provider) {
         alert("Please install MetaMask!");
@@ -168,7 +245,7 @@ async function connectWallet() {
     }
 }
 
-// Wallet disconnection
+// Wallet Disconnection
 async function disconnectWallet() {
     userAddress = null;
     document.getElementById("statusMessage").innerText = "Wallet disconnected.";
@@ -177,7 +254,7 @@ async function disconnectWallet() {
     document.getElementById("walletBalance").innerText = "Not Connected";
 }
 
-// Show wallet balance
+// Show Wallet Balance
 async function showWalletBalance() {
     if (!provider || !userAddress) return;
 
@@ -192,7 +269,7 @@ async function showWalletBalance() {
     }
 }
 
-// Show contract balance
+// Show Contract Balance
 async function showContractBalance() {
     if (!provider) return;
 
@@ -216,7 +293,7 @@ async function showContractBalance() {
     }
 }
 
-// Input validation
+// Input Validation
 function validateSDAAmount(amount) {
     if (amount < 0.001 || amount > 5000) {
         throw new Error("Amount must be between 0.001 and 5000 SDA");
@@ -226,7 +303,7 @@ function validateSDAAmount(amount) {
     }
 }
 
-// Buy tokens
+// Buy Tokens
 async function buyTokens() {
     const sdaAmount = parseFloat(document.getElementById("sdaAmount").value);
     if (!sdaAmount || sdaAmount <= 0) {
@@ -242,11 +319,28 @@ async function buyTokens() {
         validateSDAAmount(sdaAmount);
         setLoading(true);
 
+        const web3 = new Web3(provider);
+        const weiValue = web3.utils.toWei(sdaAmount.toString(), 'ether');
+
         const txParams = {
             from: userAddress,
             to: presaleAddress,
-            value: "0x" + (sdaAmount * 1e18).toString(16)
+            value: web3.utils.toHex(weiValue),
+            type: '0x2'
         };
+
+        const gasParams = await getGasParameters(web3, txParams);
+        if (gasParams) {
+            Object.assign(txParams, gasParams);
+        }
+
+        const estimatedGas = await web3.eth.estimateGas({
+            from: userAddress,
+            to: presaleAddress,
+            value: weiValue
+        });
+
+        txParams.gas = web3.utils.toHex(Math.floor(estimatedGas * 1.2));
 
         const txHash = await provider.request({
             method: "eth_sendTransaction",
@@ -255,41 +349,57 @@ async function buyTokens() {
 
         await monitorTransaction(txHash);
     } catch (error) {
+        console.error('Transaction error:', error);
         handleError(error, ErrorTypes.TRANSACTION_FAILED);
     } finally {
         setLoading(false);
     }
 }
 
-// Monitor transaction
+// Monitor Transaction
 async function monitorTransaction(txHash) {
     const web3 = new Web3(provider);
     const statusElement = document.getElementById("statusMessage");
     
     try {
-        const receipt = await web3.eth.getTransactionReceipt(txHash);
-        if (receipt.status) {
+        setLoading(true);
+        statusElement.innerHTML = `
+            ⏳ Confirming transaction... 
+            <a href="https://ledger.sidrachain.com/tx/${txHash}" 
+               target="_blank" 
+               class="underline text-yellow-300">
+                View on Explorer
+            </a>
+        `;
+
+        const { receipt, transaction } = await TransactionUtils.waitForTransaction(web3, txHash);
+        const isSuccess = await TransactionUtils.verifyTransactionSuccess(web3, txHash, receipt);
+
+        if (isSuccess) {
+            const contract = new web3.eth.Contract(abi, presaleAddress);
+            await showContractBalance();
+            await showWalletBalance();
+
             statusElement.innerHTML = `
-                ✅ Transaction confirmed! 
+                ✅ Transaction confirmed successfully! 
                 <a href="https://ledger.sidrachain.com/tx/${txHash}" 
                    target="_blank" 
                    class="underline text-green-300">
                     View on Explorer
                 </a>
             `;
-            await showContractBalance();
-            await showWalletBalance();
         } else {
-            throw new Error("Transaction failed");
+            throw new Error("Transaction verification failed");
         }
     } catch (error) {
         handleError(error, ErrorTypes.TRANSACTION_FAILED);
+    } finally {
+        setLoading(false);
     }
 }
 
-// Event listeners
+// Event Listeners
 document.addEventListener("DOMContentLoaded", function() {
-    // SDA amount input handler
     const sdaInput = document.getElementById("sdaAmount");
     if (sdaInput) {
         sdaInput.addEventListener("input", function() {
@@ -298,7 +408,6 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     }
 
-    // Initial setup
     if (provider) {
         provider.on("accountsChanged", function(accounts) {
             if (accounts.length === 0) {
@@ -314,6 +423,6 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     }
 });
-</script>
+  </script>
 </body>
 </html>
