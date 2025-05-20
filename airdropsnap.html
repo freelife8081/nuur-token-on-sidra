@@ -1,99 +1,98 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NUUR Token Airdrop</title>
-    <link rel="stylesheet" href="snap.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>NUUR Token Airdrop</title>
+  <link rel="stylesheet" href="snap.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="container">
-        <header>
-            <img src="logo.png" alt="NUUR Logo" class="logo">
-            <div class="header-right">
-                <div class="network-status">
-                    <span class="status-dot"></span>
-                    <span id="networkName">Not Connected</span>
-                </div>
-                <button id="connectWallet" class="connect-button">Connect Wallet</button>
+  <div class="container">
+    <header>
+      <img src="logo.png" alt="NUUR Logo" class="logo" />
+      <div class="header-right">
+        <div class="network-status">
+          <span class="status-dot"></span>
+          <span id="networkName">Not Connected</span>
+        </div>
+        <button id="connectWallet" class="connect-button">Connect Wallet</button>
+      </div>
+    </header>
+
+    <main>
+      <div class="airdrop-card">
+        <h1>NUUR Token Airdrop</h1>
+
+        <div class="info-container">
+          <div class="wallet-info">
+            <h3>Wallet Information</h3>
+            <div class="info-grid">
+              <div class="info-item">
+                <label>Address:</label>
+                <span id="walletAddress">Not Connected</span>
+              </div>
+              <div class="info-item">
+                <label>NUUR Balance:</label>
+                <span id="nuurBalance">0</span> NUUR
+              </div>
+              <div class="info-item">
+                <label>Snapshot Balance:</label>
+                <span id="snapshotBalance">0</span> NUUR
+              </div>
+              <div class="info-item">
+                <label>Presale Status:</label>
+                <span id="presaleStatus">Not Verified</span>
+              </div>
             </div>
-        </header>
+            <button id="takeSnapshot" class="snapshot-button" disabled>Take Snapshot</button>
+          </div>
 
-        <main>
-            <div class="airdrop-card">
-                <h1>NUUR Token Airdrop</h1>
-                
-                <div class="info-container">
-                    <div class="wallet-info">
-                        <h3>Wallet Information</h3>
-                        <div class="info-grid">
-                            <div class="info-item">
-                                <label>Address:</label>
-                                <span id="walletAddress">Not Connected</span>
-                            </div>
-                            <div class="info-item">
-                                <label>Current Balance:</label>
-                                <span id="nuurBalance">0</span> NUUR
-                            </div>
-                            <div class="info-item">
-                                <label>Snapshot Balance:</label>
-                                <span id="snapshotBalance">0</span> NUUR
-                            </div>
-                            <div class="info-item">
-                                <label>Presale Status:</label>
-                                <span id="presaleStatus">Not Verified</span>
-                            </div>
-                        </div>
-                        <button id="takeSnapshot" class="snapshot-button" disabled>Take Snapshot</button>
-                    </div>
-
-                    <div class="eligibility-info">
-                        <h3>Airdrop Tiers</h3>
-                        <div class="tiers">
-                            <div class="tier">
-                                <span class="tier-range">200,000 NUUR</span>
-                                <span class="tier-reward">10,000 NUUR</span>
-                            </div>
-                            <div class="tier">
-                                <span class="tier-range">250,000 - 500,000 NUUR</span>
-                                <span class="tier-reward">30,000 NUUR</span>
-                            </div>
-                            <div class="tier">
-                                <span class="tier-range">550,000 - 900,000 NUUR</span>
-                                <span class="tier-reward">100,000 NUUR</span>
-                            </div>
-                            <div class="tier">
-                                <span class="tier-range">901,000 - 1,000,000 NUUR</span>
-                                <span class="tier-reward">250,000 NUUR</span>
-                            </div>
-                            <div class="tier">
-                                <span class="tier-range">1,500,000+ NUUR</span>
-                                <span class="tier-reward">500,000 NUUR</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="claim-section">
-                    <div class="claim-info">
-                        <h3>Your Reward</h3>
-                        <p>Claimable Amount: <span id="claimableAmount">0</span> NUUR</p>
-                    </div>
-                    <button id="claimButton" class="claim-button" disabled>Connect Wallet</button>
-                </div>
-
-                <div id="status" class="status"></div>
+          <div class="eligibility-info">
+            <h3>Airdrop Tiers</h3>
+            <div class="tiers">
+              <div class="tier">
+                <span class="tier-range">200,000 NUUR</span>
+                <span class="tier-reward">10,000 NUUR</span>
+              </div>
+              <div class="tier">
+                <span class="tier-range">250,000 - 500,000 NUUR</span>
+                <span class="tier-reward">30,000 NUUR</span>
+              </div>
+              <div class="tier">
+                <span class="tier-range">550,000 - 900,000 NUUR</span>
+                <span class="tier-reward">100,000 NUUR</span>
+              </div>
+              <div class="tier">
+                <span class="tier-range">901,000 - 1,000,000 NUUR</span>
+                <span class="tier-reward">250,000 NUUR</span>
+              </div>
+              <div class="tier">
+                <span class="tier-range">1,500,000+ NUUR</span>
+                <span class="tier-reward">500,000 NUUR</span>
+              </div>
             </div>
-        </main>
+          </div>
+        </div>
 
-        <footer>
-            <p>Current Time (UTC): <span id="currentTime">2025-05-20 17:59:31</span></p>
-        </footer>
-    </div>
+        <div class="claim-section">
+          <div class="claim-info">
+            <h3>Your Reward</h3>
+            <p>Claimable Amount: <span id="claimableAmount">0</span> NUUR</p>
+          </div>
+          <button id="claimButton" class="claim-button" disabled>Connect Wallet</button>
+        </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
-    <script src="contractABI.js"></script>
-    <script src="snap.js"></script>
+        <div id="status" class="status"></div>
+      </div>
+    </main>
+
+    <footer>
+      <p>Current Time (UTC): <span id="currentTime">--:--:--</span></p>
+    </footer>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+  <script src="snap.js"></script>
 </body>
 </html>
