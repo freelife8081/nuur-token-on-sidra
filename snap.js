@@ -6,7 +6,7 @@ class AirdropInterface {
         this.nuurToken = null;
         
         // Contract addresses - Replace these with your deployed contract addresses
-        this.contractAddress = "YOUR_AIRDROP_CONTRACT_ADDRESS";
+        this.contractAddress = "0x8e4384ed929b82A2FEE2e6F043213170C1d905D9";
         this.nuurTokenAddress = "0x003BEc2e6ef4369f9d968eCD288d31B59fD9c2CD";
         this.presaleContract1 = "0x98FCc396547D450208e926995a74b61874a1423A";
         this.presaleContract2 = "0x858024C3c8179Ed448A9133190f991cfA9873657";
