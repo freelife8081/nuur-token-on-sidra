@@ -258,20 +258,22 @@
       initWeb3();
     });
     
-    
   window.addEventListener('load', function () {
-    setTimeout(function () {
-      const notice = document.querySelector('.popup-notice');
-      if (notice) {
-        notice.style.display = 'block';
-      }
-    }, 5000);
+    if (!localStorage.getItem('noticeDismissed')) {
+      setTimeout(function () {
+        const notice = document.querySelector('.popup-notice');
+        if (notice) {
+          notice.style.display = 'block';
+        }
+      }, 5000);
+    }
   });
 
   function closeNotice() {
     const notice = document.querySelector('.popup-notice');
     if (notice) {
       notice.style.display = 'none';
+      localStorage.setItem('noticeDismissed', 'true');
     }
   }
   </script>
