@@ -214,7 +214,7 @@
 
     <hr class="divider fade-in">
     <div id="presaleContainer">
-      <h2>NUUR Presale Progress</h2>
+      <h2>Presale Phase 1</h2>
 
       <p id="boughtAmount">Loading...</p>
       <p id="boughtPercent">Loading...</p>
@@ -300,11 +300,11 @@
       const decimals = await nuurContract.methods.decimals().call();
       const balanceRaw = await nuurContract.methods.balanceOf(presaleAddress).call();
       const balance = parseFloat(balanceRaw / 10 ** decimals);
-      const totalSupply = 5_000_000;
+      const totalSupply = 1_000_000;
       const bought = totalSupply - balance;
       const percent = ((bought / totalSupply) * 100).toFixed(2);
 
-      document.getElementById("boughtAmount").innerText = `${bought.toLocaleString()} / 5,000,000 NUUR bought`;
+      document.getElementById("boughtAmount").innerText = `${bought.toLocaleString()} / 1,000,000 NUUR bought`;
       document.getElementById("boughtPercent").innerText = `${percent}% / 100% completed`;
       document.getElementById("remainingTokens").innerText = `${balance.toLocaleString()} NUUR remaining`;
       document.getElementById("progressFill").style.width = `${percent}%`;
@@ -331,7 +331,7 @@
     const secs = Math.floor((diff % (1000 * 60)) / 1000);
 
     document.getElementById("countdown").innerText =
-      `Countdown: ${days}d ${hrs}h ${mins}m ${secs}s`;
+      `Presale ends in: ${days}d ${hrs}h ${mins}m ${secs}s`;
   }
 
   showContractProgress();
@@ -361,7 +361,7 @@
       const decimals = await nuurContract.methods.decimals().call();
       const balanceRaw = await nuurContract.methods.balanceOf(presaleAddress).call();
       const balance = parseFloat(balanceRaw / 10 ** decimals);
-      const totalSupply = 5_000_000;
+      const totalSupply = 1_000_000;
       const bought = totalSupply - balance;
       const percent = ((bought / totalSupply) * 100).toFixed(2);
 
