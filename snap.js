@@ -4,16 +4,15 @@ class AirdropInterface {
         this.signer = null;
         this.contract = null;
         this.nuurToken = null;
-        
-        // Contract addresses - Replace these with your deployed contract addresses
+
+        // Contract addresses - Replace with your deployed addresses
         this.contractAddress = "0x8e4384ed929b82A2FEE2e6F043213170C1d905D9";
         this.nuurTokenAddress = "0x003BEc2e6ef4369f9d968eCD288d31B59fD9c2CD";
         this.presaleContract1 = "0x98FCc396547D450208e926995a74b61874a1423A";
         this.presaleContract2 = "0x858024C3c8179Ed448A9133190f991cfA9873657";
-        
-        // Current user info
+
         this.currentUser = 'freelife8081';
-        
+
         this.init();
         this.updateCurrentTime();
     }
@@ -31,7 +30,6 @@ class AirdropInterface {
     async initializeProvider() {
         if (typeof window.ethereum !== 'undefined') {
             try {
-                // Initialize provider
                 this.provider = new ethers.providers.Web3Provider(window.ethereum);
                 await this.setupEthereumEvents();
                 await this.checkNetwork();
@@ -76,7 +74,6 @@ class AirdropInterface {
             window.location.reload();
         });
 
-        // Check if already connected
         const accounts = await this.provider.listAccounts();
         if (accounts.length > 0) {
             await this.updateWalletInfo(accounts[0]);
@@ -102,25 +99,21 @@ class AirdropInterface {
         }
 
         try {
-            // Request account access
-            const accounts = await window.ethereum.request({ 
-                method: 'eth_requestAccounts' 
-            });
+            const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
 
-            if (accounts.length === 0) {
-                throw new Error('No accounts available');
-            }
+            if (accounts.length === 0) throw new Error('No accounts available');
 
-            // Initialize signer
             this.signer = this.provider.getSigner();
-            
-            // Initialize contracts
+
+            // ABI for the main airdrop contract
+            const contractABI = [{"inputs":[{"internalType":"address","name":"_nuurToken","type":"address"},{"internalType":"address","name":"_presale1","type":"address"},{"internalType":"address","name":"_presale2","type":"address"}],"stateMutability":"nonpayable","type":"constructor"},{"inputs":[{"internalType":"address","name":"owner","type":"address"}],"name":"OwnableInvalidOwner","type":"error"},{"inputs":[{"internalType":"address","name":"account","type":"address"}],"name":"OwnableUnauthorizedAccount","type":"error"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"Claimed","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"oldToken","type":"address"},{"indexed":true,"internalType":"address","name":"newToken","type":"address"}],"name":"NUURTokenUpdated","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"NativeWithdrawn","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"previousOwner","type":"address"},{"indexed":true,"internalType":"address","name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"account","type":"address"}],"name":"Paused","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"presale1","type":"address"},{"indexed":false,"internalType":"address","name":"presale2","type":"address"}],"name":"PresaleContractsUpdated","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"uint256","name":"balance","type":"uint256"}],"name":"SnapshotTaken","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"TokensWithdrawn","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"account","type":"address"}],"name":"Unpaused","type":"event"},{"inputs":[],"name":"claim","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"_user","type":"address"}],"name":"getClaimableAmount","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"hasClaimed","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"nuurToken","outputs":[{"internalType":"contract IERC20","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"pause","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"paused","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"presaleContract1","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"presaleContract2","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"renounceOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"_newToken","type":"address"}],"name":"setNUURToken","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"_presale1","type":"address"},{"internalType":"address","name":"_presale2","type":"address"}],"name":"setPresaleContracts","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"snapshotBalances","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"snapshotTimestamp","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"_user","type":"address"}],"name":"takeSnapshot","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"unpause","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"_user","type":"address"}],"name":"verifyPresaleParticipation","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"withdrawNative","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"_amount","type":"uint256"}],"name":"withdrawTokens","outputs":[],"stateMutability":"nonpayable","type":"function"},{"stateMutability":"payable","type":"receive"}];
+
             this.contract = new ethers.Contract(
-                this.contractAddress, 
-                contractABI, 
+                this.contractAddress,
+                contractABI,
                 this.signer
             );
-            
+
             this.nuurToken = new ethers.Contract(
                 this.nuurTokenAddress,
                 [
@@ -138,33 +131,24 @@ class AirdropInterface {
         }
     }
 
-    // ... (rest of the methods remain the same)
-
     async updateWalletInfo(address) {
-        if (!this.provider || !this.signer) {
-            console.error('Provider or signer not initialized');
-            return;
-        }
+        if (!this.provider || !this.signer) return;
 
         try {
             document.getElementById('walletAddress').textContent = this.shortenAddress(address);
-            
-            // Check if contract is paused
+
             const isPaused = await this.isPaused();
-            
-            // Get current balance
+
             const balance = await this.nuurToken.balanceOf(address);
             const decimals = await this.nuurToken.decimals();
             const formattedBalance = ethers.utils.formatUnits(balance, decimals);
             document.getElementById('nuurBalance').textContent = parseFloat(formattedBalance).toLocaleString();
 
-            // Get snapshot balance
             const snapshotBalance = await this.contract.snapshotBalances(address);
             const formattedSnapshotBalance = ethers.utils.formatUnits(snapshotBalance, decimals);
             document.getElementById('snapshotBalance').textContent = parseFloat(formattedSnapshotBalance).toLocaleString();
 
-            // Update UI components
-            this.updateUIComponents(address, isPaused, snapshotBalance);
+            await this.updateUIComponents(address, isPaused, snapshotBalance);
         } catch (error) {
             console.error('Error updating wallet info:', error);
             this.updateStatus('Error updating wallet info: ' + error.message, 'error');
@@ -173,36 +157,85 @@ class AirdropInterface {
 
     async updateUIComponents(address, isPaused, snapshotBalance) {
         try {
-            // Check presale participation
             const isPresaleParticipant = await this.checkPresaleParticipation(address);
 
-            // Check claimable amount
             const claimableAmount = await this.contract.getClaimableAmount(address);
             const decimals = await this.nuurToken.decimals();
             const formattedClaimable = ethers.utils.formatUnits(claimableAmount, decimals);
             document.getElementById('claimableAmount').textContent = parseFloat(formattedClaimable).toLocaleString();
 
-            // Check if already claimed
             const hasClaimed = await this.contract.hasClaimed(address);
-            
-            // Update snapshot button
+
             const snapshotButton = document.getElementById('takeSnapshot');
             if (snapshotButton) {
                 snapshotButton.disabled = snapshotBalance.gt(0) || !isPresaleParticipant;
             }
-            
-            // Update claim button
+
             const claimButton = document.getElementById('claimButton');
             if (claimButton) {
                 claimButton.disabled = hasClaimed || claimableAmount.eq(0) || isPaused || !isPresaleParticipant;
-                claimButton.textContent = hasClaimed ? 'Already Claimed' : 
-                                        isPaused ? 'Claiming Paused' :
-                                        !isPresaleParticipant ? 'Not Eligible' : 
-                                        'Claim Airdrop';
+                claimButton.textContent = hasClaimed ? 'Already Claimed' :
+                    isPaused ? 'Claiming Paused' :
+                    !isPresaleParticipant ? 'Not Eligible' :
+                    'Claim Airdrop';
             }
         } catch (error) {
             console.error('Error updating UI components:', error);
             this.updateStatus('Error updating UI: ' + error.message, 'error');
+        }
+    }
+
+    async isPaused() {
+        try {
+            return await this.contract.paused();
+        } catch (error) {
+            console.error('Error checking paused state:', error);
+            return false;
+        }
+    }
+
+    async checkPresaleParticipation(address) {
+        try {
+            const presaleABI = ["function buyers(address) view returns (uint256)"];
+
+            const presale1 = new ethers.Contract(this.presaleContract1, presaleABI, this.provider);
+            const presale2 = new ethers.Contract(this.presaleContract2, presaleABI, this.provider);
+
+            const amount1 = await presale1.buyers(address);
+            const amount2 = await presale2.buyers(address);
+
+            return amount1.gt(0) || amount2.gt(0);
+        } catch (error) {
+            console.error('Error checking presale participation:', error);
+            return false;
+        }
+    }
+
+    async claimAirdrop() {
+        try {
+            const tx = await this.contract.claim();
+            this.updateStatus('Claiming airdrop...', 'success');
+            await tx.wait();
+            this.updateStatus('Airdrop claimed successfully!', 'success');
+            const address = await this.signer.getAddress();
+            await this.updateWalletInfo(address);
+        } catch (error) {
+            console.error('Error claiming airdrop:', error);
+            this.updateStatus('Claim failed: ' + error.message, 'error');
+        }
+    }
+
+    async takeSnapshot() {
+        try {
+            const tx = await this.contract.takeSnapshot();
+            this.updateStatus('Taking snapshot...', 'success');
+            await tx.wait();
+            this.updateStatus('Snapshot taken successfully!', 'success');
+            const address = await this.signer.getAddress();
+            await this.updateWalletInfo(address);
+        } catch (error) {
+            console.error('Error taking snapshot:', error);
+            this.updateStatus('Snapshot failed: ' + error.message, 'error');
         }
     }
 
@@ -217,23 +250,17 @@ class AirdropInterface {
 
         for (const [id, value] of Object.entries(elements)) {
             const element = document.getElementById(id);
-            if (element) {
-                element.textContent = value;
-            }
+            if (element) element.textContent = value;
         }
 
         const buttons = ['claimButton', 'takeSnapshot'];
         buttons.forEach(id => {
             const button = document.getElementById(id);
-            if (button) {
-                button.disabled = true;
-            }
+            if (button) button.disabled = true;
         });
 
         const statusDot = document.querySelector('.status-dot');
-        if (statusDot) {
-            statusDot.classList.remove('connected');
-        }
+        if (statusDot) statusDot.classList.remove('connected');
 
         this.updateStatus('', '');
     }
@@ -245,9 +272,20 @@ class AirdropInterface {
             statusElement.className = 'status ' + type;
         }
     }
+
+    shortenAddress(address) {
+        return address.slice(0, 6) + '...' + address.slice(-4);
+    }
+
+    async checkNetwork() {
+        const network = await this.provider.getNetwork();
+        if (network.chainId !== 1) { // Replace with your chainId if different
+            this.updateStatus('Please switch to Ethereum mainnet', 'error');
+        }
+    }
 }
 
-// Initialize the app when the page loads
+// Initialize when page loads
 window.addEventListener('DOMContentLoaded', () => {
     new AirdropInterface();
 });
