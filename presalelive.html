@@ -73,7 +73,7 @@
       // Constants
       const presaleAddress = "0x858024C3c8179Ed448A9133190f991cfA9873657";
       const rate = 1000;
-      const abi = [{"inputs":[],"name":"purchaseNUUR","outputs":[],"stateMutability":"payable","type":"function"}];
+      const abi = [{"inputs":[],"name":"buyTokens","outputs":[],"stateMutability":"payable","type":"function"}];
       
       // State variables
       let userAddress = null;
@@ -140,7 +140,7 @@
           const formattedBalance = parseFloat(web3.utils.fromWei(balance, "ether")).toFixed(4);
           walletBalance.innerText = `${formattedBalance} SDA`;
         } catch (error) {
-          walletBalance.innerText = "Unavailable";
+          walletBalance.innerText = "Unavailable or switch to Sidra Chain";
           console.error(error);
         }
       }
@@ -164,7 +164,7 @@
         try {
           // Create the transaction
           const value = web3.utils.toWei(sdaAmount.toString(), 'ether');
-          const data = presaleContract.methods.purchaseNUUR().encodeABI();
+          const data = presaleContract.methods.buyTokens().encodeABI();
 
           const txHash = await provider.request({
             method: "eth_sendTransaction",
