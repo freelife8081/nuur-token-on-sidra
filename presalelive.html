@@ -164,7 +164,7 @@
         try {
           // Create the transaction
           const value = web3.utils.toWei(sdaAmount.toString(), 'ether');
-          const data = presaleContract.methods.buyTokens().encodeABI();
+          const data = presaleContract.methods.purchaseNUUR().encodeABI();
 
           const txHash = await provider.request({
             method: "eth_sendTransaction",
