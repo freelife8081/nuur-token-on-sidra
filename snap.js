@@ -7,9 +7,9 @@ class AirdropInterface {
         
         // Contract addresses - Replace these with your deployed contract addresses
         this.contractAddress = "YOUR_AIRDROP_CONTRACT_ADDRESS";
-        this.nuurTokenAddress = "YOUR_NUUR_TOKEN_ADDRESS";
-        this.presaleContract1 = "YOUR_PRESALE_CONTRACT_1_ADDRESS";
-        this.presaleContract2 = "YOUR_PRESALE_CONTRACT_2_ADDRESS";
+        this.nuurTokenAddress = "0x003BEc2e6ef4369f9d968eCD288d31B59fD9c2CD";
+        this.presaleContract1 = "0x98FCc396547D450208e926995a74b61874a1423A";
+        this.presaleContract2 = "0x858024C3c8179Ed448A9133190f991cfA9873657";
         
         // Current user info
         this.currentUser = 'freelife8081';
@@ -40,7 +40,7 @@ class AirdropInterface {
                 this.updateStatus('Failed to initialize provider', 'error');
             }
         } else {
-            this.updateStatus('Please install MetaMask to use this dApp', 'error');
+            this.updateStatus('Please install MetaMask to claim airdrop', 'error');
             document.getElementById('connectWallet').disabled = true;
         }
     }
