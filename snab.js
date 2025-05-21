@@ -172,7 +172,7 @@ async function updateWalletInfo() {
   } catch (err) {
     nuurBalanceElem.textContent = '0';
     snapshotBalanceElem.textContent = '0';
-    updateStatus('Failed to update wallet info. Please retry.', 'error');
+    updateStatus('Failed to update wallet info. Please switch to Sidra Chain and retry.', 'error');
     console.error('Error updating wallet info:', err);
   }
 }
