@@ -4,8 +4,40 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>NUUR Token Airdrop</title>
-  <link rel="stylesheet" href="snap.css" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="snap.css" />
+  <style>
+    /* Internal CSS for the refresh icon button */
+    .refresh-section {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      margin: 1rem 0 1rem 0;
+      width: 100%;
+    }
+    .refresh-button {
+      background: none;
+      border: none;
+      cursor: pointer;
+      outline: none;
+      padding: 0.1em 0.3em;
+      margin-right: 0.5em;
+      font-size: 1.2rem;
+      color: #3056d3;
+      transition: color 0.2s;
+      display: flex;
+      align-items: center;
+    }
+    .refresh-button:hover {
+      color: #223c7b;
+    }
+    .refresh-button svg {
+      width: 1.25em;
+      height: 1.25em;
+      vertical-align: middle;
+      display: block;
+    }
+  </style>
 </head>
 <body>
   <div class="container">
@@ -89,10 +121,33 @@
 
     <footer>
       <p>Current Time (UTC): <span id="currentTime">--:--:--</span></p>
+      <div class="refresh-section">
+        <button id="refreshBtn" class="refresh-button" title="Refresh">
+          <!-- Small circular arrow SVG icon -->
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+               stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 2v6h-6"/>
+            <path d="M3 12a9 9 0 0 1 9-9c2.39 0 4.57.94 6.21 2.47L21 8"/>
+            <path d="M21 12a9 9 0 1 1-9-9"/>
+          </svg>
+        </button>
+      </div>
     </footer>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+  <script>
+    // Internal JS for the refresh button
+    document.addEventListener('DOMContentLoaded', function() {
+      const refreshBtn = document.getElementById('refreshBtn');
+      if (refreshBtn) {
+        refreshBtn.addEventListener('click', function() {
+          window.scrollTo({top: 0, left: 0, behavior: 'smooth'});
+          setTimeout(() => { location.reload(); }, 200); // Give time for scroll
+        });
+      }
+    });
+  </script>
   <script src="snap.js"></script>
 </body>
 </html>
