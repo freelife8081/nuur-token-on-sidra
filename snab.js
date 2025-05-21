@@ -87,7 +87,7 @@ async function connectWallet() {
           networkLabel = network.name.charAt(0).toUpperCase() + network.name.slice(1);
         } else {
           // Show chainId if name is unknown and not Sidra
-          networkLabel = `Chain ${network.chainId}`;
+          networkLabel = `Switch to Sidra chain`;
         }
       }
       networkNameElem.textContent = networkLabel;
@@ -145,7 +145,7 @@ async function updateWalletInfo() {
       takeSnapshotBtn.disabled = true;
       takeSnapshotBtn.classList.remove('is-danger');
       takeSnapshotBtn.textContent = "Take Snapshot";
-      updateStatus('You are not eligible to take a snapshot. Only presale participants can verify.', 'error');
+      updateStatus('You are not eligible to take a snapshot. Participate in presale and have above 200k NUUR.', 'error');
     }
 
     const rawClaimable = await airdrop.getClaimableAmount(userAddress);
