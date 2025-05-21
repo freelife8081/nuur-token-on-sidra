@@ -4,6 +4,7 @@ class AirdropInterface {
         this.signer = null;
         this.contract = null;
         this.nuurToken = null;
+        this._decimals = null;
 
         // Contract addresses - Replace with your deployed addresses
         this.contractAddress = "0x8e4384ed929b82A2FEE2e6F043213170C1d905D9";
@@ -32,7 +33,7 @@ class AirdropInterface {
             try {
                 this.provider = new ethers.providers.Web3Provider(window.ethereum);
                 await this.setupEthereumEvents();
-                await this.checkNetwork();
+                // Network check removed as per your request
             } catch (error) {
                 console.error('Provider initialization error:', error);
                 this.updateStatus('Failed to initialize provider', 'error');
@@ -125,10 +126,32 @@ class AirdropInterface {
 
             await this.updateWalletInfo(accounts[0]);
             this.updateStatus('Wallet connected successfully!', 'success');
+
+            // Button and status updates on connect
+            const connectWalletBtn = document.getElementById('connectWallet');
+            const networkName = document.getElementById('networkName');
+            const statusDot = document.querySelector('.status-dot');
+            if (connectWalletBtn) {
+                connectWalletBtn.textContent = 'Connected';
+                connectWalletBtn.disabled = true;
+            }
+            if (networkName) {
+                networkName.textContent = 'Connected';
+            }
+            if (statusDot) {
+                statusDot.classList.add('connected');
+            }
         } catch (error) {
             console.error('Connection error:', error);
             this.updateStatus('Failed to connect wallet: ' + error.message, 'error');
         }
+    }
+
+    async getTokenDecimals() {
+        if (this._decimals == null) {
+            this._decimals = await this.nuurToken.decimals();
+        }
+        return this._decimals;
     }
 
     async updateWalletInfo(address) {
@@ -140,7 +163,7 @@ class AirdropInterface {
             const isPaused = await this.isPaused();
 
             const balance = await this.nuurToken.balanceOf(address);
-            const decimals = await this.nuurToken.decimals();
+            const decimals = await this.getTokenDecimals();
             const formattedBalance = ethers.utils.formatUnits(balance, decimals);
             document.getElementById('nuurBalance').textContent = parseFloat(formattedBalance).toLocaleString();
 
@@ -159,8 +182,14 @@ class AirdropInterface {
         try {
             const isPresaleParticipant = await this.checkPresaleParticipation(address);
 
+            // Update Presale Status in UI
+            const presaleStatus = document.getElementById('presaleStatus');
+            if (presaleStatus) {
+                presaleStatus.textContent = isPresaleParticipant ? 'Eligible' : 'Not Verified';
+            }
+
             const claimableAmount = await this.contract.getClaimableAmount(address);
-            const decimals = await this.nuurToken.decimals();
+            const decimals = await this.getTokenDecimals();
             const formattedClaimable = ethers.utils.formatUnits(claimableAmount, decimals);
             document.getElementById('claimableAmount').textContent = parseFloat(formattedClaimable).toLocaleString();
 
@@ -259,8 +288,20 @@ class AirdropInterface {
             if (button) button.disabled = true;
         });
 
+        // Reset connect button and network status
+        const connectWalletBtn = document.getElementById('connectWallet');
+        const networkName = document.getElementById('networkName');
         const statusDot = document.querySelector('.status-dot');
-        if (statusDot) statusDot.classList.remove('connected');
+        if (connectWalletBtn) {
+            connectWalletBtn.textContent = 'Connect Wallet';
+            connectWalletBtn.disabled = false;
+        }
+        if (networkName) {
+            networkName.textContent = 'Not Connected';
+        }
+        if (statusDot) {
+            statusDot.classList.remove('connected');
+        }
 
         this.updateStatus('', '');
     }
@@ -275,13 +316,6 @@ class AirdropInterface {
 
     shortenAddress(address) {
         return address.slice(0, 6) + '...' + address.slice(-4);
-    }
-
-    async checkNetwork() {
-        const network = await this.provider.getNetwork();
-        if (network.chainId !== 1) { // Replace with your chainId if different
-            this.updateStatus('Please switch to Ethereum mainnet', 'error');
-        }
     }
 }
 
