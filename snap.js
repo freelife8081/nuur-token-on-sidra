@@ -155,29 +155,42 @@ class AirdropInterface {
     }
 
     async updateWalletInfo(address) {
-        if (!this.provider || !this.signer) return;
+    if (!this.provider || !this.signer) return;
 
-        try {
-            document.getElementById('walletAddress').textContent = this.shortenAddress(address);
+    try {
+        document.getElementById('walletAddress').textContent = this.shortenAddress(address);
 
-            const isPaused = await this.isPaused();
+        // Show loading message for NUUR Balance
+        const nuurBalanceElem = document.getElementById('nuurBalance');
+        if (nuurBalanceElem) {
+            nuurBalanceElem.textContent = 'fetching your NUUR balance...';
+        }
 
-            const balance = await this.nuurToken.balanceOf(address);
-            const decimals = await this.getTokenDecimals();
-            const formattedBalance = ethers.utils.formatUnits(balance, decimals);
-            document.getElementById('nuurBalance').textContent = parseFloat(formattedBalance).toLocaleString();
+        const isPaused = await this.isPaused();
 
-            const snapshotBalance = await this.contract.snapshotBalances(address);
-            const formattedSnapshotBalance = ethers.utils.formatUnits(snapshotBalance, decimals);
-            document.getElementById('snapshotBalance').textContent = parseFloat(formattedSnapshotBalance).toLocaleString();
+        // Fetch token balance
+        const balance = await this.nuurToken.balanceOf(address);
+        const decimals = await this.getTokenDecimals();
+        const formattedBalance = ethers.utils.formatUnits(balance, decimals);
+        if (nuurBalanceElem) {
+            nuurBalanceElem.textContent = parseFloat(formattedBalance).toLocaleString();
+        }
 
-            await this.updateUIComponents(address, isPaused, snapshotBalance);
-        } catch (error) {
-            console.error('Error updating wallet info:', error);
-            this.updateStatus('Error updating wallet info: ' + error.message, 'error');
+        const snapshotBalance = await this.contract.snapshotBalances(address);
+        const formattedSnapshotBalance = ethers.utils.formatUnits(snapshotBalance, decimals);
+        document.getElementById('snapshotBalance').textContent = parseFloat(formattedSnapshotBalance).toLocaleString();
+
+        await this.updateUIComponents(address, isPaused, snapshotBalance);
+    } catch (error) {
+        console.error('Error updating wallet info:', error);
+        this.updateStatus('Error updating wallet info: ' + error.message, 'error');
+        // Show error on NUUR balance if applicable
+        const nuurBalanceElem = document.getElementById('nuurBalance');
+        if (nuurBalanceElem) {
+            nuurBalanceElem.textContent = '0';
         }
     }
-
+}
     async updateUIComponents(address, isPaused, snapshotBalance) {
         try {
             const isPresaleParticipant = await this.checkPresaleParticipation(address);
