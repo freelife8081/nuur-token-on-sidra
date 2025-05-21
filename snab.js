@@ -78,12 +78,16 @@ async function connectWallet() {
     try {
       const network = await provider.getNetwork();
       let networkLabel = "Unknown Network";
-      if (network && network.chainId) {
-        // Replace 12079 with Sidra Chain's actual chainId if different
-        if (network.chainId === 12079) {
+      if (network && typeof network.chainId !== "undefined") {
+        // Replace 12079 with the correct Sidra Chain chainId if different
+        if (network.chainId === 97453) {
           networkLabel = "Sidra Chain";
         } else if (network.name && network.name !== "unknown") {
+          // Capitalize the network name
           networkLabel = network.name.charAt(0).toUpperCase() + network.name.slice(1);
+        } else {
+          // Show chainId if name is unknown and not Sidra
+          networkLabel = `Chain ${network.chainId}`;
         }
       }
       networkNameElem.textContent = networkLabel;
