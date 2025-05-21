@@ -59,7 +59,7 @@ connectWalletButton.addEventListener("click", async () => {
     // Check Eligibility
     if (formattedBalance > 200000) {
       statusMessage.innerHTML = `
-        🎉 Congratulations! You're eligible for the airdrop. Wait on listing date. You can buy more or refer new friends to get unlimited $NUUR.<br>
+        🎉 Congratulations! You're eligible for the airdrop. Please visit <a style'color:red' href'airdropsnap'>here</a> to claim your share.<br>
       `;
     } else {
       statusMessage.innerHTML = `
