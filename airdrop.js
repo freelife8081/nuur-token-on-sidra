@@ -1,7 +1,3 @@
-// Current User and Time Information
-const currentUser = "Investor";
-const currentUTCTime = "2025-05-22 08:25:02";
-
 // Check session storage on page load
 document.addEventListener("DOMContentLoaded", () => {
     // Check if user has already visited and been eligible
