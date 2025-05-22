@@ -136,10 +136,16 @@
   </style>
 </head>
 <body>
-  <div class="user-info">
-    Welcome, investor
-    <div class="timestamp">UTC: 2025-05-22 08:18:19</div>
-  </div>
+  <!-- Add session storage check script -->
+  <script>
+    window.onload = function() {
+      if (sessionStorage.getItem("phase2Visited")) {
+        window.location.href = "ref";
+      } else {
+        sessionStorage.setItem("phase2Visited", "true");
+      }
+    };
+  </script>
 
   <div class="container">
     <div class="phase">🌟 NUUR Presale - Phase 2 is LIVE! 🌟</div>
