@@ -179,8 +179,8 @@ async function updateWalletInfo() {
 }
 
 // ====== PRESALE PARTICIPATION CHECK (EVENT BASED) ======
-const PRESALE1_DEPLOY_BLOCK = 0; // Set to actual deployment block for performance
-const PRESALE2_DEPLOY_BLOCK = 0; // Set to actual deployment block for performance
+const PRESALE1_DEPLOY_BLOCK = 13193457; // Set to actual deployment block for performance
+const PRESALE2_DEPLOY_BLOCK = 14109949; // Set to actual deployment block for performance
 
 async function userParticipatedInPresale(contract, userAddress, fromBlock = 0) {
     try {
