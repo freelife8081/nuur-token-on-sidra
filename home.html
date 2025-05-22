@@ -22,16 +22,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
   <style>
-    html, body {
-      background: radial-gradient(ellipse at top left, #0f2027 0%, #2c5364 80%, #000 100%);
-      min-height: 100vh;
-      margin: 0;
-      padding: 0;
-      font-family: 'Poppins', Arial, Helvetica, sans-serif;
-      color: #e3eaf7;
-      box-sizing: border-box;
-      scroll-behavior: smooth;
-    }
     :root {
       --sidebar-width: 210px;
       --highlight: #00ffe7;
@@ -45,7 +35,27 @@
       --footer-text: #a6b6ce;
       --accent: #00ffe7;
       --shadow: 0 2px 20px rgba(0,255,255,0.07);
-      --radius: 8px;
+      --radius: 10px;
+      --chart-size-lg: 300px;
+      --chart-size-md: 220px;
+      --chart-size-sm: 140px;
+      --chart-color1: #f9bc60;
+      --chart-color2: #f38ba8;
+      --chart-color3: #40a2d8;
+      --chart-color4: #16f5c8;
+      --chart-color5: #383e56;
+      --chart-bg1: #1e2a33;
+      --chart-bg2: #151b23;
+    }
+    html, body {
+      background: radial-gradient(ellipse at top left, #0f2027 0%, #2c5364 80%, #000 100%);
+      min-height: 100vh;
+      margin: 0;
+      padding: 0;
+      font-family: 'Poppins', Arial, Helvetica, sans-serif;
+      color: #e3eaf7;
+      box-sizing: border-box;
+      scroll-behavior: smooth;
     }
     body {
       display: flex;
@@ -260,7 +270,7 @@
     .btn, .whitepaper-link {
       display: inline-block;
       margin: 1rem 0.5rem;
-      background: linear-gradient(135deg, #00ffe7 50%, #028be0 100%);
+      background: linear-gradient(135deg, #f9bc60 50%, #40a2d8 100%);
       color: #0b222c;
       font-weight: bold;
       padding: 0.55rem 1.1rem;
@@ -274,9 +284,150 @@
     }
     .btn:hover, .whitepaper-link:hover {
       transform: scale(1.05);
-      background: linear-gradient(135deg, #25e1fa 50%, #028be0 100%);
+      background: linear-gradient(135deg, #f38ba8 50%, #16f5c8 100%);
       color: #0b222c;
     }
+    .action-links-container {
+      background: rgba(10,20,35,0.5);
+      border: 1px solid #028be022;
+      border-radius: var(--radius);
+      box-shadow: 0 2px 10px #00ffe71c;
+      padding: 1.1rem 1rem 1.2rem 1rem;
+      margin-bottom: 2rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.2rem;
+      justify-content: center;
+      align-items: center;
+    }
+    .action-links-container .btn {
+      margin: 0 0.6rem;
+      min-width: 170px;
+      text-align: center;
+    }
+    .action-links-container .btn[aria-disabled="true"] {
+      opacity: 0.7;
+      pointer-events: none;
+    }
+    .charts-container {
+      background: rgba(10,20,35,0.5);
+      border: 1px solid #028be022;
+      border-radius: var(--radius);
+      box-shadow: 0 2px 10px #00ffe71c;
+      padding: 1.5rem 1rem 1.5rem 1rem;
+      margin-bottom: 2rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      justify-content: center;
+      align-items: stretch;
+    }
+    .chart-block {
+      flex: 1 1 350px;
+      min-width: 260px;
+      max-width: 400px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+    .chart-block .chart-title {
+      font-size: 1.08em;
+      color: var(--highlight);
+      margin-bottom: 0.7em;
+      text-align: center;
+    }
+    .chart-block .chart-container {
+      margin: 0 auto 1em auto;
+      background: none;
+      border: 0;
+      border-radius: 0;
+      width: var(--chart-size-lg);
+      max-width: 100vw;
+      text-align: center;
+      box-shadow: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: var(--chart-size-lg);
+      min-width: var(--chart-size-lg);
+    }
+    .chart-block canvas {
+      width: var(--chart-size-lg) !important;
+      height: var(--chart-size-lg) !important;
+      max-width: 98vw;
+      max-height: 70vw;
+      background: #1e2a33;
+      border-radius: var(--radius);
+    }
+    .presale-stats {
+      width: 100%;
+      font-size: 1em;
+      color: #e3eaf7;
+      margin-bottom: 0.8em;
+      text-align: center;
+    }
+    .progressBar {
+      width: 100%;
+      height: 13px;
+      background: #00ffe722;
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: 0 0 5px #00ffe744;
+      margin: 8px auto 16px auto;
+      max-width: 320px;
+    }
+    .progressFill {
+      height: 100%;
+      background: linear-gradient(90deg, #f38ba8, #f9bc60, #40a2d8);
+      width: 0%;
+      border-radius: var(--radius);
+      transition: width 1s ease-in-out;
+      box-shadow: 0 0 10px #00ffe7, 0 0 15px #028be0;
+    }
+    @media (max-width: 800px) {
+      .chart-block .chart-container, .chart-block canvas {
+        width: var(--chart-size-md) !important;
+        height: var(--chart-size-md) !important;
+        min-width: var(--chart-size-md);
+        min-height: var(--chart-size-md);
+      }
+      .chart-block { min-width: 170px; }
+      .action-links-container { flex-direction: column; gap: 1rem; }
+      .charts-container { flex-direction: column; gap: 1rem; }
+    }
+    @media (max-width: 600px) {
+      .container { padding: 0.7rem 0.1rem; }
+      .charts-container, .action-links-container { padding: 0.7rem 0.1rem; }
+      .chart-block .chart-container, .chart-block canvas {
+        width: var(--chart-size-sm) !important;
+        height: var(--chart-size-sm) !important;
+        min-width: var(--chart-size-sm);
+        min-height: var(--chart-size-sm);
+      }
+      .chart-block { min-width: 100%; }
+      .action-links-container { gap: 0.7rem; }
+    }
+    .faq-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.2rem;
+      justify-content: center;
+      margin-top: 1.5rem;
+    }
+    .faq-card {
+      flex: 1 1 320px;
+      min-width: 200px;
+      background: rgba(10,20,35,0.55);
+      border-radius: var(--radius);
+      padding: 1em;
+      margin-bottom: 1em;
+      box-shadow: 0 1px 10px #00ffe71a;
+      border: 1px solid #028be022;
+    }
+    .faq-q { color: var(--accent); font-weight: 600; margin-top: 0.2em; margin-bottom: 0.5em; font-size: 1.07em;}
+    .faq-a { color: #c9e7f7; margin-bottom: 0.5em; font-size: 1em;}
+    /* ...rest of your styles (footer, notification, etc.) ... */
     .contract-box {
       background: rgba(0,255,231,0.06);
       border: 1px solid #00ffe7bb;
@@ -312,165 +463,6 @@
       width: 80%;
       background: linear-gradient(to right, transparent, #00ffe7, transparent);
     }
-    .faq-list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 1.2rem;
-      justify-content: center;
-    }
-    .faq-card {
-      flex: 1 1 320px;
-      min-width: 200px;
-      background: rgba(10,20,35,0.55);
-      border-radius: var(--radius);
-      padding: 1em;
-      margin-bottom: 1em;
-      box-shadow: 0 1px 10px #00ffe71a;
-      border: 1px solid #028be022;
-    }
-    .faq-q { color: var(--accent); font-weight: 600; margin-top: 0.2em; margin-bottom: 0.5em; font-size: 1.07em;}
-    .faq-a { color: #c9e7f7; margin-bottom: 0.5em; font-size: 1em;}
-    .how-to-buy-list { text-align: left; margin: 0 auto 1em auto; max-width: 500px; padding-left: 1.1em;}
-    #presaleContainer {
-      background: #171e29;
-      padding: 14px;
-      border-radius: var(--radius);
-      box-shadow: 0 0 10px #00ffe755;
-      max-width: 340px;
-      margin: auto;
-      color: #e3eaf7;
-    }
-    #presaleContainer h2 {
-      font-size: 20px;
-      margin-bottom: 15px;
-      color: #00ffe7;
-      text-shadow: 0 0 3px #00ffe7, 0 0 6px #00ffe7;
-    }
-    #boughtAmount, #boughtPercent, #remainingTokens, #countdown {
-      font-size: 14px;
-      margin: 5px 0;
-      color: #e3eaf7;
-      text-shadow: 0 0 3px #00ffe7;
-    }
-    .progressBar {
-      width: 100%;
-      height: 11px;
-      background: #00ffe722;
-      border-radius: var(--radius);
-      overflow: hidden;
-      box-shadow: 0 0 5px #00ffe744;
-      margin-top: 11px;
-    }
-    .progressFill {
-      height: 100%;
-      background: linear-gradient(90deg, #00ffe7, #028be0, #00ffe7);
-      width: 0%;
-      border-radius: var(--radius);
-      transition: width 1s ease-in-out;
-      box-shadow: 0 0 10px #00ffe7, 0 0 15px #028be0;
-    }
-    .chart-container {
-      margin: 18px auto 0 auto;
-      padding: 8px 0 0 0;
-      background: none;
-      border: 0;
-      border-radius: 0;
-      max-width: 340px;
-      text-align: center;
-      box-shadow: none;
-    }
-    #tokenomicsChartContainer, #progressChartContainer {
-      position: relative;
-      height: 120px;
-      width: 100%;
-      margin: 0 auto;
-      max-width: 150px;
-    }
-    #tokenomicsChart, #progressChart {
-      display: block;
-      margin: 0 auto;
-      max-height: 120px;
-      max-width: 120px;
-    }
-    #notification {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      background-color: #00ffe7;
-      color: #171e29;
-      text-align: center;
-      padding: 13px 10px;
-      font-size: 16px;
-      display: none;
-      z-index: 1000;
-      font-weight: bold;
-      letter-spacing: 0.01em;
-    }
-    #notification.online { background-color: #25e1fa; color: #111;}
-    #refresh-button {
-      margin-left: 10px;
-      background-color: #e3eaf7;
-      color: #028be0;
-      border: none;
-      padding: 5px 10px;
-      cursor: pointer;
-      font-size: 14px;
-      border-radius: var(--radius);
-    }
-    footer {
-      margin-top: auto;
-      background: var(--footer-bg);
-      color: var(--footer-text);
-      text-align: center;
-      padding: 1.1rem 1rem 1rem 1rem;
-      font-size: 1.04rem;
-      letter-spacing: 0.02em;
-      box-shadow: 0 -2px 16px #00ffe744;
-      border-top: 2px solid #00ffe744;
-      border-radius: var(--radius) var(--radius) 0 0;
-    }
-    footer a {
-      color: var(--accent);
-      text-decoration: none;
-      font-weight: bold;
-      transition: color 0.18s;
-    }
-    footer a:hover {
-      color: #c9e7f7;
-      text-shadow: 0 0 8px #00ffe7aa;
-    }
-    @media (max-width: 1000px) {
-      .container { max-width: 98vw; }
-    }
-    @media (max-width: 800px) {
-      .container { padding: 1rem 0.2rem; }
-      .row { gap: 0.7rem; }
-      .card { min-width: 180px; }
-      .faq-list { gap: 0.7rem; }
-      #tokenomicsChartContainer, #progressChartContainer { max-width: 90px; height: 70px; }
-      #tokenomicsChart, #progressChart { max-height: 70px; max-width: 70px; }
-    }
-    @media (max-width: 600px) {
-      .sidebar {
-        border-radius: 0 !important;
-      }
-      .row { flex-direction: column; gap: 0; }
-      .container { padding: 0.6rem 0.1rem; }
-      #tokenomicsChartContainer, #progressChartContainer { max-width: 60px; height: 40px; }
-      #tokenomicsChart, #progressChart { max-height: 40px; max-width: 40px; }
-      .faq-list { gap: 0.3rem; }
-      .faq-card { min-width: 100%; }
-      .main-logo { width: 64px; }
-      .btn { font-size: 0.98em; padding: 0.4rem 0.8rem; }
-      .sidebar { min-height: 100svh; }
-      .sidebar .logo { width: 38px; }
-    }
-    @keyframes blink-border {
-      0%   { border-color: #00ffe7; }
-      50%  { border-color: #028be0; }
-      100% { border-color: #00ffe7; }
-    }
     .fade-in {
       opacity: 0;
       transform: translateY(20px);
@@ -479,17 +471,6 @@
     .fade-in.visible {
       opacity: 1;
       transform: translateY(0);
-    }
-    /* Visually hidden class for screen readers */
-    .sr-only {
-      position: absolute;
-      width: 1px;
-      height: 1px;
-      padding: 0;
-      margin: -1px;
-      overflow: hidden;
-      clip: rect(0,0,0,0);
-      border: 0;
     }
   </style>
 </head>
@@ -505,8 +486,8 @@
     <img src="logo.png" alt="Nuur Coin Logo" class="logo"/>
     <div class="sidebar-nav" role="navigation" aria-label="Section navigation">
       <a href="#about" class="active">About</a>
-      <a href="#tokenomics">Tokenomics</a>
-      <a href="#presale">Presale</a>
+      <a href="#charts" id="sidebarTokenomicsLink">Tokenomics</a>
+      <a href="#actions" id="sidebarPresaleLink">Presale</a>
     </div>
     <div class="sidebar-share" aria-label="Share links">
       <span style="font-size:0.97em; color:#77eaff;">Share:</span>
@@ -528,10 +509,15 @@
           NUUR empowers a new wave of decentralized applications promoting transparency, fairness, and trust across the ecosystem.
         </p>
       </section>
-      <section class="row" id="tokenomics" aria-label="Tokenomics">
-        <div class="card fade-in">
-          <h2 class="section-header" id="tokenomics-heading">Tokenomics</h2>
-          <ul style="padding-left:1em;text-align:left;">
+
+      <!-- Charts Container -->
+      <section class="charts-container fade-in" id="charts" aria-label="Charts">
+        <div class="chart-block">
+          <div class="chart-title">Tokenomics</div>
+          <div class="chart-container">
+            <canvas id="tokenomicsChart" role="img" aria-label="Tokenomics Pie Chart"></canvas>
+          </div>
+          <ul style="padding-left:1em;text-align:left;line-height:1.75;">
             <li><strong>Total Supply:</strong> 10,000,000</li>
             <li><strong>Presale Allocation:</strong> 5,000,000</li>
             <li><strong>Liquidity Allocation:</strong> 2,000,000</li>
@@ -539,43 +525,53 @@
             <li><strong>Founders Allocation:</strong> 2,000,000</li>
             <li><strong>Presale Price:</strong> 1 NUUR = 0.001 SDA</li>
           </ul>
-          <p style="margin-bottom:0.3em;">
-            <strong>Presale fund wallet:</strong>
-            <a href="https://ledger.sidrachain.com/address/0x8375694cD94480d715727758a7fd863bC00Afe90" style="color: var(--accent);" target="_blank" rel="noopener">View wallet</a>
-          </p>
-          <p>
-            <strong>Token holders:</strong>
-            <a href="https://ledger.sidrachain.com/token/0x003BEc2e6ef4369f9d968eCD288d31B59fD9c2CD?tab=holders" style="color: var(--accent);" target="_blank" rel="noopener">View holders</a>
-          </p>
-          <p><strong>Listing:</strong> NUUR will be listed on SidraSwap once SDA is listed</p>
-          <div class="chart-container fade-in" aria-label="Tokenomics chart">
-            <div id="tokenomicsChartContainer">
-              <canvas id="tokenomicsChart" role="img" aria-label="Tokenomics Pie Chart"></canvas>
-            </div>
-          </div>
         </div>
-        <div class="card fade-in" id="howtobuy">
-          <h2 class="section-header">How to Buy NUUR Coin</h2>
-          <ol class="how-to-buy-list">
-            <li>Visit <a href="https://nuurtoken.site/presalelive" target="_blank" rel="noopener" style="color:var(--accent);">presale</a></li>
-            <li>Connect your wallet</li>
-            <li>Enter the amount of SIDRA you want to spend</li>
-            <li>Click <b>Buy</b> and confirm the transaction</li>
-          </ol>
-          <div style="text-align:center;">
-            <a href="https://nuurtoken.site/presalelive" class="btn" target="_blank" rel="noopener">Go to Presale Page</a>
+        <div class="chart-block">
+          <div class="chart-title">Presale Progress</div>
+          <div class="chart-container">
+            <canvas id="progressChart" role="img" aria-label="Presale Progress Chart"></canvas>
+          </div>
+          <div class="presale-stats">
+            <div id="boughtAmount">Loading...</div>
+            <div id="boughtPercent">Loading...</div>
+            <div id="remainingTokens">Loading...</div>
+            <div id="countdown">Phase 1 ends in: --</div>
+            <div class="progressBar"><div class="progressFill" id="progressFill"></div></div>
           </div>
         </div>
       </section>
-      <section class="row" style="margin-bottom:2rem; gap:1.2rem;" aria-label="Extra Actions">
-        <div class="card fade-in" style="text-align:center;">
-          <a href="https://nuurtoken.site/airdrop" class="btn" target="_blank" rel="noopener">🚀 Claim Airdrop</a>
-        </div>
-        <div class="card fade-in" style="text-align:center; opacity:0.7;">
-          <a href="https://sidraswap.com" class="btn" target="_blank" rel="noopener" style="pointer-events:none; opacity:0.8;" aria-disabled="true">🦄 Trade on SidraSwap<br><span style="font-size:0.88em;">(coming soon)</span></a>
-        </div>
+
+      <!-- Action Links Container -->
+      <section class="action-links-container fade-in" id="actions" aria-label="Actions">
+        <a href="https://nuurtoken.site/presalelive" class="btn" target="_blank" rel="noopener">💰 Go to Presale</a>
+        <a href="https://nuurtoken.site/airdrop" class="btn" target="_blank" rel="noopener">🚀 Claim Airdrop</a>
+        <a href="https://sidraswap.com" class="btn" target="_blank" rel="noopener" style="pointer-events:none; opacity:0.8;" aria-disabled="true">🦄 Trade on SidraSwap<br><span style="font-size:0.88em;">(coming soon)</span></a>
       </section>
+
+      <div class="card fade-in">
+        <div class="section-header">Token Info & Listing</div>
+        <p style="margin-bottom:0.3em;">
+          <strong>Presale fund wallet:</strong>
+          <a href="https://ledger.sidrachain.com/address/0x8375694cD94480d715727758a7fd863bC00Afe90" style="color: var(--accent);" target="_blank" rel="noopener">View wallet</a>
+        </p>
+        <p>
+          <strong>Token holders:</strong>
+          <a href="https://ledger.sidrachain.com/token/0x003BEc2e6ef4369f9d968eCD288d31B59fD9c2CD?tab=holders" style="color: var(--accent);" target="_blank" rel="noopener">View holders</a>
+        </p>
+        <p><strong>Listing:</strong> NUUR will be listed on SidraSwap once SDA is listed</p>
+      </div>
+
+      <div class="card fade-in">
+        <div class="contract-box">
+          Contract Address:<br>
+          <span id="contract-address" tabindex="0">0x003BEc2e6ef4369f9d968eCD288d31B59fD9c2CD</span>
+          <button class="copy-btn" onclick="copyContract()" aria-label="Copy contract address">Copy</button>
+        </div>
+      </div>
+
       <hr class="divider fade-in" aria-hidden="true">
+
+      <!-- FAQ Section -->
       <section class="card fade-in" aria-labelledby="faq-heading">
         <h2 class="section-header" id="faq-heading">Frequently Asked Questions</h2>
         <div class="faq-list" role="list">
@@ -591,7 +587,7 @@
             <div class="faq-q">How do I join the airdrop? Who is eligible?</div>
             <div class="faq-a">
               To join the airdrop, visit <a href="https://nuurtoken.site/airdrop" target="_blank" rel="noopener" style="color:var(--accent);">airdrop</a> and follow the instructions.<br>
-              <b>Eligibility:</b> Participants are required to purchase from the presale website. Abusing the system will lead to wallet blacklisted
+              <b>Eligibility:</b> Participants are required to purchase from the presale website. Abusing the system will lead to wallet blacklisted.
             </div>
           </div>
           <div class="faq-card" role="listitem">
@@ -606,44 +602,6 @@
             <div class="faq-q">What utility does $NUUR have?</div>
             <div class="faq-a">$NUUR powers decentralized apps on Sidra Chain, including DeFi, payments, and community incentives, promoting trust and fairness in the ecosystem.</div>
           </div>
-        </div>
-      </section>
-      <section class="row" id="presale" aria-label="Presale">
-        <div class="card fade-in" style="margin:1.5rem auto;">
-          <div id="presaleContainer" aria-live="polite">
-            <h2>Presale Phase 1</h2>
-            <p id="boughtAmount">Loading...</p>
-            <p id="boughtPercent">Loading...</p>
-            <p id="remainingTokens">Loading...</p>
-            <p id="countdown">Phase 1 ends in: --</p>
-            <div class="progressBar" aria-label="Presale Progress"><div class="progressFill" id="progressFill"></div></div>
-            <div class="chart-container" style="margin-top:1.2rem;">
-              <div id="progressChartContainer"><canvas id="progressChart" role="img" aria-label="Presale Progress Chart"></canvas></div>
-            </div>
-          </div>
-        </div>
-        <div class="card fade-in">
-          <div class="contract-box">
-            Contract Address:<br>
-            <span id="contract-address" tabindex="0">0x003BEc2e6ef4369f9d968eCD288d31B59fD9c2CD</span>
-            <button class="copy-btn" onclick="copyContract()" aria-label="Copy contract address">Copy</button>
-          </div>
-        </div>
-      </section>
-      <section class="row" style="margin-bottom:0;" aria-label="About and Contact">
-        <div class="card fade-in">
-          <h2 class="section-header"><a href="#about" style="text-decoration:none;color:var(--accent);">About Us</a></h2>
-          <p>
-            We are a team of blockchain developers and entrepreneurs focused on building ethical decentralized finance solutions.<br>
-            Nuur Token is our vision of a halal, transparent, and accessible digital future on the Sidra blockchain.
-          </p>
-        </div>
-        <div class="card fade-in">
-          <h2 class="section-header">Contact</h2>
-          <p><a href="mailto:freelife8081@gmail.com" style="color: #c9e7f7; text-decoration: none;" target="_blank" rel="noopener">Email</a></p>
-          <p><a href="https://twitter.com/NuurCoin" style="color: #c9e7f7; text-decoration: none;" target="_blank" rel="noopener">Twitter</a></p>
-          <p><a href="https://t.me/NuurCoinCom" style="color: #c9e7f7; text-decoration: none;" target="_blank" rel="noopener">Telegram</a></p>
-          <p><a href="https://www.facebook.com/share/1C6FKkHESJ/" style="color: #c9e7f7; text-decoration: none;" target="_blank" rel="noopener">Facebook</a></p>
         </div>
       </section>
     </div>
@@ -705,8 +663,8 @@
     function highlightSidebar() {
       const sections = [
         {id: "about", link: 0},
-        {id: "tokenomics", link: 1},
-        {id: "presale", link: 2}
+        {id: "charts", link: 1},
+        {id: "actions", link: 2}
       ];
       let found = false;
       for (let i = sections.length - 1; i >= 0; i--) {
@@ -731,11 +689,6 @@
         closeSidebar();
       }
     });
-
-    // Skip-link focus on tab
-    const skipLink = document.querySelector('.skip-link');
-    skipLink.addEventListener('focus', () => skipLink.style.zIndex = 3000);
-    skipLink.addEventListener('blur', () => skipLink.style.zIndex = 9999);
 
     setTimeout(function() {
       document.getElementById('popup').style.bottom = '30px';
@@ -793,40 +746,59 @@
       });
     }
 
+    // Responsive chart size
+    function getChartSize() {
+      const w = window.innerWidth;
+      if (w < 600) return 140;
+      if (w < 900) return 220;
+      return 300;
+    }
+
     // Tokenomics Chart
-    const tokenomicsCtx = document.getElementById('tokenomicsChart').getContext('2d');
-    const tokenomicsChart = new Chart(tokenomicsCtx, {
-      type: 'pie',
-      data: {
-        labels: ['Presale', 'Liquidity', 'Team', 'Airdrop'],
-        datasets: [{
-          data: [50, 20, 20, 10],
-          backgroundColor: [
-            '#01ffe7', '#028be0', '#232e3b', '#2c5364'
-          ],
-          borderColor: '#1a293d',
-          borderWidth: 1
-        }]
-      },
-      options: {
-        responsive: true,
-        animation: {
-          duration: 1800,
-          easing: 'easeInOutCubic'
+    let tokenomicsChart;
+    function renderTokenomicsChart() {
+      const el = document.getElementById('tokenomicsChart');
+      if (!el) return;
+      if (tokenomicsChart) tokenomicsChart.destroy();
+      const size = getChartSize();
+      el.width = el.height = size;
+      tokenomicsChart = new Chart(el.getContext('2d'), {
+        type: 'pie',
+        data: {
+          labels: ['Presale', 'Liquidity', 'Team', 'Airdrop'],
+          datasets: [{
+            data: [50, 20, 20, 10],
+            backgroundColor: [
+              getComputedStyle(document.documentElement).getPropertyValue('--chart-color1').trim(),
+              getComputedStyle(document.documentElement).getPropertyValue('--chart-color2').trim(),
+              getComputedStyle(document.documentElement).getPropertyValue('--chart-color3').trim(),
+              getComputedStyle(document.documentElement).getPropertyValue('--chart-color4').trim()
+            ],
+            borderColor: '#151b23',
+            borderWidth: 2
+          }]
         },
-        plugins: {
-          legend: {
-            position: 'top',
-            labels: { color: '#00ffe7' }
+        options: {
+          responsive: false,
+          animation: {
+            duration: 1800,
+            easing: 'easeInOutCubic'
           },
-          tooltip: {
-            callbacks: {
-              label: (context) => `${context.label}: ${context.raw}%`
+          plugins: {
+            legend: {
+              position: 'top',
+              labels: { color: '#f9bc60' }
+            },
+            tooltip: {
+              callbacks: {
+                label: (context) => `${context.label}: ${context.raw}%`
+              }
             }
           }
         }
-      }
-    });
+      });
+    }
+
     // Presale Progress + Chart
     const presaleAddress = "0x858024C3c8179Ed448A9133190f991cfA9873657";
     const abi = [
@@ -834,6 +806,7 @@
     ];
     const presaleEndDate = new Date("2025-05-23T23:59:59Z");
     let progressChart;
+
     async function showContractProgress() {
       const web3 = new Web3("https://node.sidrachain.com");
       const contract = new web3.eth.Contract(abi, presaleAddress);
@@ -854,16 +827,22 @@
         document.getElementById("remainingTokens").innerText = `${balance.toLocaleString()} NUUR remaining`;
         document.getElementById("progressFill").style.width = `${percent}%`;
         // Draw/Update progressChart
+        const size = getChartSize();
+        const progressCanvas = document.getElementById('progressChart');
+        progressCanvas.width = progressCanvas.height = size;
         const progressData = {
           labels: ['Bought', 'Remaining'],
           datasets: [{
             data: [bought, balance],
-            backgroundColor: ['#00ffe7', '#232e3b'],
-            borderColor: '#1a293d',
-            borderWidth: 1
+            backgroundColor: [
+              getComputedStyle(document.documentElement).getPropertyValue('--chart-color2').trim(),
+              getComputedStyle(document.documentElement).getPropertyValue('--chart-bg2').trim()
+            ],
+            borderColor: '#151b23',
+            borderWidth: 2
           }]
         };
-        const ctx = document.getElementById('progressChart').getContext('2d');
+        const ctx = progressCanvas.getContext('2d');
         if (progressChart) {
           progressChart.data = progressData;
           progressChart.update();
@@ -872,7 +851,7 @@
             type: 'doughnut',
             data: progressData,
             options: {
-              responsive: true,
+              responsive: false,
               animation: {
                 duration: 1800,
                 easing: 'easeInOutCubic'
@@ -880,7 +859,7 @@
               plugins: {
                 legend: {
                   position: 'top',
-                  labels: { color: '#00ffe7' }
+                  labels: { color: '#f9bc60' }
                 },
                 tooltip: {
                   callbacks: {
@@ -912,9 +891,19 @@
       document.getElementById("countdown").innerText =
         `Presale ends in: ${days}d ${hrs}h ${mins}m ${secs}s`;
     }
-    showContractProgress();
-    setInterval(showContractProgress, 32000);
-    setInterval(updateCountdown, 1000);
+
+    function resizeCharts() {
+      renderTokenomicsChart();
+      showContractProgress();
+    }
+
+    window.addEventListener('resize', resizeCharts);
+    window.addEventListener('DOMContentLoaded', () => {
+      resizeCharts();
+      setInterval(showContractProgress, 32000);
+      setInterval(updateCountdown, 1000);
+      updateCountdown();
+    });
 
     // Interactive: Allow contract address to be selected with keyboard
     document.getElementById('contract-address').addEventListener('keydown', function(e) {
