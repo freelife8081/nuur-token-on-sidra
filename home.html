@@ -36,19 +36,6 @@
       min-height: 100vh;
       overflow-x: hidden;
     }
-    @media (max-width: 900px) {
-      .sidebar { 
-        transform: translateX(-120%);
-        opacity: 0;
-        pointer-events: none;
-        transition: transform 0.25s, opacity 0.2s;
-      }
-      .sidebar.open {
-        transform: translateX(0);
-        opacity: 1;
-        pointer-events: auto;
-      }
-    }
     .sidebar {
       width: var(--sidebar-width);
       background: var(--sidebar-bg);
@@ -66,7 +53,22 @@
       transition: transform 0.25s cubic-bezier(.4,2,.6,1), opacity 0.2s;
       backdrop-filter: blur(4px);
     }
-    .sidebar.closed {}
+    /* Hide sidebar by default on mobile */
+    @media (max-width: 900px) {
+      .sidebar {
+        transform: translateX(-120%);
+        opacity: 0;
+        pointer-events: none;
+      }
+      .sidebar.open {
+        transform: translateX(0);
+        opacity: 1;
+        pointer-events: auto;
+      }
+    }
+    @media (min-width: 901px) {
+      .sidebar { transform: none !important; opacity: 1 !important; pointer-events: auto !important; }
+    }
     .sidebar .logo {
       width: 60px;
       margin-bottom: 1.5rem;
@@ -109,66 +111,42 @@
       transition: color 0.2s;
     }
     .sidebar-share a:hover { color: var(--sidebar-link-hover);}
-    .sidebar-toggle, .sidebar-close {
-      display: none;
-      position: fixed;
-      top: 18px;
-      left: 18px;
-      z-index: 2100;
-      background: none;
-      border: none;
-      color: var(--accent);
-      font-size: 2.15rem;
-      cursor: pointer;
-      outline: none;
-      transition: color 0.2s;
-    }
-    .sidebar-toggle:hover, .sidebar-close:hover {
-      color: #fff;
-    }
-    .sidebar-close {
-      left: unset;
-      right: 20px;
-      top: 20px;
-      font-size: 2.1rem;
-      color: #fff;
-      z-index: 2200;
-      background: none;
-      box-shadow: none;
-    }
-    .sidebar .sidebar-close {
-      position: absolute;
-      display: block;
-    }
+    /* Hamburger and close icons hidden on desktop */
+    .sidebar-toggle, .sidebar-close { display: none;}
+    /* Hamburger button */
     @media (max-width: 900px) {
-      .sidebar {
-        position: fixed;
-        left: 0; top: 0;
-        width: 80vw;
-        max-width: 340px;
-        min-width: 190px;
-        height: 100vh;
-        min-height: 100vh;
-        padding-top: 2.3rem;
-        box-shadow: 4px 0 24px #000a;
-        background: rgba(23,29,37,0.99);
-      }
-      .main-content {
-        margin-left: 0 !important;
-      }
       .sidebar-toggle {
         display: block;
+        position: fixed;
+        top: 18px;
+        left: 18px;
+        z-index: 2100;
+        background: none;
+        border: none;
+        color: var(--accent);
+        font-size: 2.15rem;
+        cursor: pointer;
+        outline: none;
+        transition: color 0.2s;
       }
-      .sidebar.closed {}
+      .sidebar-toggle:hover { color: #fff; }
       .sidebar .sidebar-close {
         display: block;
+        position: absolute;
         right: 20px;
-        left: unset;
         top: 20px;
+        background: none;
+        border: none;
+        color: #fff;
+        font-size: 2.1rem;
+        cursor: pointer;
+        z-index: 2200;
       }
+      .sidebar:not(.open) .sidebar-close { display: none; }
+      .main-content { margin-left: 0 !important; }
     }
     @media (min-width: 901px) {
-      .sidebar-toggle, .sidebar .sidebar-close { display: none !important; }
+      .sidebar-toggle, .sidebar-close { display: none !important; }
     }
     .main-content {
       margin-left: var(--sidebar-width);
@@ -286,28 +264,23 @@
       background: linear-gradient(to right, transparent, #00ffe7, transparent);
     }
     .faq-list {
-      text-align: left;
-      margin: 0 auto;
-      max-width: 700px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
     }
-    .faq-q {
-      color: var(--accent);
-      font-weight: 600;
-      margin-top: 1.3em;
-      margin-bottom: 0.2em;
-      font-size: 1.07em;
+    .faq-card {
+      flex: 1 1 320px;
+      min-width: 230px;
+      background: rgba(10,20,35,0.55);
+      border-radius: 12px;
+      padding: 1.2em;
+      margin-bottom: 1em;
+      box-shadow: 0 1px 10px #00ffe71a;
+      border: 1px solid #028be022;
     }
-    .faq-a {
-      color: #c9e7f7;
-      margin-bottom: 0.5em;
-      font-size: 1em;
-    }
-    .how-to-buy-list {
-      text-align: left;
-      margin: 0 auto 1em auto;
-      max-width: 500px;
-      padding-left: 1.5em;
-    }
+    .faq-q { color: var(--accent); font-weight: 600; margin-top: 0.2em; margin-bottom: 0.5em; font-size: 1.08em;}
+    .faq-a { color: #c9e7f7; margin-bottom: 0.5em; font-size: 1em;}
+    .how-to-buy-list { text-align: left; margin: 0 auto 1em auto; max-width: 500px; padding-left: 1.5em;}
     #presaleContainer {
       background: #171e29;
       padding: 15px;
@@ -424,6 +397,8 @@
       .container { padding: 0.7rem 0.2rem; }
       #tokenomicsChartContainer, #progressChartContainer { max-width: 120px; height: 100px; }
       #tokenomicsChart, #progressChart { max-height: 100px; max-width: 100px; }
+      .faq-list { gap: 1rem; }
+      .faq-card { min-width: 100%; }
     }
     @keyframes blink-border {
       0%   { border-color: #00ffe7; }
@@ -445,7 +420,7 @@
   <button class="sidebar-toggle" id="sidebarOpenBtn" aria-label="Open menu">
     <i class="fas fa-bars"></i>
   </button>
-  <nav class="sidebar closed" id="sidebar">
+  <nav class="sidebar" id="sidebar">
     <button class="sidebar-close" id="sidebarCloseBtn" aria-label="Close menu">
       <i class="fas fa-times"></i>
     </button>
@@ -501,10 +476,92 @@
             </div>
           </div>
         </div>
+        <!-- ... previous code ... -->
+      <div class="row" id="tokenomics">
+        <div class="card fade-in">
+          <div class="section-header">Tokenomics</div>
+          <ul style="padding-left:1em;text-align:left;">
+            <li><strong>Total Supply:</strong> 10,000,000</li>
+            <li><strong>Presale Allocation:</strong> 5,000,000</li>
+            <li><strong>Liquidity Allocation:</strong> 2,000,000</li>
+            <li><strong>Community Airdrop:</strong> 1,000,000</li>
+            <li><strong>Founders Allocation:</strong> 2,000,000</li>
+            <li><strong>Presale Price:</strong> 1 NUUR = 0.001 SDA</li>
+          </ul>
+          <p style="margin-bottom:0.3em;">
+            <strong>Presale fund wallet:</strong>
+            <a href="https://ledger.sidrachain.com/address/0x8375694cD94480d715727758a7fd863bC00Afe90" style="color: var(--accent);" target="_blank">Fundraiser wallet</a>
+          </p>
+          <p>
+            <strong>Token holders:</strong>
+            <a href="https://ledger.sidrachain.com/token/0x003BEc2e6ef4369f9d968eCD288d31B59fD9c2CD?tab=holders" style="color: var(--accent);" target="_blank">View holders</a>
+          </p>
+          <p><strong>Listing:</strong> NUUR will be listed on SidraSwap once SDA is listed</p>
+          <div class="chart-container fade-in">
+            <div id="tokenomicsChartContainer">
+              <canvas id="tokenomicsChart"></canvas>
+            </div>
+          </div>
+        </div>
         <div class="card fade-in" id="howtobuy">
           <div class="section-header">How to Buy NUUR Coin</div>
           <ol class="how-to-buy-list">
-            <li>Visit <a href="https://nuurtoken.site/presalelive" target="_blank" style="color:var(--accent);">nuurtoken.site/presalelive</a></li>
+            <li>Visit <a href="https://nuurtoken.site/presalelive" target="_blank" style="color:var(--accent);">presale</a></li>
+            <li>Connect your wallet</li>
+            <li>Enter the amount of SIDRA you want to spend</li>
+            <li>Click <b>Buy</b> and confirm the transaction</li>
+          </ol>
+          <div style="text-align:center;">
+            <a href="https://nuurtoken.site/presalelive" class="btn" target="_blank">Go to Presale Page</a>
+          </div>
+        </div>
+      </div>
+      <!-- Extra links under tokenomics -->
+      <div class="row" style="margin-bottom:2rem; gap:2rem;">
+        <div class="card fade-in" style="text-align:center; flex:1 1 320px; min-width:230px;">
+          <a href="https://nuurtoken.site/airdrop" class="btn" target="_blank" style="display:inline-block;">🚀 Claim Airdrop</a>
+        </div>
+        <div class="card fade-in" style="text-align:center; flex:1 1 320px; min-width:230px; opacity:0.7;">
+          <a href="https://sidraswap.com" class="btn" target="_blank" style="pointer-events:none; opacity:0.8;">🦄 Trade on SidraSwap<br><span style="font-size:0.88em;">(coming soon)</span></a>
+        </div>
+      </div>
+      <hr class="divider fade-in">
+      <div class="card fade-in">
+        <div class="section-header">Frequently Asked Questions</div>
+        <div class="faq-list">
+          <div class="faq-card">
+            <div class="faq-q">What is Nuur Coin?</div>
+            <div class="faq-a">Nuur Coin (NUUR) is a utility token built on the Sidra Chain, designed to enable transparent, ethical, and innovative decentralized applications.</div>
+          </div>
+          <div class="faq-card">
+            <div class="faq-q">How do I participate in the presale?</div>
+            <div class="faq-a">You can participate by visiting <a href="https://nuurtoken.site/presalelive" style="color:var(--accent);" target="_blank">nuurtoken.site/presalelive</a>, connecting your wallet, entering the SIDRA amount, and clicking Buy.</div>
+          </div>
+          <div class="faq-card">
+            <div class="faq-q">How do I join the airdrop? Who is eligible?</div>
+            <div class="faq-a">
+              To join the airdrop, visit <a href="https://nuurtoken.site/airdrop" style="color:var(--accent);" target="_blank">airdrop</a> and follow the instructions.<br>
+              <b>Eligibility:</b> Participants are required to purchase from the presale website. Abusing the system will lead to wallet blacklisted
+            </div>
+          </div>
+          <div class="faq-card">
+            <div class="faq-q">When will $NUUR be listed on exchanges?</div>
+            <div class="faq-a">$NUUR will be listed on SidraSwap after the presale ends and upon SDA listing. Stay tuned for announcements.</div>
+          </div>
+          <div class="faq-card">
+            <div class="faq-q">Is the smart contract audited?</div>
+            <div class="faq-a">The Nuur Coin smart contract is designed for security and transparency. Audit information will be updated on our official channels.</div>
+          </div>
+          <div class="faq-card">
+            <div class="faq-q">What utility does $NUUR have?</div>
+            <div class="faq-a">$NUUR powers decentralized apps on Sidra Chain, including DeFi, payments, and community incentives, promoting trust and fairness in the ecosystem.</div>
+          </div>
+        </div>
+      </div>
+        <div class="card fade-in" id="howtobuy">
+          <div class="section-header">How to Buy NUUR Coin</div>
+          <ol class="how-to-buy-list">
+            <li>Visit <a href="https://nuurtoken.site/presalelive" target="_blank" style="color:var(--accent);">presale</a></li>
             <li>Connect your wallet</li>
             <li>Enter the amount of SIDRA you want to spend</li>
             <li>Click <b>Buy</b> and confirm the transaction</li>
@@ -540,16 +597,26 @@
       <div class="card fade-in">
         <div class="section-header">Frequently Asked Questions</div>
         <div class="faq-list">
-          <div class="faq-q">What is Nuur Coin?</div>
-          <div class="faq-a">Nuur Coin (NUUR) is a utility token built on the Sidra Chain, designed to enable transparent, ethical, and innovative decentralized applications.</div>
-          <div class="faq-q">How do I participate in the presale?</div>
-          <div class="faq-a">You can participate by visiting <a href="https://nuurtoken.site/presalelive" style="color:var(--accent);" target="_blank">nuurtoken.site/presalelive</a>, connecting your wallet, entering the SIDRA amount, and clicking Buy.</div>
-          <div class="faq-q">When will $NUUR be listed on exchanges?</div>
-          <div class="faq-a">$NUUR will be listed on SidraSwap after the presale ends and upon SDA listing. Stay tuned for announcements.</div>
-          <div class="faq-q">Is the smart contract audited?</div>
-          <div class="faq-a">The Nuur Coin smart contract is designed for security and transparency. Audit information will be updated on our official channels.</div>
-          <div class="faq-q">What utility does $NUUR have?</div>
-          <div class="faq-a">$NUUR powers decentralized apps on Sidra Chain, including DeFi, payments, and community incentives, promoting trust and fairness in the ecosystem.</div>
+          <div class="faq-card">
+            <div class="faq-q">What is Nuur Coin?</div>
+            <div class="faq-a">Nuur Coin (NUUR) is a utility token built on the Sidra Chain, designed to enable transparent, ethical, and innovative decentralized applications.</div>
+          </div>
+          <div class="faq-card">
+            <div class="faq-q">How do I participate in the presale?</div>
+            <div class="faq-a">You can participate by visiting <a href="https://nuurtoken.site/presalelive" style="color:var(--accent);" target="_blank">presale</a>, connecting your wallet, entering the SIDRA amount, and clicking Buy.</div>
+          </div>
+          <div class="faq-card">
+            <div class="faq-q">When will $NUUR be listed on exchanges?</div>
+            <div class="faq-a">$NUUR will be listed on SidraSwap after the presale ends and upon SDA listing. Stay tuned for announcements.</div>
+          </div>
+          <div class="faq-card">
+            <div class="faq-q">Is the smart contract audited?</div>
+            <div class="faq-a">The Nuur Coin smart contract is designed for security and transparency. Audit information will be updated on our official channels.</div>
+          </div>
+          <div class="faq-card">
+            <div class="faq-q">What utility does $NUUR have?</div>
+            <div class="faq-a">$NUUR powers decentralized apps on Sidra Chain, including DeFi, payments, and community incentives, promoting trust and fairness in the ecosystem.</div>
+          </div>
         </div>
       </div>
       <div class="row" style="margin-bottom:0;">
@@ -603,12 +670,10 @@
     const sidebarCloseBtn = document.getElementById('sidebarCloseBtn');
     function openSidebar() {
       sidebar.classList.add('open');
-      sidebar.classList.remove('closed');
       document.body.style.overflowY = 'hidden';
     }
     function closeSidebar() {
       sidebar.classList.remove('open');
-      sidebar.classList.add('closed');
       document.body.style.overflowY = '';
     }
     sidebarOpenBtn.addEventListener('click', openSidebar);
@@ -618,8 +683,7 @@
         if (window.innerWidth <= 900) closeSidebar();
       });
     });
-    if(window.innerWidth<=900){ sidebar.classList.remove('open'); sidebar.classList.add('closed'); }
-
+    if(window.innerWidth<=900){ sidebar.classList.remove('open'); }
     // Sidebar nav highlighting on scroll
     function highlightSidebar() {
       const sections = [
