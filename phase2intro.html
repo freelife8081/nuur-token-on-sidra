@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>NUUR Presale Phase 2 - Welcome!</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    @import url('https://fonts.googleapis.com/css?family=Montserrat:700,400&display=swap');
+    body {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Montserrat', Arial, sans-serif;
+      background: linear-gradient(135deg, #12c2e9 0%, #c471ed 50%, #f64f59 100%);
+      min-height: 100vh;
+      color: #fff;
+      overflow-x: hidden;
+    }
+    .container {
+      max-width: 600px;
+      margin: 80px auto;
+      background: rgba(0,0,0,0.45);
+      border-radius: 24px;
+      box-shadow: 0 6px 32px rgba(0,0,0,0.30);
+      padding: 48px 32px;
+      animation: floatIn 1.2s cubic-bezier(0.19,1,0.22,1);
+      text-align: center;
+    }
+    @keyframes floatIn {
+      0% { transform: translateY(80px) scale(0.96); opacity: 0; }
+      100% { transform: translateY(0) scale(1); opacity: 1; }
+    }
+    .phase {
+      font-size: 1.4rem;
+      font-weight: 700;
+      background: linear-gradient(90deg,#ffe53b 30%,#ff2525 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: shine 2.5s infinite linear alternate;
+      margin-bottom: 16px;
+      letter-spacing: 2px;
+    }
+    @keyframes shine {
+      0% { filter: brightness(1.1);}
+      100% { filter: brightness(1.5);}
+    }
+    .congrats {
+      font-size: 2.3rem;
+      font-weight: bold;
+      margin: 16px 0 18px 0;
+      background: linear-gradient(90deg,#1fd1f9 20%,#b621fe 80%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: textGlow 2s ease-in-out infinite alternate;
+    }
+    @keyframes textGlow {
+      0% { text-shadow: 0 0 10px #b621fe88;}
+      100% { text-shadow: 0 0 22px #1fd1f988;}
+    }
+    .message {
+      font-size: 1.1rem;
+      margin-bottom: 30px;
+      animation: fadeInUp 1.2s 0.3s both;
+    }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(40px);}
+      to { opacity: 1; transform: translateY(0);}
+    }
+    .cta {
+      margin-top: 32px;
+      animation: bounceIn 1.7s 0.6s both;
+    }
+    @keyframes bounceIn {
+      0% { transform: scale(0.95); opacity: 0;}
+      60% { transform: scale(1.02);}
+      80% { transform: scale(0.98);}
+      100% { transform: scale(1); opacity: 1;}
+    }
+    .cta-btn {
+      display: inline-block;
+      background: linear-gradient(90deg, #43e97b 0%, #38f9d7 100%);
+      color: #181818;
+      font-size: 1.25rem;
+      font-weight: bold;
+      border: none;
+      border-radius: 32px;
+      padding: 18px 48px;
+      text-decoration: none;
+      box-shadow: 0 4px 18px #38f9d777;
+      transition: background 0.3s, transform 0.2s;
+      cursor: pointer;
+      margin-top: 12px;
+      letter-spacing: 1.5px;
+    }
+    .cta-btn:hover {
+      background: linear-gradient(90deg, #fff200 0%, #f7971e 100%);
+      transform: scale(1.05);
+      color: #181818;
+    }
+    @media (max-width:650px) {
+      .container { padding: 32px 10px; margin: 36px 8px;}
+      .congrats { font-size: 1.5rem;}
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="phase">🌟 NUUR Presale - Phase 2 is LIVE! 🌟</div>
+    <div class="congrats">Congratulations to all Phase 1 Participants!</div>
+    <div class="message">
+      Phase 1 was a huge success, thanks to our amazing community.<br><br>
+      If you missed out on Phase 1, <b>don’t worry!</b> Phase 2 is now open.<br>
+      <span style="color:#ffe53b; font-weight:600;">This is your chance to join the NUUR journey early!</span>
+    </div>
+    <div class="cta">
+      <a class="cta-btn" href="phase2" target="_blank" rel="noopener">
+        Join NUUR Presale Phase 2 🚀
+      </a>
+    </div>
+  </div>
+</body>
+</html>
