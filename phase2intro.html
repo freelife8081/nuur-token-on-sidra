@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>NUUR Presale Phase 2 - Welcome!</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0 user-scalable=no">
   <style>
     @import url('https://fonts.googleapis.com/css?family=Montserrat:700,400&display=swap');
     body {
@@ -139,10 +139,13 @@
   <!-- Add session storage check script -->
   <script>
     window.onload = function() {
-      if (sessionStorage.getItem("phase2Visited")) {
-        window.location.href = "ref";
+      // Check if user has already seen this intro page
+      if (sessionStorage.getItem("phase2IntroViewed")) {
+        window.location.href = "phase2";
       } else {
-        sessionStorage.setItem("phase2Visited", "true");
+        // Mark that user has viewed this intro page
+        sessionStorage.setItem("phase2IntroViewed", "true");
+        sessionStorage.setItem("lastViewTime", "2025-05-22 09:06:01");
       }
     };
   </script>
