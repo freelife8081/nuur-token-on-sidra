@@ -16,6 +16,30 @@
       color: #fff;
       overflow-x: hidden;
     }
+
+    .user-info {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: rgba(0,0,0,0.45);
+      padding: 10px 20px;
+      border-radius: 12px;
+      font-size: 0.9rem;
+      text-align: right;
+      animation: fadeIn 1s ease;
+    }
+
+    .timestamp {
+      font-size: 0.8rem;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
     .container {
       max-width: 600px;
       margin: 80px auto;
@@ -100,16 +124,29 @@
     @media (max-width:650px) {
       .container { padding: 32px 10px; margin: 36px 8px;}
       .congrats { font-size: 1.5rem;}
+      .user-info {
+        position: relative;
+        top: 10px;
+        right: auto;
+        margin: 10px auto;
+        max-width: 300px;
+        text-align: center;
+      }
     }
   </style>
 </head>
 <body>
+  <div class="user-info">
+    Welcome, investor
+    <div class="timestamp">UTC: 2025-05-22 08:18:19</div>
+  </div>
+
   <div class="container">
     <div class="phase">🌟 NUUR Presale - Phase 2 is LIVE! 🌟</div>
     <div class="congrats">Congratulations to all Phase 1 Participants!</div>
     <div class="message">
       Phase 1 was a huge success, thanks to our amazing community.<br><br>
-      If you missed out on Phase 1, <b>don’t worry!</b> Phase 2 is now open.<br>
+      If you missed out on Phase 1, <b>don't worry!</b> Phase 2 is now open.<br>
       <span style="color:#ffe53b; font-weight:600;">This is your chance to join the NUUR journey early!</span>
     </div>
     <div class="cta">
