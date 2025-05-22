@@ -583,7 +583,7 @@
           </ul>
         </div>
         <div class="chart-block">
-          <div class="chart-title">Presale Progress</div>
+          <div class="chart-title">Presale 2 Progress</div>
           <div class="chart-container">
             <canvas id="progressChart" role="img" aria-label="Presale Progress Chart"></canvas>
           </div>
@@ -591,7 +591,7 @@
             <div id="boughtAmount">Loading...</div>
             <div id="boughtPercent">Loading...</div>
             <div id="remainingTokens">Loading...</div>
-            <div id="countdown">Phase 1 ends in: --</div>
+            <div id="countdown">Phase 2 ends in: --</div>
             <div class="progressBar"><div class="progressFill" id="progressFill"></div></div>
           </div>
         </div>
@@ -856,11 +856,11 @@
     }
 
     // Presale Progress + Chart
-    const presaleAddress = "0x858024C3c8179Ed448A9133190f991cfA9873657";
+    const presaleAddress = "0x98FCc396547D450208e926995a74b61874a1423A";
     const abi = [
       { "constant": true, "inputs": [], "name": "nuurToken", "outputs": [{ "name": "", "type": "address" }], "type": "function" }
     ];
-    const presaleEndDate = new Date("2025-05-23T23:59:59Z");
+    const presaleEndDate = new Date("2025-06-23T23:59:59Z");
     let progressChart;
 
     async function showContractProgress() {
