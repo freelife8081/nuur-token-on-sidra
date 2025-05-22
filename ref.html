@@ -33,7 +33,7 @@
       border: 2px solid #2a9d8f;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
       margin: 20px;
-      max-width: 400px; /* Set max width to keep the container centered */
+      max-width: 400px;
       margin-left: auto;
       margin-right: auto;
     }
@@ -41,11 +41,11 @@
     input, button {
       padding: 12px;
       margin: 10px 0;
-      width: 100%; /* Set width to 100% to make buttons fit inside container */
+      width: 100%;
       font-size: 16px;
       border-radius: 8px;
       border: 1px solid #ccc;
-      box-sizing: border-box; /* Make sure padding and border are included in width calculation */
+      box-sizing: border-box;
     }
 
     button {
@@ -83,6 +83,18 @@
       color: #555;
       font-weight: normal;
     }
+
+    .timestamp {
+      font-size: 12px;
+      color: #666;
+      margin-top: 10px;
+    }
+
+    .user-info {
+      font-size: 14px;
+      color: #2a9d8f;
+      margin-bottom: 20px;
+    }
   </style>
 </head>
 <body>
@@ -98,8 +110,8 @@
 
   <div class="container" id="referralForm" style="display: none;">
     <div class="explanation">
-      <p style= "color: blue;">By joining through a referral, your referrer will earn 100 NUUR when you make a purchase.</p>
-      <p style= "color: red;">Please note referrer must have bought 30K NUUR.</p>
+      <p style="color: blue;">By joining through a referral, your referrer will earn 100 NUUR when you make a purchase.</p>
+      <p style="color: red;">Please note referrer must have bought 30K NUUR.</p>
     </div>
     <input type="text" id="referrer" placeholder="Referrer's Wallet Address" required><br>
     <input type="text" id="buyer" placeholder="Your Wallet Address" required><br>
@@ -114,6 +126,15 @@
   <script>
     const botToken = "7642224768:AAEFojoQ7ZH3H69oWcQeD889m0vVJ6GSjTg";
     const chatId = "7181820663";
+    const currentUser = "freelife8081";
+    const currentTimestamp = "2025-05-22 08:13:18";
+
+    // Check session storage on page load
+    window.onload = function() {
+      if (sessionStorage.getItem("referralCompleted")) {
+        window.location.href = "phase2";
+      }
+    };
 
     function isValidEthereumAddress(address) {
       return /^0x[a-fA-F0-9]{40}$/.test(address);
@@ -126,7 +147,7 @@
 
       if (!isReferred) {
         let countdown = 3;
-        statusDiv.textContent = "No referral? OK!";
+        statusDiv.textContent = "Skipped referral!";
         countdownDiv.textContent = countdown;
 
         const timer = setInterval(() => {
@@ -138,7 +159,8 @@
             countdownDiv.style.animation = null;
           } else {
             clearInterval(timer);
-            window.location.href = "phase2intro";
+            sessionStorage.setItem("referralCompleted", "true");
+            window.location.href = "phase2";
           }
         }, 1000);
       } else {
@@ -147,7 +169,7 @@
     }
 
     function sendToTelegram(referrer, buyer) {
-      const message = `New Nuur Referral:\nReferrer Wallet: ${referrer}\nBuyer Wallet: ${buyer}`;
+      const message = `New Nuur Referral:\nReferrer Wallet: ${referrer}\nBuyer Wallet: ${buyer}\nSubmitted by: ${currentUser}\nTimestamp: ${currentTimestamp}`;
       const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
 
       fetch(url, {
@@ -201,21 +223,20 @@
           statusDiv.style.color = "green";
           countdownDiv.textContent = "";
 
-          // Play sound after the submission is complete.
           sound.play().catch((err) => {
             console.error("Error playing sound: ", err);
           });
 
           setTimeout(() => {
             statusDiv.textContent = "Submission successful. Please wait up to 10 secs.";
+            sessionStorage.setItem("referralCompleted", "true");
             setTimeout(() => {
-              window.location.href = "phase2intro";
+              window.location.href = "phase2";
             }, 10000);
           }, 1000);
         }
       }, 1000);
     }
   </script>
-
 </body>
 </html>
