@@ -284,7 +284,7 @@
     }
   ];
 
-  const presaleEndDate = new Date("2025-07-01T23:59:59Z"); // Change to your presale end time
+  const presaleEndDate = new Date("2025-05-23T23:59:59Z"); // Change to your presale end time
 
   async function showContractProgress() {
     const web3 = new Web3("https://node.sidrachain.com");
@@ -325,28 +325,17 @@
       return;
     }
 
-    const deadline = new Date().getTime() + 24 * 60 * 60 * 1000; // 1 day in milliseconds
-    function updateCountdown() {
-      const now = new Date().getTime();
-      const diff = deadline - now;
-      
-    if (diff <= 0) {
-    document.getElementById("countdown").innerText = "Presale ended.";
-    clearInterval(timerInterval);
-    return;
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hrs = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+    const secs = Math.floor((diff % (1000 * 60)) / 1000);
+
+    document.getElementById("countdown").innerText =
+      Presale ends in: ${days}d ${hrs}h ${mins}m ${secs}s;
   }
 
-  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-  const hrs = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-  const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-  const secs = Math.floor((diff % (1000 * 60)) / 1000);
-
-  document.getElementById("countdown").innerText =
-    `Presale ends in: ${days}d ${hrs}h ${mins}m ${secs}s`;
-}
-
-updateCountdown();
-const timerInterval = setInterval(updateCountdown, 1000);
+  showContractProgress();
+  setInterval(updateCountdown, 1000);
   
 </script>
 <div class="chart-container">
