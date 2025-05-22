@@ -3,552 +3,683 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0 user-scalable=no"/>
-  <meta name="google-adsense-account" content="ca-pub-8242718355314330">
   <title>Nuur Coin – Utility Token on Sidrachain</title>
   <link rel="icon" href="logo.png" type="image/x-icon">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
   <style>
-    body {
+    html, body {
+      background: radial-gradient(ellipse at top left, #0f2027 0%, #2c5364 80%, #000 100%);
+      min-height: 100vh;
       margin: 0;
       padding: 0;
       font-family: 'Poppins', sans-serif;
-      background: linear-gradient(135deg, #0a0f14, #121e29);
-      color: #eee;
-      line-height: 1.6;
+      color: #e3eaf7;
+      box-sizing: border-box;
+    }
+    :root {
+      --sidebar-width: 210px;
+      --highlight: #00ffe7;
+      --sidebar-bg: #171d25;
+      --sidebar-active: #00ffe7;
+      --sidebar-link: #77eaff;
+      --sidebar-link-hover: #00ffe7;
+      --card-bg: rgba(23, 29, 37, 0.97);
+      --card-border: #223344;
+      --footer-bg: #131922;
+      --footer-text: #a6b6ce;
+      --accent: #00ffe7;
+      --shadow: 0 2px 20px rgba(0,255,255,0.07);
+    }
+    body {
+      display: flex;
+      min-height: 100vh;
       overflow-x: hidden;
     }
-
-    h1, h2 {
+    @media (max-width: 900px) {
+      .sidebar { 
+        transform: translateX(-120%);
+        opacity: 0;
+        pointer-events: none;
+        transition: transform 0.25s, opacity 0.2s;
+      }
+      .sidebar.open {
+        transform: translateX(0);
+        opacity: 1;
+        pointer-events: auto;
+      }
+    }
+    .sidebar {
+      width: var(--sidebar-width);
+      background: var(--sidebar-bg);
+      color: #e3eaf7;
+      padding: 2rem 1rem 1rem 1rem;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      min-height: 100vh;
+      position: fixed;
+      left: 0;
+      top: 0;
+      z-index: 2000;
+      box-shadow: 2px 0 16px rgba(0,255,255,0.06);
+      transition: transform 0.25s cubic-bezier(.4,2,.6,1), opacity 0.2s;
+      backdrop-filter: blur(4px);
+    }
+    .sidebar.closed {}
+    .sidebar .logo {
+      width: 60px;
+      margin-bottom: 1.5rem;
+      margin-left: 0.5rem;
+      border-radius: 50%;
+      box-shadow: 0 2px 18px var(--accent);
+      background: #222a36;
+    }
+    .sidebar-nav {
+      width: 100%;
+      margin-bottom: 2rem;
+    }
+    .sidebar-nav a {
+      display: block;
+      color: var(--sidebar-link);
+      text-decoration: none;
+      padding: 0.7em 1em;
+      border-radius: 8px;
+      transition: background 0.15s, color 0.15s;
+      font-weight: 500;
+      margin-bottom: 0.3em;
+      font-size: 1.07em;
+      letter-spacing: 0.03em;
+    }
+    .sidebar-nav a.active, .sidebar-nav a:hover {
+      background: var(--sidebar-active);
+      color: #131922;
       font-weight: 700;
     }
-
-    .hero {
-      max-width: 900px;
-      margin: auto;
-      padding: 2rem;
-      text-align: center;
+    .sidebar-share {
+      margin-top: auto;
+      width: 100%;
+      text-align: left;
     }
-
-    .logo {
+    .sidebar-share a {
+      display: inline-block;
+      margin-right: 0.6em;
+      color: var(--sidebar-link);
+      font-size: 1.3em;
+      transition: color 0.2s;
+    }
+    .sidebar-share a:hover { color: var(--sidebar-link-hover);}
+    .sidebar-toggle, .sidebar-close {
+      display: none;
+      position: fixed;
+      top: 18px;
+      left: 18px;
+      z-index: 2100;
+      background: none;
+      border: none;
+      color: var(--accent);
+      font-size: 2.15rem;
+      cursor: pointer;
+      outline: none;
+      transition: color 0.2s;
+    }
+    .sidebar-toggle:hover, .sidebar-close:hover {
+      color: #fff;
+    }
+    .sidebar-close {
+      left: unset;
+      right: 20px;
+      top: 20px;
+      font-size: 2.1rem;
+      color: #fff;
+      z-index: 2200;
+      background: none;
+      box-shadow: none;
+    }
+    .sidebar .sidebar-close {
+      position: absolute;
+      display: block;
+    }
+    @media (max-width: 900px) {
+      .sidebar {
+        position: fixed;
+        left: 0; top: 0;
+        width: 80vw;
+        max-width: 340px;
+        min-width: 190px;
+        height: 100vh;
+        min-height: 100vh;
+        padding-top: 2.3rem;
+        box-shadow: 4px 0 24px #000a;
+        background: rgba(23,29,37,0.99);
+      }
+      .main-content {
+        margin-left: 0 !important;
+      }
+      .sidebar-toggle {
+        display: block;
+      }
+      .sidebar.closed {}
+      .sidebar .sidebar-close {
+        display: block;
+        right: 20px;
+        left: unset;
+        top: 20px;
+      }
+    }
+    @media (min-width: 901px) {
+      .sidebar-toggle, .sidebar .sidebar-close { display: none !important; }
+    }
+    .main-content {
+      margin-left: var(--sidebar-width);
+      flex: 1;
+      min-width: 0;
+      min-height: 100vh;
+      background: none;
+      display: flex;
+      flex-direction: column;
+      transition: margin-left 0.22s;
+    }
+    @media (max-width: 900px) {
+      .main-content { margin-left: 0 !important; }
+    }
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 2rem 1rem 1rem 1rem;
+    }
+    .hero { text-align: center; margin-bottom: 2.2rem; }
+    .main-logo {
       width: 100px;
       margin-bottom: 1rem;
       animation: spin 20s linear infinite;
-      border-radius: 50;
+      border-radius: 50%;
       object-fit: cover;
+      box-shadow: 0 4px 32px #00ffe799, 0 2px 12px #14273c;
+      background: #222a36;
     }
-
     @keyframes spin {
       from { transform: rotate(0deg); }
       to   { transform: rotate(360deg); }
     }
-
-    .description {
-      font-size: 1.1rem;
+    .row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
       margin-bottom: 2rem;
-      color: #ccc;
+      justify-content: center;
     }
-
-    .token-info p {
-      background: rgba(255,255,255,0.05);
-      border: 1px solid #333;
-      padding: 0.8rem;
-      margin: 0.4rem 0;
-      border-radius: 6px;
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 18px;
+      padding: 1.7rem 1.3rem;
+      min-width: 270px;
+      flex: 1 1 320px;
+      box-shadow: var(--shadow), 0 2px 16px #0e1820bb;
+      margin-bottom: 1.5rem;
+      transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+      color: #e3eaf7;
     }
-
+    .card:hover {
+      transform: translateY(-7px) scale(1.03);
+      border-color: var(--accent);
+      box-shadow: 0 6px 34px #00ffe744, 0 2px 18px #14273c;
+    }
+    .section-header {
+      font-size: 1.35rem;
+      color: var(--highlight);
+      text-shadow: 0 0 8px #00ffe7aa;
+      margin-bottom: 1.05rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-align: center;
+    }
     .btn, .whitepaper-link {
       display: inline-block;
       margin: 1rem 0.5rem;
-      background: linear-gradient(135deg, #0f0, #0c0);
-      color: #000;
+      background: linear-gradient(135deg, #00ffe7 50%, #028be0 100%);
+      color: #0b222c;
       font-weight: bold;
       padding: 0.7rem 1.5rem;
       border-radius: 50px;
       text-decoration: none;
-      box-shadow: 0 4px 12px rgba(0,255,0,0.2);
+      box-shadow: 0 4px 14px #00ffe744;
       transition: 0.3s;
+      border: none;
+      letter-spacing: 0.04em;
+      font-size: 1.08em;
     }
-
     .btn:hover, .whitepaper-link:hover {
-      transform: scale(1.05);
-      background: linear-gradient(135deg, #0c0, #090);
+      transform: scale(1.08);
+      background: linear-gradient(135deg, #25e1fa 50%, #028be0 100%);
+      color: #0b222c;
     }
-
     .contract-box {
-      background: rgba(255,255,255,0.05);
-      border: 1px solid #555;
+      background: rgba(0,255,231,0.06);
+      border: 1px solid #00ffe7bb;
       padding: 1rem;
       border-radius: 10px;
-      color: #0f0;
+      color: #00ffe7;
       font-family: monospace;
       position: relative;
       margin-top: 2rem;
+      text-align: center;
     }
-
     .copy-btn {
       position: absolute;
       top: 10px;
       right: 10px;
-      background: #0f0;
-      color: #000;
+      background: #00ffe7;
+      color: #182c3e;
       border: none;
       padding: 0.4rem 0.8rem;
       border-radius: 5px;
       cursor: pointer;
+      font-weight: bold;
     }
-
     .divider {
       border: none;
       height: 2px;
       margin: 2rem auto;
       width: 80%;
-      background: linear-gradient(to right, transparent, #0f0, transparent);
+      background: linear-gradient(to right, transparent, #00ffe7, transparent);
     }
-
-    section {
-      margin: 3rem 0;
+    .faq-list {
+      text-align: left;
+      margin: 0 auto;
+      max-width: 700px;
+    }
+    .faq-q {
+      color: var(--accent);
+      font-weight: 600;
+      margin-top: 1.3em;
+      margin-bottom: 0.2em;
+      font-size: 1.07em;
+    }
+    .faq-a {
+      color: #c9e7f7;
+      margin-bottom: 0.5em;
+      font-size: 1em;
+    }
+    .how-to-buy-list {
+      text-align: left;
+      margin: 0 auto 1em auto;
+      max-width: 500px;
+      padding-left: 1.5em;
+    }
+    #presaleContainer {
+      background: #171e29;
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px #00ffe755;
+      max-width: 340px;
+      margin: auto;
+      color: #e3eaf7;
+    }
+    #presaleContainer h2 {
+      font-size: 20px;
+      margin-bottom: 15px;
+      color: #00ffe7;
+      text-shadow: 0 0 3px #00ffe7, 0 0 6px #00ffe7;
+    }
+    #boughtAmount, #boughtPercent, #remainingTokens, #countdown {
+      font-size: 14px;
+      margin: 5px 0;
+      color: #e3eaf7;
+      text-shadow: 0 0 3px #00ffe7;
+    }
+    .progressBar {
+      width: 100%;
+      height: 13px;
+      background: #00ffe722;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 0 5px #00ffe744;
+      margin-top: 15px;
+    }
+    .progressFill {
+      height: 100%;
+      background: linear-gradient(90deg, #00ffe7, #028be0, #00ffe7);
+      width: 0%;
+      border-radius: 12px;
+      transition: width 1s ease-in-out;
+      box-shadow: 0 0 10px #00ffe7, 0 0 15px #028be0;
+    }
+    .chart-container {
+      margin: 23px auto 0 auto;
+      padding: 8px 0 0 0;
+      background: none;
+      border: 0;
+      border-radius: 0;
+      max-width: 340px;
       text-align: center;
+      box-shadow: none;
     }
-
-    footer {
-      background: #0a0f14;
-      color: #bbb;
-      text-align: center;
-      padding: 2rem 1rem;
-      font-size: 0.95rem;
+    #tokenomicsChartContainer, #progressChartContainer {
+      position: relative;
+      height: 140px;
+      width: 100%;
+      margin: 0 auto;
+      max-width: 190px;
     }
-
-    footer a {
-      color: #0f0;
-      text-decoration: none;
-      font-weight: bold;
+    #tokenomicsChart, #progressChart {
+      display: block;
+      margin: 0 auto;
+      max-height: 140px;
+      max-width: 140px;
     }
-
-    a:hover {
-      opacity: 0.8;
-    }
-
-    .fade-in {
-      opacity: 0;
-      transform: translateY(20px);
-      transition: opacity 0.8s ease-out, transform 0.8s ease-out;
-    }
-
-    .fade-in.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  .chart-container {
-    margin: 40px auto;
-    padding: 20px;
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 16px;
-    max-width: 600px;
-    text-align: center;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-  }
-
-  .section-header {
-    font-size: 1.8rem;
-    font-weight: 600;
-    color: #00d1ff;
-    text-shadow: 0 0 10px rgba(0, 209, 255, 0.7);
-    margin-bottom: 20px;
-  }
-
-  #tokenomicsChartContainer {
-    position: relative;
-    height: 400px;
-    width: 100%;
-  }
-
-  #tokenomicsChart {
-    display: block;
-    margin: 0 auto;
-    max-height: 100%;
-    max-width: 100%;
-  }
-  </style>
-</head>
-<body>
-  <div class="hero fade-in">
-    <img src="logo.png" alt="Nuur Token Logo" class="logo"/>
-    <h1>Nuur Coin (NUUR)</h1>
-    <p class="description">
-      NUUR is a utility token built on the Sidra Chain.
-      It represents clarity, guidance, and ethical innovation in the blockchain space.
-      NUUR empowers a new wave of decentralized applications promoting transparency, fairness, and trust across the ecosystem.
-    </p>
-
-    <div class="token-info fade-in">
-      <p><strong>Total Supply:</strong> 10,000,000</p>
-      <p><strong>Presale Allocation:</strong> 5,000,000</p>
-      <p><strong>Liquidity Allocation:</strong> 2,000,000</p>
-      <p><strong>Community Airdrop:</strong> 1,000,000</p>
-      <p><strong>Founders Allocation:</strong> 2,000,000</p>
-      <p><strong>Presale Price:</strong> 1 NUUR = 0.001 SDA</p>
-      <p><strong>Presale fund wallet:</strong><a href="https://ledger.sidrachain.com/address/0x8375694cD94480d715727758a7fd863bC00Afe90" style="text-decoration:none; color: yellow;" target="_blank"> View wallet</a></p>
-      <p><strong>Token holders:</strong><a href="https://ledger.sidrachain.com/token/0x003BEc2e6ef4369f9d968eCD288d31B59fD9c2CD?tab=holders" style="color: yellow; text-decoration:none;" target="_blank"> View holders</a></p>
-      <p><strong>Listing:</strong> NUUR will be listed on SidraSwap once SDA is listed</p>
-    </div>
-    <div class="chart-container">
-  <h2 class="section-header">Tokenomics</h2>
-  <div id="tokenomicsChartContainer">
-    <canvas id="tokenomicsChart"></canvas>
-  </div>
-</div>
-
-    <div class="fade-in">
-      <a href="ref" class="btn">Join Presale</a>
-      <a href="whitepaper" class="whitepaper-link" target="_blank">Project Whitepaper</a>
-      <a href="https://www.sidrachain.com/swap" class="btn" target=_blank>Trade NUUR/SDA(Coming soon)</a>
-      <a href="airdrop" class="btn">Airdrop</a>
-    </div>
-
-    <div class="contract-box fade-in">
-      Contract Address:<br>
-      0x003BEc2e6ef4369f9d968eCD288d31B59fD9c2CD
-      <button class="copy-btn" onclick="copyContract()">Copy</button>
-    </div>
-
-    <hr class="divider fade-in">
-    <div id="presaleContainer">
-      <h2>Presale Phase 1</h2>
-
-      <p id="boughtAmount">Loading...</p>
-      <p id="boughtPercent">Loading...</p>
-      <p id="remainingTokens">Loading...</p>
-      <p id="countdown">Phase 1 ends in: --</p>
-      <div class="progressBar">
-        <div class="progressFill" id="progressFill"></div>
-      </div>
-    </div>
-    <style>
-      #presaleContainer {
-        background: #111;
-        padding: 15px;
-        border-radius: 8px;
-        box-shadow: 0 0 10px #0ff;
-        max-width: 350px; /* Reduced width */
-        margin: auto;
-      }
-      
-      h2 {
-        font-size: 20px; /* Reduced font size */
-        margin-bottom: 15px;
-        color: #0ff;
-        text-shadow: 0 0 3px #0ff, 0 0 6px #0ff;
-      }
-      
-      #boughtAmount,
-      #boughtPercent,
-      #remainingTokens,
-      #countdown {
-        font-size: 14px; /* Reduced font size */
-        margin: 5px 0;
-        color: #fff;
-        text-shadow: 0 0 3px #0ff;
-      }
-      
-      .progressBar {
-        width: 100%;
-        height: 15px; /* Reduced height */
-        background: #222;
-        border-radius: 12px;
-        overflow: hidden;
-        box-shadow: 0 0 5px #0ff;
-        margin-top: 15px;
-      }
-      .progressFill {
-        height: 100%;
-        background: linear-gradient(90deg, #0ff, #0f0, #0ff);
-        width: 0%;
-        border-radius: 12px;
-        transition: width 1s ease-in-out;
-        box-shadow: 0 0 10px #0ff, 0 0 15px #0f0;
-      }
-    </style>
-
-<script src="https://cdn.jsdelivr.net/npm/web3@1.10.0/dist/web3.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-  const presaleAddress = "0x858024C3c8179Ed448A9133190f991cfA9873657"; // Replace with your real address
-  const abi = [
-    {
-      "constant": true,
-      "inputs": [],
-      "name": "nuurToken",
-      "outputs": [{ "name": "", "type": "address" }],
-      "type": "function"
-    }
-  ];
-
-  const presaleEndDate = new Date("2025-05-23T23:59:59Z"); // Change to your presale end time
-
-  async function showContractProgress() {
-    const web3 = new Web3("https://node.sidrachain.com");
-    const contract = new web3.eth.Contract(abi, presaleAddress);
-
-    try {
-      const nuur = await contract.methods.nuurToken().call();
-      const nuurContract = new web3.eth.Contract([
-        { "constant": true, "inputs": [], "name": "decimals", "outputs": [{ "name": "", "type": "uint8" }], "type": "function" },
-        { "constant": true, "inputs": [{ "name": "account", "type": "address" }], "name": "balanceOf", "outputs": [{ "name": "", "type": "uint256" }], "type": "function" }
-      ], nuur);
-
-      const decimals = await nuurContract.methods.decimals().call();
-      const balanceRaw = await nuurContract.methods.balanceOf(presaleAddress).call();
-      const balance = parseFloat(balanceRaw / 10 ** decimals);
-      const totalSupply = 1_000_000;
-      const bought = totalSupply - balance;
-      const percent = ((bought / totalSupply) * 100).toFixed(2);
-
-      document.getElementById("boughtAmount").innerText = `${bought.toLocaleString()} / 1,000,000 NUUR bought`;
-      document.getElementById("boughtPercent").innerText = `${percent}% / 100% completed`;
-      document.getElementById("remainingTokens").innerText = `${balance.toLocaleString()} NUUR remaining`;
-      document.getElementById("progressFill").style.width = `${percent}%`;
-    } catch (err) {
-      console.error("Error fetching progress:", err);
-      document.getElementById("boughtAmount").innerText = "Unavailable";
-      document.getElementById("boughtPercent").innerText = "";
-      document.getElementById("remainingTokens").innerText = "";
-    }
-  }
-
-  function updateCountdown() {
-    const now = new Date();
-    const diff = presaleEndDate - now;
-
-    if (diff <= 0) {
-      document.getElementById("countdown").innerText = "Presale ended";
-      return;
-    }
-
-    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-    const hrs = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-    const secs = Math.floor((diff % (1000 * 60)) / 1000);
-
-    document.getElementById("countdown").innerText =
-      Presale ends in: ${days}d ${hrs}h ${mins}m ${secs}s;
-  }
-
-  showContractProgress();
-  setInterval(updateCountdown, 1000);
-  
-</script>
-<div class="chart-container">
-  <h2 class="section-header">Presale Chart</h2>
-  <div id="progressChartContainer">
-    <canvas id="progressChart"></canvas>
-  </div>
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-  async function showContractProgress() {
-    const web3 = new Web3("https://node.sidrachain.com");
-    const contract = new web3.eth.Contract(abi, presaleAddress);
-
-    try {
-      const nuur = await contract.methods.nuurToken().call();
-      const nuurContract = new web3.eth.Contract([
-        { "constant": true, "inputs": [], "name": "decimals", "outputs": [{ "name": "", "type": "uint8" }], "type": "function" },
-        { "constant": true, "inputs": [{ "name": "account", "type": "address" }], "name": "balanceOf", "outputs": [{ "name": "", "type": "uint256" }], "type": "function" }
-      ], nuur);
-
-      const decimals = await nuurContract.methods.decimals().call();
-      const balanceRaw = await nuurContract.methods.balanceOf(presaleAddress).call();
-      const balance = parseFloat(balanceRaw / 10 ** decimals);
-      const totalSupply = 1_000_000;
-      const bought = totalSupply - balance;
-      const percent = ((bought / totalSupply) * 100).toFixed(2);
-
-      // Data for the chart
-      const progressData = {
-        labels: ['Bought', 'Remaining'],
-        datasets: [{
-          data: [bought, balance],
-          backgroundColor: ['red', 'green'],
-          borderColor: '#fff',
-          borderWidth: 1
-        }]
-      };
-
-      // Create the chart
-      const ctx = document.getElementById('progressChart').getContext('2d');
-      new Chart(ctx, {
-        type: 'doughnut',
-        data: progressData,
-        options: {
-          responsive: true,
-          animation: {
-            duration: 5000, // Slow animation
-            easing: 'easeInOutCubic'
-          },
-          plugins: {
-            legend: {
-              position: 'top',
-              labels: {
-                color: '#ddd'
-              }
-            },
-            tooltip: {
-              callbacks: {
-                label: (context) => `${context.label}: ${context.raw.toLocaleString()}`
-              }
-            }
-          }
-        }
-      });
-    } catch (err) {
-      console.error("Error fetching progress:", err);
-    }
-  }
-
-  // Call the function to display progress
-  showContractProgress();
-</script>
-
-<style>
-  .chart-container {
-    margin: 40px auto;
-    padding: 20px;
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 16px;
-    max-width: 600px;
-    text-align: center;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-  }
-
-  .section-header {
-    font-size: 1.8rem;
-    font-weight: 600;
-    color: #00d1ff;
-    text-shadow: 0 0 10px rgba(0, 209, 255, 0.7);
-    margin-bottom: 20px;
-  }
-
-  #progressChartContainer {
-    position: relative;
-    height: 400px;
-    width: 100%;
-  }
-
-  #progressChart {
-    display: block;
-    margin: 0 auto;
-    max-height: 100%;
-    max-width: 100%;
-  }
-</style>
-    <section class="fade-in">
-      <h2><a href="about" style="text-decoration:none;" target=_blank>About Us</a></h2>
-      <p>
-        We are a team of blockchain developers and entrepreneurs focused on building ethical decentralized finance solutions.
-        Nuur Token is our vision of a halal, transparent, and accessible digital future on the Sidra blockchain.
-      </p>
-    </section>
-
-    <section class="fade-in">
-      <h2>Contact</h2>
-      <p><a href="mailto:freelife8081@gmail.com" style="color: white; text-decoration: none;" target="_blank">Email</a></p>
-      <p><a href="https://twitter.com/NuurCoin" style= "color: white; text-decoration: none;" target="_blank">Twitter</a></p>
-      <p><a href="https://t.me/NuurCoinCom" style="color: white; text-decoration: none;" target="_blank">Telegram</a></p>
-      <p><a href="https://www.facebook.com/share/1C6FKkHESJ/" style="color: white; text-decoration: none;" target="_blank">Facebook</a></p>
-    </section>
-  </div>
-  <style>
-    /* Notification Styles */
     #notification {
         position: fixed;
         top: 0;
         left: 0;
         width: 100%;
-        background-color: #ff4d4d; /* Red for offline */
-        color: white;
+        background-color: #00ffe7;
+        color: #171e29;
         text-align: center;
         padding: 15px;
         font-size: 16px;
-        display: none; /* Initially hidden */
+        display: none;
         z-index: 1000;
+        font-weight: bold;
+        letter-spacing: 0.01em;
     }
-
-    #notification.online {
-        background-color: #4CAF50; /* Green for back online */
-    }
-
+    #notification.online { background-color: #25e1fa; color: #111;}
     #refresh-button {
         margin-left: 10px;
-        background-color: white;
-        color: #4CAF50;
+        background-color: #e3eaf7;
+        color: #028be0;
         border: none;
         padding: 5px 10px;
         cursor: pointer;
         font-size: 14px;
+        border-radius: 5px;
     }
-</style>
-
-<div id="notification"></div>
-
-<script>
-    const notification = document.getElementById('notification');
-
-    // Function to show notification
-    function showNotification(message, type) {
-        notification.innerText = message;
-        notification.className = type; // Apply 'online' or no class for offline
-        notification.style.display = 'block';
-
-        // If back online, add a refresh button
-        if (type === 'online') {
-            const refreshButton = document.createElement('button');
-            refreshButton.id = 'refresh-button';
-            refreshButton.innerText = 'Refresh';
-            refreshButton.onclick = () => location.reload(); // Reload the page
-            notification.appendChild(refreshButton);
-        }
+    footer {
+      margin-top: auto;
+      background: var(--footer-bg);
+      color: var(--footer-text);
+      text-align: center;
+      padding: 1.5rem 1rem 1.2rem 1rem;
+      font-size: 1.05rem;
+      letter-spacing: 0.03em;
+      box-shadow: 0 -2px 16px #00ffe744;
+      border-top: 2px solid #00ffe744;
     }
-
-    // Function to hide notification
-    function hideNotification() {
-        notification.style.display = 'none';
-        notification.innerHTML = ''; // Clear content
+    footer a {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: bold;
+      transition: color 0.18s;
     }
-
-    // Detect initial connection status
-    if (!navigator.onLine) {
-        showNotification('You are offline. Check your internet connection.', '');
+    footer a:hover {
+      color: #c9e7f7;
+      text-shadow: 0 0 8px #00ffe7aa;
     }
-
-    // Listen for offline event
-    window.addEventListener('offline', () => {
-        showNotification('Connection lost! Please check your internet.', '');
-    });
-
-    // Listen for online event
-    window.addEventListener('online', () => {
-        showNotification('You are back online. Refresh to continue.', 'online');
-    });
-</script>
-  <footer class="fade-in">
-    <a href="https://ledger.sidrachain.com/address/0x8375694cD94480d715727758a7fd863bC00Afe90">
-      Click To Donate Sidra
-    </a>
-    <p style="margin-top: 1rem;">
-      NOTE: NUUR will be listed on SidraSwap after presale ends with a target price of 0.01 to 0.1 usdt. INVEST WISELY.
-  </footer>
-
+    @media (max-width: 1000px) {
+      .container { max-width: 98vw; }
+    }
+    @media (max-width: 600px) {
+      .row { flex-direction: column; gap: 0; }
+      .container { padding: 0.7rem 0.2rem; }
+      #tokenomicsChartContainer, #progressChartContainer { max-width: 120px; height: 100px; }
+      #tokenomicsChart, #progressChart { max-height: 100px; max-width: 100px; }
+    }
+    @keyframes blink-border {
+      0%   { border-color: #00ffe7; }
+      50%  { border-color: #028be0; }
+      100% { border-color: #00ffe7; }
+    }
+    .fade-in {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+    }
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body>
+  <button class="sidebar-toggle" id="sidebarOpenBtn" aria-label="Open menu">
+    <i class="fas fa-bars"></i>
+  </button>
+  <nav class="sidebar closed" id="sidebar">
+    <button class="sidebar-close" id="sidebarCloseBtn" aria-label="Close menu">
+      <i class="fas fa-times"></i>
+    </button>
+    <img src="logo.png" alt="Nuur Logo" class="logo"/>
+    <div class="sidebar-nav">
+      <a href="#about" class="active">About</a>
+      <a href="#tokenomics">Tokenomics</a>
+      <a href="#presale">Presale</a>
+    </div>
+    <div class="sidebar-share">
+      <span style="font-size:0.97em; color:#77eaff;">Share:</span>
+      <a href="https://twitter.com/intent/tweet?text=Check%20out%20Nuur%20Coin%20on%20SidraChain!%20https%3A%2F%2Fnuurtoken.site" target="_blank" title="Share on Twitter"><i class="fab fa-twitter"></i></a>
+      <a href="https://t.me/share/url?url=https://nuurtoken.site&text=Check%20out%20Nuur%20Coin%20on%20SidraChain!" target="_blank" title="Share on Telegram"><i class="fab fa-telegram"></i></a>
+      <a href="https://www.facebook.com/sharer.php?u=https://nuurtoken.site" target="_blank" title="Share on Facebook"><i class="fab fa-facebook"></i></a>
+      <a href="mailto:?subject=Nuur%20Coin%20on%20SidraChain&body=Check%20out%20Nuur%20Coin%20on%20SidraChain!%20https://nuurtoken.site" target="_blank" title="Share by Email"><i class="fas fa-envelope"></i></a>
+      <a href="https://wa.me/?text=Check%20out%20Nuur%20Coin%20on%20SidraChain!%20https://nuurtoken.site" target="_blank" title="Share on WhatsApp"><i class="fab fa-whatsapp"></i></a>
+    </div>
+  </nav>
+  <div class="main-content">
+    <div class="container">
+      <div id="about" class="hero fade-in">
+        <img src="logo.png" alt="Nuur Token Logo" class="main-logo"/>
+        <h1>Nuur Coin (NUUR)</h1>
+        <p class="description">
+          NUUR is a utility token built on the Sidra Chain.<br>
+          It represents clarity, guidance, and ethical innovation in the blockchain space.<br>
+          NUUR empowers a new wave of decentralized applications promoting transparency, fairness, and trust across the ecosystem.
+        </p>
+      </div>
+      <div class="row" id="tokenomics">
+        <div class="card fade-in">
+          <div class="section-header">Tokenomics</div>
+          <ul style="padding-left:1em;text-align:left;">
+            <li><strong>Total Supply:</strong> 10,000,000</li>
+            <li><strong>Presale Allocation:</strong> 5,000,000</li>
+            <li><strong>Liquidity Allocation:</strong> 2,000,000</li>
+            <li><strong>Community Airdrop:</strong> 1,000,000</li>
+            <li><strong>Founders Allocation:</strong> 2,000,000</li>
+            <li><strong>Presale Price:</strong> 1 NUUR = 0.001 SDA</li>
+          </ul>
+          <p style="margin-bottom:0.3em;">
+            <strong>Presale fund wallet:</strong>
+            <a href="https://ledger.sidrachain.com/address/0x8375694cD94480d715727758a7fd863bC00Afe90" style="color: var(--accent);" target="_blank">View wallet</a>
+          </p>
+          <p>
+            <strong>Token holders:</strong>
+            <a href="https://ledger.sidrachain.com/token/0x003BEc2e6ef4369f9d968eCD288d31B59fD9c2CD?tab=holders" style="color: var(--accent);" target="_blank">View holders</a>
+          </p>
+          <p><strong>Listing:</strong> NUUR will be listed on SidraSwap once SDA is listed</p>
+          <div class="chart-container fade-in">
+            <div id="tokenomicsChartContainer">
+              <canvas id="tokenomicsChart"></canvas>
+            </div>
+          </div>
+        </div>
+        <div class="card fade-in" id="howtobuy">
+          <div class="section-header">How to Buy NUUR Coin</div>
+          <ol class="how-to-buy-list">
+            <li>Visit <a href="https://nuurtoken.site/presalelive" target="_blank" style="color:var(--accent);">nuurtoken.site/presalelive</a></li>
+            <li>Connect your wallet</li>
+            <li>Enter the amount of SIDRA you want to spend</li>
+            <li>Click <b>Buy</b> and confirm the transaction</li>
+          </ol>
+          <div style="text-align:center;">
+            <a href="https://nuurtoken.site/presalelive" class="btn" target="_blank">Go to Presale Page</a>
+          </div>
+        </div>
+      </div>
+      <div class="row" id="presale">
+        <div class="card fade-in" style="margin:2rem auto;">
+          <div id="presaleContainer">
+            <h2>Presale Phase 1</h2>
+            <p id="boughtAmount">Loading...</p>
+            <p id="boughtPercent">Loading...</p>
+            <p id="remainingTokens">Loading...</p>
+            <p id="countdown">Phase 1 ends in: --</p>
+            <div class="progressBar"><div class="progressFill" id="progressFill"></div></div>
+            <div class="chart-container" style="margin-top:1.2rem;">
+              <div id="progressChartContainer"><canvas id="progressChart"></canvas></div>
+            </div>
+          </div>
+        </div>
+        <div class="card fade-in">
+          <div class="contract-box">
+            Contract Address:<br>
+            0x003BEc2e6ef4369f9d968eCD288d31B59fD9c2CD
+            <button class="copy-btn" onclick="copyContract()">Copy</button>
+          </div>
+        </div>
+      </div>
+      <hr class="divider fade-in">
+      <div class="card fade-in">
+        <div class="section-header">Frequently Asked Questions</div>
+        <div class="faq-list">
+          <div class="faq-q">What is Nuur Coin?</div>
+          <div class="faq-a">Nuur Coin (NUUR) is a utility token built on the Sidra Chain, designed to enable transparent, ethical, and innovative decentralized applications.</div>
+          <div class="faq-q">How do I participate in the presale?</div>
+          <div class="faq-a">You can participate by visiting <a href="https://nuurtoken.site/presalelive" style="color:var(--accent);" target="_blank">nuurtoken.site/presalelive</a>, connecting your wallet, entering the SIDRA amount, and clicking Buy.</div>
+          <div class="faq-q">When will $NUUR be listed on exchanges?</div>
+          <div class="faq-a">$NUUR will be listed on SidraSwap after the presale ends and upon SDA listing. Stay tuned for announcements.</div>
+          <div class="faq-q">Is the smart contract audited?</div>
+          <div class="faq-a">The Nuur Coin smart contract is designed for security and transparency. Audit information will be updated on our official channels.</div>
+          <div class="faq-q">What utility does $NUUR have?</div>
+          <div class="faq-a">$NUUR powers decentralized apps on Sidra Chain, including DeFi, payments, and community incentives, promoting trust and fairness in the ecosystem.</div>
+        </div>
+      </div>
+      <div class="row" style="margin-bottom:0;">
+        <div class="card fade-in">
+          <h2 class="section-header"><a href="#about" style="text-decoration:none;color:var(--accent);">About Us</a></h2>
+          <p>
+            We are a team of blockchain developers and entrepreneurs focused on building ethical decentralized finance solutions.<br>
+            Nuur Token is our vision of a halal, transparent, and accessible digital future on the Sidra blockchain.
+          </p>
+        </div>
+        <div class="card fade-in">
+          <h2 class="section-header">Contact</h2>
+          <p><a href="mailto:freelife8081@gmail.com" style="color: #c9e7f7; text-decoration: none;" target="_blank">Email</a></p>
+          <p><a href="https://twitter.com/NuurCoin" style="color: #c9e7f7; text-decoration: none;" target="_blank">Twitter</a></p>
+          <p><a href="https://t.me/NuurCoinCom" style="color: #c9e7f7; text-decoration: none;" target="_blank">Telegram</a></p>
+          <p><a href="https://www.facebook.com/share/1C6FKkHESJ/" style="color: #c9e7f7; text-decoration: none;" target="_blank">Facebook</a></p>
+        </div>
+      </div>
+    </div>
+    <div id="notification"></div>
+    <footer class="fade-in">
+      <div>
+        <a href="https://ledger.sidrachain.com/address/0x8375694cD94480d715727758a7fd863bC00Afe90">
+          Click To Donate Sidra
+        </a>
+      </div>
+      <div style="margin-top: 0.8rem; font-size: 0.96em;">
+        NOTE: NUUR will be listed on SidraSwap after presale ends with a target price of 0.01 to 0.1 usdt. <b>INVEST WISELY.</b>
+      </div>
+      <div style="margin-top:1rem; color:#67fbff; font-size:0.91em;">
+        &copy; 2025 Nuur Coin. All rights reserved.
+      </div>
+    </footer>
+    <div id="popup" style="
+      position: fixed; bottom: -100px; left: 50%; transform: translateX(-50%);
+      background-color: #14273c; color: #00ffe7; padding: 16px 24px; border: 3px solid #00ffe7;
+      border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); transition: bottom 0.5s ease, opacity 0.5s ease;
+      font-family: sans-serif; z-index: 1000; animation: blink-border 1s infinite; max-width: 90%; box-sizing: border-box; opacity: 1;">
+      <button onclick="dismissPopup()" style="
+        position: absolute; top: 6px; right: 10px; background: none; border: none; color: #00ffe7; font-size: 16px; cursor: pointer;
+      ">&times;</button>
+      Watch this quick <a href="https://youtube.com/shorts/fJLqjQVc3gQ?si=ZFZSm0JK6Pb6Q5lZ" target="_blank" style="color: #00ffe7; text-decoration: underline;">video</a> to learn how to buy $NUUR coin
+    </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/web3@1.10.0/dist/web3.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script>
-    function copyContract() {
-      const text = "0x003BEc2e6ef4369f9d968eCD288d31B59fD9c2CD";
-      navigator.clipboard.writeText(text).then(() => {
-        alert("Contract address copied!");
-      });
+    // Sidebar open/close logic
+    const sidebar = document.getElementById('sidebar');
+    const sidebarOpenBtn = document.getElementById('sidebarOpenBtn');
+    const sidebarCloseBtn = document.getElementById('sidebarCloseBtn');
+    function openSidebar() {
+      sidebar.classList.add('open');
+      sidebar.classList.remove('closed');
+      document.body.style.overflowY = 'hidden';
     }
+    function closeSidebar() {
+      sidebar.classList.remove('open');
+      sidebar.classList.add('closed');
+      document.body.style.overflowY = '';
+    }
+    sidebarOpenBtn.addEventListener('click', openSidebar);
+    sidebarCloseBtn.addEventListener('click', closeSidebar);
+    document.querySelectorAll('.sidebar-nav a').forEach(link => {
+      link.addEventListener('click', () => {
+        if (window.innerWidth <= 900) closeSidebar();
+      });
+    });
+    if(window.innerWidth<=900){ sidebar.classList.remove('open'); sidebar.classList.add('closed'); }
 
+    // Sidebar nav highlighting on scroll
+    function highlightSidebar() {
+      const sections = [
+        {id: "about", link: 0},
+        {id: "tokenomics", link: 1},
+        {id: "presale", link: 2}
+      ];
+      let found = false;
+      for (let i = sections.length - 1; i >= 0; i--) {
+        const el = document.getElementById(sections[i].id);
+        if (el && window.scrollY + 100 >= el.offsetTop) {
+          document.querySelectorAll('.sidebar-nav a').forEach(a=>a.classList.remove('active'));
+          document.querySelectorAll('.sidebar-nav a')[sections[i].link].classList.add('active');
+          found = true;
+          break;
+        }
+      }
+      if (!found) {
+        document.querySelectorAll('.sidebar-nav a').forEach(a=>a.classList.remove('active'));
+        document.querySelector('.sidebar-nav a').classList.add('active');
+      }
+    }
+    window.addEventListener('scroll', highlightSidebar);
+
+    setTimeout(function() {
+      document.getElementById('popup').style.bottom = '30px';
+    }, 5000);
+    function dismissPopup() {
+      const popup = document.getElementById('popup');
+      popup.style.opacity = '0';
+      setTimeout(() => { popup.style.display = 'none'; }, 500);
+    }
+    // Notification logic
+    const notification = document.getElementById('notification');
+    function showNotification(message, type) {
+      notification.innerText = message;
+      notification.className = type;
+      notification.style.display = 'block';
+      if (type === 'online') {
+        const refreshButton = document.createElement('button');
+        refreshButton.id = 'refresh-button';
+        refreshButton.innerText = 'Refresh';
+        refreshButton.onclick = () => location.reload();
+        notification.appendChild(refreshButton);
+      }
+    }
+    function hideNotification() {
+      notification.style.display = 'none';
+      notification.innerHTML = '';
+    }
+    if (!navigator.onLine) {
+      showNotification('You are offline. Check your internet connection.', '');
+    }
+    window.addEventListener('offline', () => {
+      showNotification('Connection lost! Please check your internet.', '');
+    });
+    window.addEventListener('online', () => {
+      showNotification('You are back online. Refresh to continue.', 'online');
+    });
+    // IntersectionObserver for fade-in
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
@@ -556,106 +687,137 @@
           observer.unobserve(entry.target);
         }
       });
-    }, {
-      threshold: 0.1
-    });
-
-    document.querySelectorAll('.fade-in').forEach(el => {
-      observer.observe(el);
-    });
-      // Tokenomics Chart
-  const ctx = document.getElementById('tokenomicsChart').getContext('2d');
-  const tokenomicsChart = new Chart(ctx, {
-    type: 'pie', // You can change this to 'doughnut' if you prefer
-    data: {
-      labels: ['Presale', 'Liquidity', 'Team', 'Airdrop'], // Labels for each segment
-      datasets: [{
-        data: [50, 20, 20, 10], // Data values representing percentages
-        backgroundColor: [
-          '#00c6ff', // Color for Presale
-          '#0072ff', // Color for Liquidity
-          '#00ff99', // Color for Team
-          '#ff6f61'  // Color for Airdrop
-        ],
-        borderColor: '#fff', // Border color for each segment
-        borderWidth: 1       // Border width
-      }]
-    },
-    options: {
-      responsive: true,      // Makes the chart responsive
-      animation: {
-        duration: 5000,      // Adjust the duration in milliseconds (3000ms = 3 seconds)
-        easing: 'easeInOutCubic' // Smooth animation easing
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+    // Copy contract
+    function copyContract() {
+      const text = "0x003BEc2e6ef4369f9d968eCD288d31B59fD9c2CD";
+      navigator.clipboard.writeText(text).then(() => {
+        alert("Contract address copied!");
+      });
+    }
+    // Tokenomics Chart
+    const tokenomicsCtx = document.getElementById('tokenomicsChart').getContext('2d');
+    const tokenomicsChart = new Chart(tokenomicsCtx, {
+      type: 'pie',
+      data: {
+        labels: ['Presale', 'Liquidity', 'Team', 'Airdrop'],
+        datasets: [{
+          data: [50, 20, 20, 10],
+          backgroundColor: [
+            '#01ffe7', '#028be0', '#232e3b', '#2c5364'
+          ],
+          borderColor: '#1a293d',
+          borderWidth: 1
+        }]
       },
-      plugins: {
-        legend: {
-          position: 'top',   // Positions the legend at the top
-          labels: {
-            color: '#ddd'    // Legend text color
-          }
+      options: {
+        responsive: true,
+        animation: {
+          duration: 1800,
+          easing: 'easeInOutCubic'
         },
-        tooltip: {
-          callbacks: {
-            label: (context) => `${context.label}: ${context.raw}%` // Tooltip format
+        plugins: {
+          legend: {
+            position: 'top',
+            labels: { color: '#00ffe7' }
+          },
+          tooltip: {
+            callbacks: {
+              label: (context) => `${context.label}: ${context.raw}%`
+            }
           }
         }
       }
+    });
+    // Presale Progress + Chart
+    const presaleAddress = "0x858024C3c8179Ed448A9133190f991cfA9873657";
+    const abi = [
+      { "constant": true, "inputs": [], "name": "nuurToken", "outputs": [{ "name": "", "type": "address" }], "type": "function" }
+    ];
+    const presaleEndDate = new Date("2025-05-23T23:59:59Z");
+    let progressChart;
+    async function showContractProgress() {
+      const web3 = new Web3("https://node.sidrachain.com");
+      const contract = new web3.eth.Contract(abi, presaleAddress);
+      try {
+        const nuur = await contract.methods.nuurToken().call();
+        const nuurContract = new web3.eth.Contract([
+          { "constant": true, "inputs": [], "name": "decimals", "outputs": [{ "name": "", "type": "uint8" }], "type": "function" },
+          { "constant": true, "inputs": [{ "name": "account", "type": "address" }], "name": "balanceOf", "outputs": [{ "name": "", "type": "uint256" }], "type": "function" }
+        ], nuur);
+        const decimals = await nuurContract.methods.decimals().call();
+        const balanceRaw = await nuurContract.methods.balanceOf(presaleAddress).call();
+        const balance = parseFloat(balanceRaw / 10 ** decimals);
+        const totalSupply = 1_000_000;
+        const bought = totalSupply - balance;
+        const percent = ((bought / totalSupply) * 100).toFixed(2);
+        document.getElementById("boughtAmount").innerText = `${bought.toLocaleString()} / 1,000,000 NUUR bought`;
+        document.getElementById("boughtPercent").innerText = `${percent}% / 100% completed`;
+        document.getElementById("remainingTokens").innerText = `${balance.toLocaleString()} NUUR remaining`;
+        document.getElementById("progressFill").style.width = `${percent}%`;
+        // Draw/Update progressChart
+        const progressData = {
+          labels: ['Bought', 'Remaining'],
+          datasets: [{
+            data: [bought, balance],
+            backgroundColor: ['#00ffe7', '#232e3b'],
+            borderColor: '#1a293d',
+            borderWidth: 1
+          }]
+        };
+        const ctx = document.getElementById('progressChart').getContext('2d');
+        if (progressChart) {
+          progressChart.data = progressData;
+          progressChart.update();
+        } else {
+          progressChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: progressData,
+            options: {
+              responsive: true,
+              animation: {
+                duration: 1800,
+                easing: 'easeInOutCubic'
+              },
+              plugins: {
+                legend: {
+                  position: 'top',
+                  labels: { color: '#00ffe7' }
+                },
+                tooltip: {
+                  callbacks: {
+                    label: (context) => `${context.label}: ${context.raw.toLocaleString()}`
+                  }
+                }
+              }
+            }
+          });
+        }
+      } catch (err) {
+        console.error("Error fetching progress:", err);
+        document.getElementById("boughtAmount").innerText = "Unavailable";
+        document.getElementById("boughtPercent").innerText = "";
+        document.getElementById("remainingTokens").innerText = "";
+      }
     }
-  });
+    function updateCountdown() {
+      const now = new Date();
+      const diff = presaleEndDate - now;
+      if (diff <= 0) {
+        document.getElementById("countdown").innerText = "Presale ended";
+        return;
+      }
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hrs = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+      const secs = Math.floor((diff % (1000 * 60)) / 1000);
+      document.getElementById("countdown").innerText =
+        `Presale ends in: ${days}d ${hrs}h ${mins}m ${secs}s`;
+    }
+    showContractProgress();
+    setInterval(showContractProgress, 32000);
+    setInterval(updateCountdown, 1000);
   </script>
-  <div id="popup" style="
-  position: fixed;
-  bottom: -100px;
-  left: 50%;
-  transform: translateX(-50%);
-  background-color: #111;
-  color: #fff;
-  padding: 16px 24px;
-  border: 3px solid #00f2ff;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-  transition: bottom 0.5s ease, opacity 0.5s ease;
-  font-family: sans-serif;
-  z-index: 1000;
-  animation: blink-border 1s infinite;
-  max-width: 90%;
-  box-sizing: border-box;
-  opacity: 1;
-">
-  <button onclick="dismissPopup()" style="
-    position: absolute;
-    top: 6px;
-    right: 10px;
-    background: none;
-    border: none;
-    color: #fff;
-    font-size: 16px;
-    cursor: pointer;
-  ">&times;</button>
-  Watch this quick <a href="https://youtube.com/shorts/fJLqjQVc3gQ?si=ZFZSm0JK6Pb6Q5lZ" target="_blank" style="color: #00f2ff; text-decoration: underline;">video</a> to learn how to buy $NUUR coin
-</div>
-
-<style>
-@keyframes blink-border {
-  0%   { border-color: #00f2ff; }
-  50%  { border-color: #ff0080; }
-  100% { border-color: #00f2ff; }
-}
-</style>
-
-<script>
-  setTimeout(function() {
-    document.getElementById('popup').style.bottom = '30px';
-  }, 5000);
-
-  function dismissPopup() {
-    const popup = document.getElementById('popup');
-    popup.style.opacity = '0';
-    setTimeout(() => {
-      popup.style.display = 'none';
-    }, 500); // matches the CSS transition duration
-  }
-</script>
-
 </body>
 </html>
