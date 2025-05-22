@@ -132,7 +132,7 @@
     // Check session storage on page load
     window.onload = function() {
       if (sessionStorage.getItem("referralCompleted")) {
-        window.location.href = "phase2";
+        window.location.href = "phase2intro";
       }
     };
 
@@ -160,7 +160,7 @@
           } else {
             clearInterval(timer);
             sessionStorage.setItem("referralCompleted", "true");
-            window.location.href = "phase2";
+            window.location.href = "phase2intro";
           }
         }, 1000);
       } else {
@@ -231,7 +231,7 @@
             statusDiv.textContent = "Submission successful. Please wait up to 10 secs.";
             sessionStorage.setItem("referralCompleted", "true");
             setTimeout(() => {
-              window.location.href = "phase2";
+              window.location.href = "phase2intro";
             }, 10000);
           }, 1000);
         }
