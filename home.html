@@ -219,7 +219,7 @@
       <p id="boughtAmount">Loading...</p>
       <p id="boughtPercent">Loading...</p>
       <p id="remainingTokens">Loading...</p>
-      <p id="countdown">Presale ends in: --</p>
+      <p id="countdown">Phase 1 ends in: --</p>
       <div class="progressBar">
         <div class="progressFill" id="progressFill"></div>
       </div>
@@ -325,17 +325,28 @@
       return;
     }
 
-    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-    const hrs = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-    const secs = Math.floor((diff % (1000 * 60)) / 1000);
-
-    document.getElementById("countdown").innerText =
-      `Presale ends in: ${days}d ${hrs}h ${mins}m ${secs}s`;
+    const deadline = new Date().getTime() + 24 * 60 * 60 * 1000; // 1 day in milliseconds
+    function updateCountdown() {
+      const now = new Date().getTime();
+      const diff = deadline - now;
+      
+    if (diff <= 0) {
+    document.getElementById("countdown").innerText = "Presale ended.";
+    clearInterval(timerInterval);
+    return;
   }
 
-  showContractProgress();
-  setInterval(updateCountdown, 1000);
+  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+  const hrs = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+  const secs = Math.floor((diff % (1000 * 60)) / 1000);
+
+  document.getElementById("countdown").innerText =
+    `Presale ends in: ${days}d ${hrs}h ${mins}m ${secs}s`;
+}
+
+updateCountdown();
+const timerInterval = setInterval(updateCountdown, 1000);
   
 </script>
 <div class="chart-container">
