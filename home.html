@@ -2,20 +2,35 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0 user-scalable=no"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
   <title>Nuur Coin – Utility Token on Sidrachain</title>
+  <meta name="description" content="Nuur Coin (NUUR) is a utility token built on the Sidra Chain, empowering decentralized applications with transparency, fairness, and trust. Join the presale and claim airdrops on SidraChain.">
+  <meta name="keywords" content="Nuur Coin, NUUR, SidraChain, crypto, token, presale, airdrop, DeFi, blockchain, SidraSwap, utility token, halal crypto">
+  <meta name="author" content="Nuur Coin Team">
+  <meta property="og:title" content="Nuur Coin – Utility Token on Sidrachain">
+  <meta property="og:description" content="Empowering decentralized apps with transparency and trust. Join the presale and claim airdrops.">
+  <meta property="og:image" content="logo.png">
+  <meta property="og:url" content="https://nuurtoken.site">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Nuur Coin – Utility Token on Sidrachain">
+  <meta name="twitter:description" content="Empowering decentralized apps with transparency and trust. Join the presale and claim airdrops.">
+  <meta name="twitter:image" content="logo.png">
   <link rel="icon" href="logo.png" type="image/x-icon">
+  <link rel="apple-touch-icon" href="logo.png">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
   <style>
     html, body {
       background: radial-gradient(ellipse at top left, #0f2027 0%, #2c5364 80%, #000 100%);
       min-height: 100vh;
       margin: 0;
       padding: 0;
-      font-family: 'Poppins', sans-serif;
+      font-family: 'Poppins', Arial, Helvetica, sans-serif;
       color: #e3eaf7;
       box-sizing: border-box;
+      scroll-behavior: smooth;
     }
     :root {
       --sidebar-width: 210px;
@@ -30,11 +45,41 @@
       --footer-text: #a6b6ce;
       --accent: #00ffe7;
       --shadow: 0 2px 20px rgba(0,255,255,0.07);
+      --radius: 8px;
     }
     body {
       display: flex;
       min-height: 100vh;
       overflow-x: hidden;
+      box-sizing: border-box;
+    }
+    a, button {
+      outline-color: #00ffe7;
+    }
+    a:focus, button:focus {
+      outline: 2px dashed var(--accent);
+      outline-offset: 2px;
+    }
+    .skip-link {
+      position: absolute;
+      left: -999px;
+      top: auto;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      background: #00ffe7;
+      color: #111;
+      z-index: 9999;
+    }
+    .skip-link:focus {
+      left: 10px;
+      top: 10px;
+      width: auto;
+      height: auto;
+      padding: 8px 12px;
+      border-radius: var(--radius);
+      font-weight: bold;
+      font-size: 1.05em;
     }
     .sidebar {
       width: var(--sidebar-width);
@@ -52,8 +97,8 @@
       box-shadow: 2px 0 16px rgba(0,255,255,0.06);
       transition: transform 0.25s cubic-bezier(.4,2,.6,1), opacity 0.2s;
       backdrop-filter: blur(4px);
+      border-radius: 0 var(--radius) var(--radius) 0;
     }
-    /* Hide sidebar by default on mobile */
     @media (max-width: 900px) {
       .sidebar {
         transform: translateX(-120%);
@@ -86,7 +131,7 @@
       color: var(--sidebar-link);
       text-decoration: none;
       padding: 0.7em 1em;
-      border-radius: 8px;
+      border-radius: var(--radius);
       transition: background 0.15s, color 0.15s;
       font-weight: 500;
       margin-bottom: 0.3em;
@@ -111,9 +156,7 @@
       transition: color 0.2s;
     }
     .sidebar-share a:hover { color: var(--sidebar-link-hover);}
-    /* Hamburger and close icons hidden on desktop */
     .sidebar-toggle, .sidebar-close { display: none;}
-    /* Hamburger button */
     @media (max-width: 900px) {
       .sidebar-toggle {
         display: block;
@@ -183,32 +226,33 @@
     .row {
       display: flex;
       flex-wrap: wrap;
-      gap: 2rem;
+      gap: 1.2rem;
       margin-bottom: 2rem;
       justify-content: center;
     }
     .card {
       background: var(--card-bg);
       border: 1px solid var(--card-border);
-      border-radius: 18px;
-      padding: 1.7rem 1.3rem;
-      min-width: 270px;
+      border-radius: var(--radius);
+      padding: 1.2rem 1rem;
+      min-width: 240px;
       flex: 1 1 320px;
       box-shadow: var(--shadow), 0 2px 16px #0e1820bb;
-      margin-bottom: 1.5rem;
+      margin-bottom: 1.2rem;
       transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
       color: #e3eaf7;
+      position: relative;
     }
     .card:hover {
-      transform: translateY(-7px) scale(1.03);
+      transform: translateY(-4px) scale(1.02);
       border-color: var(--accent);
-      box-shadow: 0 6px 34px #00ffe744, 0 2px 18px #14273c;
+      box-shadow: 0 4px 20px #00ffe744, 0 2px 12px #14273c;
     }
     .section-header {
-      font-size: 1.35rem;
+      font-size: 1.25rem;
       color: var(--highlight);
       text-shadow: 0 0 8px #00ffe7aa;
-      margin-bottom: 1.05rem;
+      margin-bottom: 1rem;
       font-weight: 600;
       letter-spacing: 1px;
       text-align: center;
@@ -219,8 +263,8 @@
       background: linear-gradient(135deg, #00ffe7 50%, #028be0 100%);
       color: #0b222c;
       font-weight: bold;
-      padding: 0.7rem 1.5rem;
-      border-radius: 50px;
+      padding: 0.55rem 1.1rem;
+      border-radius: var(--radius);
       text-decoration: none;
       box-shadow: 0 4px 14px #00ffe744;
       transition: 0.3s;
@@ -229,7 +273,7 @@
       font-size: 1.08em;
     }
     .btn:hover, .whitepaper-link:hover {
-      transform: scale(1.08);
+      transform: scale(1.05);
       background: linear-gradient(135deg, #25e1fa 50%, #028be0 100%);
       color: #0b222c;
     }
@@ -237,11 +281,11 @@
       background: rgba(0,255,231,0.06);
       border: 1px solid #00ffe7bb;
       padding: 1rem;
-      border-radius: 10px;
+      border-radius: var(--radius);
       color: #00ffe7;
       font-family: monospace;
       position: relative;
-      margin-top: 2rem;
+      margin-top: 1rem;
       text-align: center;
     }
     .copy-btn {
@@ -251,10 +295,15 @@
       background: #00ffe7;
       color: #182c3e;
       border: none;
-      padding: 0.4rem 0.8rem;
-      border-radius: 5px;
+      padding: 0.3rem 0.7rem;
+      border-radius: var(--radius);
       cursor: pointer;
       font-weight: bold;
+      transition: background 0.15s, color 0.15s;
+    }
+    .copy-btn:hover {
+      background: #028be0;
+      color: #fff;
     }
     .divider {
       border: none;
@@ -266,25 +315,26 @@
     .faq-list {
       display: flex;
       flex-wrap: wrap;
-      gap: 2rem;
+      gap: 1.2rem;
+      justify-content: center;
     }
     .faq-card {
       flex: 1 1 320px;
-      min-width: 230px;
+      min-width: 200px;
       background: rgba(10,20,35,0.55);
-      border-radius: 12px;
-      padding: 1.2em;
+      border-radius: var(--radius);
+      padding: 1em;
       margin-bottom: 1em;
       box-shadow: 0 1px 10px #00ffe71a;
       border: 1px solid #028be022;
     }
-    .faq-q { color: var(--accent); font-weight: 600; margin-top: 0.2em; margin-bottom: 0.5em; font-size: 1.08em;}
+    .faq-q { color: var(--accent); font-weight: 600; margin-top: 0.2em; margin-bottom: 0.5em; font-size: 1.07em;}
     .faq-a { color: #c9e7f7; margin-bottom: 0.5em; font-size: 1em;}
-    .how-to-buy-list { text-align: left; margin: 0 auto 1em auto; max-width: 500px; padding-left: 1.5em;}
+    .how-to-buy-list { text-align: left; margin: 0 auto 1em auto; max-width: 500px; padding-left: 1.1em;}
     #presaleContainer {
       background: #171e29;
-      padding: 15px;
-      border-radius: 8px;
+      padding: 14px;
+      border-radius: var(--radius);
       box-shadow: 0 0 10px #00ffe755;
       max-width: 340px;
       margin: auto;
@@ -304,23 +354,23 @@
     }
     .progressBar {
       width: 100%;
-      height: 13px;
+      height: 11px;
       background: #00ffe722;
-      border-radius: 12px;
+      border-radius: var(--radius);
       overflow: hidden;
       box-shadow: 0 0 5px #00ffe744;
-      margin-top: 15px;
+      margin-top: 11px;
     }
     .progressFill {
       height: 100%;
       background: linear-gradient(90deg, #00ffe7, #028be0, #00ffe7);
       width: 0%;
-      border-radius: 12px;
+      border-radius: var(--radius);
       transition: width 1s ease-in-out;
       box-shadow: 0 0 10px #00ffe7, 0 0 15px #028be0;
     }
     .chart-container {
-      margin: 23px auto 0 auto;
+      margin: 18px auto 0 auto;
       padding: 8px 0 0 0;
       background: none;
       border: 0;
@@ -331,53 +381,54 @@
     }
     #tokenomicsChartContainer, #progressChartContainer {
       position: relative;
-      height: 140px;
+      height: 120px;
       width: 100%;
       margin: 0 auto;
-      max-width: 190px;
+      max-width: 150px;
     }
     #tokenomicsChart, #progressChart {
       display: block;
       margin: 0 auto;
-      max-height: 140px;
-      max-width: 140px;
+      max-height: 120px;
+      max-width: 120px;
     }
     #notification {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        background-color: #00ffe7;
-        color: #171e29;
-        text-align: center;
-        padding: 15px;
-        font-size: 16px;
-        display: none;
-        z-index: 1000;
-        font-weight: bold;
-        letter-spacing: 0.01em;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background-color: #00ffe7;
+      color: #171e29;
+      text-align: center;
+      padding: 13px 10px;
+      font-size: 16px;
+      display: none;
+      z-index: 1000;
+      font-weight: bold;
+      letter-spacing: 0.01em;
     }
     #notification.online { background-color: #25e1fa; color: #111;}
     #refresh-button {
-        margin-left: 10px;
-        background-color: #e3eaf7;
-        color: #028be0;
-        border: none;
-        padding: 5px 10px;
-        cursor: pointer;
-        font-size: 14px;
-        border-radius: 5px;
+      margin-left: 10px;
+      background-color: #e3eaf7;
+      color: #028be0;
+      border: none;
+      padding: 5px 10px;
+      cursor: pointer;
+      font-size: 14px;
+      border-radius: var(--radius);
     }
     footer {
       margin-top: auto;
       background: var(--footer-bg);
       color: var(--footer-text);
       text-align: center;
-      padding: 1.5rem 1rem 1.2rem 1rem;
-      font-size: 1.05rem;
-      letter-spacing: 0.03em;
+      padding: 1.1rem 1rem 1rem 1rem;
+      font-size: 1.04rem;
+      letter-spacing: 0.02em;
       box-shadow: 0 -2px 16px #00ffe744;
       border-top: 2px solid #00ffe744;
+      border-radius: var(--radius) var(--radius) 0 0;
     }
     footer a {
       color: var(--accent);
@@ -392,13 +443,28 @@
     @media (max-width: 1000px) {
       .container { max-width: 98vw; }
     }
+    @media (max-width: 800px) {
+      .container { padding: 1rem 0.2rem; }
+      .row { gap: 0.7rem; }
+      .card { min-width: 180px; }
+      .faq-list { gap: 0.7rem; }
+      #tokenomicsChartContainer, #progressChartContainer { max-width: 90px; height: 70px; }
+      #tokenomicsChart, #progressChart { max-height: 70px; max-width: 70px; }
+    }
     @media (max-width: 600px) {
+      .sidebar {
+        border-radius: 0 !important;
+      }
       .row { flex-direction: column; gap: 0; }
-      .container { padding: 0.7rem 0.2rem; }
-      #tokenomicsChartContainer, #progressChartContainer { max-width: 120px; height: 100px; }
-      #tokenomicsChart, #progressChart { max-height: 100px; max-width: 100px; }
-      .faq-list { gap: 1rem; }
+      .container { padding: 0.6rem 0.1rem; }
+      #tokenomicsChartContainer, #progressChartContainer { max-width: 60px; height: 40px; }
+      #tokenomicsChart, #progressChart { max-height: 40px; max-width: 40px; }
+      .faq-list { gap: 0.3rem; }
       .faq-card { min-width: 100%; }
+      .main-logo { width: 64px; }
+      .btn { font-size: 0.98em; padding: 0.4rem 0.8rem; }
+      .sidebar { min-height: 100svh; }
+      .sidebar .logo { width: 38px; }
     }
     @keyframes blink-border {
       0%   { border-color: #00ffe7; }
@@ -414,45 +480,57 @@
       opacity: 1;
       transform: translateY(0);
     }
+    /* Visually hidden class for screen readers */
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0,0,0,0);
+      border: 0;
+    }
   </style>
 </head>
 <body>
-  <button class="sidebar-toggle" id="sidebarOpenBtn" aria-label="Open menu">
-    <i class="fas fa-bars"></i>
+  <a href="#main" class="skip-link">Skip to content</a>
+  <button class="sidebar-toggle" id="sidebarOpenBtn" aria-label="Open menu" aria-controls="sidebar" aria-expanded="false">
+    <i class="fas fa-bars" aria-hidden="true"></i>
   </button>
-  <nav class="sidebar" id="sidebar">
+  <nav class="sidebar" id="sidebar" aria-label="Main navigation">
     <button class="sidebar-close" id="sidebarCloseBtn" aria-label="Close menu">
-      <i class="fas fa-times"></i>
+      <i class="fas fa-times" aria-hidden="true"></i>
     </button>
-    <img src="logo.png" alt="Nuur Logo" class="logo"/>
-    <div class="sidebar-nav">
+    <img src="logo.png" alt="Nuur Coin Logo" class="logo"/>
+    <div class="sidebar-nav" role="navigation" aria-label="Section navigation">
       <a href="#about" class="active">About</a>
       <a href="#tokenomics">Tokenomics</a>
       <a href="#presale">Presale</a>
     </div>
-    <div class="sidebar-share">
+    <div class="sidebar-share" aria-label="Share links">
       <span style="font-size:0.97em; color:#77eaff;">Share:</span>
-      <a href="https://twitter.com/intent/tweet?text=Check%20out%20Nuur%20Coin%20on%20SidraChain!%20https%3A%2F%2Fnuurtoken.site" target="_blank" title="Share on Twitter"><i class="fab fa-twitter"></i></a>
-      <a href="https://t.me/share/url?url=https://nuurtoken.site&text=Check%20out%20Nuur%20Coin%20on%20SidraChain!" target="_blank" title="Share on Telegram"><i class="fab fa-telegram"></i></a>
-      <a href="https://www.facebook.com/sharer.php?u=https://nuurtoken.site" target="_blank" title="Share on Facebook"><i class="fab fa-facebook"></i></a>
-      <a href="mailto:?subject=Nuur%20Coin%20on%20SidraChain&body=Check%20out%20Nuur%20Coin%20on%20SidraChain!%20https://nuurtoken.site" target="_blank" title="Share by Email"><i class="fas fa-envelope"></i></a>
-      <a href="https://wa.me/?text=Check%20out%20Nuur%20Coin%20on%20SidraChain!%20https://nuurtoken.site" target="_blank" title="Share on WhatsApp"><i class="fab fa-whatsapp"></i></a>
+      <a href="https://twitter.com/intent/tweet?text=Check%20out%20Nuur%20Coin%20on%20SidraChain!%20https%3A%2F%2Fnuurtoken.site" target="_blank" rel="noopener" title="Share on Twitter" aria-label="Share on Twitter"><i class="fab fa-twitter" aria-hidden="true"></i></a>
+      <a href="https://t.me/share/url?url=https://nuurtoken.site&text=Check%20out%20Nuur%20Coin%20on%20SidraChain!" target="_blank" rel="noopener" title="Share on Telegram" aria-label="Share on Telegram"><i class="fab fa-telegram" aria-hidden="true"></i></a>
+      <a href="https://www.facebook.com/sharer.php?u=https://nuurtoken.site" target="_blank" rel="noopener" title="Share on Facebook" aria-label="Share on Facebook"><i class="fab fa-facebook" aria-hidden="true"></i></a>
+      <a href="mailto:?subject=Nuur%20Coin%20on%20SidraChain&body=Check%20out%20Nuur%20Coin%20on%20SidraChain!%20https://nuurtoken.site" target="_blank" rel="noopener" title="Share by Email" aria-label="Share by Email"><i class="fas fa-envelope" aria-hidden="true"></i></a>
+      <a href="https://wa.me/?text=Check%20out%20Nuur%20Coin%20on%20SidraChain!%20https://nuurtoken.site" target="_blank" rel="noopener" title="Share on WhatsApp" aria-label="Share on WhatsApp"><i class="fab fa-whatsapp" aria-hidden="true"></i></a>
     </div>
   </nav>
-  <div class="main-content">
+  <main class="main-content" id="main" tabindex="-1">
     <div class="container">
-      <div id="about" class="hero fade-in">
+      <section id="about" class="hero fade-in" aria-labelledby="about-heading">
         <img src="logo.png" alt="Nuur Token Logo" class="main-logo"/>
-        <h1>Nuur Coin (NUUR)</h1>
-        <p class="description">
+        <h1 id="about-heading">Nuur Coin (NUUR)</h1>
+        <p>
           NUUR is a utility token built on the Sidra Chain.<br>
           It represents clarity, guidance, and ethical innovation in the blockchain space.<br>
           NUUR empowers a new wave of decentralized applications promoting transparency, fairness, and trust across the ecosystem.
         </p>
-      </div>
-      <div class="row" id="tokenomics">
+      </section>
+      <section class="row" id="tokenomics" aria-label="Tokenomics">
         <div class="card fade-in">
-          <div class="section-header">Tokenomics</div>
+          <h2 class="section-header" id="tokenomics-heading">Tokenomics</h2>
           <ul style="padding-left:1em;text-align:left;">
             <li><strong>Total Supply:</strong> 10,000,000</li>
             <li><strong>Presale Allocation:</strong> 5,000,000</li>
@@ -463,163 +541,96 @@
           </ul>
           <p style="margin-bottom:0.3em;">
             <strong>Presale fund wallet:</strong>
-            <a href="https://ledger.sidrachain.com/address/0x8375694cD94480d715727758a7fd863bC00Afe90" style="color: var(--accent);" target="_blank">View wallet</a>
+            <a href="https://ledger.sidrachain.com/address/0x8375694cD94480d715727758a7fd863bC00Afe90" style="color: var(--accent);" target="_blank" rel="noopener">View wallet</a>
           </p>
           <p>
             <strong>Token holders:</strong>
-            <a href="https://ledger.sidrachain.com/token/0x003BEc2e6ef4369f9d968eCD288d31B59fD9c2CD?tab=holders" style="color: var(--accent);" target="_blank">View holders</a>
+            <a href="https://ledger.sidrachain.com/token/0x003BEc2e6ef4369f9d968eCD288d31B59fD9c2CD?tab=holders" style="color: var(--accent);" target="_blank" rel="noopener">View holders</a>
           </p>
           <p><strong>Listing:</strong> NUUR will be listed on SidraSwap once SDA is listed</p>
-          <div class="chart-container fade-in">
+          <div class="chart-container fade-in" aria-label="Tokenomics chart">
             <div id="tokenomicsChartContainer">
-              <canvas id="tokenomicsChart"></canvas>
-            </div>
-          </div>
-        </div>
-        <!-- ... previous code ... -->
-      <div class="row" id="tokenomics">
-        <div class="card fade-in">
-          <div class="section-header">Tokenomics</div>
-          <ul style="padding-left:1em;text-align:left;">
-            <li><strong>Total Supply:</strong> 10,000,000</li>
-            <li><strong>Presale Allocation:</strong> 5,000,000</li>
-            <li><strong>Liquidity Allocation:</strong> 2,000,000</li>
-            <li><strong>Community Airdrop:</strong> 1,000,000</li>
-            <li><strong>Founders Allocation:</strong> 2,000,000</li>
-            <li><strong>Presale Price:</strong> 1 NUUR = 0.001 SDA</li>
-          </ul>
-          <p style="margin-bottom:0.3em;">
-            <strong>Presale fund wallet:</strong>
-            <a href="https://ledger.sidrachain.com/address/0x8375694cD94480d715727758a7fd863bC00Afe90" style="color: var(--accent);" target="_blank">Fundraiser wallet</a>
-          </p>
-          <p>
-            <strong>Token holders:</strong>
-            <a href="https://ledger.sidrachain.com/token/0x003BEc2e6ef4369f9d968eCD288d31B59fD9c2CD?tab=holders" style="color: var(--accent);" target="_blank">View holders</a>
-          </p>
-          <p><strong>Listing:</strong> NUUR will be listed on SidraSwap once SDA is listed</p>
-          <div class="chart-container fade-in">
-            <div id="tokenomicsChartContainer">
-              <canvas id="tokenomicsChart"></canvas>
+              <canvas id="tokenomicsChart" role="img" aria-label="Tokenomics Pie Chart"></canvas>
             </div>
           </div>
         </div>
         <div class="card fade-in" id="howtobuy">
-          <div class="section-header">How to Buy NUUR Coin</div>
+          <h2 class="section-header">How to Buy NUUR Coin</h2>
           <ol class="how-to-buy-list">
-            <li>Visit <a href="https://nuurtoken.site/presalelive" target="_blank" style="color:var(--accent);">presale</a></li>
+            <li>Visit <a href="https://nuurtoken.site/presalelive" target="_blank" rel="noopener" style="color:var(--accent);">presale</a></li>
             <li>Connect your wallet</li>
             <li>Enter the amount of SIDRA you want to spend</li>
             <li>Click <b>Buy</b> and confirm the transaction</li>
           </ol>
           <div style="text-align:center;">
-            <a href="https://nuurtoken.site/presalelive" class="btn" target="_blank">Go to Presale Page</a>
+            <a href="https://nuurtoken.site/presalelive" class="btn" target="_blank" rel="noopener">Go to Presale Page</a>
           </div>
         </div>
-      </div>
-      <!-- Extra links under tokenomics -->
-      <div class="row" style="margin-bottom:2rem; gap:2rem;">
-        <div class="card fade-in" style="text-align:center; flex:1 1 320px; min-width:230px;">
-          <a href="https://nuurtoken.site/airdrop" class="btn" target="_blank" style="display:inline-block;">🚀 Claim Airdrop</a>
+      </section>
+      <section class="row" style="margin-bottom:2rem; gap:1.2rem;" aria-label="Extra Actions">
+        <div class="card fade-in" style="text-align:center;">
+          <a href="https://nuurtoken.site/airdrop" class="btn" target="_blank" rel="noopener">🚀 Claim Airdrop</a>
         </div>
-        <div class="card fade-in" style="text-align:center; flex:1 1 320px; min-width:230px; opacity:0.7;">
-          <a href="https://sidraswap.com" class="btn" target="_blank" style="pointer-events:none; opacity:0.8;">🦄 Trade on SidraSwap<br><span style="font-size:0.88em;">(coming soon)</span></a>
+        <div class="card fade-in" style="text-align:center; opacity:0.7;">
+          <a href="https://sidraswap.com" class="btn" target="_blank" rel="noopener" style="pointer-events:none; opacity:0.8;" aria-disabled="true">🦄 Trade on SidraSwap<br><span style="font-size:0.88em;">(coming soon)</span></a>
         </div>
-      </div>
-      <hr class="divider fade-in">
-      <div class="card fade-in">
-        <div class="section-header">Frequently Asked Questions</div>
-        <div class="faq-list">
-          <div class="faq-card">
+      </section>
+      <hr class="divider fade-in" aria-hidden="true">
+      <section class="card fade-in" aria-labelledby="faq-heading">
+        <h2 class="section-header" id="faq-heading">Frequently Asked Questions</h2>
+        <div class="faq-list" role="list">
+          <div class="faq-card" role="listitem">
             <div class="faq-q">What is Nuur Coin?</div>
             <div class="faq-a">Nuur Coin (NUUR) is a utility token built on the Sidra Chain, designed to enable transparent, ethical, and innovative decentralized applications.</div>
           </div>
-          <div class="faq-card">
+          <div class="faq-card" role="listitem">
             <div class="faq-q">How do I participate in the presale?</div>
-            <div class="faq-a">You can participate by visiting <a href="https://nuurtoken.site/presalelive" style="color:var(--accent);" target="_blank">nuurtoken.site/presalelive</a>, connecting your wallet, entering the SIDRA amount, and clicking Buy.</div>
+            <div class="faq-a">You can participate by visiting <a href="https://nuurtoken.site/presalelive" target="_blank" rel="noopener" style="color:var(--accent);">nuurtoken.site/presalelive</a>, connecting your wallet, entering the SIDRA amount, and clicking Buy.</div>
           </div>
-          <div class="faq-card">
+          <div class="faq-card" role="listitem">
             <div class="faq-q">How do I join the airdrop? Who is eligible?</div>
             <div class="faq-a">
-              To join the airdrop, visit <a href="https://nuurtoken.site/airdrop" style="color:var(--accent);" target="_blank">airdrop</a> and follow the instructions.<br>
+              To join the airdrop, visit <a href="https://nuurtoken.site/airdrop" target="_blank" rel="noopener" style="color:var(--accent);">airdrop</a> and follow the instructions.<br>
               <b>Eligibility:</b> Participants are required to purchase from the presale website. Abusing the system will lead to wallet blacklisted
             </div>
           </div>
-          <div class="faq-card">
+          <div class="faq-card" role="listitem">
             <div class="faq-q">When will $NUUR be listed on exchanges?</div>
             <div class="faq-a">$NUUR will be listed on SidraSwap after the presale ends and upon SDA listing. Stay tuned for announcements.</div>
           </div>
-          <div class="faq-card">
+          <div class="faq-card" role="listitem">
             <div class="faq-q">Is the smart contract audited?</div>
             <div class="faq-a">The Nuur Coin smart contract is designed for security and transparency. Audit information will be updated on our official channels.</div>
           </div>
-          <div class="faq-card">
+          <div class="faq-card" role="listitem">
             <div class="faq-q">What utility does $NUUR have?</div>
             <div class="faq-a">$NUUR powers decentralized apps on Sidra Chain, including DeFi, payments, and community incentives, promoting trust and fairness in the ecosystem.</div>
           </div>
         </div>
-      </div>
-        <div class="card fade-in" id="howtobuy">
-          <div class="section-header">How to Buy NUUR Coin</div>
-          <ol class="how-to-buy-list">
-            <li>Visit <a href="https://nuurtoken.site/presalelive" target="_blank" style="color:var(--accent);">presale</a></li>
-            <li>Connect your wallet</li>
-            <li>Enter the amount of SIDRA you want to spend</li>
-            <li>Click <b>Buy</b> and confirm the transaction</li>
-          </ol>
-          <div style="text-align:center;">
-            <a href="https://nuurtoken.site/presalelive" class="btn" target="_blank">Go to Presale Page</a>
-          </div>
-        </div>
-      </div>
-      <div class="row" id="presale">
-        <div class="card fade-in" style="margin:2rem auto;">
-          <div id="presaleContainer">
+      </section>
+      <section class="row" id="presale" aria-label="Presale">
+        <div class="card fade-in" style="margin:1.5rem auto;">
+          <div id="presaleContainer" aria-live="polite">
             <h2>Presale Phase 1</h2>
             <p id="boughtAmount">Loading...</p>
             <p id="boughtPercent">Loading...</p>
             <p id="remainingTokens">Loading...</p>
             <p id="countdown">Phase 1 ends in: --</p>
-            <div class="progressBar"><div class="progressFill" id="progressFill"></div></div>
+            <div class="progressBar" aria-label="Presale Progress"><div class="progressFill" id="progressFill"></div></div>
             <div class="chart-container" style="margin-top:1.2rem;">
-              <div id="progressChartContainer"><canvas id="progressChart"></canvas></div>
+              <div id="progressChartContainer"><canvas id="progressChart" role="img" aria-label="Presale Progress Chart"></canvas></div>
             </div>
           </div>
         </div>
         <div class="card fade-in">
           <div class="contract-box">
             Contract Address:<br>
-            0x003BEc2e6ef4369f9d968eCD288d31B59fD9c2CD
-            <button class="copy-btn" onclick="copyContract()">Copy</button>
+            <span id="contract-address" tabindex="0">0x003BEc2e6ef4369f9d968eCD288d31B59fD9c2CD</span>
+            <button class="copy-btn" onclick="copyContract()" aria-label="Copy contract address">Copy</button>
           </div>
         </div>
-      </div>
-      <hr class="divider fade-in">
-      <div class="card fade-in">
-        <div class="section-header">Frequently Asked Questions</div>
-        <div class="faq-list">
-          <div class="faq-card">
-            <div class="faq-q">What is Nuur Coin?</div>
-            <div class="faq-a">Nuur Coin (NUUR) is a utility token built on the Sidra Chain, designed to enable transparent, ethical, and innovative decentralized applications.</div>
-          </div>
-          <div class="faq-card">
-            <div class="faq-q">How do I participate in the presale?</div>
-            <div class="faq-a">You can participate by visiting <a href="https://nuurtoken.site/presalelive" style="color:var(--accent);" target="_blank">presale</a>, connecting your wallet, entering the SIDRA amount, and clicking Buy.</div>
-          </div>
-          <div class="faq-card">
-            <div class="faq-q">When will $NUUR be listed on exchanges?</div>
-            <div class="faq-a">$NUUR will be listed on SidraSwap after the presale ends and upon SDA listing. Stay tuned for announcements.</div>
-          </div>
-          <div class="faq-card">
-            <div class="faq-q">Is the smart contract audited?</div>
-            <div class="faq-a">The Nuur Coin smart contract is designed for security and transparency. Audit information will be updated on our official channels.</div>
-          </div>
-          <div class="faq-card">
-            <div class="faq-q">What utility does $NUUR have?</div>
-            <div class="faq-a">$NUUR powers decentralized apps on Sidra Chain, including DeFi, payments, and community incentives, promoting trust and fairness in the ecosystem.</div>
-          </div>
-        </div>
-      </div>
-      <div class="row" style="margin-bottom:0;">
+      </section>
+      <section class="row" style="margin-bottom:0;" aria-label="About and Contact">
         <div class="card fade-in">
           <h2 class="section-header"><a href="#about" style="text-decoration:none;color:var(--accent);">About Us</a></h2>
           <p>
@@ -629,17 +640,17 @@
         </div>
         <div class="card fade-in">
           <h2 class="section-header">Contact</h2>
-          <p><a href="mailto:freelife8081@gmail.com" style="color: #c9e7f7; text-decoration: none;" target="_blank">Email</a></p>
-          <p><a href="https://twitter.com/NuurCoin" style="color: #c9e7f7; text-decoration: none;" target="_blank">Twitter</a></p>
-          <p><a href="https://t.me/NuurCoinCom" style="color: #c9e7f7; text-decoration: none;" target="_blank">Telegram</a></p>
-          <p><a href="https://www.facebook.com/share/1C6FKkHESJ/" style="color: #c9e7f7; text-decoration: none;" target="_blank">Facebook</a></p>
+          <p><a href="mailto:freelife8081@gmail.com" style="color: #c9e7f7; text-decoration: none;" target="_blank" rel="noopener">Email</a></p>
+          <p><a href="https://twitter.com/NuurCoin" style="color: #c9e7f7; text-decoration: none;" target="_blank" rel="noopener">Twitter</a></p>
+          <p><a href="https://t.me/NuurCoinCom" style="color: #c9e7f7; text-decoration: none;" target="_blank" rel="noopener">Telegram</a></p>
+          <p><a href="https://www.facebook.com/share/1C6FKkHESJ/" style="color: #c9e7f7; text-decoration: none;" target="_blank" rel="noopener">Facebook</a></p>
         </div>
-      </div>
+      </section>
     </div>
-    <div id="notification"></div>
+    <div id="notification" role="status" aria-live="polite"></div>
     <footer class="fade-in">
       <div>
-        <a href="https://ledger.sidrachain.com/address/0x8375694cD94480d715727758a7fd863bC00Afe90">
+        <a href="https://ledger.sidrachain.com/address/0x8375694cD94480d715727758a7fd863bC00Afe90" rel="noopener">
           Click To Donate Sidra
         </a>
       </div>
@@ -653,28 +664,34 @@
     <div id="popup" style="
       position: fixed; bottom: -100px; left: 50%; transform: translateX(-50%);
       background-color: #14273c; color: #00ffe7; padding: 16px 24px; border: 3px solid #00ffe7;
-      border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); transition: bottom 0.5s ease, opacity 0.5s ease;
-      font-family: sans-serif; z-index: 1000; animation: blink-border 1s infinite; max-width: 90%; box-sizing: border-box; opacity: 1;">
+      border-radius: var(--radius); box-shadow: 0 4px 12px rgba(0,0,0,0.3); transition: bottom 0.5s ease, opacity 0.5s ease;
+      font-family: sans-serif; z-index: 1000; animation: blink-border 1s infinite; max-width: 95vw; box-sizing: border-box; opacity: 1;"
+      aria-live="polite" role="alert"
+    >
       <button onclick="dismissPopup()" style="
         position: absolute; top: 6px; right: 10px; background: none; border: none; color: #00ffe7; font-size: 16px; cursor: pointer;
-      ">&times;</button>
-      Watch this quick <a href="https://youtube.com/shorts/fJLqjQVc3gQ?si=ZFZSm0JK6Pb6Q5lZ" target="_blank" style="color: #00ffe7; text-decoration: underline;">video</a> to learn how to buy $NUUR coin
+      " aria-label="Dismiss popup">&times;</button>
+      Watch this quick <a href="https://youtube.com/shorts/fJLqjQVc3gQ?si=ZFZSm0JK6Pb6Q5lZ" target="_blank" rel="noopener" style="color: #00ffe7; text-decoration: underline;">video</a> to learn how to buy $NUUR coin
     </div>
-  </div>
+  </main>
   <script src="https://cdn.jsdelivr.net/npm/web3@1.10.0/dist/web3.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script>
-    // Sidebar open/close logic
+    // Sidebar open/close logic with ARIA
     const sidebar = document.getElementById('sidebar');
     const sidebarOpenBtn = document.getElementById('sidebarOpenBtn');
     const sidebarCloseBtn = document.getElementById('sidebarCloseBtn');
     function openSidebar() {
       sidebar.classList.add('open');
+      sidebarOpenBtn.setAttribute('aria-expanded', 'true');
       document.body.style.overflowY = 'hidden';
+      sidebarCloseBtn.focus();
     }
     function closeSidebar() {
       sidebar.classList.remove('open');
+      sidebarOpenBtn.setAttribute('aria-expanded', 'false');
       document.body.style.overflowY = '';
+      sidebarOpenBtn.focus();
     }
     sidebarOpenBtn.addEventListener('click', openSidebar);
     sidebarCloseBtn.addEventListener('click', closeSidebar);
@@ -708,6 +725,18 @@
     }
     window.addEventListener('scroll', highlightSidebar);
 
+    // Keyboard accessibility for sidebar (ESC to close)
+    document.addEventListener('keydown', (e) => {
+      if (e.key === "Escape" && sidebar.classList.contains('open')) {
+        closeSidebar();
+      }
+    });
+
+    // Skip-link focus on tab
+    const skipLink = document.querySelector('.skip-link');
+    skipLink.addEventListener('focus', () => skipLink.style.zIndex = 3000);
+    skipLink.addEventListener('blur', () => skipLink.style.zIndex = 9999);
+
     setTimeout(function() {
       document.getElementById('popup').style.bottom = '30px';
     }, 5000);
@@ -727,6 +756,7 @@
         refreshButton.id = 'refresh-button';
         refreshButton.innerText = 'Refresh';
         refreshButton.onclick = () => location.reload();
+        refreshButton.setAttribute('aria-label', 'Refresh the page');
         notification.appendChild(refreshButton);
       }
     }
@@ -753,13 +783,16 @@
       });
     }, { threshold: 0.1 });
     document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
     // Copy contract
     function copyContract() {
-      const text = "0x003BEc2e6ef4369f9d968eCD288d31B59fD9c2CD";
+      const text = document.getElementById('contract-address').innerText;
       navigator.clipboard.writeText(text).then(() => {
-        alert("Contract address copied!");
+        showNotification("Contract address copied!", "");
+        setTimeout(hideNotification, 1500);
       });
     }
+
     // Tokenomics Chart
     const tokenomicsCtx = document.getElementById('tokenomicsChart').getContext('2d');
     const tokenomicsChart = new Chart(tokenomicsCtx, {
@@ -882,6 +915,13 @@
     showContractProgress();
     setInterval(showContractProgress, 32000);
     setInterval(updateCountdown, 1000);
+
+    // Interactive: Allow contract address to be selected with keyboard
+    document.getElementById('contract-address').addEventListener('keydown', function(e) {
+      if (e.key === "Enter" || e.key === " ") {
+        copyContract();
+      }
+    });
   </script>
 </body>
 </html>
