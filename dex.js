@@ -116,6 +116,7 @@ async function connectWallet() {
             document.getElementById('swapButton').textContent = 'Swap';
             document.getElementById('swapButton').disabled = false;
             document.getElementById('addLiquidityButton').disabled = false;
+            document.getElementById('addLiquidityButton').textContent = 'Add Liquidity';
 
             // Setup event listeners
             window.ethereum.on('accountsChanged', handleAccountsChanged);
@@ -203,6 +204,7 @@ function disconnectWallet() {
     document.getElementById('swapButton').disabled = true;
     document.getElementById('swapButton').textContent = 'Connect Wallet to Swap';
     document.getElementById('addLiquidityButton').disabled = true;
+    document.getElementById('addLiquidityButton').textContent = 'Add Liquidity';
 }
 
 // Handle token switch
