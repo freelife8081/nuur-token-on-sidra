@@ -4,10 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NUUR-SDA DEX</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto+Mono:wght@500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="dex.css">
 </head>
 <body>
     <div class="container">
+        <!-- Top Bar -->
+        <div class="top-bar">
+            <div class="time-display">
+                Time (UTC): <span class="time-value">2025-05-25 08:29:46</span>
+            </div>
+            <div class="user-info">
+                User: <span class="user-value">freelife8081</span>
+            </div>
+        </div>
+
+        <!-- Header -->
         <header>
             <div class="dex-header">
                 <div class="logo">
@@ -25,6 +37,7 @@
         </header>
 
         <main>
+            <!-- Swap View -->
             <div id="swapView" class="view active">
                 <div class="swap-box">
                     <div class="input-container">
@@ -72,11 +85,42 @@
                 </div>
             </div>
 
+            <!-- Liquidity View -->
             <div id="liquidityView" class="view">
                 <div class="liquidity-box">
                     <h2>Your Liquidity Positions</h2>
-                    <div id="liquidityPositions"></div>
-                    <button id="addLiquidityButton" class="action-button" disabled>Connect Wallet to Add Liquidity</button>
+                    <div id="liquidityPositions">
+                        <!-- Positions will be dynamically inserted here -->
+                    </div>
+                    <div class="liquidity-actions">
+                        <div class="input-container">
+                            <div class="token-input">
+                                <input type="number" id="sdaAmount" placeholder="0.0">
+                                <div class="token-selector">
+                                    <img src="sidra.png" alt="SDA" class="token-logo">
+                                    <span>SDA</span>
+                                </div>
+                            </div>
+                            <div class="token-balance">
+                                Balance: <span id="sdaLiquidityBalance">0.00</span>
+                            </div>
+                        </div>
+                        
+                        <div class="input-container">
+                            <div class="token-input">
+                                <input type="number" id="nuurAmount" placeholder="0.0">
+                                <div class="token-selector">
+                                    <img src="logo.png" alt="NUUR" class="token-logo">
+                                    <span>NUUR</span>
+                                </div>
+                            </div>
+                            <div class="token-balance">
+                                Balance: <span id="nuurLiquidityBalance">0.00</span>
+                            </div>
+                        </div>
+                        
+                        <button id="addLiquidityButton" class="action-button" disabled>Connect Wallet to Add Liquidity</button>
+                    </div>
                 </div>
             </div>
         </main>
