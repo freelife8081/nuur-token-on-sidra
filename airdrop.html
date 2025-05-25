@@ -11,11 +11,14 @@
     <!-- Bulma CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
     
-    <!-- Font Awesome via CDN instead of kit code -->
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <!-- Your custom CSS -->
     <link rel="stylesheet" href="snap.css">
+
+    <!-- Ethers.js - Updated to a more reliable CDN -->
+    <script src="https://cdn.ethers.org/lib/ethers-5.2.umd.min.js" type="application/javascript"></script>
 </head>
 <body>
     <section class="section">
@@ -39,14 +42,15 @@
                             <!-- Current time -->
                             <div class="mb-4">
                                 <strong>Current Time (UTC):</strong>
-                                <span id="currentTime">2025-05-25 05:34:59</span>
+                                <span id="currentTime">2025-05-25 05:38:55</span>
                             </div>
 
                             <!-- Wallet section -->
                             <div class="box">
                                 <div class="is-flex is-justify-content-space-between is-align-items-center mb-4">
-                                    <strong>Wallet Address:</strong>
-                                    <div>
+                                    <strong>Connected as:</strong>
+                                    <div class="is-flex is-align-items-center">
+                                        <span class="mr-2">@freelife8081</span>
                                         <span id="walletAddress">Not Connected</span>
                                         <button id="connectWallet" class="button is-primary is-small ml-2">Connect Wallet</button>
                                     </div>
@@ -98,7 +102,6 @@
     </div>
 
     <!-- Scripts -->
-    <script src="https://cdn.ethers.io/lib/ethers-5.7.2.umd.min.js" type="application/javascript"></script>
     <script src="snap.js"></script>
 </body>
 </html>
