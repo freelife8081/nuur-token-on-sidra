@@ -1,11 +1,12 @@
-// Configuration: replace these with your actual addresses and ABIs
+// Configuration: Replace with your actual addresses and ABI arrays
 const ROUTER_ADDRESS = '0xC9B0dDBd6a93f8C623428BA39511e210Ff9B327F';
 const NUUR_ADDRESS = '0x99110619B49fc1B1d7508c0244d17ef32859CA59';
 const ROUTER_ABI = [{"inputs":[{"internalType":"address","name":"_nuurToken","type":"address"}],"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"newFee","type":"uint256"}],"name":"FeeUpdated","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"provider","type":"address"},{"indexed":false,"internalType":"uint256","name":"sdaAmount","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"nuurAmount","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"liquidity","type":"uint256"}],"name":"LiquidityAdded","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"provider","type":"address"},{"indexed":false,"internalType":"uint256","name":"sdaAmount","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"nuurAmount","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"liquidity","type":"uint256"}],"name":"LiquidityRemoved","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"previousOwner","type":"address"},{"indexed":true,"internalType":"address","name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"bool","name":"isSdaToNuur","type":"bool"},{"indexed":false,"internalType":"uint256","name":"amountIn","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"amountOut","type":"uint256"}],"name":"Swap","type":"event"},{"inputs":[],"name":"FEE_DENOMINATOR","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"MINIMUM_LIQUIDITY","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"minNuurAmount","type":"uint256"}],"name":"addLiquidity","outputs":[{"internalType":"uint256","name":"liquidity","type":"uint256"}],"stateMutability":"payable","type":"function"},{"inputs":[{"internalType":"uint256","name":"amountIn","type":"uint256"},{"internalType":"uint256","name":"reserveIn","type":"uint256"},{"internalType":"uint256","name":"reserveOut","type":"uint256"}],"name":"getAmountOut","outputs":[{"internalType":"uint256","name":"amountOut","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getReserves","outputs":[{"internalType":"uint256","name":"","type":"uint256"},{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"liquidityBalances","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"nuurReserve","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"nuurToken","outputs":[{"internalType":"contract IERC20","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"liquidity","type":"uint256"},{"internalType":"uint256","name":"minSdaAmount","type":"uint256"},{"internalType":"uint256","name":"minNuurAmount","type":"uint256"}],"name":"removeLiquidity","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"renounceOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"sdaReserve","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"newFee","type":"uint256"}],"name":"setSwapFee","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"swapFee","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"nuurAmount","type":"uint256"},{"internalType":"uint256","name":"minSdaOut","type":"uint256"}],"name":"swapNuurForSda","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"minNuurOut","type":"uint256"}],"name":"swapSdaForNuur","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[],"name":"totalLiquidity","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"stateMutability":"payable","type":"receive"}];
 const TOKEN_ABI = [{"inputs":[{"internalType":"address","name":"recipient","type":"address"}],"stateMutability":"nonpayable","type":"constructor"},{"inputs":[{"internalType":"address","name":"spender","type":"address"},{"internalType":"uint256","name":"allowance","type":"uint256"},{"internalType":"uint256","name":"needed","type":"uint256"}],"name":"ERC20InsufficientAllowance","type":"error"},{"inputs":[{"internalType":"address","name":"sender","type":"address"},{"internalType":"uint256","name":"balance","type":"uint256"},{"internalType":"uint256","name":"needed","type":"uint256"}],"name":"ERC20InsufficientBalance","type":"error"},{"inputs":[{"internalType":"address","name":"approver","type":"address"}],"name":"ERC20InvalidApprover","type":"error"},{"inputs":[{"internalType":"address","name":"receiver","type":"address"}],"name":"ERC20InvalidReceiver","type":"error"},{"inputs":[{"internalType":"address","name":"sender","type":"address"}],"name":"ERC20InvalidSender","type":"error"},{"inputs":[{"internalType":"address","name":"spender","type":"address"}],"name":"ERC20InvalidSpender","type":"error"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"owner","type":"address"},{"indexed":true,"internalType":"address","name":"spender","type":"address"},{"indexed":false,"internalType":"uint256","name":"value","type":"uint256"}],"name":"Approval","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"from","type":"address"},{"indexed":true,"internalType":"address","name":"to","type":"address"},{"indexed":false,"internalType":"uint256","name":"value","type":"uint256"}],"name":"Transfer","type":"event"},{"inputs":[{"internalType":"address","name":"owner","type":"address"},{"internalType":"address","name":"spender","type":"address"}],"name":"allowance","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"spender","type":"address"},{"internalType":"uint256","name":"value","type":"uint256"}],"name":"approve","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"account","type":"address"}],"name":"balanceOf","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"decimals","outputs":[{"internalType":"uint8","name":"","type":"uint8"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"name","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"symbol","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"totalSupply","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256","name":"value","type":"uint256"}],"name":"transfer","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"from","type":"address"},{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256","name":"value","type":"uint256"}],"name":"transferFrom","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"}];
-const CHAIN_ID = 97453; // Your chain ID
+const CHAIN_ID = 97453; // Replace with your chain ID
 
 let provider, signer, routerContract, nuurContract, userAddress;
+let isAutoCalculating = false; // Flag to prevent recursive updates
 
 window.addEventListener('DOMContentLoaded', () => {
   setupEventListeners();
@@ -19,12 +20,51 @@ window.addEventListener('DOMContentLoaded', () => {
 function setupEventListeners() {
   document.getElementById('connectWallet').onclick = connectWallet;
   document.getElementById('addLiquidityButton').onclick = addLiquidity;
-  document.getElementById('sdaAmount').oninput = updateNuurAmount;
-  document.getElementById('nuurAmount').oninput = updateSdaAmount;
+  
+  // Debounced input handlers
+  const sdaInput = document.getElementById('sdaAmount');
+  const nuurInput = document.getElementById('nuurAmount');
+  
+  sdaInput.addEventListener('input', debounce(async (e) => {
+    if (isAutoCalculating) return;
+    const value = e.target.value;
+    if (value && parseFloat(value) > 0) {
+      await updateNuurAmount(true);
+    }
+  }, 500));
+
+  nuurInput.addEventListener('input', debounce(async (e) => {
+    if (isAutoCalculating) return;
+    const value = e.target.value;
+    if (value && parseFloat(value) > 0) {
+      await updateSdaAmount(true);
+    }
+  }, 500));
+}
+
+// Debounce function to prevent too frequent updates
+function debounce(func, wait) {
+  let timeout;
+  return function executedFunction(...args) {
+    const later = () => {
+      clearTimeout(timeout);
+      func(...args);
+    };
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+  };
 }
 
 async function connectWallet() {
   try {
+    if (typeof window.ethereum === 'undefined') {
+      showError('No Ethereum wallet detected. Please install MetaMask or another wallet extension.');
+      return;
+    }
+    provider = new ethers.providers.Web3Provider(window.ethereum);
+    routerContract = new ethers.Contract(ROUTER_ADDRESS, ROUTER_ABI, provider);
+    nuurContract = new ethers.Contract(NUUR_ADDRESS, TOKEN_ABI, provider);
+
     await provider.send('eth_requestAccounts', []);
     signer = provider.getSigner();
     userAddress = await signer.getAddress();
@@ -60,17 +100,20 @@ async function updateLiquidityPositions() {
     const liquidityBalance = await routerContract.liquidityBalances(userAddress);
     const totalLiquidity = await routerContract.totalLiquidity();
     const positionsDiv = document.getElementById('liquidityPositions');
+    
     if (liquidityBalance.gt(0)) {
       const [sdaReserve, nuurReserve] = await routerContract.getReserves();
       const share = liquidityBalance.mul(100).div(totalLiquidity);
       const sdaAmount = sdaReserve.mul(liquidityBalance).div(totalLiquidity);
       const nuurAmount = nuurReserve.mul(liquidityBalance).div(totalLiquidity);
+      
       positionsDiv.innerHTML = `
         <div class="liquidity-position">
           <h3>Your Liquidity Position</h3>
           <p>Share of Pool: ${ethers.utils.formatUnits(share, 2)}%</p>
           <p>SDA: ${ethers.utils.formatEther(sdaAmount)}</p>
           <p>NUUR: ${ethers.utils.formatEther(nuurAmount)}</p>
+          <button onclick="removeLiquidity()" class="action-button" style="margin-top:12px;">Remove Liquidity</button>
         </div>
       `;
     } else {
@@ -81,18 +124,66 @@ async function updateLiquidityPositions() {
   }
 }
 
+async function updateNuurAmount(userInput = false) {
+  if (!routerContract || isAutoCalculating) return;
+  const sdaAmountStr = document.getElementById('sdaAmount').value;
+  if (!sdaAmountStr || parseFloat(sdaAmountStr) <= 0) {
+    if (!userInput) document.getElementById('nuurAmount').value = '';
+    return;
+  }
+  
+  try {
+    const [sdaReserve, nuurReserve] = await routerContract.getReserves();
+    if (sdaReserve.isZero() || nuurReserve.isZero()) return;
+    
+    isAutoCalculating = true;
+    const sdaValue = ethers.utils.parseEther(sdaAmountStr);
+    const nuurNeeded = sdaValue.mul(nuurReserve).div(sdaReserve);
+    document.getElementById('nuurAmount').value = ethers.utils.formatEther(nuurNeeded);
+  } catch (e) {
+    if (!userInput) document.getElementById('nuurAmount').value = '';
+  } finally {
+    isAutoCalculating = false;
+  }
+}
+
+async function updateSdaAmount(userInput = false) {
+  if (!routerContract || isAutoCalculating) return;
+  const nuurAmountStr = document.getElementById('nuurAmount').value;
+  if (!nuurAmountStr || parseFloat(nuurAmountStr) <= 0) {
+    if (!userInput) document.getElementById('sdaAmount').value = '';
+    return;
+  }
+  
+  try {
+    const [sdaReserve, nuurReserve] = await routerContract.getReserves();
+    if (sdaReserve.isZero() || nuurReserve.isZero()) return;
+    
+    isAutoCalculating = true;
+    const nuurValue = ethers.utils.parseEther(nuurAmountStr);
+    const sdaNeeded = nuurValue.mul(sdaReserve).div(nuurReserve);
+    document.getElementById('sdaAmount').value = ethers.utils.formatEther(sdaNeeded);
+  } catch (e) {
+    if (!userInput) document.getElementById('sdaAmount').value = '';
+  } finally {
+    isAutoCalculating = false;
+  }
+}
+
 async function addLiquidity() {
   if (!userAddress || !routerContract) return;
   try {
     const sdaAmountStr = document.getElementById('sdaAmount').value;
     const nuurAmountStr = document.getElementById('nuurAmount').value;
-    if (!sdaAmountStr || !nuurAmountStr || parseFloat(sdaAmountStr) <= 0 || parseFloat(nuurAmountStr) <= 0) {
+    if (!sdaAmountStr || !nuurAmountStr || 
+        parseFloat(sdaAmountStr) <= 0 || parseFloat(nuurAmountStr) <= 0) {
       throw new Error('Please enter valid amounts');
     }
+    
     const sdaValue = ethers.utils.parseEther(sdaAmountStr);
     const nuurValue = ethers.utils.parseEther(nuurAmountStr);
 
-    // Approve the router to spend the NUUR first
+    // First approve NUUR spending
     const approveTx = await nuurContract.approve(ROUTER_ADDRESS, nuurValue);
     await approveTx.wait();
 
@@ -102,56 +193,36 @@ async function addLiquidity() {
       { value: sdaValue }
     );
     await tx.wait();
+    
+    // Reset inputs and update UI
+    document.getElementById('sdaAmount').value = '';
+    document.getElementById('nuurAmount').value = '';
     await updateBalances();
     await updateLiquidityPositions();
-    document.getElementById('sdaAmount').value = '';
-    document.getElementById('nuurAmount').value = '';
+    
+    showSuccess('Liquidity added successfully!');
   } catch (e) {
-    showError(e.message || 'Add liquidity failed');
+    showError(e.message || 'Failed to add liquidity');
   }
 }
 
-// When user enters SDA, auto-fill required NUUR (proportional to reserves)
-async function updateNuurAmount() {
-  if (!routerContract) return;
-  const sdaAmountStr = document.getElementById('sdaAmount').value;
-  if (!sdaAmountStr || parseFloat(sdaAmountStr) <= 0) {
-    document.getElementById('nuurAmount').value = '';
-    return;
-  }
+async function removeLiquidity() {
+  if (!userAddress || !routerContract) return;
   try {
-    const sdaValue = ethers.utils.parseEther(sdaAmountStr);
-    const [sdaReserve, nuurReserve] = await routerContract.getReserves();
-    if (sdaReserve.isZero()) {
-      document.getElementById('nuurAmount').value = '';
-      return;
+    const liquidityBalance = await routerContract.liquidityBalances(userAddress);
+    if (liquidityBalance.isZero()) {
+      throw new Error('No liquidity to remove');
     }
-    const nuurNeeded = sdaValue.mul(nuurReserve).div(sdaReserve);
-    document.getElementById('nuurAmount').value = ethers.utils.formatEther(nuurNeeded);
-  } catch (e) {
-    document.getElementById('nuurAmount').value = '';
-  }
-}
 
-// When user enters NUUR, auto-fill required SDA (proportional to reserves)
-async function updateSdaAmount() {
-  if (!routerContract) return;
-  const nuurAmountStr = document.getElementById('nuurAmount').value;
-  if (!nuurAmountStr || parseFloat(nuurAmountStr) <= 0) {
-    document.getElementById('sdaAmount').value = '';
-    return;
-  }
-  try {
-    const nuurValue = ethers.utils.parseEther(nuurAmountStr);
-    const [sdaReserve, nuurReserve] = await routerContract.getReserves();
-    if (nuurReserve.isZero()) {
-      document.getElementById('sdaAmount').value = '';
-      return;
-    }
-    const sdaNeeded = nuurValue.mul(sdaReserve).div(nuurReserve);
-    document.getElementById('sdaAmount').value = ethers.utils.formatEther(sdaNeeded);
+    const tx = await routerContract.removeLiquidity(liquidityBalance);
+    await tx.wait();
+    
+    await updateBalances();
+    await updateLiquidityPositions();
+    
+    showSuccess('Liquidity removed successfully!');
   } catch (e) {
-    document.getElementById('sdaAmount').value = '';
+    showError(e.message || 'Failed to remove liquidity');
   }
 }
 
@@ -160,4 +231,15 @@ function showError(msg) {
   div.textContent = msg;
   div.classList.add('visible');
   setTimeout(() => div.classList.remove('visible'), 5000);
+}
+
+function showSuccess(msg) {
+  const div = document.getElementById('errorMessage');
+  div.textContent = msg;
+  div.style.backgroundColor = '#10B981';
+  div.classList.add('visible');
+  setTimeout(() => {
+    div.classList.remove('visible');
+    div.style.backgroundColor = '';
+  }, 5000);
 }
