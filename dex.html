@@ -1,1 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NUUR-SDA DEX</title>
+    <link rel="stylesheet" href="dex.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="top-bar">
+                <div class="user-info">
+                    Swap</span>
+                </div>
+            </div>
 
+            <div class="dex-header">
+                <div class="logo">
+                    <h1>NUUR-SDA DEX</h1>
+                </div>
+                <nav>
+                    <button class="nav-btn active" data-view="swap">Swap</button>
+                    <button class="nav-btn" data-view="liquidity">Liquidity</button>
+                </nav>
+                <div class="wallet-info">
+                    <button id="connectWallet">Connect Wallet</button>
+                    <span id="walletAddress"></span>
+                </div>
+            </div>
+        </header>
+
+        <main>
+            <div id="swapView" class="view active">
+                <div class="swap-box">
+                    <div class="input-container">
+                        <div class="token-input">
+                            <input type="number" id="fromAmount" placeholder="0.0">
+                            <div class="token-selector">
+                                <img id="fromTokenLogo" src="sidra.png" alt="SDA" class="token-logo">
+                                <span id="fromTokenSymbol">SDA</span>
+                            </div>
+                        </div>
+                        <div class="token-balance">
+                            Balance: <span id="fromTokenBalance">0.00</span>
+                        </div>
+                    </div>
+                    
+                    <button id="switchTokens">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <path d="M12 4L12 20M12 4L8 8M12 4L16 8M12 20L8 16M12 20L16 16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                    
+                    <div class="input-container">
+                        <div class="token-input">
+                            <input type="number" id="toAmount" placeholder="0.0" readonly>
+                            <div class="token-selector">
+                                <img id="toTokenLogo" src="logo.png" alt="NUUR" class="token-logo">
+                                <span id="toTokenSymbol">NUUR</span>
+                            </div>
+                        </div>
+                        <div class="token-balance">
+                            Balance: <span id="toTokenBalance">0.00</span>
+                        </div>
+                    </div>
+
+                    <div class="swap-info">
+                        <div class="rate">
+                            1 SDA = <span id="exchangeRate">0.00</span> NUUR
+                        </div>
+                        <div class="slippage">
+                            Slippage: <span id="slippage">0.5</span>%
+                        </div>
+                    </div>
+
+                    <button id="swapButton" class="action-button" disabled>Connect Wallet to Swap</button>
+                </div>
+            </div>
+
+            <div id="liquidityView" class="view">
+                <div class="liquidity-box">
+                    <h2>Your Liquidity Positions</h2>
+                    <div id="liquidityPositions"></div>
+                    <button id="addLiquidityButton" class="action-button" disabled>Connect Wallet to Add Liquidity</button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/ethers@5.4.7/dist/ethers.umd.min.js"></script>
+    <script src="dex.js"></script>
+</body>
+</html>
