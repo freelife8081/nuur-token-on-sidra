@@ -31,8 +31,8 @@ async function initializeWeb3() {
         const network = await provider.getNetwork();
         
         // Check if we're on the correct network (replace with your chain ID)
-        if (network.chainId !== YOUR_CHAIN_ID) {
-            throw new Error('Please connect to the correct network');
+        if (network.chainId !== 97453) {
+            throw new Error('Please connect to Sidra Chain');
         }
 
         routerContract = new ethers.Contract(ROUTER_ADDRESS, ROUTER_ABI, provider);
