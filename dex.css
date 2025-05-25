@@ -280,3 +280,48 @@ nav {
         text-align: center;
     }
 }
+/* Liquidity Page Styles */
+.liquidity-box h2 {
+    font-size: 20px;
+    margin-bottom: 20px;
+    color: var(--primary-color);
+}
+
+#liquidityPositions {
+    margin: 20px 0;
+}
+
+.liquidity-position {
+    background: #f8f9fa;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 16px;
+}
+
+.liquidity-position h3 {
+    font-size: 16px;
+    margin-bottom: 12px;
+    color: var(--primary-color);
+}
+
+.liquidity-position p {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.liquidity-position p:last-child {
+    margin-bottom: 0;
+}
+
+/* No positions message */
+#liquidityPositions p {
+    text-align: center;
+    color: #666;
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 12px;
+}
