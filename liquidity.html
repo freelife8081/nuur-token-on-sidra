@@ -1,163 +1,151 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Liquidity | NuurDex</title>
-    <link rel="stylesheet" href="liquidity.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Liquidity - NUUR-SDA DEX</title>
+  <link rel="stylesheet" href="dex.css" />
+  <style>
+    .slippage-slider-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 14px;
+      margin-bottom: 10px;
+    }
+    .header-logo-name {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+    .header-logo-img {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      box-shadow: 0 2px 8px #0001;
+      object-fit: cover;
+      background: #fff;
+    }
+    .header-logo-text {
+      font-size: 23px;
+      font-weight: 700;
+      color: #222;
+      letter-spacing: 1px;
+    }
+    .liquidity-info-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .liquidity-label {
+      color: #555;
+      font-size: 14px;
+      font-weight: 500;
+    }
+    .liquidity-value {
+      font-family: monospace;
+      font-size: 15px;
+      color: #2980b9;
+    }
+    .liquidity-box {
+      padding: 28px 20px 18px 20px;
+      background: #fff;
+      box-shadow: 0 4px 32px #0001;
+      border-radius: 18px;
+      width: 100%;
+      max-width: 400px;
+      margin: 40px auto 0 auto;
+    }
+    .liquidity-position {
+      background: #f6f8fa;
+      padding: 15px 10px;
+      border-radius: 10px;
+      margin-top: 15px;
+      margin-bottom: 8px;
+    }
+    .token-logo {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-right: 6px;
+      background: #fff;
+    }
+    .token-selector {
+      display: flex;
+      align-items: center;
+    }
+    .input-container {
+      margin-bottom: 18px;
+    }
+    .error-message {
+      color: #dc2626;
+      font-weight: 500;
+      margin-top: 14px;
+      text-align: center;
+      display: none;
+    }
+    .error-message.visible {
+      display: block;
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>NuurDex Liquidity</h1>
-            <p>Provide or remove liquidity to earn rewards on NuurDex</p>
-        </header>
-
-        <div class="wallet-section">
-            <button id="connect-wallet" onclick="connectWallet()">Connect Wallet</button>
-            <p id="wallet-address"></p>
-        </div>
-
-        <div class="liquidity-section">
-            <h2>Add Liquidity</h2>
-            <div class="liquidity-form">
-                <label for="token1">Token 1:</label>
-                <select id="token1" class="token-select">
-                    <option value="SDA">SDA</option>
-                    <option value="WSDA">WSDA</option>
-                    <option value="NUR">NUR</option>
-                </select>
-                <input type="number" id="amount1" placeholder="Amount" class="input-amount">
-                <br>
-                <label for="token2">Token 2:</label>
-                <select id="token2" class="token-select">
-                    <option value="SDA">SDA</option>
-                    <option value="WSDA">WSDA</option>
-                    <option value="NUR">NUR</option>
-                </select>
-                <input type="number" id="amount2" placeholder="Amount" class="input-amount">
-                <br>
-                <button onclick="addLiquidity()">Add Liquidity</button>
-            </div>
-
-            <h2>Remove Liquidity & Claim Fees</h2>
-            <div class="liquidity-form">
-                <label for="remove-token1">Token 1:</label>
-                <select id="remove-token1" class="token-select">
-                    <option value="SDA">SDA</option>
-                    <option value="WSDA">WSDA</option>
-                    <option value="NUR">NUR</option>
-                </select>
-                <input type="number" id="remove-amount1" placeholder="Amount" class="input-amount">
-                <br>
-                <label for="remove-token2">Token 2:</label>
-                <select id="remove-token2" class="token-select">
-                    <option value="SDA">SDA</option>
-                    <option value="WSDA">WSDA</option>
-                    <option value="NUR">NUR</option>
-                </select>
-                <input type="number" id="remove-amount2" placeholder="Amount" class="input-amount">
-                <br>
-                <button onclick="removeLiquidity()">Remove Liquidity</button>
-                <button onclick="claimFees()">Claim Fees</button>
-            </div>
-        </div>
+  <div class="container">
+    <!-- Header and Nav -->
+    <div class="dex-header">
+      <div class="header-logo-name">
+        <img src="logo.png" alt="DEX Logo" class="header-logo-img">
+        <span class="header-logo-text">NUUR-SDA DEX</span>
+      </div>
+      <nav>
+        <a href="swap.html" class="nav-btn" id="swapNav">Swap</a>
+        <a href="liquidity.html" class="nav-btn active" id="liquidityNav">Liquidity</a>
+      </nav>
+      <div class="wallet-info">
+        <button id="connectWallet">Connect Wallet</button>
+        <span id="walletAddress"></span>
+      </div>
     </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/web3@1.5.2/dist/web3.min.js"></script>
-    <script>
-        let web3;
-        let userAccount;
-        let uniswapRouter;
-        const routerABI = [{"inputs":[{"internalType":"address","name":"_WSDA","type":"address"},{"internalType":"address","name":"_NUR","type":"address"}],"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"fromToken","type":"address"},{"indexed":false,"internalType":"address","name":"toToken","type":"address"},{"indexed":false,"internalType":"uint256","name":"amountIn","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"amountOut","type":"uint256"}],"name":"SwapExecuted","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"token","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"TokensWithdrawn","type":"event"},{"inputs":[],"name":"NUR","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"WSDA","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"fromToken","type":"address"},{"internalType":"address","name":"toToken","type":"address"},{"internalType":"uint256","name":"amountIn","type":"uint256"},{"internalType":"uint256","name":"amountOutMin","type":"uint256"}],"name":"swapTokens","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[{"internalType":"address","name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"token","type":"address"},{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"withdrawTokens","outputs":[],"stateMutability":"nonpayable","type":"function"},{"stateMutability":"payable","type":"receive"}];  // Replace with your ABI
-        const routerAddress = '0x6F9796FBdc084EBeD6f6Ab16c3B8d2CA292D248f';  // Replace with your router contract address
-
-        // Initialize web3 and contract
-        async function initWeb3() {
-            if (window.ethereum) {
-                web3 = new Web3(window.ethereum);
-                try {
-                    await window.ethereum.enable();
-                    const accounts = await web3.eth.getAccounts();
-                    userAccount = accounts[0];
-                    document.getElementById('wallet-address').textContent = `Connected: ${userAccount}`;
-                    initUniswapRouter();
-                } catch (error) {
-                    console.error('User denied account access');
-                }
-            } else {
-                alert('Please install MetaMask!');
-            }
-        }
-
-        function initUniswapRouter() {
-            uniswapRouter = new web3.eth.Contract(routerABI, routerAddress);
-        }
-
-        async function connectWallet() {
-            await initWeb3();
-        }
-
-        // Function to add liquidity
-        async function addLiquidity() {
-            const token1 = document.getElementById('token1').value;
-            const token2 = document.getElementById('token2').value;
-            const amount1 = document.getElementById('amount1').value;
-            const amount2 = document.getElementById('amount2').value;
-
-            // Approve token transfers if needed before adding liquidity
-            // You will need to call the approve function on the token contracts to allow the router to transfer tokens on behalf of the user
-
-            const token1Address = token1 === "SDA" ? null : '0xE4095a910209D7BE03B55D02F40d4554B1666182';  // Replace with token contract address
-            const token2Address = token2 === "NUR" ? null : '0x3f2C99C23eE666096d2cFda162A4bFBcC4AE8de8';  // Replace with token contract address
-
-            if (token1 === "SDA") {
-                await uniswapRouter.methods.addLiquidityETH(
-                    token2Address,
-                    web3.utils.toWei(amount2, 'ether'),
-                    0, 0, userAccount, Math.floor(Date.now() / 1000) + 60 * 20
-                ).send({ from: userAccount, value: web3.utils.toWei(amount1, 'ether') });
-            } else if (token2 === "SDA") {
-                await uniswapRouter.methods.addLiquidityETH(
-                    token1Address,
-                    web3.utils.toWei(amount1, 'ether'),
-                    0, 0, userAccount, Math.floor(Date.now() / 1000) + 60 * 20
-                ).send({ from: userAccount, value: web3.utils.toWei(amount2, 'ether') });
-            } else {
-                await uniswapRouter.methods.addLiquidity(
-                    token1Address,
-                    token2Address,
-                    web3.utils.toWei(amount1, 'ether'),
-                    web3.utils.toWei(amount2, 'ether'),
-                    0, 0, userAccount, Math.floor(Date.now() / 1000) + 60 * 20
-                ).send({ from: userAccount });
-            }
-        }
-
-        // Function to remove liquidity and claim fees
-        async function removeLiquidity() {
-            const token1 = document.getElementById('remove-token1').value;
-            const token2 = document.getElementById('remove-token2').value;
-            const amount1 = document.getElementById('remove-amount1').value;
-            const amount2 = document.getElementById('remove-amount2').value;
-
-            const token1Address = token1 === "SDA" ? null : 'TOKEN1_ADDRESS';  // Replace with token contract address
-            const token2Address = token2 === "SDA" ? null : 'TOKEN2_ADDRESS';  // Replace with token contract address
-
-            // Assuming liquidity is being removed from a pool (handle LP tokens accordingly)
-            await uniswapRouter.methods.removeLiquidity(
-                token1Address,
-                token2Address,
-                web3.utils.toWei(amount1, 'ether'),
-                web3.utils.toWei(amount2, 'ether'),
-                0, 0, userAccount, Math.floor(Date.now() / 1000) + 60 * 20
-            ).send({ from: userAccount });
-        }
-
-        // Claim fees: Fees are automatically included when liquidity is removed
-        function claimFees() {
-            alert("Fees are automatically included when you withdraw liquidity.");
-        }
-    </script>
+    <main>
+      <!-- Liquidity View -->
+      <div class="liquidity-box">
+        <div class="input-container">
+          <div class="liquidity-info-row">
+            <div class="liquidity-label">SDA balance:</div>
+            <div class="liquidity-value"><span id="sdaLiquidityBalance">0.00</span> SDA</div>
+          </div>
+          <div class="token-input">
+            <input type="number" id="sdaAmount" placeholder="SDA amount" min="0" step="any">
+            <div class="token-selector">
+              <img src="sidra.png" alt="SDA" class="token-logo">
+              <span>SDA</span>
+            </div>
+          </div>
+        </div>
+        <div class="input-container">
+          <div class="liquidity-info-row">
+            <div class="liquidity-label">NUUR balance:</div>
+            <div class="liquidity-value"><span id="nuurLiquidityBalance">0.00</span> NUUR</div>
+          </div>
+          <div class="token-input">
+            <input type="number" id="nuurAmount" placeholder="NUUR amount" min="0" step="any">
+            <div class="token-selector">
+              <img src="logo.png" alt="NUUR" class="token-logo">
+              <span>NUUR</span>
+            </div>
+          </div>
+        </div>
+        <button id="addLiquidityButton" class="action-button" disabled>Add Liquidity</button>
+        <div id="liquidityPositions"></div>
+      </div>
+    </main>
+    <div class="error-message" id="errorMessage"></div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/ethers@5.4.7/dist/ethers.umd.min.js"></script>
+  <script src="liquidity.js"></script>
 </body>
 </html>
