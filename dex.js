@@ -31,7 +31,7 @@ async function initializeWeb3() {
         const network = await provider.getNetwork();
         
         // Check if we're on the correct network (replace with your chain ID)
-        if (network.chainId !== 97453) {
+        if (network.chainId !== 0x17cad) {
             throw new Error('Please connect to Sidra Chain');
         }
 
