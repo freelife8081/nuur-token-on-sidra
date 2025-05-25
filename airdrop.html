@@ -1,106 +1,117 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NUUR Token Airdrop</title>
-    
-    <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
-    <!-- Bulma CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
-    
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- Your custom CSS -->
-    <link rel="stylesheet" href="snap.css">
-
-    <!-- Ethers.js - Updated to a more reliable CDN -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>NUUR Token Airdrop</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.1/css/bulma.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="snap.css">
 </head>
 <body>
-    <section class="section">
-        <div class="container">
-            <div class="columns is-centered">
-                <div class="column is-8">
-                    <!-- Header with network info -->
-                    <div class="is-flex is-align-items-center mb-5">
-                        <img src="logo.png" alt="Logo" class="logo">
-                        <div>
-                            <span id="networkName" class="tag is-medium">Connecting...</span>
-                            <span class="status-dot" id="statusDot"></span>
-                        </div>
-                    </div>
-
-                    <!-- Main card -->
-                    <div class="card airdrop-card">
-                        <div class="card-content">
-                            <h1 class="title">NUUR Token Airdrop</h1>
-                            
-                            <!-- Current time -->
-                            <div class="mb-4">
-                                <strong>Current Time (UTC):</strong>
-                                <span id="currentTime">2025-05-25 05:38:55</span>
-                            </div>
-
-                            <!-- Wallet section -->
-                            <div class="box">
-                                <div class="is-flex is-justify-content-space-between is-align-items-center mb-4">
-                                    <strong>Connected as:</strong>
-                                    <div class="is-flex is-align-items-center">
-                                        <span id="walletAddress">Not Connected</span>
-                                        <button id="connectWallet" class="button is-primary is-small ml-2">Connect Wallet</button>
-                                    </div>
-                                </div>
-
-                                <!-- Balance info -->
-                                <div class="tiers">
-                                    <div class="tier">
-                                        <span>NUUR Balance:</span>
-                                        <span id="nuurBalance">0</span>
-                                    </div>
-                                    <div class="tier">
-                                        <span>Snapshot Balance:</span>
-                                        <span id="snapshotBalance">0</span>
-                                    </div>
-                                    <div class="tier">
-                                        <span>Presale Status:</span>
-                                        <span id="presaleStatus">Not Verified</span>
-                                    </div>
-                                    <div class="tier">
-                                        <span>Claimable Amount:</span>
-                                        <span id="claimableAmount">0</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Action buttons -->
-                            <div class="buttons is-centered mt-5">
-                                <button id="takeSnapshot" class="button is-info" disabled>Take Snapshot</button>
-                                <button id="claimButton" class="button is-success" disabled>Claim Airdrop</button>
-                            </div>
-
-                            <!-- Status messages -->
-                            <div id="status" class="status has-text-centered"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+  <div class="section">
+    <div class="container">
+      <nav class="level mb-4">
+        <div class="level-left">
+          <div class="level-item">
+            <img src="logo.png" alt="NUUR Logo" class="logo" />
+          </div>
         </div>
-    </section>
+        <div class="level-right">
+          <div class="level-item">
+            <span class="status-dot" id="statusDot"></span>
+            <span id="networkName" class="mr-3">Not Connected</span>
+            <button id="connectWallet" class="button is-link">Connect Wallet</button>
+          </div>
+        </div>
+      </nav>
 
-    <!-- Refresh button -->
-    <div class="refresh-section">
-        <button onclick="location.reload()" class="refresh-button">
-            <span class="icon">
-                <i class="fas fa-sync-alt"></i>
-            </span>
-        </button>
+      <div class="columns is-centered">
+        <div class="column is-8">
+          <div class="card airdrop-card">
+            <header class="card-header">
+              <p class="card-header-title title is-4">NUUR Token Airdrop</p>
+            </header>
+            <div class="card-content">
+              <div class="columns">
+                <div class="column is-half">
+                  <h3 class="subtitle is-6 mb-2">Wallet Information</h3>
+                  <div class="box">
+                    <div class="columns is-multiline is-mobile">
+                      <div class="column is-half">
+                        <strong>Address:</strong>
+                        <br><span id="walletAddress">Not Connected</span>
+                      </div>
+                      <div class="column is-half">
+                        <strong>NUUR Balance:</strong>
+                        <br><span id="nuurBalance">0</span> NUUR
+                      </div>
+                      <div class="column is-half">
+                        <strong>Snapshot Balance:</strong>
+                        <br><span id="snapshotBalance">0</span> NUUR
+                      </div>
+                      <div class="column is-half">
+                        <strong>Presale Status:</strong>
+                        <br><span id="presaleStatus">Not Verified</span>
+                      </div>
+                    </div>
+                    <button id="takeSnapshot" class="button is-warning is-small mt-2" disabled>Take Snapshot</button>
+                  </div>
+                </div>
+                <div class="column is-half">
+                  <h3 class="subtitle is-6 mb-2">Airdrop Tiers</h3>
+                  <div class="box">
+                    <div class="tiers">
+                      <div class="tier"><span>200k NUUR</span><span>10k NUUR</span></div>
+                      <div class="tier"><span>250k - 500k NUUR</span><span>30k NUUR</span></div>
+                      <div class="tier"><span>550k - 900k NUUR</span><span>100k NUUR</span></div>
+                      <div class="tier"><span>901k - 1M NUUR</span><span>250k NUUR</span></div>
+                      <div class="tier"><span>1.5M+ NUUR</span><span>500k NUUR</span></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="box mt-3">
+                <h3 class="subtitle is-6 mb-2">Your Reward</h3>
+                <p>Claimable Amount: <span id="claimableAmount">0</span> NUUR</p>
+                <button id="claimButton" class="button is-success mt-2" disabled>Connect Wallet</button>
+              </div>
+
+              <div id="status" class="status"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <footer class="mt-4 has-text-centered">
+        <p>Current Time (UTC): <span id="currentTime">--:--:--</span></p>
+      </footer>
     </div>
+    <div class="refresh-section">
+      <button id="refreshBtn" class="refresh-button" title="Refresh">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+             stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 2v6h-6"/>
+          <path d="M3 12a9 9 0 0 1 9-9c2.39 0 4.57.94 6.21 2.47L21 8"/>
+          <path d="M21 12a9 9 0 1 1-9-9"/>
+        </svg>
+      </button>
+    </div>
+  </div>
 
-    <!-- Scripts -->
-    <script src="snap.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+  <script>
+    // Refresh button: scroll to top smoothly, then reload
+    document.addEventListener('DOMContentLoaded', function() {
+      const refreshBtn = document.getElementById('refreshBtn');
+      if (refreshBtn) {
+        refreshBtn.addEventListener('click', function() {
+          window.scrollTo({top: 0, left: 0, behavior: 'smooth'});
+          setTimeout(() => { location.reload(); }, 200);
+        });
+      }
+    });
+  </script>
+  <script src="snap.js"></script>
 </body>
 </html>
