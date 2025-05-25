@@ -6,26 +6,22 @@
     --border-radius: 16px;
     --font-mono: 'Roboto Mono', monospace;
 }
-
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
-
 body {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
     background-color: var(--background-color);
     color: var(--primary-color);
     min-height: 100vh;
 }
-
 .container {
     max-width: 480px;
     margin: 0 auto;
     padding: 20px;
 }
-
 /* Top Bar Styles */
 .top-bar {
     background: white;
@@ -38,17 +34,14 @@ body {
     align-items: center;
     font-size: 14px;
 }
-
 .time-display, .user-info {
     color: var(--primary-color);
 }
-
 .time-value, .user-value {
     font-family: var(--font-mono);
     font-weight: 500;
     margin-left: 4px;
 }
-
 /* Header Styles */
 .dex-header {
     background: white;
@@ -57,21 +50,18 @@ body {
     margin-bottom: 20px;
     box-shadow: var(--box-shadow);
 }
-
 .logo h1 {
     font-size: 24px;
     font-weight: 700;
     margin-bottom: 20px;
     text-align: center;
 }
-
 nav {
     display: flex;
     gap: 10px;
     justify-content: center;
     margin-bottom: 20px;
 }
-
 .nav-btn {
     padding: 10px 20px;
     border: none;
@@ -81,20 +71,18 @@ nav {
     cursor: pointer;
     font-weight: 500;
     transition: all 0.3s ease;
+    text-decoration: none;
 }
-
 .nav-btn.active {
     background: var(--secondary-color);
     color: white;
 }
-
 /* Wallet Connection Styles */
 .wallet-info {
     display: flex;
     justify-content: center;
     gap: 12px;
 }
-
 #connectWallet {
     background: linear-gradient(135deg, #3498db, #2980b9);
     color: white;
@@ -106,12 +94,10 @@ nav {
     cursor: pointer;
     transition: all 0.3s ease;
 }
-
 #connectWallet:hover {
     transform: translateY(-1px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
-
 #walletAddress {
     display: none;
     background: #f8f9fa;
@@ -121,11 +107,9 @@ nav {
     font-weight: 500;
     font-family: var(--font-mono);
 }
-
 #walletAddress.connected {
     display: block;
 }
-
 /* Swap Box Styles */
 .swap-box, .liquidity-box {
     background: white;
@@ -133,11 +117,9 @@ nav {
     border-radius: var(--border-radius);
     box-shadow: var(--box-shadow);
 }
-
 .input-container {
     margin-bottom: 20px;
 }
-
 .token-input {
     display: flex;
     align-items: center;
@@ -146,7 +128,6 @@ nav {
     padding: 16px;
     margin-bottom: 8px;
 }
-
 .token-input input {
     flex: 1;
     border: none;
@@ -156,7 +137,6 @@ nav {
     outline: none;
     padding: 0 12px;
 }
-
 .token-selector {
     display: flex;
     align-items: center;
@@ -166,20 +146,17 @@ nav {
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
-
 .token-logo {
     width: 24px;
     height: 24px;
     border-radius: 50%;
 }
-
 .token-balance {
     font-size: 14px;
     color: #666;
     text-align: right;
     padding: 4px 12px;
 }
-
 #switchTokens {
     display: flex;
     align-items: center;
@@ -194,12 +171,10 @@ nav {
     transition: all 0.3s ease;
     color: var(--secondary-color);
 }
-
 #switchTokens:hover {
     transform: rotate(180deg);
     background: #f8f9fa;
 }
-
 .swap-info {
     display: flex;
     justify-content: space-between;
@@ -210,7 +185,6 @@ nav {
     border-radius: 8px;
     font-size: 14px;
 }
-
 .action-button {
     width: 100%;
     padding: 16px;
@@ -223,26 +197,21 @@ nav {
     cursor: pointer;
     transition: all 0.3s ease;
 }
-
 .action-button:hover:not(:disabled) {
     transform: translateY(-1px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
-
 .action-button:disabled {
     background: #ccc;
     cursor: not-allowed;
 }
-
 /* View Styles */
 .view {
     display: none;
 }
-
 .view.active {
     display: block;
 }
-
 /* Error Message Styles */
 .error-message {
     background: #fee2e2;
@@ -253,32 +222,8 @@ nav {
     font-size: 14px;
     display: none;
 }
-
 .error-message.visible {
     display: block;
-}
-
-/* Responsive Styles */
-@media (max-width: 480px) {
-    .container {
-        padding: 10px;
-    }
-
-    .top-bar {
-        flex-direction: column;
-        gap: 8px;
-        text-align: center;
-    }
-
-    .token-input input {
-        font-size: 18px;
-    }
-
-    .swap-info {
-        flex-direction: column;
-        gap: 8px;
-        text-align: center;
-    }
 }
 /* Liquidity Page Styles */
 .liquidity-box h2 {
@@ -286,24 +231,20 @@ nav {
     margin-bottom: 20px;
     color: var(--primary-color);
 }
-
 #liquidityPositions {
     margin: 20px 0;
 }
-
 .liquidity-position {
     background: #f8f9fa;
     border-radius: 12px;
     padding: 20px;
     margin-bottom: 16px;
 }
-
 .liquidity-position h3 {
     font-size: 16px;
     margin-bottom: 12px;
     color: var(--primary-color);
 }
-
 .liquidity-position p {
     font-size: 14px;
     color: #666;
@@ -312,16 +253,41 @@ nav {
     justify-content: space-between;
     align-items: center;
 }
-
 .liquidity-position p:last-child {
     margin-bottom: 0;
 }
-
-/* No positions message */
 #liquidityPositions p {
     text-align: center;
     color: #666;
     padding: 20px;
     background: #f8f9fa;
     border-radius: 12px;
+}
+/* Liquidity Actions Styles */
+.liquidity-actions {
+    margin-top: 24px;
+    border-top: 1px solid #f0f0f0;
+    padding-top: 24px;
+}
+.liquidity-actions .input-container:first-child {
+    margin-bottom: 16px;
+}
+/* Responsive Styles */
+@media (max-width: 480px) {
+    .container {
+        padding: 10px;
+    }
+    .top-bar {
+        flex-direction: column;
+        gap: 8px;
+        text-align: center;
+    }
+    .token-input input {
+        font-size: 18px;
+    }
+    .swap-info {
+        flex-direction: column;
+        gap: 8px;
+        text-align: center;
+    }
 }
