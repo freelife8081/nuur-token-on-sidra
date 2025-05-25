@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NUUR Token Airdrop</title>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Bulma CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+    
+    <!-- Font Awesome via CDN instead of kit code -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Your custom CSS -->
+    <link rel="stylesheet" href="snap.css">
+</head>
+<body>
+    <section class="section">
+        <div class="container">
+            <div class="columns is-centered">
+                <div class="column is-8">
+                    <!-- Header with network info -->
+                    <div class="is-flex is-align-items-center mb-5">
+                        <img src="logo.png" alt="Logo" class="logo">
+                        <div>
+                            <span id="networkName" class="tag is-medium">Connecting...</span>
+                            <span class="status-dot" id="statusDot"></span>
+                        </div>
+                    </div>
+
+                    <!-- Main card -->
+                    <div class="card airdrop-card">
+                        <div class="card-content">
+                            <h1 class="title">NUUR Token Airdrop</h1>
+                            
+                            <!-- Current time -->
+                            <div class="mb-4">
+                                <strong>Current Time (UTC):</strong>
+                                <span id="currentTime">2025-05-25 05:34:59</span>
+                            </div>
+
+                            <!-- Wallet section -->
+                            <div class="box">
+                                <div class="is-flex is-justify-content-space-between is-align-items-center mb-4">
+                                    <strong>Wallet Address:</strong>
+                                    <div>
+                                        <span id="walletAddress">Not Connected</span>
+                                        <button id="connectWallet" class="button is-primary is-small ml-2">Connect Wallet</button>
+                                    </div>
+                                </div>
+
+                                <!-- Balance info -->
+                                <div class="tiers">
+                                    <div class="tier">
+                                        <span>NUUR Balance:</span>
+                                        <span id="nuurBalance">0</span>
+                                    </div>
+                                    <div class="tier">
+                                        <span>Snapshot Balance:</span>
+                                        <span id="snapshotBalance">0</span>
+                                    </div>
+                                    <div class="tier">
+                                        <span>Presale Status:</span>
+                                        <span id="presaleStatus">Not Verified</span>
+                                    </div>
+                                    <div class="tier">
+                                        <span>Claimable Amount:</span>
+                                        <span id="claimableAmount">0</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Action buttons -->
+                            <div class="buttons is-centered mt-5">
+                                <button id="takeSnapshot" class="button is-info" disabled>Take Snapshot</button>
+                                <button id="claimButton" class="button is-success" disabled>Claim Airdrop</button>
+                            </div>
+
+                            <!-- Status messages -->
+                            <div id="status" class="status has-text-centered"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Refresh button -->
+    <div class="refresh-section">
+        <button onclick="location.reload()" class="refresh-button">
+            <span class="icon">
+                <i class="fas fa-sync-alt"></i>
+            </span>
+        </button>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.ethers.io/lib/ethers-5.7.2.umd.min.js" type="application/javascript"></script>
+    <script src="snap.js"></script>
+</body>
+</html>
