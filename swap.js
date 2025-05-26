@@ -7,14 +7,25 @@ const CHAIN_ID = 97453;
 
 let provider, signer, routerContract, nuurContract, userAddress;
 let isSdaToNuur = true;
-let slippage = 0.5; // 0.5% default slippage
 let isApproved = false;
 
+// Update current time
+function updateCurrentTime() {
+    const now = new Date();
+    const formatted = now.getUTCFullYear() + '-' + 
+                     String(now.getUTCMonth() + 1).padStart(2, '0') + '-' +
+                     String(now.getUTCDate()).padStart(2, '0') + ' ' +
+                     String(now.getUTCHours()).padStart(2, '0') + ':' +
+                     String(now.getUTCMinutes()).padStart(2, '0') + ':' +
+                     String(now.getUTCSeconds()).padStart(2, '0');
+    document.getElementById('currentTime').textContent = formatted;
+}
 
 window.addEventListener('DOMContentLoaded', () => {
     setupEventListeners();
-    setupSlippageUI();
     updateSwapUI();
+    updateCurrentTime();
+    setInterval(updateCurrentTime, 1000);
     
     // Initialize contracts if wallet is already connected
     if (typeof window.ethereum !== 'undefined') {
@@ -59,7 +70,6 @@ async function connectWallet() {
         routerContract = routerContract.connect(signer);
         nuurContract = nuurContract.connect(signer);
 
-        document.getElementById('connectWallet').style.display = 'none';
         document.getElementById('walletAddress').textContent = `${userAddress.slice(0,6)}...${userAddress.slice(-4)}`;
         document.getElementById('walletAddress').classList.add('connected');
         document.getElementById('swapButton').textContent = 'Swap';
@@ -74,7 +84,7 @@ async function connectWallet() {
 }
 
 async function checkAllowance() {
-    if (!userAddress || !nuurContract || !isSdaToNuur) {
+    if (!userAddress || !nuurContract || isSdaToNuur) {
         isApproved = true; // No approval needed for SDA
         return;
     }
@@ -128,10 +138,13 @@ async function updatePrice() {
         const sdaToNuurRate = await routerContract.getAmountOut(oneEther, sdaReserve, nuurReserve);
         const nuurToSdaRate = await routerContract.getAmountOut(oneEther, nuurReserve, sdaReserve);
 
-        document.getElementById('sdaToNuurRate').textContent = 
-            `1 SDA = ${parseFloat(ethers.utils.formatEther(sdaToNuurRate)).toFixed(6)} NUUR`;
-        document.getElementById('nuurToSdaRate').textContent = 
-            `1 NUUR = ${parseFloat(ethers.utils.formatEther(nuurToSdaRate)).toFixed(6)} SDA`;
+        const rateContainer = document.querySelector('.rate-container');
+        if (rateContainer) {
+            rateContainer.innerHTML = `
+                <div class="rate-item">1 SDA = ${parseFloat(ethers.utils.formatEther(sdaToNuurRate)).toFixed(6)} NUUR</div>
+                <div class="rate-item">1 NUUR = ${parseFloat(ethers.utils.formatEther(nuurToSdaRate)).toFixed(6)} SDA</div>
+            `;
+        }
     } catch (e) {
         console.error('Error updating price:', e);
     }
@@ -190,11 +203,11 @@ async function executeSwap() {
 
         if (isSdaToNuur) {
             const amountOut = await routerContract.getAmountOut(amountIn, sdaReserve, nuurReserve);
-            const minOut = amountOut.mul(Math.floor((100 - slippage) * 100)).div(10000);
+            const minOut = amountOut.mul(995).div(1000); // 0.5% slippage
             tx = await routerContract.swapSdaForNuur(minOut, { value: amountIn });
         } else {
             const amountOut = await routerContract.getAmountOut(amountIn, nuurReserve, sdaReserve);
-            const minOut = amountOut.mul(Math.floor((100 - slippage) * 100)).div(10000);
+            const minOut = amountOut.mul(995).div(1000); // 0.5% slippage
             tx = await routerContract.swapNuurForSda(amountIn, minOut);
         }
 
