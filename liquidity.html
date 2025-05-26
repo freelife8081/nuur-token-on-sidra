@@ -6,20 +6,41 @@
   <title>Liquidity - NuurSwap</title>
   <link rel="stylesheet" href="dex.css" />
   <style>
-    .slippage-slider-container {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-top: 14px;
-      margin-bottom: 10px;
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
+
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f0f2f5;
+      color: #1a1a1a;
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 480px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .dex-header {
+      text-align: center;
+      margin: 30px auto 30px auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
     .header-logo-name {
       display: flex;
       align-items: center;
       gap: 12px;
       justify-content: center;
-      margin-bottom: 20px;
+      margin-bottom: 12px;
     }
+
     .header-logo-img {
       width: 38px;
       height: 38px;
@@ -28,44 +49,114 @@
       object-fit: cover;
       background: #fff;
     }
+
     .header-logo-text {
       font-size: 23px;
       font-weight: 700;
       color: #222;
       letter-spacing: 1px;
     }
-    .liquidity-info-row {
+
+    nav {
+      margin: 12px 0;
       display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 10px;
+      gap: 16px;
     }
-    .liquidity-label {
-      color: #555;
-      font-size: 14px;
+
+    .nav-btn {
+      padding: 8px 18px;
+      background: #e2e8f0;
+      border-radius: 10px;
+      text-decoration: none;
+      color: #1f2937;
       font-weight: 500;
+      transition: background-color 0.2s;
     }
-    .liquidity-value {
-      font-family: monospace;
-      font-size: 15px;
-      color: #2980b9;
+
+    .nav-btn:hover {
+      background: #cbd5e1;
     }
+
+    .nav-btn.active {
+      background: #3b82f6;
+      color: white;
+    }
+
+    .wallet-info {
+      margin-top: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .wallet-info button {
+      padding: 6px 12px;
+      border-radius: 18px;
+      border: none;
+      background: #3b82f6;
+      color: white;
+      cursor: pointer;
+    }
+
+    .wallet-info span {
+      font-size: 0.9em;
+      color: #333;
+    }
+
     .liquidity-box {
       padding: 28px 20px 18px 20px;
       background: #fff;
       box-shadow: 0 4px 32px #0001;
       border-radius: 18px;
       width: 100%;
-      max-width: 400px;
       margin: 40px auto 0 auto;
     }
-    .liquidity-position {
-      background: #f6f8fa;
-      padding: 15px 10px;
-      border-radius: 10px;
-      margin-top: 15px;
-      margin-bottom: 8px;
+
+    .liquidity-info-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
     }
+
+    .liquidity-label {
+      color: #555;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .liquidity-value {
+      font-family: monospace;
+      font-size: 15px;
+      color: #2980b9;
+    }
+
+    .input-container {
+      margin-bottom: 18px;
+    }
+
+    .token-input {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #f8fafc;
+      padding: 10px;
+      border-radius: 10px;
+    }
+
+    .token-input input {
+      background: transparent;
+      border: none;
+      font-size: 18px;
+      width: 60%;
+      outline: none;
+    }
+
+    .token-selector {
+      display: flex;
+      align-items: center;
+    }
+
     .token-logo {
       width: 26px;
       height: 26px;
@@ -74,13 +165,37 @@
       margin-right: 6px;
       background: #fff;
     }
-    .token-selector {
-      display: flex;
-      align-items: center;
+
+    .action-button {
+      width: 100%;
+      padding: 14px;
+      background: #3b82f6;
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.2s;
     }
-    .input-container {
-      margin-bottom: 18px;
+
+    .action-button:hover {
+      background: #2563eb;
     }
+
+    .action-button:disabled {
+      background: #94a3b8;
+      cursor: not-allowed;
+    }
+
+    .liquidity-position {
+      background: #f6f8fa;
+      padding: 15px 10px;
+      border-radius: 10px;
+      margin-top: 15px;
+      margin-bottom: 8px;
+    }
+
     .error-message {
       color: #dc2626;
       font-weight: 500;
@@ -88,6 +203,7 @@
       text-align: center;
       display: none;
     }
+
     .error-message.visible {
       display: block;
     }
@@ -95,23 +211,25 @@
 </head>
 <body>
   <div class="container">
-    <!-- Header and Nav -->
+
+    <!-- Shared Header -->
     <div class="dex-header">
       <div class="header-logo-name">
         <img src="logo.png" alt="DEX Logo" class="header-logo-img">
         <span class="header-logo-text">NuurSwap</span>
       </div>
       <nav>
-        <a href="swap.html" class="nav-btn" id="swapNav">Swap</a>
-        <a href="liquidity.html" class="nav-btn active" id="liquidityNav">Liquidity</a>
+        <a href="swap" class="nav-btn" id="swapNav">Swap</a>
+        <a href="liquidity" class="nav-btn active" id="liquidityNav">Liquidity</a>
       </nav>
       <div class="wallet-info">
         <button id="connectWallet">Connect Wallet</button>
         <span id="walletAddress"></span>
       </div>
     </div>
+
+    <!-- Liquidity Interface -->
     <main>
-      <!-- Liquidity View -->
       <div class="liquidity-box">
         <div class="input-container">
           <div class="liquidity-info-row">
@@ -126,6 +244,7 @@
             </div>
           </div>
         </div>
+
         <div class="input-container">
           <div class="liquidity-info-row">
             <div class="liquidity-label">NUUR balance:</div>
@@ -139,12 +258,15 @@
             </div>
           </div>
         </div>
+
         <button id="addLiquidityButton" class="action-button" disabled>Add Liquidity</button>
         <div id="liquidityPositions"></div>
       </div>
     </main>
+
     <div class="error-message" id="errorMessage"></div>
   </div>
+
   <script src="https://cdn.jsdelivr.net/npm/ethers@5.4.7/dist/ethers.umd.min.js"></script>
   <script src="liquidity.js"></script>
 </body>
