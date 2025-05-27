@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>NuurSwap</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body, html {
+      height: 100%;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background: url('bg.gif') no-repeat center center fixed;
+      background-size: cover;
+      display: flex;
+      flex-direction: column;
+      color: #ffffff;
+    }
+
+    .overlay {
+      background-color: rgba(0, 0, 0, 0.75);
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+      background: rgba(26, 26, 26, 0.8);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+    }
+
+    .nav-logo {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #0fc2c0;
+    }
+
+    .nav-links {
+      list-style: none;
+      display: flex;
+      gap: 1.5rem;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: #ffffff;
+      font-weight: 500;
+      transition: color 0.3s;
+    }
+
+    .nav-links a:hover {
+      color: #0fc2c0;
+    }
+
+    .hero {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 3rem 1rem;
+    }
+
+    .hero h1 {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      color: #0fc2c0;
+    }
+
+    .hero p {
+      font-size: 1.2rem;
+      color: #cccccc;
+      margin-bottom: 2rem;
+    }
+
+    .buttons {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .buttons a {
+      padding: 0.75rem 1.5rem;
+      background-color: #0fc2c0;
+      color: #0e0e0e;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: bold;
+      transition: background-color 0.3s;
+    }
+
+    .buttons a:hover {
+      background-color: #0aa8a7;
+    }
+
+    .footer {
+      text-align: center;
+      padding: 1rem;
+      background: rgba(26, 26, 26, 0.8);
+      color: #888;
+    }
+  </style>
+</head>
+<body>
+  <div class="overlay">
+    <nav class="navbar">
+      <div class="nav-logo">NuurSwap</div>
+      <ul class="nav-links">
+        <li><a href="home">Home</a></li>
+        <li><a href="phase2">Presale</a></li>
+      </ul>
+    </nav>
+
+    <main class="hero">
+      <h1>Coming Soon</h1>
+      <p>NuurSwap will launch upon Sidra Chain listing.</p>
+      <div class="buttons">
+        <a href="#">Home</a>
+        <a href="#">Presale</a>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <p>&copy; 2025 NuurSwap. All rights reserved.</p>
+    </footer>
+  </div>
+
+  <script>
+    console.log("NuurSwap with background GIF loaded.");
+  </script>
+</body>
+</html>
