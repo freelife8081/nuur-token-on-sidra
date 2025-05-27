@@ -531,8 +531,8 @@
   </style>
 </head>
 <body>
-  <div id="nuurNotice" style="display: none; position: fixed; top: 0; width: 100%; background-color: #ffeeba; z-index: 9999; overflow: hidden; white-space: nowrap; padding: 10px 0;">
-  <div id="nuurText" style="display: inline-block; padding-left: 100%; animation: scrollLeft 20s linear infinite; font-weight: bold; color: #000;">
+  <div id="nuurNotice" style="display: none; position: fixed; top: 0; width: 100%; background-color: rgba(255, 238, 186, 0.8); z-index: 9999; overflow: hidden; white-space: nowrap; padding: 4px 0; height: 24px; line-height: 24px;">
+  <div id="nuurText" style="display: inline-block; padding-left: 100%; animation: scrollLeft 20s linear infinite; font-weight: 500; color: #000; font-size: 12px; vertical-align: middle;">
     Please note that NUUR is built on Sidra Chain EVM. To purchase NUUR, you need to have SDA in your wallet. 
     <a href="https://www.bittime.com/en/blog/apa-itu-Sidra-Chain" target="_blank" style="color: #0056b3; text-decoration: underline;">Learn more about Sidrachain</a>
   </div>
@@ -550,6 +550,7 @@
     document.getElementById('nuurNotice').style.display = 'block';
   }, 2000);
 </script>
+
 
   <a href="#main" class="skip-link">Skip to content</a>
   <button class="sidebar-toggle" id="sidebarOpenBtn" aria-label="Open menu" aria-controls="sidebar" aria-expanded="false">
