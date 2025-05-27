@@ -21,6 +21,58 @@
   </style>
 </head>
 <body class="bg-[#0D111C] text-white min-h-screen">
+  <div id="networkNotice" style="
+  display: none;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background-color: #ffcc00;
+  color: #000;
+  font-weight: 600;
+  font-size: 16px;
+  font-family: 'Segoe UI', sans-serif;
+  padding: 12px 20px;
+  z-index: 9999;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+">
+  <span>Make sure to switch to Sidra Chain network for txn to succeed.</span>
+  <button onclick="dismissNotice()" style="
+    background: none;
+    border: none;
+    font-size: 20px;
+    font-weight: bold;
+    color: #000;
+    cursor: pointer;
+  ">&times;</button>
+</div>
+
+<script>
+  const noticeKey = 'sidraNoticeDismissed';
+  const noticeDuration = 24 * 60 * 60 * 1000; // 24 hours
+
+  function dismissNotice() {
+    document.getElementById('networkNotice').style.display = 'none';
+    localStorage.setItem(noticeKey, Date.now().toString());
+  }
+
+  function shouldShowNotice() {
+    const dismissedAt = localStorage.getItem(noticeKey);
+    if (!dismissedAt) return true;
+    return (Date.now() - parseInt(dismissedAt)) > noticeDuration;
+  }
+
+  window.addEventListener('load', () => {
+    if (shouldShowNotice()) {
+      setTimeout(() => {
+        document.getElementById('networkNotice').style.display = 'flex';
+      }, 2000);
+    }
+  });
+</script>
+
   <div class="min-h-screen flex flex-col items-center justify-center relative p-4">
     <!-- Header - Absolute positioned at the top -->
     <header class="w-full absolute top-0 flex justify-end py-4 px-4">
