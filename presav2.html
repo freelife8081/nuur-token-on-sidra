@@ -1,169 +1,126 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" >
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>NUUR Coin Presale</title>
+  <title>NUUR Presale with Material Tailwind</title>
 
-  <!-- Bulma CSS -->
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Material Tailwind CSS -->
   <link
+    href="https://unpkg.com/@material-tailwind/react@latest/dist/material-tailwind-react.min.css"
     rel="stylesheet"
-    href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css"
   />
+
   <script src="https://cdn.jsdelivr.net/npm/web3@1.10.0/dist/web3.min.js"></script>
 
   <style>
     body {
-      background-color: #0d111c;
+      background-color: #0f172a;
       color: white;
       min-height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
       padding: 1rem;
+      font-family: 'Roboto', sans-serif;
     }
-    .box {
-      background-color: #1a1e2d;
-      width: 100%;
-      max-width: 400px;
-      border-radius: 1rem;
-    }
-    .input,
-    .button {
-      border-radius: 1rem;
-    }
-    .button.is-green {
-      background-color: #22c55e;
-      color: white;
-    }
-    .button.is-green:hover {
-      background-color: #16a34a;
-      color: white;
-    }
-    .tag.is-info {
-      background-color: #3b82f6;
-    }
-    #spinner {
-      border: 3px solid rgba(255, 255, 255, 0.25);
-      border-top-color: #22c55e;
-      border-radius: 50%;
-      width: 24px;
-      height: 24px;
-      animation: spin 1s linear infinite;
-      margin: auto;
-      margin-top: 1rem;
-      display: none;
-    }
-    @keyframes spin {
-      to {
-        transform: rotate(360deg);
-      }
-    }
-    .token-logo {
-      height: 24px;
-      width: 24px;
-      margin-right: 6px;
+    a {
+      color: #22c55e;
+      text-decoration: underline;
     }
   </style>
 </head>
 <body>
-  <div class="box">
-    <div class="level">
-      <div class="level-left">
-        <h1 class="title is-4">NUUR Presale Phase 2</h1>
-      </div>
-      <div class="level-right">
-        <button id="connectWalletButton" class="button is-info">Connect Wallet</button>
-        <button id="disconnectWalletButton" class="button is-light" style="display:none;">
-          Disconnect
-        </button>
-      </div>
+  <div class="w-full max-w-md bg-gray-900 rounded-xl p-6 shadow-lg">
+    <h1 class="text-2xl font-semibold mb-6 text-center text-green-400">NUUR Presale Phase 2</h1>
+
+    <div class="flex justify-between mb-6">
+      <button id="connectWalletButton" class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded text-white font-medium">
+        Connect Wallet
+      </button>
+      <button id="disconnectWalletButton" class="bg-gray-600 hover:bg-gray-700 px-4 py-2 rounded text-white font-medium hidden">
+        Disconnect
+      </button>
     </div>
 
-    <div class="field">
-      <label class="label" for="sdaAmount">
-        <span class="icon">
-          <img src="sidra.png" alt="SDA" class="token-logo" />
-        </span>
+    <div class="mb-4">
+      <label for="sdaAmount" class="block mb-1 font-medium flex items-center">
+        <img src="sidra.png" alt="SDA" class="h-6 w-6 mr-2" />
         Amount (SDA)
       </label>
-      <div class="control has-icons-left">
-        <input
-          id="sdaAmount"
-          class="input"
-          type="number"
-          step="any"
-          min="0"
-          placeholder="0.00"
-        />
-        <span class="icon is-small is-left">SDA</span>
-      </div>
+      <input
+        id="sdaAmount"
+        type="number"
+        min="0"
+        step="any"
+        placeholder="0.00"
+        class="w-full rounded-lg px-3 py-2 text-gray-900"
+      />
     </div>
 
-    <div class="field">
-      <label class="label" for="nuurEstimate">
-        <span class="icon">
-          <img src="logo.png" alt="NUUR" class="token-logo" />
-        </span>
+    <div class="mb-4">
+      <label for="nuurEstimate" class="block mb-1 font-medium flex items-center">
+        <img src="logo.png" alt="NUUR" class="h-6 w-6 mr-2" />
         Estimated NUUR
       </label>
-      <div class="control">
-        <input
-          id="nuurEstimate"
-          class="input"
-          type="text"
-          readonly
-          value="0"
-        />
-      </div>
+      <input
+        id="nuurEstimate"
+        type="text"
+        readonly
+        value="0"
+        class="w-full rounded-lg px-3 py-2 text-gray-300 bg-gray-800 cursor-not-allowed"
+      />
     </div>
 
-    <div class="content is-small" style="color:#bbb; margin-bottom: 1rem;">
+    <div class="text-sm text-gray-400 mb-6">
       <p><strong>Phase:</strong> NuurPhase2</p>
       <p><strong>Rate:</strong> 1 SDA = 200 NUUR (1 NUUR = 0.005 SDA)</p>
       <p>
-        <strong>Min Buy:</strong> <span id="minBuyText">1</span> SDA
+        <strong>Min Buy:</strong> <span id="minBuyText" class="text-green-400"></span> SDA
         &nbsp;&nbsp;|&nbsp;&nbsp;
-        <strong>Max Buy:</strong> <span id="maxBuyText">Loading...</span> SDA
+        <strong>Max Buy:</strong> <span id="maxBuyText" class="text-green-400">Loading...</span> SDA
       </p>
     </div>
 
-    <button id="buyButton" class="button is-green is-fullwidth" disabled>Buy NUUR</button>
+    <button
+      id="buyButton"
+      class="bg-green-500 hover:bg-green-600 text-white font-semibold rounded-lg w-full py-3 disabled:bg-gray-600"
+      disabled
+    >
+      Buy NUUR
+    </button>
 
-    <div id="spinner"></div>
+    <div
+      id="spinner"
+      class="border-4 border-green-400 border-t-transparent rounded-full w-8 h-8 mx-auto mt-6 animate-spin hidden"
+    ></div>
 
-    <p
-      id="statusMessage"
-      class="has-text-centered mt-3"
-      style="min-height: 1.2em;"
-    ></p>
+    <p id="statusMessage" class="text-center mt-4 min-h-[1.5rem]"></p>
 
-    <hr style="border-color: #2a2f45;" />
+    <hr class="border-gray-700 my-6" />
 
-    <div class="content is-small has-text-centered" style="color:#bbb;">
+    <div class="text-center text-gray-400 text-sm">
       <p>
-        Wallet:
-        <span id="walletAddress">Not Connected</span>
+        Wallet: <span id="walletAddress">Not Connected</span>
       </p>
       <p>
-        Balance:
-        <span id="walletBalance">N/A</span>
+        Balance: <span id="walletBalance">N/A</span>
       </p>
     </div>
   </div>
 
   <script>
     // === Config ===
-    const presaleAddress = "0x98FCc396547D450208e926995a74b61874a1423A"; // Replace with your contract
+    const presaleAddress = "0x98FCc396547D450208e926995a74b61874a1423A"; // replace with your presale contract address
     const presaleABI = [{"inputs":[{"internalType":"address","name":"_nuurToken","type":"address"},{"internalType":"address","name":"_devWallet","type":"address"},{"internalType":"address","name":"initialOwner","type":"address"}],"stateMutability":"nonpayable","type":"constructor"},{"inputs":[{"internalType":"address","name":"owner","type":"address"}],"name":"OwnableInvalidOwner","type":"error"},{"inputs":[{"internalType":"address","name":"account","type":"address"}],"name":"OwnableUnauthorizedAccount","type":"error"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"newDevWallet","type":"address"}],"name":"DevWalletUpdated","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"to","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"NUURWithdrawn","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"previousOwner","type":"address"},{"indexed":true,"internalType":"address","name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"uint256","name":"phaseId","type":"uint256"},{"indexed":false,"internalType":"string","name":"phaseName","type":"string"},{"indexed":false,"internalType":"uint256","name":"rate","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"startTime","type":"uint256"}],"name":"PhaseUpdated","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"bool","name":"isActive","type":"bool"}],"name":"PresaleStatusChanged","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"to","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"SDAWithdrawn","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"sender","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"TokensDeposited","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"buyer","type":"address"},{"indexed":false,"internalType":"uint256","name":"sdaAmount","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"nuurAmount","type":"uint256"},{"indexed":false,"internalType":"string","name":"phaseName","type":"string"},{"indexed":false,"internalType":"uint256","name":"rate","type":"uint256"}],"name":"TokensPurchased","type":"event"},{"inputs":[],"name":"buyTokens","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[{"internalType":"uint256","name":"sdaAmount","type":"uint256"}],"name":"calculateNUURAmount","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"currentPhaseId","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"currentPhaseName","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"currentRate","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"depositTokens","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"devWallet","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getCurrentPhaseInfo","outputs":[{"internalType":"uint256","name":"phaseId","type":"uint256"},{"internalType":"string","name":"name","type":"string"},{"internalType":"uint256","name":"rate","type":"uint256"},{"internalType":"uint256","name":"startTime","type":"uint256"},{"internalType":"uint256","name":"tokensSold","type":"uint256"},{"internalType":"uint256","name":"sdaReceived","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getNUURBalance","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"phaseId","type":"uint256"}],"name":"getPhaseInfo","outputs":[{"internalType":"string","name":"name","type":"string"},{"internalType":"uint256","name":"rate","type":"uint256"},{"internalType":"uint256","name":"startTime","type":"uint256"},{"internalType":"uint256","name":"tokensSold","type":"uint256"},{"internalType":"uint256","name":"sdaReceived","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getSDABalance","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"nuurToken","outputs":[{"internalType":"contract IERC20","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"phaseStartTime","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"","type":"uint256"}],"name":"phases","outputs":[{"internalType":"string","name":"name","type":"string"},{"internalType":"uint256","name":"rate","type":"uint256"},{"internalType":"uint256","name":"startTime","type":"uint256"},{"internalType":"uint256","name":"tokensSold","type":"uint256"},{"internalType":"uint256","name":"sdaReceived","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"presaleActive","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"renounceOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"bool","name":"_status","type":"bool"}],"name":"setPresaleStatus","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"totalSDAReceived","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"totalTokensSold","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"newDevWallet","type":"address"}],"name":"updateDevWallet","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"newPhaseId","type":"uint256"},{"internalType":"string","name":"newPhaseName","type":"string"},{"internalType":"uint256","name":"newRate","type":"uint256"}],"name":"updatePhase","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"withdrawNUUR","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"withdrawSDA","outputs":[],"stateMutability":"nonpayable","type":"function"},{"stateMutability":"payable","type":"receive"}];
     const nuurPrice = 0.005; // 1 NUUR = 0.005 SDA
-    const minBuy = 1; // Updated minimum buy
+    const minBuy = 1; // SDA minimum buy
 
     // === State ===
-    let web3,
-      userAddress,
-      presaleContract,
-      maxBuy = 0;
+    let web3, userAddress, presaleContract, maxBuy = 0;
 
     // === Elements ===
     const connectBtn = document.getElementById("connectWalletButton");
@@ -178,9 +135,8 @@
     const minBuyText = document.getElementById("minBuyText");
     const maxBuyText = document.getElementById("maxBuyText");
 
-    minBuyText.innerText = minBuy;
+    minBuyText.textContent = minBuy;
 
-    // Initialize web3 and contract
     async function init() {
       if (window.ethereum) {
         web3 = new Web3(window.ethereum);
@@ -195,63 +151,68 @@
         await window.ethereum.request({ method: "eth_requestAccounts" });
         const accounts = await web3.eth.getAccounts();
         userAddress = accounts[0];
-        walletAddressSpan.innerText =
+        walletAddressSpan.textContent =
           userAddress.slice(0, 6) + "..." + userAddress.slice(-4);
-        connectBtn.style.display = "none";
-        disconnectBtn.style.display = "inline-block";
-        statusMessage.innerText = "Wallet connected.";
+        connectBtn.classList.add("hidden");
+        disconnectBtn.classList.remove("hidden");
+        statusMessage.textContent = "Wallet connected.";
         await updateWalletBalance();
         await updateMaxBuy();
         enforceInputBounds();
         buyBtn.disabled = false;
       } catch (error) {
         console.error(error);
-        statusMessage.innerText = "Failed to connect wallet.";
+        statusMessage.textContent = "Failed to connect wallet.";
       }
     }
 
     function disconnectWallet() {
       userAddress = null;
-      walletAddressSpan.innerText = "Not Connected";
-      walletBalanceSpan.innerText = "N/A";
-      connectBtn.style.display = "inline-block";
-      disconnectBtn.style.display = "none";
-      statusMessage.innerText = "Wallet disconnected.";
+      walletAddressSpan.textContent = "Not Connected";
+      walletBalanceSpan.textContent = "N/A";
+      connectBtn.classList.remove("hidden");
+      disconnectBtn.classList.add("hidden");
+      statusMessage.textContent = "Wallet disconnected.";
       sdaInput.value = "";
       nuurEstimate.value = "0";
-      maxBuyText.innerText = "Loading...";
+      maxBuyText.textContent = "Loading...";
       maxBuy = 0;
       buyBtn.disabled = true;
     }
 
     async function updateWalletBalance() {
       if (!userAddress) {
-        walletBalanceSpan.innerText = "N/A";
+        walletBalanceSpan.textContent = "N/A";
         return;
       }
       try {
         const balanceWei = await web3.eth.getBalance(userAddress);
         const balance = web3.utils.fromWei(balanceWei, "ether");
-        walletBalanceSpan.innerText = parseFloat(balance).toFixed(4) + " SDA";
+        walletBalanceSpan.textContent = parseFloat(balance).toFixed(4) + " SDA";
       } catch (e) {
-        walletBalanceSpan.innerText = "Error";
+        walletBalanceSpan.textContent = "Error";
       }
     }
 
     async function updateMaxBuy() {
       if (!presaleContract) {
-        maxBuyText.innerText = "Contract not loaded";
+        maxBuyText.textContent = "Contract not loaded";
         return;
       }
       try {
         const tokensLeftRaw = await presaleContract.methods.tokensLeft().call();
-        // tokensLeftRaw is uint256 with 18 decimals, convert to number
+        // tokensLeftRaw is a string with 18 decimals, convert to float
         const tokensLeft = parseFloat(web3.utils.fromWei(tokensLeftRaw, "ether"));
         maxBuy = tokensLeft * nuurPrice;
-        maxBuyText.innerText = maxBuy.toFixed(4);
+        if (isNaN(maxBuy) || maxBuy <= 0) {
+          maxBuyText.textContent = "0";
+          maxBuy = 0;
+        } else {
+          maxBuyText.textContent = maxBuy.toFixed(4);
+        }
         enforceInputBounds();
       } catch (e) {
-        maxBuyText.innerText = "Error";
+        maxBuyText.textContent = "Error";
         console.error("Error fetching tokensLeft:", e);
       }
     }
@@ -277,6 +238,7 @@
       if (maxBuy > 0 && sdaAmount > maxBuy) {
         sdaAmount = maxBuy;
       }
+      // NUUR tokens is floor(sda / 0.005)
       const nuurAmount = Math.floor(sdaAmount / nuurPrice);
       nuurEstimate.value = nuurAmount.toLocaleString();
     }
@@ -306,17 +268,17 @@
       }
 
       try {
-        spinner.style.display = "block";
-        statusMessage.innerText = "Sending transaction...";
+        spinner.classList.remove("hidden");
+        statusMessage.textContent = "Sending transaction...";
         const receipt = await web3.eth.sendTransaction({
           from: userAddress,
           to: presaleAddress,
           value: web3.utils.toWei(amount.toString(), "ether"),
         });
-        spinner.style.display = "none";
+        spinner.classList.add("hidden");
 
-        const explorerBase = "https://ledger.sidrachain.com/tx/"; // Replace with your actual explorer URL
-        const txLink = `<a href="${explorerBase}${receipt.transactionHash}" target="_blank" rel="noopener" style="color:#22c55e; text-decoration: underline;">View on ledger</a>`;
+        const explorerBase = "https://ledger.sidrachain.com/tx/"; // Replace with your explorer URL
+        const txLink = `<a href="${explorerBase}${receipt.transactionHash}" target="_blank" rel="noopener">View on ledger</a>`;
 
         statusMessage.innerHTML = `Transaction successful! ${txLink}`;
         await updateWalletBalance();
@@ -324,8 +286,8 @@
         sdaInput.value = "";
         nuurEstimate.value = "0";
       } catch (e) {
-        spinner.style.display = "none";
-        statusMessage.innerText = "Transaction failed or rejected.";
+        spinner.classList.add("hidden");
+        statusMessage.textContent = "Transaction failed or rejected.";
         console.error(e);
       }
     });
@@ -333,7 +295,6 @@
     connectBtn.addEventListener("click", connectWallet);
     disconnectBtn.addEventListener("click", disconnectWallet);
 
-    // Initialize
     init();
 
     // Auto-connect if already connected
@@ -345,13 +306,13 @@
         }
       });
 
-    // Update balance and address if accounts change
+    // Update address and balance on account change
     window.ethereum?.on("accountsChanged", (accounts) => {
       if (accounts.length === 0) {
         disconnectWallet();
       } else {
         userAddress = accounts[0];
-        walletAddressSpan.innerText =
+        walletAddressSpan.textContent =
           userAddress.slice(0, 6) + "..." + userAddress.slice(-4);
         updateWalletBalance();
       }
