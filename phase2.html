@@ -73,59 +73,47 @@
       Wallet Balance: <span id="walletBalance">Not Connected</span>
     </div>
   </div>
-  <footer style="text-align: center; margin-top: 1.5rem; font-size: 0.875rem;"><a href="error-report" style="display: inline-block; margin-top: 0.5rem; padding: 0.5em 1em; background-color: #f14668; color: white; border: 1px solid #d1364c; border-radius: 6px; text-decoration: none; font-weight: 500; transition: background-color 0.2s ease, border-color 0.2s ease;" target"_blank">Report an error</a></footer>
-  <div id="networkNotice" style="
-  display: none;
-  position: fixed;
-  top: 0;
-  width: 100%;
-  background-color: #ffcc00;
-  color: #000;
-  font-weight: 600;
-  font-size: 16px;
-  font-family: 'Segoe UI', sans-serif;
-  padding: 12px 20px;
-  z-index: 9999;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-">
-  <span>Make sure to switch to Sidra Chain network for txn to succeed.</span>
-  <button onclick="dismissNotice()" style="
-    background: none;
-    border: none;
-    font-size: 20px;
-    font-weight: bold;
-    color: #000;
-    cursor: pointer;
-  ">&times;</button>
+  <div id="nuurNotice" style="display: none; position: fixed; top: 0; width: 100%; background-color: rgba(255, 238, 186, 0.8); z-index: 9999; padding: 0 40px 0 0; height: 24px; line-height: 24px; overflow: hidden;">
+  <div style="position: relative; width: 100%; height: 100%;">
+    <div style="position: absolute; width: 100%; height: 100%; overflow: hidden;">
+      <div id="nuurText" style="display: inline-block; padding-left: 100%; animation: scrollLeft 20s linear infinite; font-weight: 500; color: #000; font-size: 12px; white-space: nowrap;">
+        NUUR is built on Sidra Chain. For successful transaction, switch to Sidra Chain network 
+        <a href="https://chatgpt.com/share/6836ae6d-97e8-8004-b7ac-8eb122f69ce4" target="_blank" style="color: #0056b3; text-decoration: underline;">Learn how to import Sidrachain to Metamask</a>
+      </div>
+    </div>
+    <button onclick="dismissNotice()" style="position: absolute; right: 0; top: 0; bottom: 0; background: none; border: none; font-size: 16px; color: #000; padding: 0 10px; cursor: pointer;">&times;</button>
+  </div>
 </div>
 
+<style>
+  @keyframes scrollLeft {
+    0% { transform: translateX(0%); }
+    100% { transform: translateX(-100%); }
+  }
+</style>
+
 <script>
-  const noticeKey = 'sidraNoticeDismissed';
-  const noticeDuration = 24 * 60 * 60 * 1000; // 24 hours
-
-  function dismissNotice() {
-    document.getElementById('networkNotice').style.display = 'none';
-    localStorage.setItem(noticeKey, Date.now().toString());
-  }
-
-  function shouldShowNotice() {
-    const dismissedAt = localStorage.getItem(noticeKey);
-    if (!dismissedAt) return true;
-    return (Date.now() - parseInt(dismissedAt)) > noticeDuration;
-  }
-
-  window.addEventListener('load', () => {
-    if (shouldShowNotice()) {
+  window.addEventListener('DOMContentLoaded', () => {
+    if (!localStorage.getItem('nuurNoticeDismissed')) {
       setTimeout(() => {
-        document.getElementById('networkNotice').style.display = 'flex';
+        document.getElementById('nuurNotice').style.display = 'block';
       }, 2000);
     }
   });
+
+  function dismissNotice() {
+    const notice = document.getElementById('nuurNotice');
+    notice.style.transition = 'opacity 0.5s ease';
+    notice.style.opacity = '0';
+    setTimeout(() => {
+      notice.style.display = 'none';
+      localStorage.setItem('nuurNoticeDismissed', 'true');
+    }, 500);
+  }
 </script>
-  <script>
+
+  <footer style="text-align: center; margin-top: 1.5rem; font-size: 0.875rem;"><a href="error-report" style="display: inline-block; margin-top: 0.5rem; padding: 0.5em 1em; background-color: #f14668; color: white; border: 1px solid #d1364c; border-radius: 6px; text-decoration: none; font-weight: 500; transition: background-color 0.2s ease, border-color 0.2s ease;" target"_blank">Report an error</a></footer>
+    <script>
     document.addEventListener('DOMContentLoaded', function() {
       // Constants - PHASE 2
       const presaleAddress = "0x98FCc396547D450208e926995a74b61874a1423A";
