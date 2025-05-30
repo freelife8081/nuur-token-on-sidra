@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>NUUR Token Ledger</title>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --text: #c9d1d9;
+      --highlight: #58a6ff;
+      --card: #161b22;
+      --hover: #21262d;
+      --border: #30363d;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      padding: 1.5rem;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    header img {
+      width: 80px;
+      height: 80px;
+      border-radius: 20%;
+      margin-bottom: 0.5rem;
+    }
+
+    h1 {
+      font-size: 1.8rem;
+      color: var(--highlight);
+      margin: 0;
+    }
+
+    #loader {
+      text-align: center;
+      margin-top: 2rem;
+    }
+
+    .loader-spinner {
+      border: 6px solid #282c34;
+      border-top: 6px solid var(--highlight);
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 1rem;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0 12px;
+      margin-top: 1.5rem;
+      font-size: 0.9rem;
+    }
+
+    th {
+      background-color: var(--card);
+      color: var(--highlight);
+      padding: 0.6rem;
+      text-align: left;
+    }
+
+    tr {
+      background-color: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      box-shadow: 0 0 0 1px var(--border);
+    }
+
+    td {
+      padding: 0.8rem;
+      text-align: left;
+      word-break: break-word;
+      border: none;
+    }
+
+    tr:hover {
+      background-color: var(--hover);
+    }
+
+    a {
+      color: var(--highlight);
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 2rem;
+    }
+
+    .presale-btn {
+      background: var(--highlight);
+      color: #fff;
+      padding: 0.6rem 1.2rem;
+      border: none;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    @media (max-width: 600px) {
+      th, td {
+        font-size: 0.8rem;
+        padding: 0.4rem;
+      }
+
+      .presale-btn {
+        padding: 0.5rem 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <img src="logo.png" alt="NUUR Logo" />
+    <h1>NUURCoin Explorer</h1>
+  </header>
+
+  <div id="loader">
+    <div class="loader-spinner"></div>
+    Fetching transactions from SidraChain...
+  </div>
+
+  <table id="ledger-table" style="display: none;">
+    <thead>
+      <tr>
+        <th>From</th>
+        <th>To</th>
+        <th>Amount</th>
+        <th>Txn Hash</th>
+        <th>Method</th>
+      </tr>
+    </thead>
+    <tbody id="ledger-body"></tbody>
+  </table>
+
+  <footer>
+    <a class="presale-btn" href="phase2" target="_blank" rel="noopener noreferrer">Go to Presale</a>
+  </footer>
+
+  <script>
+    const tokenAddress = '0x003BEc2e6ef4369f9d968eCD288d31B59fD9c2CD'.toLowerCase();
+    const tokenDecimals = 18;
+    const rpcUrl = 'https://node.sidrachain.com';
+    const transferEventSig = '0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef';
+
+    const ledgerBody = document.getElementById('ledger-body');
+    const loader = document.getElementById('loader');
+    const table = document.getElementById('ledger-table');
+
+    function sliceAddress(addr) {
+      return addr.slice(0, 6) + '...' + addr.slice(-4);
+    }
+
+    function getMethodFromInput(input) {
+      return input && input !== '0x' ? input.slice(2, 10) : 'N/A';
+    }
+
+    function decodeAmount(hex) {
+      return parseInt(hex, 16) / (10 ** tokenDecimals);
+    }
+
+    async function fetchTxInput(hash) {
+      const res = await fetch(rpcUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          jsonrpc: '2.0',
+          id: 1,
+          method: 'eth_getTransactionByHash',
+          params: [hash]
+        })
+      });
+      const txData = await res.json();
+      return txData.result?.input || '0x';
+    }
+
+    async function fetchLogsAndDisplay() {
+      const res = await fetch(rpcUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          jsonrpc: '2.0',
+          id: 1,
+          method: 'eth_getLogs',
+          params: [{
+            fromBlock: '0x0',
+            toBlock: 'latest',
+            address: tokenAddress,
+            topics: [transferEventSig]
+          }]
+        })
+      });
+
+      const data = await res.json();
+      const logs = data.result || [];
+
+      table.style.display = 'table';
+      loader.style.display = 'none';
+
+      logs.reverse().forEach(async log => {
+        let from = '0x' + log.topics[1].slice(26).toLowerCase();
+        const to = '0x' + log.topics[2].slice(26);
+        const amount = decodeAmount(log.data);
+        const txHash = log.transactionHash;
+
+        let label = '';
+        if (from === '0x858024c3c8179ed448a9133190f991cfa9873657') {
+          label = 'Presale 1';
+        } else if (from === '0x98fcc396547d450208e926995a74b61874a1423a') {
+          label = 'Presale 2';
+        } else if (from === '0x8e4384ed929b82a2fee2e6f043213170c1d905d9') {
+          label = 'Airdrop';
+        }
+        const fromDisplay = label || sliceAddress(from);
+
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${fromDisplay}</td>
+          <td>${sliceAddress(to)}</td>
+          <td>${amount.toFixed(2)}</td>
+          <td><a href="https://ledger.sidrachain.com/tx/${txHash}" target="_blank" rel="noopener noreferrer">${txHash.slice(0, 10)}...</a></td>
+          <td id="method-${txHash}">Loading...</td>
+        `;
+
+        // Insert new row at the top of tbody:
+        ledgerBody.insertBefore(row, ledgerBody.firstChild);
+
+        // Fetch method and update cell
+        try {
+          const input = await fetchTxInput(txHash);
+          const methodCell = document.getElementById(`method-${txHash}`);
+          methodCell.textContent = getMethodFromInput(input);
+        } catch {
+          const methodCell = document.getElementById(`method-${txHash}`);
+          methodCell.textContent = 'Error';
+        }
+      });
+    }
+
+    fetchLogsAndDisplay().catch(err => {
+      loader.innerText = 'Failed to load transactions.';
+      console.error(err);
+    });
+  </script>
+</body>
+</html>
