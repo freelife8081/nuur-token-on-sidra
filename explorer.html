@@ -1,348 +1,1141 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>NUURCoin Ledger</title>
-  <style>
-    :root {
-      --bg: #0d1117;
-      --text: #c9d1d9;
-      --highlight: #58a6ff;
-      --card: #161b22;
-      --hover: #21262d;
-      --border: #30363d;
-    }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>NUUR Coin Ledger</title>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --text: #c9d1d9;
+      --highlight: #58a6ff;
+      --card: #161b22;
+      --hover: #21262d;
+      --border: #30363d;
+      --success: #238636;
+      --warning: #d29922;
+      --error: #f85149;
+      --incoming: #3fb950;
+      --outgoing: #f85149;
+    }
 
-    body {
-      margin: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      padding: 1.5rem;
-    }
+    [data-theme="light"] {
+      --bg: #ffffff;
+      --text: #24292f;
+      --highlight: #0969da;
+      --card: #f6f8fa;
+      --hover: #eaeef2;
+      --border: #d0d7de;
+      --success: #1a7f37;
+      --warning: #9a6700;
+      --error: #cf222e;
+      --incoming: #1a7f37;
+      --outgoing: #cf222e;
+    }
 
-    header {
-      text-align: center;
-      margin-bottom: 2rem;
-    }
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      padding: 1.5rem;
+      transition: all 0.3s ease;
+    }
 
-    header img {
-      width: 80px;
-      height: 80px;
-      border-radius: 20%;
-      margin-bottom: 0.5rem;
-    }
+    header {
+      text-align: center;
+      margin-bottom: 2rem;
+      position: relative;
+    }
 
-    h1 {
-      font-size: 1.8rem;
-      color: var(--highlight);
-      margin: 0;
-    }
+    .theme-toggle {
+      position: absolute;
+      right: 0;
+      top: 0;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 5px 10px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
 
-    #loader {
-      text-align: center;
-      margin-top: 2rem;
-      aria-live: polite;
-    }
+    header img {
+      width: 80px;
+      height: 80px;
+      border-radius: 20%;
+      margin-bottom: 0.5rem;
+    }
 
-    .loader-spinner {
-      border: 6px solid #282c34;
-      border-top: 6px solid var(--highlight);
-      border-radius: 50%;
-      width: 40px;
-      height: 40px;
-      animation: spin 1s linear infinite;
-      margin: 0 auto 1rem;
-    }
+    h1 {
+      font-size: 1.8rem;
+      color: var(--highlight);
+      margin: 0;
+    }
 
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 1rem;
+      align-items: center;
+      justify-content: center;
+    }
 
-    table {
-      width: 100%;
-      border-collapse: separate;
-      border-spacing: 0 12px;
-      margin-top: 1.5rem;
-      font-size: 0.9rem;
-      display: block;
-      overflow-x: auto;
-      white-space: nowrap;
-    }
+    .filter-group {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
 
-    th {
-      background-color: var(--card);
-      color: var(--highlight);
-      padding: 0.6rem;
-      text-align: left;
-      scope: col;
-    }
+    label {
+      font-size: 0.9rem;
+    }
 
-    tr {
-      background-color: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      box-shadow: 0 0 0 1px var(--border);
-    }
+    input, select {
+      background: var(--card);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 0.5rem;
+      border-radius: 4px;
+    }
 
-    td {
-      padding: 0.8rem;
-      text-align: left;
-      word-break: break-word;
-      border: none;
-    }
+    #loader {
+      text-align: center;
+      margin-top: 2rem;
+    }
 
-    tr:hover {
-      background-color: var(--hover);
-    }
+    .loader-spinner {
+      border: 6px solid var(--card);
+      border-top: 6px solid var(--highlight);
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 1rem;
+    }
 
-    a {
-      color: var(--highlight);
-      text-decoration: none;
-    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
 
-    a:hover {
-      text-decoration: underline;
-    }
+    .stats-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
 
-    footer {
-      text-align: center;
-      margin-top: 2rem;
-    }
+    .stat-card {
+      background: var(--card);
+      border-radius: 8px;
+      padding: 1rem;
+      border: 1px solid var(--border);
+    }
 
-    .presale-btn {
-      background: var(--highlight);
-      color: #fff;
-      padding: 0.6rem 1.2rem;
-      border: none;
-      border-radius: 6px;
-      font-weight: bold;
-      cursor: pointer;
-      text-decoration: none;
-    }
+    .stat-value {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: var(--highlight);
+    }
 
-    #load-more-btn {
-      display: block;
-      margin: 1.5rem auto 0;
-      padding: 0.6rem 1.2rem;
-      background: var(--highlight);
-      color: #fff;
-      border: none;
-      border-radius: 6px;
-      font-weight: bold;
-      cursor: pointer;
-    }
+    .stat-label {
+      font-size: 0.8rem;
+      color: var(--text);
+      opacity: 0.8;
+    }
 
-    #load-more-btn:disabled {
-      background: #444c56;
-      cursor: default;
-    }
+    table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0 12px;
+      margin-top: 1.5rem;
+      font-size: 0.9rem;
+    }
 
-    @media (max-width: 600px) {
-      th, td {
-        font-size: 0.8rem;
-        padding: 0.4rem;
-      }
+    th {
+      background-color: var(--card);
+      color: var(--highlight);
+      padding: 0.6rem;
+      text-align: left;
+      cursor: pointer;
+      user-select: none;
+      position: sticky;
+      top: 0;
+    }
 
-      .presale-btn, #load-more-btn {
-        padding: 0.5rem 1rem;
-      }
-    }
-  </style>
+    th.sort-asc::after {
+      content: " ↑";
+    }
+
+    th.sort-desc::after {
+      content: " ↓";
+    }
+
+    tr {
+      background-color: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      box-shadow: 0 0 0 1px var(--border);
+    }
+
+    td {
+      padding: 0.8rem;
+      text-align: left;
+      word-break: break-word;
+      border: none;
+    }
+
+    tr:hover {
+      background-color: var(--hover);
+    }
+
+    a {
+      color: var(--highlight);
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .copy-icon {
+      cursor: pointer;
+      margin-left: 5px;
+      opacity: 0.7;
+    }
+
+    .copy-icon:hover {
+      opacity: 1;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      background: var(--highlight);
+      color: #fff;
+      padding: 0.6rem 1.2rem;
+      border: none;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      text-align: center;
+      transition: all 0.2s ease;
+    }
+
+    .btn:hover {
+      opacity: 0.9;
+      transform: translateY(-1px);
+    }
+
+    .btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .btn-secondary {
+      background: var(--card);
+      border: 1px solid var(--border);
+    }
+
+    .btn-icon {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .error-message {
+      color: var(--error);
+      text-align: center;
+      margin: 1rem 0;
+    }
+
+    .success-message {
+      color: var(--success);
+      text-align: center;
+      margin: 1rem 0;
+    }
+
+    .timestamp {
+      font-size: 0.8rem;
+      color: var(--text);
+      opacity: 0.8;
+    }
+
+    .method-transfer {
+      color: var(--success);
+    }
+
+    .method-approve {
+      color: var(--warning);
+    }
+
+    .method-other {
+      color: var(--highlight);
+    }
+
+    .amount-in {
+      color: var(--incoming);
+    }
+
+    .amount-out {
+      color: var(--outgoing);
+    }
+
+    .mobile-card {
+      display: none;
+      background: var(--card);
+      border-radius: 8px;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      border: 1px solid var(--border);
+    }
+
+    .mobile-card-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 0.5rem;
+    }
+
+    .mobile-card-label {
+      font-weight: bold;
+      color: var(--highlight);
+    }
+
+    .tooltip {
+      position: relative;
+      display: inline-block;
+    }
+
+    .tooltip .tooltiptext {
+      visibility: hidden;
+      width: 120px;
+      background-color: var(--card);
+      color: var(--text);
+      text-align: center;
+      border-radius: 6px;
+      padding: 5px;
+      position: absolute;
+      z-index: 1;
+      bottom: 125%;
+      left: 50%;
+      margin-left: -60px;
+      opacity: 0;
+      transition: opacity 0.3s;
+      border: 1px solid var(--border);
+    }
+
+    .tooltip:hover .tooltiptext {
+      visibility: visible;
+      opacity: 1;
+    }
+
+    @media (max-width: 768px) {
+      .stats-container {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      table {
+        display: none;
+      }
+
+      .mobile-card {
+        display: block;
+      }
+
+      .btn-group {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .btn {
+        width: 100%;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .stats-container {
+        grid-template-columns: 1fr;
+      }
+
+      .controls {
+        flex-direction: column;
+        align-items: stretch;
+      }
+    }
+  </style>
 </head>
 <body>
 
-  <header>
-    <img src="logo.png" alt="NUUR Logo" />
-    <h1>NUUR Token Ledger</h1>
-  </header>
+  <header>
+    <button class="theme-toggle" id="theme-toggle">
+      <span class="theme-icon">🌙</span>
+      <span class="theme-text">Dark</span>
+    </button>
+    <img src="https://nuurtoken.site/logo.png" alt="NUUR Logo" />
+    <h1>NUUR Token Ledger</h1>
+  </header>
 
-  <div id="loader" aria-live="polite">
-    <div class="loader-spinner"></div>
-    Fetching transactions from SidraChain...
-  </div>
+  <div class="controls">
+    <div class="filter-group">
+      <label for="search">Search:</label>
+      <input type="text" id="search" placeholder="Address or txn hash">
+    </div>
+    <div class="filter-group">
+      <label for="filter-method">Method:</label>
+      <select id="filter-method">
+        <option value="all">All</option>
+        <option value="transfer">Transfer</option>
+        <option value="approve">Approve</option>
+        <option value="other">Other</option>
+      </select>
+    </div>
+    <div class="filter-group">
+      <label for="filter-address">Address:</label>
+      <select id="filter-address">
+        <option value="all">All</option>
+        <option value="0x858024c3c8179ed448a9133190f991cfa9873657">Presale 1</option>
+        <option value="0x98fcc396547d450208e926995a74b61874a1423a">Presale 2</option>
+        <option value="0x8e4384ed929b82a2fee2e6f043213170c1d905d9">Airdrop</option>
+      </select>
+    </div>
+    <button id="refresh-btn" class="btn btn-secondary btn-icon">
+      <span>↻</span> Refresh
+    </button>
+  </div>
 
-  <table id="ledger-table" style="display: none;">
-    <thead>
-      <tr>
-        <th scope="col">From</th>
-        <th scope="col">To</th>
-        <th scope="col">Amount</th>
-        <th scope="col">Txn Hash</th>
-        <th scope="col">Method</th>
-      </tr>
-    </thead>
-    <tbody id="ledger-body"></tbody>
-  </table>
+  <div class="stats-container" id="stats-container">
+    <!-- Filled dynamically by JavaScript -->
+  </div>
 
-  <button id="load-more-btn" style="display: none;">Load More</button>
+  <div id="loader">
+    <div class="loader-spinner"></div>
+    <p>Fetching transactions from SidraChain...</p>
+  </div>
 
-  <footer>
-    <a class="presale-btn" href="https://nuurtoken.site/phase2" target="_blank" rel="noopener noreferrer">Go to Presale</a>
-  </footer>
+  <div id="error-message" class="error-message" style="display: none;"></div>
 
-  <script>
-    const tokenAddress = '0x003BEc2e6ef4369f9d968eCD288d31B59fD9c2CD'.toLowerCase();
-    const tokenDecimals = 18;
-    const rpcUrl = 'https://node.sidrachain.com';
-    const transferEventSig = '0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef';
+  <table id="ledger-table" style="display: none;">
+    <thead>
+      <tr>
+        <th id="th-timestamp" data-sort="desc">Timestamp</th>
+        <th id="th-from" data-sort="none">From</th>
+        <th id="th-to" data-sort="none">To</th>
+        <th id="th-amount" data-sort="desc">Amount</th>
+        <th id="th-txn" data-sort="none">Txn Hash</th>
+        <th id="th-method" data-sort="none">Method</th>
+      </tr>
+    </thead>
+    <tbody id="ledger-body"></tbody>
+  </table>
 
-    const ledgerBody = document.getElementById('ledger-body');
-    const loader = document.getElementById('loader');
-    const table = document.getElementById('ledger-table');
-    const loadMoreBtn = document.getElementById('load-more-btn');
+  <div id="mobile-ledger">
+    <!-- Filled dynamically for mobile view -->
+  </div>
 
-    // Store all logs fetched
-    let allLogs = [];
-    let displayedCount = 0;
-    const batchSize = 5;
+  <div id="load-more-container" style="text-align: center; margin: 1rem 0; display: none;">
+    <button id="load-more-btn" class="btn btn-icon">
+      <span>⬇</span> Load More
+    </button>
+  </div>
 
-    function sliceAddress(addr) {
-      return addr.slice(0, 6) + '...' + addr.slice(-4);
-    }
+  <footer>
+    <div class="btn-group">
+      <a class="btn" href="https://nuurtoken.site/phase2" target="_blank" rel="noopener noreferrer">Go to Presale</a>
+      <button id="export-btn" class="btn btn-secondary btn-icon">
+        <span>📁</span> Export CSV
+      </button>
+    </div>
+    <div class="timestamp">Last updated: <span id="last-updated">Never</span></div>
+    <div class="timestamp">Data cached until: <span id="cache-expiry">Not cached</span></div>
+  </footer>
 
-    function getMethodFromInput(input) {
-      return input && input !== '0x' ? input.slice(2, 10) : 'N/A';
-    }
+  <script>
+    // Configuration
+    const tokenAddress = '0x003BEc2e6ef4369f9d968eCD288d31B59fD9c2CD'.toLowerCase();
+    const tokenDecimals = 18;
+    const rpcUrl = 'https://node.sidrachain.com';
+    const transferEventSig = '0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef';
+    const pageSize = 10;
+    const CACHE_KEY = 'nuur_ledger_cache';
+    const CACHE_EXPIRY_HOURS = 6;
 
-    function decodeAmount(hex) {
-      try {
-        // Use BigInt for big numbers
-        const amountBigInt = BigInt(hex);
-        const decimalsBigInt = 10n ** BigInt(tokenDecimals);
-        const whole = amountBigInt / decimalsBigInt;
-        const fraction = amountBigInt % decimalsBigInt;
-        // Return as number with 2 decimals
-        return Number(whole) + Number(fraction) / Number(decimalsBigInt);
-      } catch {
-        return 0;
-      }
-    }
+    // DOM Elements
+    const ledgerBody = document.getElementById('ledger-body');
+    const mobileLedger = document.getElementById('mobile-ledger');
+    const loader = document.getElementById('loader');
+    const table = document.getElementById('ledger-table');
+    const loadMoreContainer = document.getElementById('load-more-container');
+    const loadMoreBtn = document.getElementById('load-more-btn');
+    const refreshBtn = document.getElementById('refresh-btn');
+    const searchInput = document.getElementById('search');
+    const filterMethod = document.getElementById('filter-method');
+    const filterAddress = document.getElementById('filter-address');
+    const errorMessage = document.getElementById('error-message');
+    const lastUpdated = document.getElementById('last-updated');
+    const cacheExpiry = document.getElementById('cache-expiry');
+    const exportBtn = document.getElementById('export-btn');
+    const statsContainer = document.getElementById('stats-container');
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeIcon = document.querySelector('.theme-icon');
+    const themeText = document.querySelector('.theme-text');
 
-    async function fetchTxInput(hash) {
-      const res = await fetch(rpcUrl, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          jsonrpc: '2.0',
-          id: 1,
-          method: 'eth_getTransactionByHash',
-          params: [hash]
-        })
-      });
-      const txData = await res.json();
-      return txData.result?.input || '0x';
-    }
+    // State
+    let allTransactions = [];
+    let displayedTransactions = 0;
+    let sortColumn = 'timestamp';
+    let sortDirection = 'desc';
+    let userAddress = null;
 
-    // Create and append one row, returns the methodCell for async update
-    function createRow(log) {
-      let from = '0x' + log.topics[1].slice(26).toLowerCase();
-      const to = '0x' + log.topics[2].slice(26).toLowerCase();
-      const amount = decodeAmount(log.data);
-      const txHash = log.transactionHash;
+    // Caches
+    const txCache = new Map();
+    const blockCache = new Map();
+    const addressLabels = {
+      '0x858024c3c8179ed448a9133190f991cfa9873657': 'Presale 1',
+      '0x98fcc396547d450208e926995a74b61874a1423a': 'Presale 2',
+      '0x8e4384ed929b82a2fee2e6f043213170c1d905d9': 'Airdrop'
+    };
 
-      let label = '';
-      if (from === '0x858024c3c8179ed448a9133190f991cfa9873657') {
-        label = 'Presale 1';
-      } else if (from === '0x98fcc396547d450208e926995a74b61874a1423a') {
-        label = 'Presale 2';
-      } else if (from === '0x8e4384ed929b82a2fee2e6f043213170c1d905d9') {
-        label = 'Airdrop';
-      }
-      const fromDisplay = label || sliceAddress(from);
+    // Initialize theme
+    function initTheme() {
+      const savedTheme = localStorage.getItem('nuur_ledger_theme') || 
+                        (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+      setTheme(savedTheme);
+    }
 
-      const row = document.createElement('tr');
+    function setTheme(theme) {
+      document.documentElement.setAttribute('data-theme', theme);
+      localStorage.setItem('nuur_ledger_theme', theme);
+      
+      if (theme === 'light') {
+        themeIcon.textContent = '☀️';
+        themeText.textContent = 'Light';
+      } else {
+        themeIcon.textContent = '🌙';
+        themeText.textContent = 'Dark';
+      }
+    }
 
-      // Create cells
-      const fromCell = document.createElement('td');
-      fromCell.textContent = fromDisplay;
+    function toggleTheme() {
+      const currentTheme = document.documentElement.getAttribute('data-theme');
+      setTheme(currentTheme === 'light' ? 'dark' : 'light');
+    }
 
-      const toCell = document.createElement('td');
-      toCell.textContent = sliceAddress(to);
+    // Helper functions
+    function sliceAddress(addr) {
+      return addr ? addr.slice(0, 6) + '...' + addr.slice(-4) : 'N/A';
+    }
 
-      const amountCell = document.createElement('td');
-      amountCell.textContent = amount.toFixed(2);
+    function copyToClipboard(text) {
+      navigator.clipboard.writeText(text).then(() => {
+        showTooltip('Copied!');
+      }).catch(err => {
+        console.error('Failed to copy:', err);
+      });
+    }
 
-      const hashCell = document.createElement('td');
-      const link = document.createElement('a');
-      link.href = `https://ledger.sidrachain.com/tx/${txHash}`;
-      link.target = '_blank';
-      link.rel = 'noopener noreferrer';
-      link.textContent = txHash.slice(0, 10) + '...';
-      hashCell.appendChild(link);
+    function showTooltip(message) {
+      const tooltip = document.createElement('div');
+      tooltip.className = 'tooltip-message';
+      tooltip.textContent = message;
+      tooltip.style.position = 'fixed';
+      tooltip.style.bottom = '20px';
+      tooltip.style.left = '50%';
+      tooltip.style.transform = 'translateX(-50%)';
+      tooltip.style.backgroundColor = 'var(--card)';
+      tooltip.style.color = 'var(--text)';
+      tooltip.style.padding = '8px 16px';
+      tooltip.style.borderRadius = '4px';
+      tooltip.style.boxShadow = '0 2px 10px rgba(0,0,0,0.2)';
+      tooltip.style.zIndex = '1000';
+      document.body.appendChild(tooltip);
+      
+      setTimeout(() => {
+        tooltip.style.opacity = '0';
+        tooltip.style.transition = 'opacity 0.5s';
+        setTimeout(() => document.body.removeChild(tooltip), 500);
+      }, 2000);
+    }
 
-      const methodCell = document.createElement('td');
-      methodCell.textContent = 'Loading...';
+    function getMethodFromInput(input) {
+      if (!input || input === '0x') return 'N/A';
+      
+      const methodId = input.slice(2, 10);
+      switch(methodId) {
+        case 'a9059cbb': return 'transfer';
+        case '095ea7b3': return 'approve';
+        default: return 'other';
+      }
+    }
 
-      row.appendChild(fromCell);
-      row.appendChild(toCell);
-      row.appendChild(amountCell);
-      row.appendChild(hashCell);
-      row.appendChild(methodCell);
+    function getMethodClass(method) {
+      switch(method) {
+        case 'transfer': return 'method-transfer';
+        case 'approve': return 'method-approve';
+        default: return 'method-other';
+      }
+    }
 
-      ledgerBody.appendChild(row);
+    function decodeAmount(hex) {
+      return parseInt(hex, 16) / (10 ** tokenDecimals);
+    }
 
-      // Fetch method async
-      fetchTxInput(txHash).then(input => {
-        methodCell.textContent = getMethodFromInput(input);
-      }).catch(() => {
-        methodCell.textContent = 'Error';
-      });
+    function formatTimestamp(timestamp) {
+      if (!timestamp) return 'N/A';
+      const date = new Date(timestamp * 1000);
+      return date.toLocaleString();
+    }
 
-      return row;
-    }
+    function formatDateForCSV(timestamp) {
+      if (!timestamp) return '';
+      const date = new Date(timestamp * 1000);
+      return date.toISOString();
+    }
 
-    // Render next batch of transactions
-    function renderBatch() {
-      const nextBatch = allLogs.slice(displayedCount, displayedCount + batchSize);
-      nextBatch.forEach(log => createRow(log));
-      displayedCount += nextBatch.length;
+    function getLabelForAddress(address) {
+      if (!address) return 'N/A';
+      
+      const addr = address.toLowerCase();
+      return addressLabels[addr] || sliceAddress(addr);
+    }
 
-      if (displayedCount >= allLogs.length) {
-        loadMoreBtn.style.display = 'none';
-      } else {
-        loadMoreBtn.style.display = 'block';
-      }
-    }
+    function getAmountClass(from, to) {
+      if (!userAddress) return '';
+      const userAddr = userAddress.toLowerCase();
+      return to.toLowerCase() === userAddr ? 'amount-in' : 
+             from.toLowerCase() === userAddr ? 'amount-out' : '';
+    }
 
-    async function fetchLogsAndDisplay() {
-      const res = await fetch(rpcUrl, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          jsonrpc: '2.0',
-          id: 1,
-          method: 'eth_getLogs',
-          params: [{
-            fromBlock: '0x0',
-            toBlock: 'latest',
-            address: tokenAddress,
-            topics: [transferEventSig]
-          }]
-        })
-      });
+    // Data fetching functions
+    async function fetchTxInput(hash) {
+      if (txCache.has(hash)) return txCache.get(hash);
+      
+      try {
+        const res = await fetch(rpcUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            jsonrpc: '2.0',
+            id: 1,
+            method: 'eth_getTransactionByHash',
+            params: [hash]
+          })
+        });
+        const txData = await res.json();
+        const input = txData.result?.input || '0x';
+        txCache.set(hash, input);
+        return input;
+      } catch (error) {
+        console.error('Error fetching transaction:', error);
+        return '0x';
+      }
+    }
 
-      const data = await res.json();
-      allLogs = data.result || [];
+    async function fetchBlockTimestamp(blockNumber) {
+      if (blockCache.has(blockNumber)) return blockCache.get(blockNumber);
+      
+      try {
+        const res = await fetch(rpcUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            jsonrpc: '2.0',
+            id: 1,
+            method: 'eth_getBlockByNumber',
+            params: [blockNumber, false]
+          })
+        });
+        const blockData = await res.json();
+        const timestamp = parseInt(blockData.result?.timestamp, 16) || Date.now() / 1000;
+        blockCache.set(blockNumber, timestamp);
+        return timestamp;
+      } catch (error) {
+        console.error('Error fetching block:', error);
+        return Math.floor(Date.now() / 1000);
+      }
+    }
 
-      loader.style.display = 'none';
-      table.style.display = 'table';
+    // Cache management
+    function saveToCache(data) {
+      const cacheData = {
+        transactions: data,
+        timestamp: Date.now(),
+        expiry: Date.now() + (CACHE_EXPIRY_HOURS * 60 * 60 * 1000)
+      };
+      localStorage.setItem(CACHE_KEY, JSON.stringify(cacheData));
+      updateCacheExpiryDisplay(cacheData.expiry);
+    }
 
-      // Reverse logs so newest first
-      allLogs.reverse();
+    function loadFromCache() {
+      const cacheData = localStorage.getItem(CACHE_KEY);
+      if (!cacheData) return null;
+      
+      const parsed = JSON.parse(cacheData);
+      if (Date.now() > parsed.expiry) {
+        localStorage.removeItem(CACHE_KEY);
+        return null;
+      }
+      
+      updateCacheExpiryDisplay(parsed.expiry);
+      return parsed.transactions;
+    }
 
-      renderBatch();
-    }
+    function updateCacheExpiryDisplay(expiryTimestamp) {
+      if (!expiryTimestamp) {
+        cacheExpiry.textContent = 'Not cached';
+        return;
+      }
+      
+      const expiryDate = new Date(expiryTimestamp);
+      cacheExpiry.textContent = expiryDate.toLocaleString();
+    }
 
-    loadMoreBtn.addEventListener('click', () => {
-      renderBatch();
-    });
+    // Analytics functions
+    function calculateStats(transactions) {
+      const stats = {
+        totalTransactions: transactions.length,
+        uniqueSenders: new Set(),
+        uniqueReceivers: new Set(),
+        totalVolume: 0,
+        largestTransfer: 0,
+        firstTransaction: null,
+        lastTransaction: null
+      };
 
-    fetchLogsAndDisplay().catch(err => {
-      loader.innerText = 'Failed to load transactions.';
-      console.error(err);
-    });
-  </script>
+      transactions.forEach(tx => {
+        stats.uniqueSenders.add(tx.from);
+        stats.uniqueReceivers.add(tx.to);
+        stats.totalVolume += tx.amount;
+        
+        if (tx.amount > stats.largestTransfer) {
+          stats.largestTransfer = tx.amount;
+        }
+        
+        if (!stats.firstTransaction || tx.timestamp < stats.firstTransaction.timestamp) {
+          stats.firstTransaction = tx;
+        }
+        
+        if (!stats.lastTransaction || tx.timestamp > stats.lastTransaction.timestamp) {
+          stats.lastTransaction = tx;
+        }
+      });
+
+      return {
+        ...stats,
+        uniqueAddresses: stats.uniqueSenders.size + stats.uniqueReceivers.size,
+        averageTransfer: stats.totalVolume / stats.totalTransactions
+      };
+    }
+
+    function renderStats(stats) {
+      statsContainer.innerHTML = `
+        <div class="stat-card">
+          <div class="stat-value">${stats.totalTransactions}</div>
+          <div class="stat-label">Total Transactions</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">${stats.uniqueAddresses}</div>
+          <div class="stat-label">Unique Addresses</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">${stats.totalVolume.toFixed(2)}</div>
+          <div class="stat-label">Total Volume (NUUR)</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">${stats.averageTransfer.toFixed(2)}</div>
+          <div class="stat-label">Avg. Transfer (NUUR)</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">${stats.largestTransfer.toFixed(2)}</div>
+          <div class="stat-label">Largest Transfer (NUUR)</div>
+        </div>
+      `;
+    }
+
+    // Transaction processing
+    function filterTransactions() {
+      const searchTerm = searchInput.value.toLowerCase();
+      const methodFilter = filterMethod.value;
+      const addressFilter = filterAddress.value;
+      
+      return allTransactions.filter(tx => {
+        // Search filter
+        const matchesSearch = searchTerm === '' || 
+          tx.from.toLowerCase().includes(searchTerm) ||
+          tx.to.toLowerCase().includes(searchTerm) ||
+          tx.hash.toLowerCase().includes(searchTerm);
+        
+        // Method filter
+        const matchesMethod = methodFilter === 'all' || 
+          (methodFilter === 'transfer' && tx.method === 'transfer') ||
+          (methodFilter === 'approve' && tx.method === 'approve') ||
+          (methodFilter === 'other' && tx.method !== 'transfer' && tx.method !== 'approve');
+        
+        // Address filter
+        const matchesAddress = addressFilter === 'all' || 
+          tx.from.toLowerCase() === addressFilter.toLowerCase() ||
+          tx.to.toLowerCase() === addressFilter.toLowerCase();
+        
+        return matchesSearch && matchesMethod && matchesAddress;
+      });
+    }
+
+    function sortTransactions(transactions) {
+      return transactions.sort((a, b) => {
+        let valA, valB;
+        
+        switch(sortColumn) {
+          case 'timestamp':
+            valA = a.timestamp;
+            valB = b.timestamp;
+            break;
+          case 'amount':
+            valA = a.amount;
+            valB = b.amount;
+            break;
+          case 'from':
+            valA = a.fromDisplay;
+            valB = b.fromDisplay;
+            break;
+          case 'to':
+            valA = a.toDisplay;
+            valB = b.toDisplay;
+            break;
+          default:
+            return 0;
+        }
+        
+        if (valA < valB) return sortDirection === 'asc' ? -1 : 1;
+        if (valA > valB) return sortDirection === 'asc' ? 1 : -1;
+        return 0;
+      });
+    }
+
+    function renderTransactions() {
+      const filtered = filterTransactions();
+      const sorted = sortTransactions([...filtered]);
+      
+      // Clear current displays
+      ledgerBody.innerHTML = '';
+      mobileLedger.innerHTML = '';
+      
+      // Display only the current page
+      const transactionsToShow = sorted.slice(0, displayedTransactions);
+      
+      // Render desktop table
+      transactionsToShow.forEach(tx => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>
+            <div class="timestamp">${formatTimestamp(tx.timestamp)}</div>
+          </td>
+          <td>
+            <span class="tooltip">
+              ${tx.fromDisplay}
+              <span class="tooltiptext">${tx.from}</span>
+            </span>
+            <span class="copy-icon" onclick="copyToClipboard('${tx.from}')">⎘</span>
+          </td>
+          <td>
+            <span class="tooltip">
+              ${tx.toDisplay}
+              <span class="tooltiptext">${tx.to}</span>
+            </span>
+            <span class="copy-icon" onclick="copyToClipboard('${tx.to}')">⎘</span>
+          </td>
+          <td class="${getAmountClass(tx.from, tx.to)}">${tx.amount.toFixed(2)}</td>
+          <td>
+            <a href="https://ledger.sidrachain.com/tx/${tx.hash}" target="_blank" rel="noopener noreferrer">
+              ${tx.hash.slice(0, 10)}...
+            </a>
+            <span class="copy-icon" onclick="copyToClipboard('${tx.hash}')">⎘</span>
+          </td>
+          <td class="${getMethodClass(tx.method)}">${tx.method}</td>
+        `;
+        ledgerBody.appendChild(row);
+      });
+      
+      // Render mobile cards
+      transactionsToShow.forEach(tx => {
+        const card = document.createElement('div');
+        card.className = 'mobile-card';
+        card.innerHTML = `
+          <div class="mobile-card-row">
+            <span class="mobile-card-label">From:</span>
+            <span>${tx.fromDisplay}</span>
+          </div>
+          <div class="mobile-card-row">
+            <span class="mobile-card-label">To:</span>
+            <span>${tx.toDisplay}</span>
+          </div>
+          <div class="mobile-card-row">
+            <span class="mobile-card-label">Amount:</span>
+            <span class="${getAmountClass(tx.from, tx.to)}">${tx.amount.toFixed(2)} NUUR</span>
+          </div>
+          <div class="mobile-card-row">
+            <span class="mobile-card-label">Time:</span>
+            <span class="timestamp">${formatTimestamp(tx.timestamp)}</span>
+          </div>
+          <div class="mobile-card-row">
+            <span class="mobile-card-label">Method:</span>
+            <span class="${getMethodClass(tx.method)}">${tx.method}</span>
+          </div>
+          <div class="mobile-card-row">
+            <span class="mobile-card-label">Txn:</span>
+            <a href="https://ledger.sidrachain.com/tx/${tx.hash}" target="_blank" rel="noopener noreferrer">
+              View on explorer
+            </a>
+          </div>
+        `;
+        mobileLedger.appendChild(card);
+      });
+      
+      // Show/hide load more button
+      if (displayedTransactions < sorted.length) {
+        loadMoreContainer.style.display = 'block';
+      } else {
+        loadMoreContainer.style.display = 'none';
+      }
+      
+      // Show table if we have transactions
+      if (filtered.length > 0) {
+        table.style.display = 'table';
+      } else {
+        table.style.display = 'none';
+      }
+      
+      // Update stats
+      const stats = calculateStats(filtered);
+      renderStats(stats);
+    }
+
+    function updateLastUpdated() {
+      const now = new Date();
+      lastUpdated.textContent = now.toLocaleString();
+    }
+
+    // Export functions
+    function exportToCSV() {
+      const filtered = filterTransactions();
+      const sorted = sortTransactions([...filtered]);
+      
+      let csv = 'Timestamp,From,To,Amount (NUUR),Transaction Hash,Method\n';
+      
+      sorted.forEach(tx => {
+        csv += `"${formatDateForCSV(tx.timestamp)}","${tx.from}","${tx.to}",${tx.amount.toFixed(2)},"${tx.hash}","${tx.method}"\n`;
+      });
+      
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.setAttribute('href', url);
+      link.setAttribute('download', `nuur_transactions_${new Date().toISOString().slice(0, 10)}.csv`);
+      link.style.visibility = 'hidden';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+
+    // Main data loading function
+    async function fetchLogsAndDisplay() {
+      try {
+        // Check cache first
+        const cachedData = loadFromCache();
+        if (cachedData) {
+          allTransactions = cachedData;
+          displayedTransactions = Math.min(pageSize, allTransactions.length);
+          renderTransactions();
+          updateLastUpdated();
+          loader.style.display = 'none';
+          table.style.display = 'table';
+        }
+        
+        loader.style.display = 'block';
+        errorMessage.style.display = 'none';
+        table.style.display = 'none';
+        loadMoreContainer.style.display = 'none';
+        
+        const res = await fetch(rpcUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            jsonrpc: '2.0',
+            id: 1,
+            method: 'eth_getLogs',
+            params: [{
+              fromBlock: '0x0',
+              toBlock: 'latest',
+              address: tokenAddress,
+              topics: [transferEventSig]
+            }]
+          })
+        });
+
+        if (!res.ok) throw new Error('Network response was not ok');
+        
+        const data = await res.json();
+        const logs = data.result || [];
+        
+        // Process all logs in parallel
+        const transactions = await Promise.all(logs.map(async log => {
+          const from = '0x' + log.topics[1].slice(26).toLowerCase();
+          const to = '0x' + log.topics[2].slice(26);
+          const amount = decodeAmount(log.data);
+          const hash = log.transactionHash;
+          const blockNumber = log.blockNumber;
+          
+          // Fetch additional data in parallel
+          const [input, timestamp] = await Promise.all([
+            fetchTxInput(hash),
+            fetchBlockTimestamp(blockNumber)
+          ]);
+          
+          const method = getMethodFromInput(input);
+          
+          return {
+            from,
+            to,
+            amount,
+            hash,
+            method,
+            timestamp,
+            fromDisplay: getLabelForAddress(from),
+            toDisplay: getLabelForAddress(to),
+            blockNumber
+          };
+        }));
+        
+        allTransactions = transactions;
+        displayedTransactions = Math.min(pageSize, allTransactions.length);
+        
+        // Save to cache
+        saveToCache(allTransactions);
+        
+        renderTransactions();
+        updateLastUpdated();
+        
+        loader.style.display = 'none';
+      } catch (error) {
+        console.error('Error:', error);
+        loader.style.display = 'none';
+        errorMessage.style.display = 'block';
+        errorMessage.textContent = `Failed to load transactions: ${error.message}`;
+        
+        // If we have cached data but failed to fetch new, show cached
+        if (allTransactions.length === 0) {
+          const cachedData = loadFromCache();
+          if (cachedData) {
+            allTransactions = cachedData;
+            displayedTransactions = Math.min(pageSize, allTransactions.length);
+            renderTransactions();
+            updateLastUpdated();
+            table.style.display = 'table';
+            errorMessage.textContent += ' Showing cached data.';
+          }
+        }
+      }
+    }
+
+    function setupEventListeners() {
+      // Load more button
+      loadMoreBtn.addEventListener('click', () => {
+        displayedTransactions += pageSize;
+        renderTransactions();
+      });
+      
+      // Refresh button
+      refreshBtn.addEventListener('click', () => {
+        txCache.clear();
+        blockCache.clear();
+        localStorage.removeItem(CACHE_KEY);
+        fetchLogsAndDisplay();
+      });
+      
+      // Export button
+      exportBtn.addEventListener('click', exportToCSV);
+      
+      // Search and filter inputs
+      searchInput.addEventListener('input', renderTransactions);
+      filterMethod.addEventListener('change', renderTransactions);
+      filterAddress.addEventListener('change', renderTransactions);
+      
+      // Theme toggle
+      themeToggle.addEventListener('click', toggleTheme);
+      
+      // Table sorting
+      document.querySelectorAll('th[data-sort]').forEach(th => {
+        th.addEventListener('click', () => {
+          const column = th.id.replace('th-', '');
+          
+          // Reset all other columns
+          document.querySelectorAll('th[data-sort]').forEach(otherTh => {
+            if (otherTh !== th) {
+              otherTh.dataset.sort = 'none';
+              otherTh.classList.remove('sort-asc', 'sort-desc');
+            }
+          });
+          
+          // Set new sort state
+          if (th.dataset.sort === 'asc') {
+            th.dataset.sort = 'desc';
+            sortDirection = 'desc';
+          } else {
+            th.dataset.sort = 'asc';
+            sortDirection = 'asc';
+          }
+          
+          sortColumn = column;
+          th.classList.toggle('sort-asc', sortDirection === 'asc');
+          th.classList.toggle('sort-desc', sortDirection === 'desc');
+          
+          renderTransactions();
+        });
+      });
+    }
+
+    // Initialize
+    function init() {
+      initTheme();
+      setupEventListeners();
+      
+      // Check if we have wallet integration (MetaMask, etc.)
+      if (window.ethereum) {
+        window.ethereum.request({ method: 'eth_requestAccounts' })
+          .then(accounts => {
+            userAddress = accounts[0];
+            renderTransactions();
+          })
+          .catch(err => {
+            console.log('User denied wallet access');
+          });
+      }
+      
+      fetchLogsAndDisplay();
+    }
+
+    // Make copyToClipboard available globally for inline handlers
+    window.copyToClipboard = copyToClipboard;
+
+    // Start the app
+    init();
+  </script>
 </body>
 </html>
