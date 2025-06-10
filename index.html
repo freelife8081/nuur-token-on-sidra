@@ -6,7 +6,7 @@
   <title>NUUR Coin - Loading</title>
   <script src="ip.js"></script>
   <link rel="icon" href="logo.png" type="image/x-icon">
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-NSWY7LWMRZ"></script>
   <script>
@@ -17,13 +17,13 @@
   </script>
   <style>
     :root {
-      --primary: #00F5E4;
+      --primary: #00FFE7;
       --primary-dark: #00C4B5;
-      --secondary: #7B61FF;
-      --dark: #0B1622;
-      --darker: #080F18;
-      --light: #E3F2FF;
-      --gradient: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+      --accent: #FF5E7D;
+      --dark: #0D111C;
+      --darker: #080A10;
+      --light: #FFFFFF;
+      --gradient: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
     }
     
     * {
@@ -34,35 +34,61 @@
     
     body {
       font-family: 'Inter', sans-serif;
-      background: linear-gradient(135deg, var(--darker) 0%, var(--dark) 100%);
+      background-color: var(--darker);
       color: var(--light);
       display: flex;
       justify-content: center;
       align-items: center;
       height: 100vh;
       overflow: hidden;
+      position: relative;
+    }
+    
+    body::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at 20% 30%, rgba(0, 255, 231, 0.08) 0%, transparent 50%),
+                  radial-gradient(circle at 80% 70%, rgba(255, 94, 125, 0.08) 0%, transparent 50%);
+      z-index: -1;
     }
     
     #loader {
       text-align: center;
       max-width: 90%;
-      animation: fadeIn 0.8s ease-out;
+      animation: fadeIn 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+      position: relative;
     }
     
     .logo-container {
       position: relative;
-      width: 180px;
-      height: 180px;
-      margin: 0 auto 2rem;
+      width: 160px;
+      height: 160px;
+      margin: 0 auto 1.5rem;
+      perspective: 1000px;
     }
     
-    .logo-glow {
+    .logo-spinner {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      transform-style: preserve-3d;
+      animation: rotate 12s infinite linear;
+    }
+    
+    .logo-spinner::before {
+      content: '';
       position: absolute;
       width: 100%;
       height: 100%;
       border-radius: 50%;
-      background: radial-gradient(circle, rgba(0, 245, 228, 0.3) 0%, rgba(0, 245, 228, 0) 70%);
-      animation: pulse 3s infinite alternate;
+      background: var(--gradient);
+      opacity: 0.4;
+      filter: blur(30px);
+      animation: pulse 4s infinite alternate;
     }
     
     #loader img {
@@ -71,51 +97,76 @@
       position: relative;
       z-index: 2;
       border-radius: 50%;
-      border: 3px solid var(--primary);
-      box-shadow: 0 0 30px rgba(0, 245, 228, 0.3);
+      border: 2px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 0 40px rgba(0, 255, 231, 0.2);
     }
     
     h1 {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 2.5rem;
+      font-family: 'Kanit', sans-serif;
+      font-size: 2.8rem;
       font-weight: 700;
-      margin-bottom: 1.5rem;
+      margin-bottom: 1rem;
       background: var(--gradient);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
+      letter-spacing: 0.5px;
     }
     
     .loading-text {
       font-size: 1.1rem;
-      margin-bottom: 0.5rem;
-      color: var(--light);
-    }
-    
-    .reward-text {
-      font-size: 1rem;
-      color: var(--primary);
-      margin-top: 1.5rem;
-      padding: 0.75rem 1.5rem;
-      background: rgba(123, 97, 255, 0.1);
-      border-radius: 100px;
+      margin-bottom: 1.5rem;
+      color: rgba(255, 255, 255, 0.8);
+      position: relative;
       display: inline-block;
     }
     
-    .progress-container {
-      width: 200px;
-      height: 4px;
-      background: rgba(123, 97, 255, 0.1);
-      border-radius: 2px;
-      margin: 2rem auto 0;
+    .loading-text::after {
+      content: '';
+      display: inline-block;
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--primary);
+      margin-left: 5px;
+      vertical-align: middle;
+      animation: blink 1.5s infinite;
+    }
+    
+    .reward-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 1rem;
+      color: var(--light);
+      margin-top: 2rem;
+      padding: 0.75rem 1.5rem;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 50px;
+      backdrop-filter: blur(5px);
+    }
+    
+    .reward-badge span {
+      color: var(--primary);
+      font-weight: 500;
+    }
+    
+    .particles {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
       overflow: hidden;
     }
     
-    .progress-bar {
-      height: 100%;
-      width: 0%;
-      background: var(--gradient);
-      border-radius: 2px;
-      transition: width 0.3s ease;
+    .particle {
+      position: absolute;
+      background: var(--primary);
+      border-radius: 50%;
+      opacity: 0.3;
+      animation: float linear infinite;
     }
     
     /* Animations */
@@ -130,81 +181,130 @@
       }
     }
     
-    @keyframes pulse {
-      0% {
-        transform: scale(0.95);
-        opacity: 0.6;
+    @keyframes rotate {
+      from {
+        transform: rotateY(0deg);
       }
-      100% {
-        transform: scale(1.1);
-        opacity: 0.3;
+      to {
+        transform: rotateY(360deg);
       }
     }
     
-    @keyframes progress {
+    @keyframes pulse {
       0% {
-        width: 0%;
+        transform: scale(0.9);
+        opacity: 0.3;
       }
       100% {
-        width: 100%;
+        transform: scale(1.1);
+        opacity: 0.5;
+      }
+    }
+    
+    @keyframes blink {
+      0%, 100% {
+        opacity: 1;
+      }
+      50% {
+        opacity: 0.5;
+      }
+    }
+    
+    @keyframes float {
+      0% {
+        transform: translateY(0) translateX(0);
+      }
+      50% {
+        transform: translateY(-50px) translateX(20px);
+      }
+      100% {
+        transform: translateY(0) translateX(0);
       }
     }
     
     /* Responsive adjustments */
     @media (max-width: 768px) {
       .logo-container {
-        width: 140px;
-        height: 140px;
+        width: 120px;
+        height: 120px;
       }
       
       h1 {
-        font-size: 2rem;
+        font-size: 2.2rem;
       }
       
       .loading-text {
         font-size: 1rem;
       }
+      
+      .reward-badge {
+        font-size: 0.9rem;
+        padding: 0.6rem 1.2rem;
+      }
     }
   </style>
 </head>
 <body>
+  <!-- Particle background -->
+  <div class="particles" id="particles"></div>
+  
   <!-- Modern Loading Screen -->
   <div id="loader">
     <div class="logo-container">
-      <div class="logo-glow"></div>
-      <img src="logo.png" alt="NUUR Coin Logo">
+      <div class="logo-spinner">
+        <img src="logo.png" alt="NUUR Coin Logo">
+      </div>
     </div>
     
-    <h1>NUUR Coin</h1>
-    <p class="loading-text">Please wait as we connect to Sidra Chain...</p>
-    <p class="reward-text">Hold >200k NUUR for unlimited rewards</p>
+    <h1>NUUR COIN</h1>
+    <p class="loading-text">Connecting to SidraChain</p>
     
-    <div class="progress-container">
-      <div class="progress-bar" id="progressBar"></div>
+    <div class="reward-badge">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 15C13.6569 15 15 13.6569 15 12C15 10.3431 13.6569 9 12 9C10.3431 9 9 10.3431 9 12C9 13.6569 10.3431 15 12 15Z" fill="#00FFE7"/>
+        <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" stroke="#00FFE7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      Hold <span>>200K NUUR</span> for unlimited rewards
     </div>
   </div>
 
   <script>
-    // Animate progress bar
-    document.addEventListener('DOMContentLoaded', () => {
-      const progressBar = document.getElementById('progressBar');
-      progressBar.style.width = '100%';
-      progressBar.style.transition = 'width 4s linear';
+    // Create floating particles
+    function createParticles() {
+      const particlesContainer = document.getElementById('particles');
+      const particleCount = 15;
       
-      // Redirect after progress completes
+      for (let i = 0; i < particleCount; i++) {
+        const particle = document.createElement('div');
+        particle.classList.add('particle');
+        
+        // Random properties
+        const size = Math.random() * 5 + 2;
+        const posX = Math.random() * 100;
+        const posY = Math.random() * 100;
+        const duration = Math.random() * 10 + 10;
+        const delay = Math.random() * -20;
+        
+        particle.style.width = `${size}px`;
+        particle.style.height = `${size}px`;
+        particle.style.left = `${posX}%`;
+        particle.style.top = `${posY}%`;
+        particle.style.animationDuration = `${duration}s`;
+        particle.style.animationDelay = `${delay}s`;
+        
+        particlesContainer.appendChild(particle);
+      }
+    }
+    
+    // Initialize
+    document.addEventListener('DOMContentLoaded', () => {
+      createParticles();
+      
+      // Redirect after delay
       setTimeout(() => {
         window.location.href = "home";
-      }, 4500); // Slightly shorter than animation for smooth transition
+      }, 4500);
     });
-    
-    // Optional: Check for Web3 provider while loading
-    if (window.ethereum) {
-      setTimeout(() => {
-        if (!window.ethereum.isConnected()) {
-          document.querySelector('.loading-text').textContent = "Please unlock your wallet";
-        }
-      }, 2000);
-    }
   </script>
 </body>
 </html>
