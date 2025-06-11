@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1 user-scalable=no" />
+  <title>NUUR Support - Report an Issue</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-color: #4361ee;
+      --primary-hover: #3a56d4;
+      --gradient-start: #4361ee;
+      --gradient-end: #3a0ca3;
+      --background: #f8fafc;
+      --card-bg: #ffffff;
+      --text-primary: #0f172a;
+      --text-secondary: #64748b;
+      --border-color: #e2e8f0;
+      --error-color: #ef4444;
+      --success-color: #10b981;
+      --radius-lg: 12px;
+      --radius-md: 8px;
+      --radius-sm: 4px;
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--background);
+      color: var(--text-primary);
+      margin: 0;
+      padding: 0;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 2rem 1rem;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-md);
+      padding: 2.5rem;
+      border: 1px solid var(--border-color);
+    }
+
+    .logo-container {
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
+
+    .logo {
+      width: 160px;
+      height: auto;
+      transition: transform 0.3s ease;
+    }
+
+    .logo:hover {
+      transform: scale(1.05);
+    }
+
+    .timestamp {
+      text-align: center;
+      color: var(--text-secondary);
+      font-size: 0.875rem;
+      margin-bottom: 2rem;
+      font-weight: 500;
+    }
+
+    h1 {
+      color: var(--text-primary);
+      margin-bottom: 2rem;
+      font-size: 1.75rem;
+      font-weight: 700;
+      text-align: center;
+      line-height: 1.3;
+    }
+
+    .form-group {
+      margin-bottom: 1.75rem;
+    }
+
+    label {
+      font-weight: 600;
+      display: block;
+      margin-bottom: 0.75rem;
+      color: var(--text-primary);
+      font-size: 0.9375rem;
+    }
+
+    input[type="text"], textarea, input[type="file"] {
+      width: 100%;
+      padding: 0.875rem;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      font-size: 1rem;
+      transition: all 0.2s;
+      box-sizing: border-box;
+      font-family: inherit;
+      background-color: #f8fafc;
+    }
+
+    input[type="text"]:focus, textarea:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.15);
+      background-color: white;
+    }
+
+    textarea {
+      min-height: 140px;
+      resize: vertical;
+      line-height: 1.6;
+    }
+
+    .issue-options {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .issue-option {
+      position: relative;
+    }
+
+    .issue-option input[type="radio"] {
+      position: absolute;
+      opacity: 0;
+    }
+
+    .issue-option label {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.25rem 0.5rem;
+      background: #f8fafc;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s;
+      font-weight: 500;
+      font-size: 0.9375rem;
+      height: 100%;
+    }
+
+    .issue-option input[type="radio"]:checked + label {
+      background: rgba(67, 97, 238, 0.1);
+      border-color: var(--primary-color);
+      color: var(--primary-color);
+      font-weight: 600;
+    }
+
+    .issue-option:hover label {
+      border-color: var(--primary-color);
+      transform: translateY(-2px);
+    }
+
+    .file-input-container {
+      margin-bottom: 1.75rem;
+    }
+
+    .file-input-wrapper {
+      position: relative;
+      overflow: hidden;
+      display: inline-block;
+      width: 100%;
+    }
+
+    .file-input-button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.875rem;
+      border: 1px dashed var(--border-color);
+      border-radius: var(--radius-md);
+      background-color: #f8fafc;
+      color: var(--text-secondary);
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      width: 100%;
+    }
+
+    .file-input-button:hover {
+      border-color: var(--primary-color);
+      color: var(--primary-color);
+      background-color: rgba(67, 97, 238, 0.05);
+    }
+
+    .file-input-button svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    input[type="file"] {
+      position: absolute;
+      left: 0;
+      top: 0;
+      opacity: 0;
+      width: 100%;
+      height: 100%;
+      cursor: pointer;
+    }
+
+    .preview-container {
+      display: none;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-top: 1rem;
+    }
+
+    .preview-item {
+      position: relative;
+      width: calc(33.333% - 0.666rem);
+      aspect-ratio: 1/1;
+    }
+
+    .preview-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-color);
+    }
+
+    .remove-image {
+      position: absolute;
+      top: 0.5rem;
+      right: 0.5rem;
+      background: rgba(239, 68, 68, 0.9);
+      color: white;
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 0.875rem;
+      font-weight: bold;
+      transition: all 0.2s;
+    }
+
+    .remove-image:hover {
+      background: var(--error-color);
+      transform: scale(1.1);
+    }
+
+    button {
+      background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+      color: white;
+      padding: 1rem;
+      border: none;
+      border-radius: var(--radius-md);
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      width: 100%;
+      transition: all 0.3s;
+      box-shadow: var(--shadow);
+      letter-spacing: 0.5px;
+    }
+
+    button:hover {
+      background: linear-gradient(135deg, var(--primary-hover), #2e0a8a);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+
+    button:active {
+      transform: translateY(0);
+    }
+
+    .statusMessage {
+      margin-top: 1.5rem;
+      padding: 1rem;
+      border-radius: var(--radius-md);
+      font-weight: 500;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .error {
+      background: rgba(239, 68, 68, 0.1);
+      color: var(--error-color);
+      border: 1px solid rgba(239, 68, 68, 0.2);
+    }
+
+    .success {
+      background: rgba(16, 185, 129, 0.1);
+      color: var(--success-color);
+      border: 1px solid rgba(16, 185, 129, 0.2);
+    }
+
+    .status-icon {
+      width: 20px;
+      height: 20px;
+    }
+
+    .char-count {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      text-align: right;
+      margin-top: 0.25rem;
+    }
+
+    .char-count.warning {
+      color: #f59e0b;
+    }
+
+    .char-count.error {
+      color: var(--error-color);
+    }
+
+    @media (max-width: 640px) {
+      .container {
+        padding: 1.5rem 1rem;
+      }
+      
+      .card {
+        padding: 1.75rem;
+      }
+      
+      h1 {
+        font-size: 1.5rem;
+      }
+      
+      .issue-options {
+        grid-template-columns: 1fr;
+      }
+      
+      .preview-item {
+        width: calc(50% - 0.5rem);
+      }
+    }
+
+    @media (max-width: 480px) {
+      .card {
+        padding: 1.5rem 1.25rem;
+      }
+      
+      .preview-item {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="logo-container">
+      <img src="logo.png" alt="NUUR Logo" class="logo">
+    </div>
+
+    <div class="timestamp">
+      <span id="currentDateTime">UTC: 2025-05-25 04:56:52</span>
+    </div>
+
+    <div class="card">
+      <h1>Report an Issue with NUUR</h1>
+
+      <form id="errorForm">
+        <div class="form-group">
+          <label for="walletAddress">Your Sidra Wallet Address</label>
+          <input
+            type="text"
+            id="walletAddress"
+            name="walletAddress"
+            placeholder="0x..."
+            required
+            pattern="^0x[a-fA-F0-9]{40}$"
+          />
+        </div>
+
+        <div class="form-group">
+          <label>What type of issue are you experiencing?</label>
+          <div class="issue-options">
+            <div class="issue-option">
+              <input type="radio" id="wallet-connect" name="issueType" value="Wallet Connect" required>
+              <label for="wallet-connect">Wallet Connection</label>
+            </div>
+            <div class="issue-option">
+              <input type="radio" id="nuur-purchase" name="issueType" value="NUUR Purchase">
+              <label for="nuur-purchase">NUUR Purchase</label>
+            </div>
+            <div class="issue-option">
+              <input type="radio" id="airdrop-claim" name="issueType" value="Airdrop Claim">
+              <label for="airdrop-claim">Airdrop Claim</label>
+            </div>
+            <div class="issue-option">
+              <input type="radio" id="other-issue" name="issueType" value="Other">
+              <label for="other-issue">Other Issue</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="issue">Describe your issue in detail</label>
+          <textarea
+            id="issue"
+            name="issue"
+            placeholder="Please provide as much detail as possible about the issue you're experiencing..."
+            required
+            minlength="50"
+          ></textarea>
+          <div id="charCounter" class="char-count">0/50 minimum characters</div>
+        </div>
+
+        <div class="file-input-container">
+          <label for="screenshot">Attach Screenshots (Required)</label>
+          <div class="file-input-wrapper">
+            <input
+              type="file"
+              id="screenshot"
+              name="screenshot"
+              accept="image/*"
+              multiple
+            />
+            <div class="file-input-button">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+              </svg>
+              <span>Select files</span>
+            </div>
+          </div>
+        </div>
+
+        <div id="imagePreview" class="preview-container"></div>
+
+        <button type="submit">
+          Submit Issue Report
+        </button>
+      </form>
+
+      <div id="formStatus" class="statusMessage"></div>
+    </div>
+  </div>
+
+  <script>
+    // Update current date time
+    function updateDateTime() {
+      const now = new Date();
+      const formatted = now.toISOString().replace('T', ' ').substring(0, 19);
+      document.getElementById('currentDateTime').textContent = `UTC: ${formatted}`;
+    }
+    
+    updateDateTime();
+    setInterval(updateDateTime, 1000);
+
+    const form = document.getElementById('errorForm');
+    const statusDiv = document.getElementById('formStatus');
+    const imagePreview = document.getElementById('imagePreview');
+    const screenshotInput = document.getElementById('screenshot');
+    const issueTextarea = document.getElementById('issue');
+    const charCounter = document.getElementById('charCounter');
+
+    // Replace these with your actual bot token and chat ID
+    const BOT_TOKEN = '7529157623:AAFNTTESufdig5oXH8zY0yEvHK2aNci5TCc';
+    const CHAT_ID = '7181820663';
+
+    // Character counter for issue description
+    issueTextarea.addEventListener('input', function() {
+      const length = this.value.length;
+      charCounter.textContent = `${length}/100 minimum characters`;
+      
+      if (length < 50) {
+        charCounter.className = 'char-count warning';
+      } else {
+        charCounter.className = 'char-count';
+      }
+    });
+
+    // Handle image preview
+    screenshotInput.addEventListener('change', function(e) {
+      imagePreview.innerHTML = '';
+      imagePreview.style.display = 'flex';
+      
+      Array.from(this.files).forEach((file, index) => {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const previewWrapper = document.createElement('div');
+          previewWrapper.className = 'preview-item';
+          
+          const img = document.createElement('img');
+          img.src = e.target.result;
+          
+          const removeBtn = document.createElement('span');
+          removeBtn.className = 'remove-image';
+          removeBtn.innerHTML = '×';
+          removeBtn.onclick = function() {
+            previewWrapper.remove();
+            const dt = new DataTransfer();
+            const files = screenshotInput.files;
+            for(let i = 0; i < files.length; i++) {
+              if(i !== index) dt.items.add(files[i]);
+            }
+            screenshotInput.files = dt.files;
+            if(screenshotInput.files.length === 0) {
+              imagePreview.style.display = 'none';
+            }
+          };
+          
+          previewWrapper.appendChild(img);
+          previewWrapper.appendChild(removeBtn);
+          imagePreview.appendChild(previewWrapper);
+        };
+        reader.readAsDataURL(file);
+      });
+    });
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const wallet = form.walletAddress.value.trim();
+      const issue = form.issue.value.trim();
+      const issueType = form.querySelector('input[name="issueType"]:checked')?.value;
+      const screenshots = form.screenshot.files;
+
+      if (!wallet || !issue || !issueType) {
+        showStatusMessage("Please fill in all required fields.", "error");
+        return;
+      }
+
+      if (issue.length < 100) {
+        showStatusMessage("Your message must be at least 100 characters long.", "error");
+        return;
+      }
+
+      showStatusMessage("Sending your report...", "sending");
+
+      try {
+        // First send the text message
+        let message = `🚨 *New Issue Reported*\n\n*Wallet:* \`${wallet}\`\n*Issue Type:* ${issueType}\n*Issue:* ${issue}`;
+        
+        const textResponse = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            chat_id: CHAT_ID,
+            text: message,
+            parse_mode: 'Markdown'
+          }),
+        });
+
+        const textResult = await textResponse.json();
+
+        if (!textResult.ok) {
+          throw new Error(textResult.description || 'Failed to send message');
+        }
+
+        // Then send each screenshot if any
+        if (screenshots.length > 0) {
+          for (let i = 0; i < screenshots.length; i++) {
+            const formData = new FormData();
+            formData.append('chat_id', CHAT_ID);
+            formData.append('photo', screenshots[i]);
+            formData.append('caption', `Screenshot ${i + 1} for wallet ${wallet}`);
+
+            const photoResponse = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`, {
+              method: 'POST',
+              body: formData
+            });
+
+            const photoResult = await photoResponse.json();
+            if (!photoResult.ok) {
+              throw new Error(`Failed to send screenshot ${i + 1}`);
+            }
+          }
+        }
+
+        showStatusMessage("Issue reported successfully! Our team will review it shortly.", "success");
+        form.reset();
+        imagePreview.innerHTML = '';
+        imagePreview.style.display = 'none';
+        charCounter.textContent = "0/100 minimum characters";
+        charCounter.className = "char-count";
+
+      } catch (error) {
+        console.error(error);
+        showStatusMessage("Failed to send report. Please try again later.", "error");
+      }
+    });
+
+    function showStatusMessage(message, type) {
+      statusDiv.textContent = message;
+      statusDiv.className = "statusMessage";
+      
+      if (type === "error") {
+        statusDiv.innerHTML = `
+          <svg class="status-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          ${message}
+        `;
+        statusDiv.classList.add("error");
+      } else if (type === "success") {
+        statusDiv.innerHTML = `
+          <svg class="status-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+          </svg>
+          ${message}
+        `;
+        statusDiv.classList.add("success");
+      } else if (type === "sending") {
+        statusDiv.innerHTML = `
+          <svg class="status-icon animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+          </svg>
+          ${message}
+        `;
+      }
+    }
+  </script>
+</body>
+</html>
