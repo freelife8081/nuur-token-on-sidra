@@ -186,7 +186,7 @@ document.addEventListener('DOMContentLoaded', function() {
             <div class="amount">${tx.amount}</div>
             <div class="time" title="${new Date(tx.timestamp * 1000).toLocaleString()}">${timeAgo}</div>
             <div class="txn-link">
-                <a href="https://sidrascan.com/tx/${tx.hash}" target="_blank" title="View on Sidrascan">
+                <a href="https://ledger.sidrachain.com/tx/${tx.hash}" target="_blank" title="View on Ledger">
                     <i class="fas fa-external-link-alt"></i>
                 </a>
             </div>
