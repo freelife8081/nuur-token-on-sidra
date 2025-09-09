@@ -1,0 +1,1863 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0 user-scalable=no"/>
+  <title>NUUR Coin Ledger</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    :root {
+      --primary: #6C4DF6;
+      --primary-dark: #5640d4;
+      --secondary: #FF7D29;
+      --dark: #1A1D2B;
+      --darker: #12141E;
+      --light: #F8FAFC;
+      --lighter: #FFFFFF;
+      --gray: #94A3B8;
+      --success: #22C55E;
+      --warning: #F59E0B;
+      --error: #EF4444;
+      --incoming: #10B981;
+      --outgoing: #EF4444;
+      --card-bg: rgba(255, 255, 255, 0.05);
+      --card-border: rgba(255, 255, 255, 0.1);
+      --shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+      --transition: all 0.3s ease;
+    }
+
+    [data-theme="light"] {
+      --dark: #F1F5F9;
+      --darker: #E2E8F0;
+      --light: #1E293B;
+      --lighter: #0F172A;
+      --gray: #64748B;
+      --card-bg: rgba(255, 255, 255, 0.9);
+      --card-border: rgba(0, 0, 0, 0.1);
+      --shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, var(--darker) 0%, var(--dark) 100%);
+      color: var(--light);
+      min-height: 100vh;
+      padding: 0;
+      transition: var(--transition);
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 1.5rem;
+    }
+
+    /* Header Styles */
+    header {
+      background: rgba(26, 29, 43, 0.8);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--card-border);
+      padding: 1rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      transition: var(--transition);
+    }
+
+    [data-theme="light"] header {
+      background: rgba(241, 245, 249, 0.9);
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .logo {
+      width: 50px;
+      height: 50px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+      font-size: 1.2rem;
+    }
+
+    .logo-text {
+      display: flex;
+      flex-direction: column;
+    }
+
+    h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--light);
+      line-height: 1.2;
+    }
+
+    .subtitle {
+      font-size: 0.85rem;
+      color: var(--gray);
+      font-weight: 500;
+    }
+
+    .header-controls {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    /* Theme Toggle */
+    .theme-toggle {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 50px;
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--light);
+      font-weight: 500;
+      transition: var(--transition);
+    }
+
+    .theme-toggle:hover {
+      background: var(--primary);
+      color: white;
+    }
+
+    /* Tabs */
+    .tabs {
+      display: flex;
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 0.5rem;
+      margin: 1.5rem 0;
+      border: 1px solid var(--card-border);
+    }
+
+    .tab {
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .tab.active {
+      background: var(--primary);
+      color: white;
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    /* Dashboard */
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 1.5rem;
+    }
+
+    .chart-container {
+      background: var(--card-bg);
+      border-radius: 16px;
+      padding: 1.5rem;
+      border: 1px solid var(--card-border);
+      box-shadow: var(--shadow);
+      margin-bottom: 1.5rem;
+    }
+
+    .chart-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .chart-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--light);
+    }
+
+    /* Stats Section */
+    .stats-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .stat-card {
+      background: var(--card-bg);
+      border-radius: 16px;
+      padding: 1.5rem;
+      border: 1px solid var(--card-border);
+      box-shadow: var(--shadow);
+      transition: var(--transition);
+    }
+
+    .stat-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    .stat-value {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--light);
+      margin-bottom: 0.5rem;
+    }
+
+    .stat-label {
+      font-size: 0.85rem;
+      color: var(--gray);
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    /* Controls Section */
+    .controls-section {
+      background: var(--card-bg);
+      border-radius: 16px;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+      border: 1px solid var(--card-border);
+      box-shadow: var(--shadow);
+    }
+
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      align-items: center;
+    }
+
+    .filter-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .filter-group label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--gray);
+    }
+
+    input, select {
+      background: var(--darker);
+      border: 1px solid var(--card-border);
+      color: var(--light);
+      padding: 0.75rem;
+      border-radius: 12px;
+      font-size: 0.9rem;
+      transition: var(--transition);
+    }
+
+    input:focus, select:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(108, 77, 246, 0.2);
+    }
+
+    [data-theme="light"] input, 
+    [data-theme="light"] select {
+      background: var(--lighter);
+      color: var(--darker);
+    }
+
+    .btn {
+      background: var(--primary);
+      color: white;
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: var(--transition);
+    }
+
+    .btn:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+    }
+
+    .btn-secondary {
+      background: var(--card-bg);
+      color: var(--light);
+      border: 1px solid var(--card-border);
+    }
+
+    .btn-secondary:hover {
+      background: var(--darker);
+    }
+
+    /* Loader */
+    #loader {
+      text-align: center;
+      margin: 3rem 0;
+    }
+
+    .loader-spinner {
+      border: 4px solid var(--card-bg);
+      border-top: 4px solid var(--primary);
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 1rem;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Table Styles */
+    .table-container {
+      background: var(--card-bg);
+      border-radius: 16px;
+      padding: 1.5rem;
+      border: 1px solid var(--card-border);
+      box-shadow: var(--shadow);
+      overflow-x: auto;
+      margin-bottom: 1.5rem;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      font-size: 0.9rem;
+    }
+
+    th {
+      background-color: var(--darker);
+      color: var(--light);
+      padding: 1rem;
+      text-align: left;
+      cursor: pointer;
+      user-select: none;
+      position: sticky;
+      top: 0;
+      font-weight: 600;
+      border-bottom: 2px solid var(--card-border);
+    }
+
+    th.sort-asc::after {
+      content: " ↑";
+    }
+
+    th.sort-desc::after {
+      content: " ↓";
+    }
+
+    td {
+      padding: 1rem;
+      text-align: left;
+      word-break: break-word;
+      border-bottom: 1px solid var(--card-border);
+    }
+
+    tr {
+      transition: var(--transition);
+    }
+
+    tr:not(:last-child) td {
+      border-bottom: 1px solid var(--card-border);
+    }
+
+    tr:hover {
+      background-color: var(--darker);
+    }
+
+    a {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 500;
+      transition: var(--transition);
+    }
+
+    a:hover {
+      color: var(--primary-dark);
+      text-decoration: underline;
+    }
+
+    .copy-icon {
+      cursor: pointer;
+      margin-left: 5px;
+      opacity: 0.7;
+      transition: var(--transition);
+    }
+
+    .copy-icon:hover {
+      opacity: 1;
+      color: var(--primary);
+    }
+
+    /* Mobile Cards */
+    .mobile-card {
+      display: none;
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      border: 1px solid var(--card-border);
+      box-shadow: var(--shadow);
+    }
+
+    .mobile-card-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 0.75rem;
+    }
+
+    .mobile-card-label {
+      font-weight: 600;
+      color: var(--gray);
+      font-size: 0.85rem;
+    }
+
+    /* Tooltip */
+    .tooltip {
+      position: relative;
+      display: inline-block;
+    }
+
+    .tooltip .tooltiptext {
+      visibility: hidden;
+      width: 120px;
+      background-color: var(--darker);
+      color: var(--light);
+      text-align: center;
+      border-radius: 6px;
+      padding: 5px;
+      position: absolute;
+      z-index: 1;
+      bottom: 125%;
+      left: 50%;
+      margin-left: -60px;
+      opacity: 0;
+      transition: opacity 0.3s;
+      border: 1px solid var(--card-border);
+      font-size: 0.8rem;
+    }
+
+    .tooltip:hover .tooltiptext {
+      visibility: visible;
+      opacity: 1;
+    }
+
+    /* Footer */
+    footer {
+      background: var(--card-bg);
+      border-radius: 16px;
+      padding: 1.5rem;
+      border: 1px solid var(--card-border);
+      box-shadow: var(--shadow);
+      margin-top: 2rem;
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 1.5rem;
+    }
+
+    .timestamp {
+      font-size: 0.85rem;
+      color: var(--gray);
+      text-align: center;
+    }
+
+    /* Status Colors */
+    .method-transfer {
+      color: var(--success);
+      font-weight: 600;
+    }
+
+    .method-approve {
+      color: var(--warning);
+      font-weight: 600;
+    }
+
+    .method-other {
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    .amount-in {
+      color: var(--incoming);
+      font-weight: 700;
+    }
+
+    .amount-out {
+      color: var(--outgoing);
+      font-weight: 700;
+    }
+
+    /* Error Message */
+    .error-message {
+      background: rgba(239, 68, 68, 0.1);
+      color: var(--error);
+      padding: 1rem;
+      border-radius: 12px;
+      text-align: center;
+      margin: 1rem 0;
+      border: 1px solid rgba(239, 68, 68, 0.2);
+    }
+
+    .success-message {
+      background: rgba(34, 197, 94, 0.1);
+      color: var(--success);
+      padding: 1rem;
+      border-radius: 12px;
+      text-align: center;
+      margin: 1rem 0;
+      border: 1px solid rgba(34, 197, 94, 0.2);
+    }
+
+    /* Responsive Design */
+    @media (max-width: 1024px) {
+      .dashboard-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .stats-container {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 1rem;
+      }
+      
+      header {
+        flex-direction: column;
+        gap: 1rem;
+        padding: 1rem;
+      }
+      
+      .tabs {
+        flex-wrap: wrap;
+      }
+      
+      .controls {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      
+      .filter-group {
+        width: 100%;
+      }
+      
+      .stats-container {
+        grid-template-columns: 1fr;
+      }
+      
+      table {
+        display: none;
+      }
+      
+      .mobile-card {
+        display: block;
+      }
+      
+      .btn-group {
+        flex-direction: column;
+      }
+    }
+
+    @media (max-width: 480px) {
+      h1 {
+        font-size: 1.3rem;
+      }
+      
+      .stat-value {
+        font-size: 1.5rem;
+      }
+      
+      .theme-toggle span:not(.theme-icon) {
+        display: none;
+      }
+      
+      .tab span {
+        display: none;
+      }
+      
+      .tab {
+        padding: 0.75rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="logo-container">
+      <div class="logo">N</div>
+      <div class="logo-text">
+        <h1>NUUR Coin Ledger</h1>
+        <span class="subtitle">Track all NUUR transactions</span>
+      </div>
+    </div>
+    <div class="header-controls">
+      <button class="theme-toggle" id="theme-toggle">
+        <i class="theme-icon fas fa-moon"></i>
+        <span class="theme-text">Dark</span>
+      </button>
+    </div>
+  </header>
+
+  <div class="container">
+    <!-- Tabs Navigation -->
+    <div class="tabs">
+      <div class="tab active" data-tab="dashboard">
+        <i class="fas fa-chart-line"></i>
+        <span>Dashboard</span>
+      </div>
+      <div class="tab" data-tab="transactions">
+        <i class="fas fa-list"></i>
+        <span>Transactions</span>
+      </div>
+      <div class="tab" data-tab="analytics">
+        <i class="fas fa-chart-pie"></i>
+        <span>Analytics</span>
+      </div>
+    </div>
+
+    <!-- Dashboard Tab -->
+    <div class="tab-content active" id="dashboard-tab">
+      <div class="dashboard-grid">
+        <div class="left-column">
+          <div class="stats-container" id="stats-container">
+            <!-- Filled dynamically by JavaScript -->
+          </div>
+          
+          <div class="chart-container">
+            <div class="chart-header">
+              <div class="chart-title">Volume Over Time</div>
+              <select id="chart-range">
+                <option value="7">Last 7 Days</option>
+                <option value="30" selected>Last 30 Days</option>
+                <option value="90">Last 90 Days</option>
+                <option value="365">Last Year</option>
+                <option value="all">All Time</option>
+              </select>
+            </div>
+            <canvas id="volumeChart"></canvas>
+          </div>
+          
+          <div class="controls-section">
+            <div class="controls">
+              <div class="filter-group">
+                <label for="search"><i class="fas fa-search"></i> Search</label>
+                <input type="text" id="search" placeholder="Address, txn hash, or amount">
+              </div>
+              <div class="filter-group">
+                <label for="filter-method"><i class="fas fa-filter"></i> Method</label>
+                <select id="filter-method">
+                  <option value="all">All Methods</option>
+                  <option value="transfer">Transfer</option>
+                  <option value="approve">Approve</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+              <div class="filter-group">
+                <label for="filter-address"><i class="fas fa-address-book"></i> Address</label>
+                <select id="filter-address">
+                  <option value="all">All Addresses</option>
+                  <option value="0x858024c3c8179ed448a9133190f991cfa9873657">Presale 1</option>
+                  <option value="0x98fcc396547d450208e926995a74b61874a1423a">Presale 2</option>
+                  <option value="0x8e4384ed929b82a2fee2e6f043213170c1d905d9">Airdrop</option>
+                </select>
+              </div>
+              <button id="refresh-btn" class="btn btn-secondary">
+                <i class="fas fa-sync-alt"></i> Refresh
+              </button>
+            </div>
+          </div>
+        </div>
+        
+        <div class="right-column">
+          <div class="chart-container">
+            <div class="chart-header">
+              <div class="chart-title">Transaction Types</div>
+            </div>
+            <canvas id="methodChart"></canvas>
+          </div>
+          
+          <div class="chart-container">
+            <div class="chart-header">
+              <div class="chart-title">Top Addresses</div>
+            </div>
+            <canvas id="addressChart"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Transactions Tab -->
+    <div class="tab-content" id="transactions-tab">
+      <div class="table-container">
+        <table id="ledger-table">
+          <thead>
+            <tr>
+              <th id="th-timestamp" data-sort="desc">
+                <i class="fas fa-clock"></i> Timestamp
+              </th>
+              <th id="th-from" data-sort="none">
+                <i class="fas fa-from"></i> From
+              </th>
+              <th id="th-to" data-sort="none">
+                <i class="fas fa-to"></i> To
+              </th>
+              <th id="th-amount" data-sort="desc">
+                <i class="fas fa-coins"></i> Amount
+              </th>
+              <th id="th-txn" data-sort="none">
+                <i class="fas fa-receipt"></i> Txn Hash
+              </th>
+              <th id="th-method" data-sort="none">
+                <i class="fas fa-code"></i> Method
+              </th>
+            </tr>
+          </thead>
+          <tbody id="ledger-body"></tbody>
+        </table>
+      </div>
+
+      <div id="mobile-ledger">
+        <!-- Filled dynamically for mobile view -->
+      </div>
+
+      <div id="load-more-container" style="text-align: center; margin: 1.5rem 0; display: none;">
+        <button id="load-more-btn" class="btn">
+          <i class="fas fa-chevron-down"></i> Load More
+        </button>
+      </div>
+    </div>
+
+    <!-- Analytics Tab -->
+    <div class="tab-content" id="analytics-tab">
+      <div class="dashboard-grid">
+        <div class="chart-container">
+          <div class="chart-header">
+            <div class="chart-title">Daily Transactions</div>
+          </div>
+          <canvas id="dailyTxChart"></canvas>
+        </div>
+        
+        <div class="chart-container">
+          <div class="chart-header">
+            <div class="chart-title">Transaction Value Distribution</div>
+          </div>
+          <canvas id="valueDistributionChart"></canvas>
+        </div>
+      </div>
+      
+      <div class="stats-container">
+        <div class="stat-card">
+          <div class="stat-value" id="avg-tx-value">0</div>
+          <div class="stat-label"><i class="fas fa-coins"></i> Average Transaction Value</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="median-tx-value">0</div>
+          <div class="stat-label"><i class="fas fa-balance-scale"></i> Median Transaction Value</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="tx-frequency">0</div>
+          <div class="stat-label"><i class="fas fa-history"></i> Transactions Per Day</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="active-addresses">0</div>
+          <div class="stat-label"><i class="fas fa-users"></i> Active Addresses (30d)</div>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      <div class="btn-group">
+        <a class="btn" href="phase2" target="_blank" rel="noopener noreferrer">
+          <i class="fas fa-external-link-alt"></i> Go to Presale
+        </a>
+        <button id="export-btn" class="btn btn-secondary">
+          <i class="fas fa-file-export"></i> Export CSV
+        </button>
+      </div>
+      <div class="timestamp">
+        <p>Last updated: <span id="last-updated">Never</span></p>
+        <p>Data cached until: <span id="cache-expiry">Not cached</span></p>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    // Configuration
+    const tokenAddress = '0x003BEc2e6ef4369f9d968eCD288d31B59fD9c2CD'.toLowerCase();
+    const tokenDecimals = 18;
+    const rpcUrl = 'https://node.sidrachain.com';
+    const transferEventSig = '0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef';
+    const pageSize = 10;
+    const CACHE_KEY = 'nuur_ledger_cache';
+    const CACHE_EXPIRY_HOURS = 6;
+
+    // DOM Elements
+    const ledgerBody = document.getElementById('ledger-body');
+    const mobileLedger = document.getElementById('mobile-ledger');
+    const loader = document.getElementById('loader');
+    const table = document.getElementById('ledger-table');
+    const loadMoreContainer = document.getElementById('load-more-container');
+    const loadMoreBtn = document.getElementById('load-more-btn');
+    const refreshBtn = document.getElementById('refresh-btn');
+    const searchInput = document.getElementById('search');
+    const filterMethod = document.getElementById('filter-method');
+    const filterAddress = document.getElementById('filter-address');
+    const errorMessage = document.getElementById('error-message');
+    const lastUpdated = document.getElementById('last-updated');
+    const cacheExpiry = document.getElementById('cache-expiry');
+    const exportBtn = document.getElementById('export-btn');
+    const statsContainer = document.getElementById('stats-container');
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeIcon = document.querySelector('.theme-icon');
+    const themeText = document.querySelector('.theme-text');
+    const tabs = document.querySelectorAll('.tab');
+    const tabContents = document.querySelectorAll('.tab-content');
+
+    // Chart variables
+    let volumeChart, methodChart, addressChart, dailyTxChart, valueDistributionChart;
+
+    // State
+    let allTransactions = [];
+    let displayedTransactions = 0;
+    let sortColumn = 'timestamp';
+    let sortDirection = 'desc';
+    let userAddress = null;
+
+    // Caches
+    const txCache = new Map();
+    const blockCache = new Map();
+    const addressLabels = {
+      '0x858024c3c8179ed448a9133190f991cfa9873657': 'Presale 1',
+      '0x98fcc396547d450208e926995a74b61874a1423a': 'Presale 2',
+      '0x8e4384ed929b82a2fee2e6f043213170c1d905d9': 'Airdrop'
+    };
+
+    // Initialize theme
+    function initTheme() {
+      const savedTheme = localStorage.getItem('nuur_ledger_theme') || 
+                        (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+      setTheme(savedTheme);
+    }
+
+    function setTheme(theme) {
+      document.documentElement.setAttribute('data-theme', theme);
+      localStorage.setItem('nuur_ledger_theme', theme);
+      
+      if (theme === 'light') {
+        themeIcon.className = 'theme-icon fas fa-sun';
+        themeText.textContent = 'Light';
+      } else {
+        themeIcon.className = 'theme-icon fas fa-moon';
+        themeText.textContent = 'Dark';
+      }
+    }
+
+    function toggleTheme() {
+      const currentTheme = document.documentElement.getAttribute('data-theme');
+      setTheme(currentTheme === 'light' ? 'dark' : 'light');
+    }
+
+    // Tab functionality
+    function setupTabs() {
+      tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          const tabId = tab.getAttribute('data-tab');
+          
+          // Update active tab
+          tabs.forEach(t => t.classList.remove('active'));
+          tab.classList.add('active');
+          
+          // Show active content
+          tabContents.forEach(content => content.classList.remove('active'));
+          document.getElementById(`${tabId}-tab`).classList.add('active');
+        });
+      });
+    }
+
+    // Chart functions
+    function initCharts() {
+      // Volume over time chart
+      const volumeCtx = document.getElementById('volumeChart').getContext('2d');
+      volumeChart = new Chart(volumeCtx, {
+        type: 'line',
+        data: {
+          labels: [],
+          datasets: [{
+            label: 'Transaction Volume',
+            data: [],
+            borderColor: '#6C4DF6',
+            backgroundColor: 'rgba(108, 77, 246, 0.1)',
+            tension: 0.3,
+            fill: true
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: {
+              position: 'top',
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              ticks: {
+                callback: function(value) {
+                  return value + ' NUUR';
+                }
+              }
+            }
+          }
+        }
+      });
+
+      // Method distribution chart
+      const methodCtx = document.getElementById('methodChart').getContext('2d');
+      methodChart = new Chart(methodCtx, {
+        type: 'doughnut',
+        data: {
+          labels: ['Transfer', 'Approve', 'Other'],
+          datasets: [{
+            data: [0, 0, 0],
+            backgroundColor: [
+              '#22C55E',
+              '#F59E0B',
+              '#6C4DF6'
+            ]
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: {
+              position: 'top',
+            }
+          }
+        }
+      });
+
+      // Address distribution chart
+      const addressCtx = document.getElementById('addressChart').getContext('2d');
+      addressChart = new Chart(addressCtx, {
+        type: 'bar',
+        data: {
+          labels: [],
+          datasets: [{
+            label: 'Transaction Count',
+            data: [],
+            backgroundColor: '#FF7D29'
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: {
+              display: false
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
+        }
+      });
+
+      // Daily transactions chart
+      const dailyTxCtx = document.getElementById('dailyTxChart').getContext('2d');
+      dailyTxChart = new Chart(dailyTxCtx, {
+        type: 'bar',
+        data: {
+          labels: [],
+          datasets: [{
+            label: 'Transactions',
+            data: [],
+            backgroundColor: '#10B981'
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: {
+              position: 'top',
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
+        }
+      });
+
+      // Value distribution chart
+      const valueDistributionCtx = document.getElementById('valueDistributionChart').getContext('2d');
+      valueDistributionChart = new Chart(valueDistributionCtx, {
+        type: 'doughnut',
+        data: {
+          labels: ['< 100 NUUR', '100-1K NUUR', '1K-10K NUUR', '> 10K NUUR'],
+          datasets: [{
+            data: [0, 0, 0, 0],
+            backgroundColor: [
+              '#6C4DF6',
+              '#FF7D29',
+              '#10B981',
+              '#EF4444'
+            ]
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: {
+              position: 'top',
+            }
+          }
+        }
+      });
+    }
+
+    function updateCharts() {
+      if (allTransactions.length === 0) return;
+      
+      // Update volume chart
+      const volumeData = calculateVolumeOverTime(30); // Last 30 days
+      volumeChart.data.labels = volumeData.labels;
+      volumeChart.data.datasets[0].data = volumeData.values;
+      volumeChart.update();
+      
+      // Update method chart
+      const methodData = calculateMethodDistribution();
+      methodChart.data.datasets[0].data = [
+        methodData.transfer,
+        methodData.approve,
+        methodData.other
+      ];
+      methodChart.update();
+      
+      // Update address chart
+      const addressData = calculateTopAddresses(5); // Top 5 addresses
+      addressChart.data.labels = addressData.labels;
+      addressChart.data.datasets[0].data = addressData.values;
+      addressChart.update();
+      
+      // Update daily transactions chart
+      const dailyTxData = calculateDailyTransactions(30);
+      dailyTxChart.data.labels = dailyTxData.labels;
+      dailyTxChart.data.datasets[0].data = dailyTxData.values;
+      dailyTxChart.update();
+      
+      // Update value distribution chart
+      const valueDistributionData = calculateValueDistribution();
+      valueDistributionChart.data.datasets[0].data = [
+        valueDistributionData.small,
+        valueDistributionData.medium,
+        valueDistributionData.large,
+        valueDistributionData.xlarge
+      ];
+      valueDistributionChart.update();
+      
+      // Update analytics stats
+      updateAnalyticsStats();
+    }
+
+    function calculateVolumeOverTime(days = 30) {
+      const now = new Date();
+      const result = {
+        labels: [],
+        values: []
+      };
+      
+      // Initialize with empty data for each day
+      for (let i = days - 1; i >= 0; i--) {
+        const date = new Date(now);
+        date.setDate(date.getDate() - i);
+        const label = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+        result.labels.push(label);
+        result.values.push(0);
+      }
+      
+      // Sum up transaction amounts by day
+      allTransactions.forEach(tx => {
+        const txDate = new Date(tx.timestamp * 1000);
+        const dayDiff = Math.floor((now - txDate) / (1000 * 60 * 60 * 24));
+        
+        if (dayDiff < days && dayDiff >= 0) {
+          const index = days - 1 - dayDiff;
+          result.values[index] += tx.amount;
+        }
+      });
+      
+      return result;
+    }
+
+    function calculateMethodDistribution() {
+      const result = {
+        transfer: 0,
+        approve: 0,
+        other: 0
+      };
+      
+      allTransactions.forEach(tx => {
+        if (tx.method === 'transfer') result.transfer++;
+        else if (tx.method === 'approve') result.approve++;
+        else result.other++;
+      });
+      
+      return result;
+    }
+
+    function calculateTopAddresses(limit = 5) {
+      const addressCounts = {};
+      
+      allTransactions.forEach(tx => {
+        // Count transactions from address
+        addressCounts[tx.from] = (addressCounts[tx.from] || 0) + 1;
+        
+        // Count transactions to address
+        addressCounts[tx.to] = (addressCounts[tx.to] || 0) + 1;
+      });
+      
+      // Convert to array and sort
+      const addresses = Object.entries(addressCounts)
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, limit);
+      
+      return {
+        labels: addresses.map(([address]) => sliceAddress(address)),
+        values: addresses.map(([, count]) => count)
+      };
+    }
+
+    function calculateDailyTransactions(days = 30) {
+      const now = new Date();
+      const result = {
+        labels: [],
+        values: []
+      };
+      
+      // Initialize with empty data for each day
+      for (let i = days - 1; i >= 0; i--) {
+        const date = new Date(now);
+        date.setDate(date.getDate() - i);
+        const label = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+        result.labels.push(label);
+        result.values.push(0);
+      }
+      
+      // Count transactions by day
+      allTransactions.forEach(tx => {
+        const txDate = new Date(tx.timestamp * 1000);
+        const dayDiff = Math.floor((now - txDate) / (1000 * 60 * 60 * 24));
+        
+        if (dayDiff < days && dayDiff >= 0) {
+          const index = days - 1 - dayDiff;
+          result.values[index]++;
+        }
+      });
+      
+      return result;
+    }
+
+    function calculateValueDistribution() {
+      const result = {
+        small: 0,   // < 100 NUUR
+        medium: 0,  // 100-1K NUUR
+        large: 0,   // 1K-10K NUUR
+        xlarge: 0   // > 10K NUUR
+      };
+      
+      allTransactions.forEach(tx => {
+        if (tx.amount < 100) result.small++;
+        else if (tx.amount < 1000) result.medium++;
+        else if (tx.amount < 10000) result.large++;
+        else result.xlarge++;
+      });
+      
+      return result;
+    }
+
+    function updateAnalyticsStats() {
+      if (allTransactions.length === 0) return;
+      
+      // Calculate average transaction value
+      const totalVolume = allTransactions.reduce((sum, tx) => sum + tx.amount, 0);
+      const avgTxValue = totalVolume / allTransactions.length;
+      document.getElementById('avg-tx-value').textContent = avgTxValue.toFixed(2);
+      
+      // Calculate median transaction value
+      const sortedAmounts = allTransactions.map(tx => tx.amount).sort((a, b) => a - b);
+      const mid = Math.floor(sortedAmounts.length / 2);
+      const medianTxValue = sortedAmounts.length % 2 !== 0 
+        ? sortedAmounts[mid] 
+        : (sortedAmounts[mid - 1] + sortedAmounts[mid]) / 2;
+      document.getElementById('median-tx-value').textContent = medianTxValue.toFixed(2);
+      
+      // Calculate transactions per day
+      const firstTx = allTransactions[allTransactions.length - 1];
+      const lastTx = allTransactions[0];
+      const daysDiff = Math.ceil((lastTx.timestamp - firstTx.timestamp) / (60 * 60 * 24));
+      const txPerDay = allTransactions.length / Math.max(1, daysDiff);
+      document.getElementById('tx-frequency').textContent = txPerDay.toFixed(1);
+      
+      // Calculate active addresses (last 30 days)
+      const thirtyDaysAgo = Date.now() / 1000 - 30 * 24 * 60 * 60;
+      const activeAddresses = new Set();
+      allTransactions.forEach(tx => {
+        if (tx.timestamp >= thirtyDaysAgo) {
+          activeAddresses.add(tx.from);
+          activeAddresses.add(tx.to);
+        }
+      });
+      document.getElementById('active-addresses').textContent = activeAddresses.size;
+    }
+
+    // Helper functions
+    function sliceAddress(addr) {
+      return addr ? addr.slice(0, 6) + '...' + addr.slice(-4) : 'N/A';
+    }
+
+    function copyToClipboard(text) {
+      navigator.clipboard.writeText(text).then(() => {
+        showTooltip('Copied!');
+      }).catch(err => {
+        console.error('Failed to copy:', err);
+      });
+    }
+
+    function showTooltip(message) {
+      const tooltip = document.createElement('div');
+      tooltip.className = 'tooltip-message';
+      tooltip.textContent = message;
+      tooltip.style.position = 'fixed';
+      tooltip.style.bottom = '20px';
+      tooltip.style.left = '50%';
+      tooltip.style.transform = 'translateX(-50%)';
+      tooltip.style.backgroundColor = 'var(--darker)';
+      tooltip.style.color = 'var(--light)';
+      tooltip.style.padding = '8px 16px';
+      tooltip.style.borderRadius = '4px';
+      tooltip.style.boxShadow = '0 4px 12px rgba(0,0,0,0.15)';
+      tooltip.style.zIndex = '1000';
+      tooltip.style.border = '1px solid var(--card-border)';
+      document.body.appendChild(tooltip);
+      
+      setTimeout(() => {
+        tooltip.style.opacity = '0';
+        tooltip.style.transition = 'opacity 0.5s';
+        setTimeout(() => document.body.removeChild(tooltip), 500);
+      }, 2000);
+    }
+
+    function getMethodFromInput(input) {
+      if (!input || input === '0x') return 'N/A';
+      
+      const methodId = input.slice(2, 10);
+      switch(methodId) {
+        case 'a9059cbb': return 'transfer';
+        case '095ea7b3': return 'approve';
+        default: return 'other';
+      }
+    }
+
+    function getMethodClass(method) {
+      switch(method) {
+        case 'transfer': return 'method-transfer';
+        case 'approve': return 'method-approve';
+        default: return 'method-other';
+      }
+    }
+
+    function decodeAmount(hex) {
+      return parseInt(hex, 16) / (10 ** tokenDecimals);
+    }
+
+    function formatTimestamp(timestamp) {
+      if (!timestamp) return 'N/A';
+      const date = new Date(timestamp * 1000);
+      return date.toLocaleString();
+    }
+
+    function formatDateForCSV(timestamp) {
+      if (!timestamp) return '';
+      const date = new Date(timestamp * 1000);
+      return date.toISOString();
+    }
+
+    function getLabelForAddress(address) {
+      if (!address) return 'N/A';
+      
+      const addr = address.toLowerCase();
+      return addressLabels[addr] || sliceAddress(addr);
+    }
+
+    function getAmountClass(from, to) {
+      if (!userAddress) return '';
+      const userAddr = userAddress.toLowerCase();
+      return to.toLowerCase() === userAddr ? 'amount-in' : 
+             from.toLowerCase() === userAddr ? 'amount-out' : '';
+    }
+
+    // Data fetching functions
+    async function fetchTxInput(hash) {
+      if (txCache.has(hash)) return txCache.get(hash);
+      
+      try {
+        const res = await fetch(rpcUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            jsonrpc: '2.0',
+            id: 1,
+            method: 'eth_getTransactionByHash',
+            params: [hash]
+          })
+        });
+        const txData = await res.json();
+        const input = txData.result?.input || '0x';
+        txCache.set(hash, input);
+        return input;
+      } catch (error) {
+        console.error('Error fetching transaction:', error);
+        return '0x';
+      }
+    }
+
+    async function fetchBlockTimestamp(blockNumber) {
+      if (blockCache.has(blockNumber)) return blockCache.get(blockNumber);
+      
+      try {
+        const res = await fetch(rpcUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            jsonrpc: '2.0',
+            id: 1,
+            method: 'eth_getBlockByNumber',
+            params: [blockNumber, false]
+          })
+        });
+        const blockData = await res.json();
+        const timestamp = parseInt(blockData.result?.timestamp, 16) || Date.now() / 1000;
+        blockCache.set(blockNumber, timestamp);
+        return timestamp;
+      } catch (error) {
+        console.error('Error fetching block:', error);
+        return Math.floor(Date.now() / 1000);
+      }
+    }
+
+    // Cache management
+    function saveToCache(data) {
+      const cacheData = {
+        transactions: data,
+        timestamp: Date.now(),
+        expiry: Date.now() + (CACHE_EXPIRY_HOURS * 60 * 60 * 1000)
+      };
+      localStorage.setItem(CACHE_KEY, JSON.stringify(cacheData));
+      updateCacheExpiryDisplay(cacheData.expiry);
+    }
+
+    function loadFromCache() {
+      const cacheData = localStorage.getItem(CACHE_KEY);
+      if (!cacheData) return null;
+      
+      const parsed = JSON.parse(cacheData);
+      if (Date.now() > parsed.expiry) {
+        localStorage.removeItem(CACHE_KEY);
+        return null;
+      }
+      
+      updateCacheExpiryDisplay(parsed.expiry);
+      return parsed.transactions;
+    }
+
+    function updateCacheExpiryDisplay(expiryTimestamp) {
+      if (!expiryTimestamp) {
+        cacheExpiry.textContent = 'Not cached';
+        return;
+      }
+      
+      const expiryDate = new Date(expiryTimestamp);
+      cacheExpiry.textContent = expiryDate.toLocaleString();
+    }
+
+    // Analytics functions
+    function calculateStats(transactions) {
+      const stats = {
+        totalTransactions: transactions.length,
+        uniqueSenders: new Set(),
+        uniqueReceivers: new Set(),
+        totalVolume: 0,
+        largestTransfer: 0,
+        firstTransaction: null,
+        lastTransaction: null
+      };
+
+      transactions.forEach(tx => {
+        stats.uniqueSenders.add(tx.from);
+        stats.uniqueReceivers.add(tx.to);
+        stats.totalVolume += tx.amount;
+        
+        if (tx.amount > stats.largestTransfer) {
+          stats.largestTransfer = tx.amount;
+        }
+        
+        if (!stats.firstTransaction || tx.timestamp < stats.firstTransaction.timestamp) {
+          stats.firstTransaction = tx;
+        }
+        
+        if (!stats.lastTransaction || tx.timestamp > stats.lastTransaction.timestamp) {
+          stats.lastTransaction = tx;
+        }
+      });
+
+      return {
+        ...stats,
+        uniqueAddresses: stats.uniqueSenders.size + stats.uniqueReceivers.size,
+        averageTransfer: stats.totalVolume / stats.totalTransactions
+      };
+    }
+
+    function renderStats(stats) {
+      statsContainer.innerHTML = `
+        <div class="stat-card">
+          <div class="stat-value">${stats.totalTransactions}</div>
+          <div class="stat-label"><i class="fas fa-exchange-alt"></i> Total Transactions</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">${stats.uniqueAddresses}</div>
+          <div class="stat-label"><i class="fas fa-users"></i> Unique Addresses</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">${stats.totalVolume.toFixed(2)}</div>
+          <div class="stat-label"><i class="fas fa-chart-line"></i> Total Volume (NUUR)</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">${stats.averageTransfer.toFixed(2)}</div>
+          <div class="stat-label"><i class="fas fa-calculator"></i> Avg. Transfer (NUUR)</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">${stats.largestTransfer.toFixed(2)}</div>
+          <div class="stat-label"><i class="fas fa-arrow-up"></i> Largest Transfer (NUUR)</div>
+        </div>
+      `;
+    }
+
+    // Transaction processing
+    function filterTransactions() {
+      const searchTerm = searchInput.value.toLowerCase();
+      const methodFilter = filterMethod.value;
+      const addressFilter = filterAddress.value;
+      
+      return allTransactions.filter(tx => {
+        // Search filter
+        const matchesSearch = searchTerm === '' || 
+          tx.from.toLowerCase().includes(searchTerm) ||
+          tx.to.toLowerCase().includes(searchTerm) ||
+          tx.hash.toLowerCase().includes(searchTerm) ||
+          tx.amount.toString().includes(searchTerm);
+        
+        // Method filter
+        const matchesMethod = methodFilter === 'all' || 
+          (methodFilter === 'transfer' && tx.method === 'transfer') ||
+          (methodFilter === 'approve' && tx.method === 'approve') ||
+          (methodFilter === 'other' && tx.method !== 'transfer' && tx.method !== 'approve');
+        
+        // Address filter
+        const matchesAddress = addressFilter === 'all' || 
+          tx.from.toLowerCase() === addressFilter.toLowerCase() ||
+          tx.to.toLowerCase() === addressFilter.toLowerCase();
+        
+        return matchesSearch && matchesMethod && matchesAddress;
+      });
+    }
+
+    function sortTransactions(transactions) {
+      return transactions.sort((a, b) => {
+        let valA, valB;
+        
+        switch(sortColumn) {
+          case 'timestamp':
+            valA = a.timestamp;
+            valB = b.timestamp;
+            break;
+          case 'amount':
+            valA = a.amount;
+            valB = b.amount;
+            break;
+          case 'from':
+            valA = a.fromDisplay;
+            valB = b.fromDisplay;
+            break;
+          case 'to':
+            valA = a.toDisplay;
+            valB = b.toDisplay;
+            break;
+          default:
+            return 0;
+        }
+        
+        if (valA < valB) return sortDirection === 'asc' ? -1 : 1;
+        if (valA > valB) return sortDirection === 'asc' ? 1 : -1;
+        return 0;
+      });
+    }
+
+    function renderTransactions() {
+      const filtered = filterTransactions();
+      const sorted = sortTransactions([...filtered]);
+      
+      // Clear current displays
+      ledgerBody.innerHTML = '';
+      mobileLedger.innerHTML = '';
+      
+      // Display only the current page
+      const transactionsToShow = sorted.slice(0, displayedTransactions);
+      
+      // Render desktop table
+      transactionsToShow.forEach(tx => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>
+            <div class="timestamp">${formatTimestamp(tx.timestamp)}</div>
+          </td>
+          <td>
+            <span class="tooltip">
+              ${tx.fromDisplay}
+              <span class="tooltiptext">${tx.from}</span>
+            </span>
+            <span class="copy-icon" onclick="copyToClipboard('${tx.from}')"><i class="fas fa-copy"></i></span>
+          </td>
+          <td>
+            <span class="tooltip">
+              ${tx.toDisplay}
+              <span class="tooltiptext">${tx.to}</span>
+            </span>
+            <span class="copy-icon" onclick="copyToClipboard('${tx.to}')"><i class="fas fa-copy"></i></span>
+          </td>
+          <td class="${getAmountClass(tx.from, tx.to)}">${tx.amount.toFixed(2)}</td>
+          <td>
+            <a href="https://ledger.sidrachain.com/tx/${tx.hash}" target="_blank" rel="noopener noreferrer">
+              ${tx.hash.slice(0, 10)}...
+            </a>
+            <span class="copy-icon" onclick="copyToClipboard('${tx.hash}')"><i class="fas fa-copy"></i></span>
+          </td>
+          <td class="${getMethodClass(tx.method)}">${tx.method}</td>
+        `;
+        ledgerBody.appendChild(row);
+      });
+      
+      // Render mobile cards
+      transactionsToShow.forEach(tx => {
+        const card = document.createElement('div');
+        card.className = 'mobile-card';
+        card.innerHTML = `
+          <div class="mobile-card-row">
+            <span class="mobile-card-label">From:</span>
+            <span>${tx.fromDisplay}</span>
+          </div>
+          <div class="mobile-card-row">
+            <span class="mobile-card-label">To:</span>
+            <span>${tx.toDisplay}</span>
+          </div>
+          <div class="mobile-card-row">
+            <span class="mobile-card-label">Amount:</span>
+            <span class="${getAmountClass(tx.from, tx.to)}">${tx.amount.toFixed(2)} NUUR</span>
+          </div>
+          <div class="mobile-card-row">
+            <span class="mobile-card-label">Time:</span>
+            <span class="timestamp">${formatTimestamp(tx.timestamp)}</span>
+          </div>
+          <div class="mobile-card-row">
+            <span class="mobile-card-label">Method:</span>
+            <span class="${getMethodClass(tx.method)}">${tx.method}</span>
+          </div>
+          <div class="mobile-card-row">
+            <span class="mobile-card-label">Txn:</span>
+            <a href="https://ledger.sidrachain.com/tx/${tx.hash}" target="_blank" rel="noopener noreferrer">
+              View on explorer
+            </a>
+          </div>
+        `;
+        mobileLedger.appendChild(card);
+      });
+      
+      // Show/hide load more button
+      if (displayedTransactions < sorted.length) {
+        loadMoreContainer.style.display = 'block';
+      } else {
+        loadMoreContainer.style.display = 'none';
+      }
+      
+      // Show table if we have transactions
+      if (filtered.length > 0) {
+        table.style.display = 'table';
+      } else {
+        table.style.display = 'none';
+      }
+      
+      // Update stats
+      const stats = calculateStats(filtered);
+      renderStats(stats);
+    }
+
+    function updateLastUpdated() {
+      const now = new Date();
+      lastUpdated.textContent = now.toLocaleString();
+    }
+
+    // Export functions
+    function exportToCSV() {
+      const filtered = filterTransactions();
+      const sorted = sortTransactions([...filtered]);
+      
+      let csv = 'Timestamp,From,To,Amount (NUUR),Transaction Hash,Method\n';
+      
+      sorted.forEach(tx => {
+        csv += `"${formatDateForCSV(tx.timestamp)}","${tx.from}","${tx.to}",${tx.amount.toFixed(2)},"${tx.hash}","${tx.method}"\n`;
+      });
+      
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.setAttribute('href', url);
+      link.setAttribute('download', `nuur_transactions_${new Date().toISOString().slice(0, 10)}.csv`);
+      link.style.visibility = 'hidden';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+
+    // Main data loading function
+    async function fetchLogsAndDisplay() {
+      try {
+        // Check cache first
+        const cachedData = loadFromCache();
+        if (cachedData) {
+          allTransactions = cachedData;
+          displayedTransactions = Math.min(pageSize, allTransactions.length);
+          renderTransactions();
+          updateLastUpdated();
+          loader.style.display = 'none';
+          table.style.display = 'table';
+          updateCharts();
+        }
+        
+        loader.style.display = 'block';
+        errorMessage.style.display = 'none';
+        table.style.display = 'none';
+        loadMoreContainer.style.display = 'none';
+        
+        const res = await fetch(rpcUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            jsonrpc: '2.0',
+            id: 1,
+            method: 'eth_getLogs',
+            params: [{
+              fromBlock: '0x0',
+              toBlock: 'latest',
+              address: tokenAddress,
+              topics: [transferEventSig]
+            }]
+          })
+        });
+
+        if (!res.ok) throw new Error('Network response was not ok');
+        
+        const data = await res.json();
+        const logs = data.result || [];
+        
+        // Process all logs in parallel
+        const transactions = await Promise.all(logs.map(async log => {
+          const from = '0x' + log.topics[1].slice(26).toLowerCase();
+          const to = '0x' + log.topics[2].slice(26);
+          const amount = decodeAmount(log.data);
+          const hash = log.transactionHash;
+          const blockNumber = log.blockNumber;
+          
+          // Fetch additional data in parallel
+          const [input, timestamp] = await Promise.all([
+            fetchTxInput(hash),
+            fetchBlockTimestamp(blockNumber)
+          ]);
+          
+          const method = getMethodFromInput(input);
+          
+          return {
+            from,
+            to,
+            amount,
+            hash,
+            method,
+            timestamp,
+            fromDisplay: getLabelForAddress(from),
+            toDisplay: getLabelForAddress(to),
+            blockNumber
+          };
+        }));
+        
+        allTransactions = transactions;
+        displayedTransactions = Math.min(pageSize, allTransactions.length);
+        
+        // Save to cache
+        saveToCache(allTransactions);
+        
+        renderTransactions();
+        updateLastUpdated();
+        updateCharts();
+        
+        loader.style.display = 'none';
+      } catch (error) {
+        console.error('Error:', error);
+        loader.style.display = 'none';
+        errorMessage.style.display = 'block';
+        errorMessage.textContent = `Failed to load transactions: ${error.message}`;
+        
+        // If we have cached data but failed to fetch new, show cached
+        if (allTransactions.length === 0) {
+          const cachedData = loadFromCache();
+          if (cachedData) {
+            allTransactions = cachedData;
+            displayedTransactions = Math.min(pageSize, allTransactions.length);
+            renderTransactions();
+            updateLastUpdated();
+            table.style.display = 'table';
+            errorMessage.textContent += ' Showing cached data.';
+          }
+        }
+      }
+    }
+
+    function setupEventListeners() {
+      // Load more button
+      loadMoreBtn.addEventListener('click', () => {
+        displayedTransactions += pageSize;
+        renderTransactions();
+      });
+      
+      // Refresh button
+      refreshBtn.addEventListener('click', () => {
+        txCache.clear();
+        blockCache.clear();
+        localStorage.removeItem(CACHE_KEY);
+        fetchLogsAndDisplay();
+      });
+      
+      // Export button
+      exportBtn.addEventListener('click', exportToCSV);
+      
+      // Search and filter inputs
+      searchInput.addEventListener('input', renderTransactions);
+      filterMethod.addEventListener('change', renderTransactions);
+      filterAddress.addEventListener('change', renderTransactions);
+      
+      // Theme toggle
+      themeToggle.addEventListener('click', toggleTheme);
+      
+      // Table sorting
+      document.querySelectorAll('th[data-sort]').forEach(th => {
+        th.addEventListener('click', () => {
+          const column = th.id.replace('th-', '');
+          
+          // Reset all other columns
+          document.querySelectorAll('th[data-sort]').forEach(otherTh => {
+            if (otherTh !== th) {
+              otherTh.dataset.sort = 'none';
+              otherTh.classList.remove('sort-asc', 'sort-desc');
+            }
+          });
+          
+          // Set new sort state
+          if (th.dataset.sort === 'asc') {
+            th.dataset.sort = 'desc';
+            sortDirection = 'desc';
+          } else {
+            th.dataset.sort = 'asc';
+            sortDirection = 'asc';
+          }
+          
+          sortColumn = column;
+          th.classList.toggle('sort-asc', sortDirection === 'asc');
+          th.classList.toggle('sort-desc', sortDirection === 'desc');
+          
+          renderTransactions();
+        });
+      });
+    }
+
+    // Initialize
+    function init() {
+      initTheme();
+      setupTabs();
+      setupEventListeners();
+      initCharts();
+      
+      // Check if we have wallet integration (MetaMask, etc.)
+      if (window.ethereum) {
+        window.ethereum.request({ method: 'eth_requestAccounts' })
+          .then(accounts => {
+            userAddress = accounts[0];
+            renderTransactions();
+          })
+          .catch(err => {
+            console.log('User denied wallet access');
+          });
+      }
+      
+      fetchLogsAndDisplay();
+    }
+
+    // Make copyToClipboard available globally for inline handlers
+    window.copyToClipboard = copyToClipboard;
+
+    // Start the app
+    init();
+  </script>
+</body>
+      </html>
