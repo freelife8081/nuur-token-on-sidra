@@ -5,166 +5,164 @@
   <meta name="viewport" content="width=device-width, initial-scale=1 user-scalable=no" />
   <title>NUUR Support - Report an Issue</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     :root {
-      --primary-color: #4361ee;
-      --primary-hover: #3a56d4;
-      --gradient-start: #4361ee;
-      --gradient-end: #3a0ca3;
+      --primary: #4361ee;
+      --primary-dark: #3a56d4;
+      --secondary: #7209b7;
+      --accent: #f72585;
       --background: #f8fafc;
       --card-bg: #ffffff;
       --text-primary: #0f172a;
       --text-secondary: #64748b;
-      --border-color: #e2e8f0;
-      --error-color: #ef4444;
-      --success-color: #10b981;
-      --radius-lg: 12px;
-      --radius-md: 8px;
-      --radius-sm: 4px;
-      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-      --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      --border: #e2e8f0;
+      --error: #ef4444;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --radius-lg: 16px;
+      --radius-md: 12px;
+      --radius-sm: 8px;
+      --shadow-sm: 0 4px 6px rgba(0, 0, 0, 0.04);
+      --shadow: 0 10px 20px rgba(0, 0, 0, 0.08), 0 2px 6px rgba(0, 0, 0, 0.04);
+      --shadow-md: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
 
     body {
       font-family: 'Inter', sans-serif;
-      background: var(--background);
+      background: linear-gradient(135deg, #f0f4ff 0%, #f8fafc 100%);
       color: var(--text-primary);
-      margin: 0;
-      padding: 0;
-      line-height: 1.5;
-      -webkit-font-smoothing: antialiased;
+      line-height: 1.6;
+      min-height: 100vh;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
 
     .container {
-      max-width: 600px;
+      width: 100%;
+      max-width: 700px;
       margin: 0 auto;
-      padding: 2rem 1rem;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .logo {
+      height: 60px;
+      margin-bottom: 15px;
+    }
+
+    .title {
+      font-size: 2.2rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 10px;
+    }
+
+    .subtitle {
+      color: var(--text-secondary);
+      font-size: 1.1rem;
+      font-weight: 400;
     }
 
     .card {
       background: var(--card-bg);
       border-radius: var(--radius-lg);
-      box-shadow: var(--shadow-md);
-      padding: 2.5rem;
-      border: 1px solid var(--border-color);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      border: 1px solid var(--border);
     }
 
-    .logo-container {
-      text-align: center;
-      margin-bottom: 2.5rem;
+    .card-header {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+      color: white;
+      padding: 20px 30px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
     }
 
-    .logo {
-      width: 160px;
-      height: auto;
-      transition: transform 0.3s ease;
+    .card-header i {
+      font-size: 1.8rem;
     }
 
-    .logo:hover {
-      transform: scale(1.05);
-    }
-
-    .timestamp {
-      text-align: center;
-      color: var(--text-secondary);
-      font-size: 0.875rem;
-      margin-bottom: 2rem;
-      font-weight: 500;
-    }
-
-    h1 {
-      color: var(--text-primary);
-      margin-bottom: 2rem;
-      font-size: 1.75rem;
-      font-weight: 700;
-      text-align: center;
-      line-height: 1.3;
+    .card-body {
+      padding: 30px;
     }
 
     .form-group {
-      margin-bottom: 1.75rem;
+      margin-bottom: 25px;
     }
 
     label {
-      font-weight: 600;
       display: block;
-      margin-bottom: 0.75rem;
+      font-weight: 600;
+      margin-bottom: 10px;
       color: var(--text-primary);
-      font-size: 0.9375rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
-    input[type="text"], textarea, input[type="file"] {
+    label i {
+      color: var(--primary);
+      font-size: 1.1rem;
+    }
+
+    input[type="text"], input[type="email"], textarea, select {
       width: 100%;
-      padding: 0.875rem;
-      border: 1px solid var(--border-color);
+      padding: 16px;
+      border: 2px solid var(--border);
       border-radius: var(--radius-md);
       font-size: 1rem;
-      transition: all 0.2s;
-      box-sizing: border-box;
+      transition: all 0.3s;
       font-family: inherit;
       background-color: #f8fafc;
     }
 
-    input[type="text"]:focus, textarea:focus {
+    input[type="text"]:focus, input[type="email"]:focus, textarea:focus, select:focus {
       outline: none;
-      border-color: var(--primary-color);
-      box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.15);
+      border-color: var(--primary);
+      box-shadow: 0 0 0 4px rgba(67, 97, 238, 0.15);
       background-color: white;
     }
 
     textarea {
       min-height: 140px;
       resize: vertical;
-      line-height: 1.6;
     }
 
-    .issue-options {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 1rem;
-      margin-bottom: 1.5rem;
-    }
-
-    .issue-option {
+    .select-wrapper {
       position: relative;
     }
 
-    .issue-option input[type="radio"] {
+    .select-wrapper::after {
+      content: "";
       position: absolute;
-      opacity: 0;
-    }
-
-    .issue-option label {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 1.25rem 0.5rem;
-      background: #f8fafc;
-      border: 1px solid var(--border-color);
-      border-radius: var(--radius-md);
-      cursor: pointer;
-      text-align: center;
-      transition: all 0.2s;
-      font-weight: 500;
-      font-size: 0.9375rem;
-      height: 100%;
-    }
-
-    .issue-option input[type="radio"]:checked + label {
-      background: rgba(67, 97, 238, 0.1);
-      border-color: var(--primary-color);
-      color: var(--primary-color);
-      font-weight: 600;
-    }
-
-    .issue-option:hover label {
-      border-color: var(--primary-color);
-      transform: translateY(-2px);
+      top: 50%;
+      right: 16px;
+      transform: translateY(-50%);
+      width: 12px;
+      height: 12px;
+      background-color: var(--text-secondary);
+      clip-path: polygon(0 0, 100% 0, 50% 100%);
+      pointer-events: none;
     }
 
     .file-input-container {
-      margin-bottom: 1.75rem;
+      margin-bottom: 25px;
     }
 
     .file-input-wrapper {
@@ -178,27 +176,26 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 0.5rem;
-      padding: 0.875rem;
-      border: 1px dashed var(--border-color);
+      gap: 10px;
+      padding: 18px;
+      border: 2px dashed var(--border);
       border-radius: var(--radius-md);
       background-color: #f8fafc;
       color: var(--text-secondary);
       font-weight: 500;
       cursor: pointer;
-      transition: all 0.2s;
+      transition: all 0.3s;
       width: 100%;
     }
 
     .file-input-button:hover {
-      border-color: var(--primary-color);
-      color: var(--primary-color);
+      border-color: var(--primary);
+      color: var(--primary);
       background-color: rgba(67, 97, 238, 0.05);
     }
 
-    .file-input-button svg {
-      width: 20px;
-      height: 20px;
+    .file-input-button i {
+      font-size: 1.2rem;
     }
 
     input[type="file"] {
@@ -213,14 +210,14 @@
 
     .preview-container {
       display: none;
-      gap: 1rem;
+      gap: 15px;
       flex-wrap: wrap;
-      margin-top: 1rem;
+      margin-top: 20px;
     }
 
     .preview-item {
       position: relative;
-      width: calc(33.333% - 0.666rem);
+      width: calc(33.333% - 10px);
       aspect-ratio: 1/1;
     }
 
@@ -229,50 +226,68 @@
       height: 100%;
       object-fit: cover;
       border-radius: var(--radius-md);
-      border: 1px solid var(--border-color);
+      border: 2px solid var(--border);
     }
 
     .remove-image {
       position: absolute;
-      top: 0.5rem;
-      right: 0.5rem;
+      top: 8px;
+      right: 8px;
       background: rgba(239, 68, 68, 0.9);
       color: white;
       border-radius: 50%;
-      width: 24px;
-      height: 24px;
+      width: 28px;
+      height: 28px;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      font-size: 0.875rem;
+      font-size: 1rem;
       font-weight: bold;
       transition: all 0.2s;
     }
 
     .remove-image:hover {
-      background: var(--error-color);
+      background: var(--error);
       transform: scale(1.1);
     }
 
+    .char-count {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      text-align: right;
+      margin-top: 8px;
+    }
+
+    .char-count.warning {
+      color: var(--warning);
+    }
+
+    .char-count.error {
+      color: var(--error);
+    }
+
     button {
-      background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
       color: white;
-      padding: 1rem;
+      padding: 18px;
       border: none;
       border-radius: var(--radius-md);
-      font-size: 1rem;
+      font-size: 1.1rem;
       font-weight: 600;
       cursor: pointer;
       width: 100%;
       transition: all 0.3s;
       box-shadow: var(--shadow);
       letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
     }
 
     button:hover {
-      background: linear-gradient(135deg, var(--primary-hover), #2e0a8a);
-      transform: translateY(-2px);
+      transform: translateY(-3px);
       box-shadow: var(--shadow-md);
     }
 
@@ -280,170 +295,233 @@
       transform: translateY(0);
     }
 
+    button:disabled {
+      background: #94a3b8;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
     .statusMessage {
-      margin-top: 1.5rem;
-      padding: 1rem;
+      margin-top: 25px;
+      padding: 18px;
       border-radius: var(--radius-md);
       font-weight: 500;
       text-align: center;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 0.5rem;
+      gap: 12px;
     }
 
     .error {
       background: rgba(239, 68, 68, 0.1);
-      color: var(--error-color);
+      color: var(--error);
       border: 1px solid rgba(239, 68, 68, 0.2);
     }
 
     .success {
       background: rgba(16, 185, 129, 0.1);
-      color: var(--success-color);
+      color: var(--success);
       border: 1px solid rgba(16, 185, 129, 0.2);
     }
 
+    .warning {
+      background: rgba(245, 158, 11, 0.1);
+      color: var(--warning);
+      border: 1px solid rgba(245, 158, 11, 0.2);
+    }
+
     .status-icon {
-      width: 20px;
-      height: 20px;
+      width: 22px;
+      height: 22px;
     }
 
-    .char-count {
-      font-size: 0.75rem;
+    .validation-error {
+      color: var(--error);
+      font-size: 0.85rem;
+      margin-top: 8px;
+      display: none;
+    }
+
+    .timestamp {
+      text-align: center;
       color: var(--text-secondary);
-      text-align: right;
-      margin-top: 0.25rem;
+      font-size: 0.9rem;
+      margin: 20px 0;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
     }
 
-    .char-count.warning {
-      color: #f59e0b;
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
     }
 
-    .char-count.error {
-      color: var(--error-color);
+    .animate-spin {
+      animation: spin 1s linear infinite;
     }
 
-    @media (max-width: 640px) {
+    @media (max-width: 768px) {
       .container {
-        padding: 1.5rem 1rem;
+        padding: 0;
       }
       
-      .card {
-        padding: 1.75rem;
+      .card-body {
+        padding: 25px;
       }
       
-      h1 {
-        font-size: 1.5rem;
-      }
-      
-      .issue-options {
-        grid-template-columns: 1fr;
+      .title {
+        font-size: 1.8rem;
       }
       
       .preview-item {
-        width: calc(50% - 0.5rem);
+        width: calc(50% - 8px);
       }
     }
 
     @media (max-width: 480px) {
-      .card {
-        padding: 1.5rem 1.25rem;
+      .card-body {
+        padding: 20px;
       }
       
       .preview-item {
         width: 100%;
+      }
+      
+      .title {
+        font-size: 1.6rem;
+      }
+      
+      .subtitle {
+        font-size: 1rem;
       }
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <div class="logo-container">
-      <img src="logo.png" alt="NUUR Logo" class="logo">
+    <div class="header">
+      <div class="logo-container">
+        <svg class="logo" viewBox="0 0 100 40" xmlns="http://www.w3.org/2000/svg">
+          <text x="0" y="30" font-family="Inter" font-weight="700" font-size="30" fill="#4361ee">NUUR</text>
+        </svg>
+      </div>
+      <h1 class="title">Report an Issue</h1>
+      <p class="subtitle">Our support team is here to help you resolve any problems</p>
     </div>
 
     <div class="timestamp">
-      <span id="currentDateTime">UTC: 2025-05-25 04:56:52</span>
+      <i class="far fa-clock"></i>
+      <span id="currentDateTime">Loading date and time...</span>
     </div>
 
     <div class="card">
-      <h1>Report an Issue with NUUR</h1>
+      <div class="card-header">
+        <i class="fas fa-headset"></i>
+        <h2>Support Request Form</h2>
+      </div>
 
-      <form id="errorForm">
-        <div class="form-group">
-          <label for="walletAddress">Your Sidra Wallet Address</label>
-          <input
-            type="text"
-            id="walletAddress"
-            name="walletAddress"
-            placeholder="0x..."
-            required
-            pattern="^0x[a-fA-F0-9]{40}$"
-          />
-        </div>
-
-        <div class="form-group">
-          <label>What type of issue are you experiencing?</label>
-          <div class="issue-options">
-            <div class="issue-option">
-              <input type="radio" id="wallet-connect" name="issueType" value="Wallet Connect" required>
-              <label for="wallet-connect">Wallet Connection</label>
-            </div>
-            <div class="issue-option">
-              <input type="radio" id="nuur-purchase" name="issueType" value="NUUR Purchase">
-              <label for="nuur-purchase">NUUR Purchase</label>
-            </div>
-            <div class="issue-option">
-              <input type="radio" id="airdrop-claim" name="issueType" value="Airdrop Claim">
-              <label for="airdrop-claim">Airdrop Claim</label>
-            </div>
-            <div class="issue-option">
-              <input type="radio" id="other-issue" name="issueType" value="Other">
-              <label for="other-issue">Other Issue</label>
-            </div>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label for="issue">Describe your issue in detail</label>
-          <textarea
-            id="issue"
-            name="issue"
-            placeholder="Please provide as much detail as possible about the issue you're experiencing..."
-            required
-            minlength="50"
-          ></textarea>
-          <div id="charCounter" class="char-count">0/50 minimum characters</div>
-        </div>
-
-        <div class="file-input-container">
-          <label for="screenshot">Attach Screenshots (Required)</label>
-          <div class="file-input-wrapper">
+      <div class="card-body">
+        <form id="errorForm">
+          <div class="form-group">
+            <label for="walletAddress">
+              <i class="fas fa-wallet"></i>
+              Your Sidra Wallet Address
+            </label>
             <input
-              type="file"
-              id="screenshot"
-              name="screenshot"
-              accept="image/*"
-              multiple
+              type="text"
+              id="walletAddress"
+              name="walletAddress"
+              placeholder="0x..."
+              required
             />
-            <div class="file-input-button">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-              </svg>
-              <span>Select files</span>
-            </div>
+            <div id="walletError" class="validation-error">Please enter a valid wallet address</div>
           </div>
-        </div>
 
-        <div id="imagePreview" class="preview-container"></div>
+          <div class="form-group">
+            <label for="email">
+              <i class="fas fa-envelope"></i>
+              Your Email Address
+            </label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              placeholder="your.email@example.com"
+              required
+            />
+            <div id="emailError" class="validation-error">Please enter a valid email address</div>
+          </div>
 
-        <button type="submit">
-          Submit Issue Report
-        </button>
-      </form>
+          <div class="form-group">
+            <label for="issueType">
+              <i class="fas fa-bug"></i>
+              What type of issue are you experiencing?
+            </label>
+            <div class="select-wrapper">
+              <select id="issueType" name="issueType" required>
+                <option value="" disabled selected>Select an issue type</option>
+                <option value="Wallet Connect">Wallet Connection</option>
+                <option value="NUUR Purchase">NUUR Purchase</option>
+                <option value="Airdrop Claim">Airdrop Claim</option>
+                <option value="Other">Other Issue</option>
+              </select>
+            </div>
+            <div id="issueTypeError" class="validation-error">Please select an issue type</div>
+          </div>
 
-      <div id="formStatus" class="statusMessage"></div>
+          <div class="form-group">
+            <label for="issue">
+              <i class="fas fa-comment-dots"></i>
+              Describe your issue in detail
+            </label>
+            <textarea
+              id="issue"
+              name="issue"
+              placeholder="Please provide as much detail as possible about the issue you're experiencing..."
+              required
+              minlength="50"
+            ></textarea>
+            <div id="charCounter" class="char-count">0/50 minimum characters</div>
+            <div id="issueError" class="validation-error">Please provide at least 50 characters</div>
+          </div>
+
+          <div class="file-input-container">
+            <label for="screenshot">
+              <i class="fas fa-camera"></i>
+              Attach Screenshots (Required)
+            </label>
+            <div class="file-input-wrapper">
+              <input
+                type="file"
+                id="screenshot"
+                name="screenshot"
+                accept="image/*"
+                multiple
+                required
+              />
+              <div class="file-input-button">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <span>Click to upload or drag and drop</span>
+              </div>
+            </div>
+            <div id="screenshotError" class="validation-error">Please attach at least one screenshot</div>
+          </div>
+
+          <div id="imagePreview" class="preview-container"></div>
+
+          <button type="submit" id="submitButton">
+            <i class="fas fa-paper-plane"></i>
+            Submit Issue Report
+          </button>
+        </form>
+
+        <div id="formStatus" class="statusMessage"></div>
+      </div>
     </div>
   </div>
 
@@ -451,8 +529,16 @@
     // Update current date time
     function updateDateTime() {
       const now = new Date();
-      const formatted = now.toISOString().replace('T', ' ').substring(0, 19);
-      document.getElementById('currentDateTime').textContent = `UTC: ${formatted}`;
+      const options = { 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit'
+      };
+      const formatted = now.toLocaleDateString('en-US', options);
+      document.getElementById('currentDateTime').textContent = formatted;
     }
     
     updateDateTime();
@@ -464,6 +550,12 @@
     const screenshotInput = document.getElementById('screenshot');
     const issueTextarea = document.getElementById('issue');
     const charCounter = document.getElementById('charCounter');
+    const submitButton = document.getElementById('submitButton');
+    const walletError = document.getElementById('walletError');
+    const emailError = document.getElementById('emailError');
+    const issueTypeError = document.getElementById('issueTypeError');
+    const issueError = document.getElementById('issueError');
+    const screenshotError = document.getElementById('screenshotError');
 
     // Replace these with your actual bot token and chat ID
     const BOT_TOKEN = '7529157623:AAFNTTESufdig5oXH8zY0yEvHK2aNci5TCc';
@@ -472,9 +564,11 @@
     // Character counter for issue description
     issueTextarea.addEventListener('input', function() {
       const length = this.value.length;
-      charCounter.textContent = `${length}/100 minimum characters`;
+      charCounter.textContent = `${length}/50 minimum characters`;
       
-      if (length < 50) {
+      if (length < 30) {
+        charCounter.className = 'char-count error';
+      } else if (length < 50) {
         charCounter.className = 'char-count warning';
       } else {
         charCounter.className = 'char-count';
@@ -484,13 +578,20 @@
     // Handle image preview
     screenshotInput.addEventListener('change', function(e) {
       imagePreview.innerHTML = '';
-      imagePreview.style.display = 'flex';
+      
+      if (this.files.length > 0) {
+        imagePreview.style.display = 'flex';
+        screenshotError.style.display = 'none';
+      } else {
+        imagePreview.style.display = 'none';
+      }
       
       Array.from(this.files).forEach((file, index) => {
         const reader = new FileReader();
         reader.onload = function(e) {
           const previewWrapper = document.createElement('div');
           previewWrapper.className = 'preview-item';
+          previewWrapper.dataset.index = index;
           
           const img = document.createElement('img');
           img.src = e.target.result;
@@ -499,13 +600,19 @@
           removeBtn.className = 'remove-image';
           removeBtn.innerHTML = '×';
           removeBtn.onclick = function() {
-            previewWrapper.remove();
+            // Create a new FileList without the removed file
             const dt = new DataTransfer();
             const files = screenshotInput.files;
+            
             for(let i = 0; i < files.length; i++) {
-              if(i !== index) dt.items.add(files[i]);
+              if(i !== parseInt(previewWrapper.dataset.index)) {
+                dt.items.add(files[i]);
+              }
             }
+            
             screenshotInput.files = dt.files;
+            previewWrapper.remove();
+            
             if(screenshotInput.files.length === 0) {
               imagePreview.style.display = 'none';
             }
@@ -519,29 +626,77 @@
       });
     });
 
+    // Validate wallet address format
+    function isValidWalletAddress(address) {
+      // More flexible validation for different wallet formats
+      return address.length >= 20 && address.length <= 60;
+    }
+
+    // Validate email format
+    function isValidEmail(email) {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return emailRegex.test(email);
+    }
+
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
-
+      
+      // Reset error messages
+      walletError.style.display = 'none';
+      emailError.style.display = 'none';
+      issueTypeError.style.display = 'none';
+      issueError.style.display = 'none';
+      screenshotError.style.display = 'none';
+      
       const wallet = form.walletAddress.value.trim();
+      const email = form.email.value.trim();
       const issue = form.issue.value.trim();
-      const issueType = form.querySelector('input[name="issueType"]:checked')?.value;
+      const issueType = form.issueType.value;
       const screenshots = form.screenshot.files;
-
-      if (!wallet || !issue || !issueType) {
-        showStatusMessage("Please fill in all required fields.", "error");
+      
+      let isValid = true;
+      
+      // Validate wallet address
+      if (!wallet || !isValidWalletAddress(wallet)) {
+        walletError.style.display = 'block';
+        isValid = false;
+      }
+      
+      // Validate email
+      if (!email || !isValidEmail(email)) {
+        emailError.style.display = 'block';
+        isValid = false;
+      }
+      
+      // Validate issue type
+      if (!issueType) {
+        issueTypeError.style.display = 'block';
+        isValid = false;
+      }
+      
+      // Validate issue description
+      if (issue.length < 50) {
+        issueError.style.display = 'block';
+        isValid = false;
+      }
+      
+      // Validate screenshots
+      if (screenshots.length === 0) {
+        screenshotError.style.display = 'block';
+        isValid = false;
+      }
+      
+      if (!isValid) {
+        showStatusMessage("Please fix the errors in the form.", "error");
         return;
       }
 
-      if (issue.length < 100) {
-        showStatusMessage("Your message must be at least 100 characters long.", "error");
-        return;
-      }
-
+      submitButton.disabled = true;
       showStatusMessage("Sending your report...", "sending");
 
       try {
         // First send the text message
-        let message = `🚨 *New Issue Reported*\n\n*Wallet:* \`${wallet}\`\n*Issue Type:* ${issueType}\n*Issue:* ${issue}`;
+        let message = `🚨 *New Issue Reported*\n\n*Wallet:* \`${wallet}\`\n*Email:* ${email}\n*Issue Type:* ${issueType}\n*Issue:* ${issue}`;
         
         const textResponse = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
           method: 'POST',
@@ -581,21 +736,23 @@
           }
         }
 
-        showStatusMessage("Issue reported successfully! Our team will review it shortly.", "success");
+        showStatusMessage("Issue reported successfully! Our team will contact you shortly.", "success");
         form.reset();
         imagePreview.innerHTML = '';
         imagePreview.style.display = 'none';
-        charCounter.textContent = "0/100 minimum characters";
+        charCounter.textContent = "0/50 minimum characters";
         charCounter.className = "char-count";
 
       } catch (error) {
         console.error(error);
         showStatusMessage("Failed to send report. Please try again later.", "error");
+      } finally {
+        submitButton.disabled = false;
       }
     });
 
     function showStatusMessage(message, type) {
-      statusDiv.textContent = message;
+      statusDiv.innerHTML = '';
       statusDiv.className = "statusMessage";
       
       if (type === "error") {
@@ -623,6 +780,34 @@
         `;
       }
     }
+
+    // Enable drag and drop for file upload
+    const fileInputButton = document.querySelector('.file-input-button');
+    const fileInput = document.getElementById('screenshot');
+    
+    fileInputButton.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      fileInputButton.style.borderColor = 'var(--primary)';
+      fileInputButton.style.backgroundColor = 'rgba(67, 97, 238, 0.1)';
+    });
+    
+    fileInputButton.addEventListener('dragleave', (e) => {
+      e.preventDefault();
+      fileInputButton.style.borderColor = '';
+      fileInputButton.style.backgroundColor = '';
+    });
+    
+    fileInputButton.addEventListener('drop', (e) => {
+      e.preventDefault();
+      fileInputButton.style.borderColor = '';
+      fileInputButton.style.backgroundColor = '';
+      
+      if (e.dataTransfer.files.length) {
+        fileInput.files = e.dataTransfer.files;
+        const event = new Event('change', { bubbles: true });
+        fileInput.dispatchEvent(event);
+      }
+    });
   </script>
 </body>
 </html>
