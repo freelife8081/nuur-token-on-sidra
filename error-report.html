@@ -58,8 +58,9 @@
     }
 
     .logo {
-      height: 60px;
+      height: 80px;
       margin-bottom: 15px;
+      object-fit: contain;
     }
 
     .title {
@@ -418,6 +419,10 @@
       .subtitle {
         font-size: 1rem;
       }
+      
+      .logo {
+        height: 60px;
+      }
     }
   </style>
 </head>
@@ -425,9 +430,8 @@
   <div class="container">
     <div class="header">
       <div class="logo-container">
-        <svg class="logo" viewBox="0 0 100 40" xmlns="http://www.w3.org/2000/svg">
-          <text x="0" y="30" font-family="Inter" font-weight="700" font-size="30" fill="#4361ee">NUUR</text>
-        </svg>
+        <!-- Your logo.png will be displayed here -->
+        <img src="logo.png" alt="NUUR Logo" class="logo">
       </div>
       <h1 class="title">Report an Issue</h1>
       <p class="subtitle">Our support team is here to help you resolve any problems</p>
@@ -826,7 +830,7 @@
         // Cancel timeout as submission was successful
         cancelSubmissionTimeout();
         
-        showStatusMessage("Issue reported successfully! Our team will contact you shortly.", "success");
+        showStatusMessage("Issue reported successfully! Our team will contact you shortly. Please check your spam folder", "success");
         form.reset();
         imagePreview.innerHTML = '';
         imagePreview.style.display = 'none';
