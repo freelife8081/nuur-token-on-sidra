@@ -4,35 +4,816 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Smart Contract Interactor</title>
-  <link rel="stylesheet" href="ui.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <style>
+    :root {
+      --primary: #00F5E4;
+      --primary-dark: #00C4B5;
+      --secondary: #7B61FF;
+      --accent: #FF5E7D;
+      --dark: #0B1622;
+      --darker: #080F18;
+      --light: #E3F2FF;
+      --gray: #8A9DB3;
+      --card-bg: rgba(13, 21, 34, 0.8);
+      --card-border: rgba(123, 97, 255, 0.15);
+      --radius: 16px;
+      --radius-sm: 8px;
+      --shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+      --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--darker);
+      color: var(--light);
+      min-height: 100vh;
+      padding: 2rem;
+      line-height: 1.6;
+    }
+    
+    h1, h2, h3, h4 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--card-border);
+    }
+    
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    
+    .logo-icon {
+      width: 40px;
+      height: 40px;
+      background: var(--gradient);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .logo-text {
+      font-size: 1.8rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    .wallet-section {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.75rem 1.5rem;
+      border-radius: var(--radius-sm);
+      font-weight: 600;
+      transition: var(--transition);
+      border: none;
+      cursor: pointer;
+      gap: 0.5rem;
+    }
+    
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+      color: var(--darker);
+      box-shadow: 0 4px 15px rgba(123, 97, 255, 0.3);
+    }
+    
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(123, 97, 255, 0.4);
+    }
+    
+    .btn-outline {
+      background: transparent;
+      color: var(--primary);
+      border: 1px solid var(--primary);
+    }
+    
+    .btn-outline:hover {
+      background: rgba(0, 245, 228, 0.1);
+    }
+    
+    .wallet-address {
+      background: var(--card-bg);
+      padding: 0.5rem 1rem;
+      border-radius: var(--radius-sm);
+      font-family: monospace;
+      font-size: 0.9rem;
+      border: 1px solid var(--card-border);
+    }
+    
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      padding: 2rem;
+      margin-bottom: 2rem;
+      box-shadow: var(--shadow);
+    }
+    
+    .card-title {
+      font-size: 1.5rem;
+      margin-bottom: 1.5rem;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+    
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      color: var(--light);
+    }
+    
+    input, textarea {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border-radius: var(--radius-sm);
+      background: rgba(18, 24, 38, 0.7);
+      border: 1px solid var(--card-border);
+      color: var(--light);
+      font-family: 'Inter', sans-serif;
+      transition: var(--transition);
+    }
+    
+    input:focus, textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 2px rgba(0, 245, 228, 0.2);
+    }
+    
+    textarea {
+      min-height: 150px;
+      resize: vertical;
+    }
+    
+    .tabs {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+    
+    .tab {
+      padding: 0.75rem 1.5rem;
+      background: rgba(18, 24, 38, 0.5);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: var(--transition);
+      font-weight: 500;
+    }
+    
+    .tab:hover {
+      background: rgba(123, 97, 255, 0.1);
+    }
+    
+    .tab.active {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+      color: var(--darker);
+      border-color: transparent;
+    }
+    
+    .function-card {
+      background: rgba(18, 24, 38, 0.5);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-sm);
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .function-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+      cursor: pointer;
+    }
+    
+    .function-name {
+      font-weight: 600;
+      color: var(--primary);
+      font-family: monospace;
+    }
+    
+    .function-type {
+      padding: 0.25rem 0.75rem;
+      background: rgba(123, 97, 255, 0.1);
+      color: var(--secondary);
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 500;
+    }
+    
+    .function-details {
+      margin-top: 1rem;
+      display: none;
+    }
+    
+    .function-details.active {
+      display: block;
+    }
+    
+    .param-group {
+      margin-bottom: 1rem;
+    }
+    
+    .param-label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      color: var(--gray);
+      font-family: monospace;
+    }
+    
+    .execute-btn {
+      margin-top: 1rem;
+    }
+    
+    .output-container {
+      margin-top: 2rem;
+    }
+    
+    .output-title {
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
+      color: var(--primary);
+    }
+    
+    .output-content {
+      background: rgba(18, 24, 38, 0.5);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-sm);
+      padding: 1.5rem;
+      font-family: monospace;
+      white-space: pre-wrap;
+      max-height: 300px;
+      overflow-y: auto;
+    }
+    
+    .status {
+      margin-top: 1rem;
+      padding: 1rem;
+      border-radius: var(--radius-sm);
+      font-weight: 500;
+    }
+    
+    .status.success {
+      background: rgba(72, 187, 120, 0.1);
+      color: #48BB78;
+      border: 1px solid rgba(72, 187, 120, 0.2);
+    }
+    
+    .status.error {
+      background: rgba(245, 101, 101, 0.1);
+      color: #F56565;
+      border: 1px solid rgba(245, 101, 101, 0.2);
+    }
+    
+    .status.info {
+      background: rgba(0, 245, 228, 0.1);
+      color: var(--primary);
+      border: 1px solid rgba(0, 245, 228, 0.2);
+    }
+    
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(5px);
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .modal-content {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      width: 90%;
+      max-width: 500px;
+      padding: 2rem;
+      box-shadow: var(--shadow);
+      position: relative;
+    }
+    
+    .close {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: var(--gray);
+    }
+    
+    .close:hover {
+      color: var(--light);
+    }
+    
+    .modal-title {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      color: var(--primary);
+    }
+    
+    .modal-text {
+      margin-bottom: 1.5rem;
+      line-height: 1.6;
+    }
+    
+    .modal-actions {
+      display: flex;
+      gap: 1rem;
+      justify-content: flex-end;
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+      body {
+        padding: 1rem;
+      }
+      
+      header {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: flex-start;
+      }
+      
+      .wallet-section {
+        width: 100%;
+        justify-content: space-between;
+      }
+      
+      .tabs {
+        overflow-x: auto;
+        padding-bottom: 0.5rem;
+      }
+    }
+  </style>
 </head>
 <body>
   <div class="container">
-    <h1>Smart Contract Interactor</h1>
-    <button id="connectWallet">Connect Wallet</button>
-    <p id="walletAddress"></p>
+    <header>
+      <div class="logo">
+        <div class="logo-icon">
+          <i class="fas fa-code"></i>
+        </div>
+        <h1 class="logo-text">Smart Contract Interactor</h1>
+      </div>
+      
+      <div class="wallet-section">
+        <button id="connectWallet" class="btn btn-primary">
+          <i class="fas fa-wallet"></i> Connect Wallet
+        </button>
+        <div id="walletAddress" class="wallet-address">Not connected</div>
+      </div>
+    </header>
 
-    <input type="text" id="contractAddressInput" placeholder="Smart Contract Address" />
-    <textarea id="abiInput" placeholder="Paste ABI here"></textarea>
-    <button onclick="loadContract()">Load Contract</button>
+    <div class="card">
+      <h2 class="card-title">
+        <i class="fas fa-file-contract"></i> Contract Details
+      </h2>
+      
+      <div class="form-group">
+        <label for="contractAddressInput">Smart Contract Address</label>
+        <input type="text" id="contractAddressInput" placeholder="0x..." />
+      </div>
+      
+      <div class="form-group">
+        <label for="abiInput">Contract ABI (JSON Interface)</label>
+        <textarea id="abiInput" placeholder="Paste ABI here..."></textarea>
+      </div>
+      
+      <button onclick="loadContract()" class="btn btn-primary">
+        <i class="fas fa-download"></i> Load Contract
+      </button>
+    </div>
 
-    <div class="tabs" id="functionTabs"></div>
-    <div id="functionsContainer"></div>
-    <div id="functionOutput"></div>
-    <p id="status"></p>
+    <div id="contractInterface" style="display: none;">
+      <div class="card">
+        <h2 class="card-title">
+          <i class="fas fa-functions"></i> Contract Functions
+        </h2>
+        
+        <div class="tabs" id="functionTabs"></div>
+        <div id="functionsContainer"></div>
+      </div>
+      
+      <div class="card output-container">
+        <h2 class="card-title">
+          <i class="fas fa-terminal"></i> Output
+        </h2>
+        <div id="functionOutput" class="output-content">No output yet. Execute a function to see results.</div>
+      </div>
+    </div>
+
+    <div id="status" class="status info" style="display: none;"></div>
   </div>
 
   <!-- Modal -->
   <div id="confirmModal" class="modal">
     <div class="modal-content">
       <span class="close" onclick="closeModal()">&times;</span>
-      <h2>Confirm Transaction</h2>
-      <p id="modalText"></p>
-      <button id="confirmExecute">Confirm</button>
+      <h2 class="modal-title">Confirm Transaction</h2>
+      <p id="modalText" class="modal-text"></p>
+      <div class="modal-actions">
+        <button onclick="closeModal()" class="btn btn-outline">Cancel</button>
+        <button id="confirmExecute" class="btn btn-primary">Confirm</button>
+      </div>
     </div>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
-  <script src="ui.js"></script>
+  <script>
+    let provider = null;
+    let signer = null;
+    let contract = null;
+    let contractAddress = '';
+    let abi = [];
+    let currentFunction = null;
+    let currentParams = {};
+
+    // Initialize when page loads
+    window.addEventListener('DOMContentLoaded', () => {
+      // Check if Ethereum provider is available
+      if (typeof window.ethereum !== 'undefined') {
+        console.log('Ethereum provider detected');
+        provider = new ethers.providers.Web3Provider(window.ethereum);
+        
+        // Check if already connected
+        checkConnection();
+      } else {
+        showStatus('Please install a Web3 wallet like MetaMask', 'error');
+        document.getElementById('connectWallet').disabled = true;
+      }
+      
+      // Set up event listeners
+      document.getElementById('connectWallet').addEventListener('click', connectWallet);
+      document.getElementById('confirmExecute').addEventListener('click', executeFunction);
+    });
+
+    // Check if already connected to wallet
+    async function checkConnection() {
+      try {
+        const accounts = await window.ethereum.request({ method: 'eth_accounts' });
+        if (accounts.length > 0) {
+          await setSigner();
+          showStatus('Wallet connected successfully', 'success');
+        }
+      } catch (error) {
+        console.error('Error checking connection:', error);
+      }
+    }
+
+    // Connect to wallet
+    async function connectWallet() {
+      try {
+        await window.ethereum.request({ method: 'eth_requestAccounts' });
+        await setSigner();
+        showStatus('Wallet connected successfully', 'success');
+      } catch (error) {
+        console.error('Error connecting wallet:', error);
+        showStatus('Error connecting wallet: ' + error.message, 'error');
+      }
+    }
+
+    // Set signer
+    async function setSigner() {
+      if (provider) {
+        signer = provider.getSigner();
+        const address = await signer.getAddress();
+        document.getElementById('walletAddress').textContent = 
+          `${address.substring(0, 6)}...${address.substring(address.length - 4)}`;
+      }
+    }
+
+    // Load contract from address and ABI
+    function loadContract() {
+      contractAddress = document.getElementById('contractAddressInput').value.trim();
+      const abiInput = document.getElementById('abiInput').value.trim();
+      
+      // Validate inputs
+      if (!contractAddress) {
+        showStatus('Please enter a contract address', 'error');
+        return;
+      }
+      
+      if (!abiInput) {
+        showStatus('Please enter a contract ABI', 'error');
+        return;
+      }
+      
+      try {
+        // Parse ABI
+        abi = JSON.parse(abiInput);
+        
+        // Create contract instance
+        if (signer) {
+          contract = new ethers.Contract(contractAddress, abi, signer);
+        } else {
+          contract = new ethers.Contract(contractAddress, abi, provider);
+        }
+        
+        // Show contract interface
+        document.getElementById('contractInterface').style.display = 'block';
+        
+        // Render functions
+        renderFunctionTabs();
+        renderFunctions('view');
+        
+        showStatus('Contract loaded successfully', 'success');
+      } catch (error) {
+        console.error('Error loading contract:', error);
+        showStatus('Error loading contract: ' + error.message, 'error');
+      }
+    }
+
+    // Render function tabs
+    function renderFunctionTabs() {
+      const tabsContainer = document.getElementById('functionTabs');
+      tabsContainer.innerHTML = '';
+      
+      const tabTypes = [
+        { id: 'view', name: 'View Functions', icon: 'eye' },
+        { id: 'write', name: 'Write Functions', icon: 'edit' },
+        { id: 'all', name: 'All Functions', icon: 'list' }
+      ];
+      
+      tabTypes.forEach(tab => {
+        const tabElement = document.createElement('div');
+        tabElement.className = 'tab';
+        tabElement.innerHTML = `<i class="fas fa-${tab.icon}"></i> ${tab.name}`;
+        tabElement.addEventListener('click', () => renderFunctions(tab.id));
+        
+        if (tab.id === 'view') {
+          tabElement.classList.add('active');
+        }
+        
+        tabsContainer.appendChild(tabElement);
+      });
+    }
+
+    // Render functions based on type
+    function renderFunctions(type) {
+      const container = document.getElementById('functionsContainer');
+      container.innerHTML = '';
+      
+      // Update active tab
+      document.querySelectorAll('.tab').forEach(tab => {
+        tab.classList.remove('active');
+      });
+      event.currentTarget.classList.add('active');
+      
+      // Filter functions based on type
+      let functions = [];
+      if (type === 'view') {
+        functions = abi.filter(item => 
+          item.type === 'function' && 
+          (item.stateMutability === 'view' || item.stateMutability === 'pure')
+        );
+      } else if (type === 'write') {
+        functions = abi.filter(item => 
+          item.type === 'function' && 
+          item.stateMutability !== 'view' && 
+          item.stateMutability !== 'pure'
+        );
+      } else {
+        functions = abi.filter(item => item.type === 'function');
+      }
+      
+      if (functions.length === 0) {
+        container.innerHTML = '<p>No functions found</p>';
+        return;
+      }
+      
+      // Render each function
+      functions.forEach(func => {
+        const functionCard = document.createElement('div');
+        functionCard.className = 'function-card';
+        
+        const functionHeader = document.createElement('div');
+        functionHeader.className = 'function-header';
+        functionHeader.innerHTML = `
+          <div class="function-name">${func.name}</div>
+          <div class="function-type">${func.stateMutability}</div>
+        `;
+        
+        const functionDetails = document.createElement('div');
+        functionDetails.className = 'function-details';
+        
+        // Create input fields for parameters
+        if (func.inputs && func.inputs.length > 0) {
+          func.inputs.forEach((input, index) => {
+            const paramGroup = document.createElement('div');
+            paramGroup.className = 'param-group';
+            
+            paramGroup.innerHTML = `
+              <label class="param-label">${input.name || `param_${index}`} (${input.type})</label>
+              <input type="text" class="param-input" data-index="${index}" data-type="${input.type}" 
+                     placeholder="${input.type}" />
+            `;
+            
+            functionDetails.appendChild(paramGroup);
+          });
+        } else {
+          functionDetails.innerHTML = '<p>This function has no parameters</p>';
+        }
+        
+        // Add execute button
+        const executeButton = document.createElement('button');
+        executeButton.className = `btn ${func.stateMutability === 'view' || func.stateMutability === 'pure' ? 'btn-primary' : 'btn-outline'} execute-btn`;
+        executeButton.innerHTML = `
+          <i class="fas fa-${func.stateMutability === 'view' || func.stateMutability === 'pure' ? 'eye' : 'edit'}"></i>
+          Execute ${func.stateMutability === 'view' || func.stateMutability === 'pure' ? 'Call' : 'Transaction'}
+        `;
+        
+        executeButton.addEventListener('click', () => {
+          prepareFunctionExecution(func);
+        });
+        
+        functionDetails.appendChild(executeButton);
+        
+        // Toggle function details on header click
+        functionHeader.addEventListener('click', () => {
+          functionDetails.classList.toggle('active');
+        });
+        
+        functionCard.appendChild(functionHeader);
+        functionCard.appendChild(functionDetails);
+        container.appendChild(functionCard);
+      });
+    }
+
+    // Prepare function execution
+    function prepareFunctionExecution(func) {
+      if (!contract) {
+        showStatus('Contract not loaded', 'error');
+        return;
+      }
+      
+      currentFunction = func;
+      currentParams = {};
+      
+      // Get parameter values
+      const paramInputs = document.querySelectorAll('.param-input');
+      let valid = true;
+      
+      paramInputs.forEach(input => {
+        const value = input.value.trim();
+        const type = input.dataset.type;
+        
+        if (value) {
+          try {
+            // Simple type validation and conversion
+            if (type.includes('int')) {
+              currentParams[input.dataset.index] = ethers.BigNumber.from(value);
+            } else if (type === 'bool') {
+              currentParams[input.dataset.index] = value.toLowerCase() === 'true';
+            } else if (type === 'address') {
+              // Basic address validation
+              if (!ethers.utils.isAddress(value)) {
+                throw new Error('Invalid address format');
+              }
+              currentParams[input.dataset.index] = value;
+            } else {
+              currentParams[input.dataset.index] = value;
+            }
+          } catch (error) {
+            showStatus(`Invalid value for parameter: ${error.message}`, 'error');
+            valid = false;
+          }
+        } else {
+          // Check if parameter is required
+          currentParams[input.dataset.index] = '';
+        }
+      });
+      
+      if (!valid) return;
+      
+      // For write functions, show confirmation modal
+      if (func.stateMutability !== 'view' && func.stateMutability !== 'pure') {
+        if (!signer) {
+          showStatus('Please connect your wallet to execute transactions', 'error');
+          return;
+        }
+        
+        showConfirmationModal(func);
+      } else {
+        // For view functions, execute directly
+        executeFunction();
+      }
+    }
+
+    // Show confirmation modal for transactions
+    function showConfirmationModal(func) {
+      const modal = document.getElementById('confirmModal');
+      const modalText = document.getElementById('modalText');
+      
+      modalText.innerHTML = `
+        You are about to execute the <strong>${func.name}</strong> function.<br><br>
+        This will require a transaction and will cost gas fees.
+      `;
+      
+      modal.style.display = 'flex';
+    }
+
+    // Close modal
+    function closeModal() {
+      document.getElementById('confirmModal').style.display = 'none';
+    }
+
+    // Execute the function
+    async function executeFunction() {
+      closeModal();
+      
+      if (!currentFunction || !contract) {
+        showStatus('No function selected or contract not loaded', 'error');
+        return;
+      }
+      
+      try {
+        showStatus('Executing function...', 'info');
+        
+        // Prepare parameters as array
+        const params = Object.keys(currentParams)
+          .sort((a, b) => parseInt(a) - parseInt(b))
+          .map(key => currentParams[key]);
+        
+        // Execute the function
+        const result = await contract[currentFunction.name](...params);
+        
+        // Format the result based on its type
+        let output = '';
+        if (ethers.BigNumber.isBigNumber(result)) {
+          output = result.toString();
+        } else if (typeof result === 'object' && result !== null) {
+          output = JSON.stringify(result, null, 2);
+        } else {
+          output = String(result);
+        }
+        
+        // Display the result
+        document.getElementById('functionOutput').textContent = output;
+        showStatus('Function executed successfully', 'success');
+      } catch (error) {
+        console.error('Error executing function:', error);
+        document.getElementById('functionOutput').textContent = `Error: ${error.message}`;
+        showStatus('Error executing function: ' + error.message, 'error');
+      }
+    }
+
+    // Show status message
+    function showStatus(message, type) {
+      const statusElement = document.getElementById('status');
+      statusElement.textContent = message;
+      statusElement.className = `status ${type}`;
+      statusElement.style.display = 'block';
+      
+      // Auto hide after 5 seconds
+      setTimeout(() => {
+        statusElement.style.display = 'none';
+      }, 5000);
+    }
+  </script>
 </body>
 </html>
