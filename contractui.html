@@ -283,6 +283,13 @@
       font-family: monospace;
     }
     
+    .param-hint {
+      font-size: 0.8rem;
+      color: var(--gray);
+      margin-top: 0.25rem;
+      font-style: italic;
+    }
+    
     .execute-btn {
       margin-top: 1rem;
     }
@@ -322,6 +329,12 @@
       background: rgba(0, 245, 228, 0.1);
       color: var(--primary);
       border: 1px solid rgba(0, 245, 228, 0.2);
+    }
+    
+    .status.warning {
+      background: rgba(237, 137, 54, 0.1);
+      color: #ED8936;
+      border: 1px solid rgba(237, 137, 54, 0.2);
     }
     
     /* Modal */
@@ -673,10 +686,25 @@
             const paramGroup = document.createElement('div');
             paramGroup.className = 'param-group';
             
+            // Add hint for parameter type
+            let hint = '';
+            if (input.type.includes('int')) {
+              hint = 'Enter a number (e.g., 100)';
+            } else if (input.type === 'bool') {
+              hint = 'Enter true or false';
+            } else if (input.type === 'address') {
+              hint = 'Enter an Ethereum address (0x...)';
+            } else if (input.type === 'bytes') {
+              hint = 'Enter hex data (0x...)';
+            } else {
+              hint = `Enter a ${input.type} value`;
+            }
+            
             paramGroup.innerHTML = `
               <label class="param-label">${input.name || `param_${index}`} (${input.type})</label>
               <input type="text" class="param-input" data-index="${index}" data-type="${input.type}" 
                      placeholder="${input.type}" />
+              <div class="param-hint">${hint}</div>
             `;
             
             functionDetails.appendChild(paramGroup);
@@ -710,6 +738,44 @@
       });
     }
 
+    // Convert parameter value based on type
+    function convertParameterValue(value, type) {
+      if (!value || value === '') {
+        // Handle empty values based on type
+        if (type.includes('int')) {
+          return ethers.BigNumber.from(0);
+        } else if (type === 'bool') {
+          return false;
+        } else if (type === 'address') {
+          return ethers.constants.AddressZero;
+        } else {
+          return '';
+        }
+      }
+      
+      try {
+        if (type.includes('int')) {
+          return ethers.BigNumber.from(value);
+        } else if (type === 'bool') {
+          return value.toLowerCase() === 'true';
+        } else if (type === 'address') {
+          if (!ethers.utils.isAddress(value)) {
+            throw new Error('Invalid address format');
+          }
+          return value;
+        } else if (type.startsWith('bytes')) {
+          if (!value.startsWith('0x')) {
+            throw new Error('Bytes values must start with 0x');
+          }
+          return value;
+        } else {
+          return value;
+        }
+      } catch (error) {
+        throw new Error(`Invalid ${type} value: ${error.message}`);
+      }
+    }
+
     // Prepare function execution
     function prepareFunctionExecution(func) {
       if (!contract) {
@@ -723,38 +789,30 @@
       // Get parameter values
       const paramInputs = document.querySelectorAll('.param-input');
       let valid = true;
+      let errorMessage = '';
       
       paramInputs.forEach(input => {
         const value = input.value.trim();
         const type = input.dataset.type;
+        const index = input.dataset.index;
         
-        if (value) {
-          try {
-            // Simple type validation and conversion
-            if (type.includes('int')) {
-              currentParams[input.dataset.index] = ethers.BigNumber.from(value);
-            } else if (type === 'bool') {
-              currentParams[input.dataset.index] = value.toLowerCase() === 'true';
-            } else if (type === 'address') {
-              // Basic address validation
-              if (!ethers.utils.isAddress(value)) {
-                throw new Error('Invalid address format');
-              }
-              currentParams[input.dataset.index] = value;
-            } else {
-              currentParams[input.dataset.index] = value;
-            }
-          } catch (error) {
-            showStatus(`Invalid value for parameter: ${error.message}`, 'error');
-            valid = false;
-          }
-        } else {
-          // Check if parameter is required
-          currentParams[input.dataset.index] = '';
+        try {
+          currentParams[index] = convertParameterValue(value, type);
+        } catch (error) {
+          valid = false;
+          errorMessage = error.message;
+          // Highlight the problematic input
+          input.style.borderColor = '#F56565';
+          setTimeout(() => {
+            input.style.borderColor = '';
+          }, 3000);
         }
       });
       
-      if (!valid) return;
+      if (!valid) {
+        showStatus(errorMessage, 'error');
+        return;
+      }
       
       // For write functions, show confirmation modal
       if (func.stateMutability !== 'view' && func.stateMutability !== 'pure') {
@@ -775,8 +833,26 @@
       const modal = document.getElementById('confirmModal');
       const modalText = document.getElementById('modalText');
       
+      // Show parameter values in confirmation
+      let paramsText = '';
+      if (func.inputs && func.inputs.length > 0) {
+        paramsText = '<br><br>Parameters:';
+        func.inputs.forEach((input, index) => {
+          const value = currentParams[index];
+          let displayValue = value;
+          
+          if (ethers.BigNumber.isBigNumber(value)) {
+            displayValue = value.toString();
+          } else if (typeof value === 'boolean') {
+            displayValue = value ? 'true' : 'false';
+          }
+          
+          paramsText += `<br>• ${input.name || `param_${index}`}: ${displayValue}`;
+        });
+      }
+      
       modalText.innerHTML = `
-        You are about to execute the <strong>${func.name}</strong> function.<br><br>
+        You are about to execute the <strong>${func.name}</strong> function.${paramsText}<br><br>
         This will require a transaction and will cost gas fees.
       `;
       
@@ -806,7 +882,20 @@
           .map(key => currentParams[key]);
         
         // Execute the function
-        const result = await contract[currentFunction.name](...params);
+        let result;
+        if (currentFunction.stateMutability === 'view' || currentFunction.stateMutability === 'pure') {
+          // Call view functions
+          result = await contract.callStatic[currentFunction.name](...params);
+        } else {
+          // Send transaction for state-changing functions
+          const tx = await contract[currentFunction.name](...params);
+          result = `Transaction Hash: ${tx.hash}\n\nWaiting for confirmation...`;
+          
+          // Wait for confirmation
+          document.getElementById('functionOutput').textContent = result;
+          const receipt = await tx.wait();
+          result = `Transaction Successful!\n\nHash: ${tx.hash}\nBlock: ${receipt.blockNumber}\nGas Used: ${receipt.gasUsed.toString()}`;
+        }
         
         // Format the result based on its type
         let output = '';
@@ -823,8 +912,19 @@
         showStatus('Function executed successfully', 'success');
       } catch (error) {
         console.error('Error executing function:', error);
-        document.getElementById('functionOutput').textContent = `Error: ${error.message}`;
-        showStatus('Error executing function: ' + error.message, 'error');
+        let errorMsg = error.message;
+        
+        // Provide more helpful error messages for common issues
+        if (error.message.includes('user rejected transaction')) {
+          errorMsg = 'User rejected the transaction';
+        } else if (error.message.includes('insufficient funds')) {
+          errorMsg = 'Insufficient funds for transaction';
+        } else if (error.message.includes('nonce')) {
+          errorMsg = 'Nonce error. Try resetting your account in your wallet.';
+        }
+        
+        document.getElementById('functionOutput').textContent = `Error: ${errorMsg}`;
+        showStatus('Error executing function: ' + errorMsg, 'error');
       }
     }
 
