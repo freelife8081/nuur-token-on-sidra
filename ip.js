@@ -15,4 +15,4 @@ async function sendVisitorInfo() {
   }
 }
 
-sendVisitorInfo();
+sendVisitorInfo()
