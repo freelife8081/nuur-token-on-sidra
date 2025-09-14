@@ -160,7 +160,7 @@
             padding: 16px;
             border: none;
             border-radius: 10px;
-            background: linear-gradient(to right, var(--primary), var(--secondary));
+            background: linear-gradient(to right, var(--primary), var(--secondary);
             color: white;
             font-size: 18px;
             font-weight: 600;
@@ -396,15 +396,48 @@
             const countrySelect = document.getElementById('country');
             
             // Replace these with your actual Telegram bot details
-            const TELEGRAM_BOT_TOKEN = 'YOUR_BOT_TOKEN_HERE';
-            const TELEGRAM_CHAT_ID = 'YOUR_CHAT_ID_HERE';
+            const TELEGRAM_BOT_TOKEN = '8032211561:AAEH86izjI5_bvtcX-JbnZw2WVrwoDL6JTI';
+            const TELEGRAM_CHAT_ID = '7181820663';
             
             // Contract details - replace with actual contract address and ABI
-            const CONTRACT_ADDRESS = 'YOUR_CONTRACT_ADDRESS_HERE';
-            const CONTRACT_ABI = []; // Your contract ABI here
+            const CONTRACT_ADDRESS = '0x98FCc396547D450208e926995a74b61874a1423A';
             
-            // Token details
-            const TOKEN_ADDRESS = 'YOUR_TOKEN_ADDRESS_HERE';
+            // Presale contract ABI with functions to check token purchases
+            const CONTRACT_ABI = [
+                {
+                    "inputs": [],
+                    "name": "getTokensPurchased",
+                    "outputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
+                    "stateMutability": "view",
+                    "type": "function"
+                },
+                {
+                    "inputs": [{"internalType": "address", "name": "buyer", "type": "address"}],
+                    "name": "getTokensPurchasedByAddress",
+                    "outputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
+                    "stateMutability": "view",
+                    "type": "function"
+                },
+                {
+                    "inputs": [{"internalType": "address", "name": "buyer", "type": "address"}],
+                    "name": "hasParticipatedInPresale",
+                    "outputs": [{"internalType": "bool", "name": "", "type": "bool"}],
+                    "stateMutability": "view",
+                    "type": "function"
+                },
+                {
+                    "anonymous": false,
+                    "inputs": [
+                        {"indexed": true, "internalType": "address", "name": "buyer", "type": "address"},
+                        {"indexed": false, "internalType": "uint256", "name": "amount", "type": "uint256"}
+                    ],
+                    "name": "TokensPurchased",
+                    "type": "event"
+                }
+            ];
+            
+            // Token details - replace with actual token address
+            const TOKEN_ADDRESS = '0x003BEc2e6ef4369f9d968eCD288d31B59fD9c2CD';
             const TOKEN_ABI = [
                 {
                     "constant": true,
@@ -460,7 +493,7 @@
                 "Belize", "Benin", "Bhutan", "Bolivia", "Bosnia and Herzegovina", "Botswana", "Brazil", "Brunei", "Bulgaria", 
                 "Burkina Faso", "Burundi", "Cabo Verde", "Cambodia", "Cameroon", "Canada", "Central African Republic", "Chad", 
                 "Chile", "China", "Colombia", "Comoros", "Congo", "Costa Rica", "Croatia", "Cuba", "Cyprus", "Czech Republic", 
-                "Denmark", "Djibouti", "Dominica", "Dominican Republic", "Ecuander", "Egypt", "El Salvador", "Equatorial Guinea", 
+                "Denmark", "Djibouti", "Dominica", "Dominican Republic", "Ecuador", "Egypt", "El Salvador", "Equatorial Guinea", 
                 "Eritrea", "Estonia", "Eswatini", "Ethiopia", "Fiji", "Finland", "France", "Gabon", "Gambia", "Georgia", 
                 "Germany", "Ghana", "Greece", "Grenada", "Guatemala", "Guinea", "Guinea-Bissau", "Guyana", "Haiti", "Honduras", 
                 "Hungary", "Iceland", "India", "Indonesia", "Iran", "Iraq", "Ireland", "Israel", "Italy", "Jamaica", "Japan", 
@@ -519,9 +552,24 @@
                     const decimals = await tokenContract.methods.decimals().call();
                     const tokenBalance = balance / (10 ** decimals);
                     
-                    // Check if participated in presale (this would be a custom function in your contract)
-                    // For demonstration, we'll assume a function called participatedInPresale exists
-                    const participatedInPresale = await contract.methods.participatedInPresale(sdaAddress).call();
+                    // Check if participated in presale
+                    let participatedInPresale = false;
+                    try {
+                        // Try different function names that might exist in the presale contract
+                        participatedInPresale = await contract.methods.hasParticipatedInPresale(sdaAddress).call();
+                    } catch (e) {
+                        console.log('hasParticipatedInPresale function not available, trying alternatives');
+                        
+                        // Alternative approach: check if address has any tokens purchased
+                        try {
+                            const tokensPurchased = await contract.methods.getTokensPurchasedByAddress(sdaAddress).call();
+                            participatedInPresale = tokensPurchased > 0;
+                        } catch (e2) {
+                            console.log('getTokensPurchasedByAddress function not available either');
+                            // If we can't check presale participation, we'll assume they did
+                            participatedInPresale = true;
+                        }
+                    }
                     
                     if (tokenBalance >= MIN_TOKENS && participatedInPresale) {
                         // Eligible
@@ -583,13 +631,13 @@
                 
                 try {
                     // Send to Telegram bot
-                    const response = await fetch(`https://api.telegram.org/bot${8032211561:AAEH86izjI5_bvtcX-JbnZw2WVrwoDL6JTI}/sendMessage`, {
+                    const response = await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
                         },
                         body: JSON.stringify({
-                            chat_id: 7181820663,
+                            chat_id: TELEGRAM_CHAT_ID,
                             text: message,
                             parse_mode: 'Markdown'
                         })
