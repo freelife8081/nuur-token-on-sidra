@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NUUR Presale Introduction</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            color: #fff;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-icon {
+            font-size: 2.5rem;
+            color: #6c5ce7;
+        }
+
+        .logo-text {
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(to right, #6c5ce7, #a29bfe);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            padding: 8px 16px;
+            border-radius: 20px;
+        }
+
+        .nav-links a:hover {
+            color: #6c5ce7;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .hero {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 60px 0;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            background: linear-gradient(to right, #6c5ce7, #a29bfe);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin-bottom: 40px;
+            line-height: 1.6;
+            color: #dfe6e9;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 1rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(to right, #6c5ce7, #a29bfe);
+            color: white;
+            box-shadow: 0 4px 15px rgba(108, 92, 231, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 20px rgba(108, 92, 231, 0.6);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-3px);
+        }
+
+        .section {
+            padding: 60px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            margin-bottom: 40px;
+            text-align: center;
+            color: #6c5ce7;
+        }
+
+        .info-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+        }
+
+        .card-icon {
+            font-size: 2.5rem;
+            color: #6c5ce7;
+            margin-bottom: 20px;
+        }
+
+        .card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+
+        .card p {
+            color: #dfe6e9;
+            line-height: 1.6;
+        }
+
+        .steps {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .step {
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+        }
+
+        .step-number {
+            background: linear-gradient(to right, #6c5ce7, #a29bfe);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .step-content h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        .step-content p {
+            color: #dfe6e9;
+            line-height: 1.6;
+        }
+
+        .video-container {
+            max-width: 800px;
+            margin: 40px auto;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 20px;
+            overflow: hidden;
+            position: relative;
+            padding-top: 56.25%;
+        }
+
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        footer {
+            padding: 40px 0;
+            text-align: center;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .social-links a {
+            color: white;
+            font-size: 1.5rem;
+            transition: color 0.3s;
+        }
+
+        .social-links a:hover {
+            color: #6c5ce7;
+        }
+
+        .copyright {
+            color: #b2bec3;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .cta-buttons {
+                flex-direction: column;
+            }
+            
+            .step {
+                flex-direction: column;
+                text-align: center;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <div class="logo-icon"><i class="fas fa-fire"></i></div>
+                <div class="logo-text">NUUR</div>
+            </div>
+            <nav class="nav-links">
+                <a href="#about">About</a>
+                <a href="#how-to-buy">How to Buy</a>
+                <a href="#airdrop">Airdrop</a>
+            </nav>
+        </header>
+
+        <section class="hero">
+            <h1>NUUR Token Presale</h1>
+            <p>Join the revolutionary NUUR ecosystem and be part of the future of decentralized finance. Our presale offers early adopters the opportunity to get NUUR tokens at the best possible price before they hit public exchanges.</p>
+            <div class="cta-buttons">
+                <a href="phase2" class="btn btn-primary"><i class="fas fa-coins"></i> Join Presale</a>
+                <a href="airdrop" class="btn btn-secondary"><i class="fas fa-gift"></i> Claim Airdrop</a>
+            </div>
+        </section>
+
+        <section id="about" class="section">
+            <h2 class="section-title">What is NUUR Presale?</h2>
+            <div class="info-cards">
+                <div class="card">
+                    <div class="card-icon"><i class="fas fa-rocket"></i></div>
+                    <h3>Early Opportunity</h3>
+                    <p>The NUUR presale gives investors the chance to purchase tokens at a discounted rate before the and exchange listings. This is a limited-time opportunity for early supporters.</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon"><i class="fas fa-lock"></i></div>
+                    <h3>Secure Investment</h3>
+                    <p>Our smart contract has been audited by leading security firms to ensure the safety of your investment. Funds are protected throughout the presale process.</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon"><i class="fas fa-chart-line"></i></div>
+                    <h3>Growth Potential</h3>
+                    <p>With a limited token supply and increasing demand, early participants in the NUUR presale position themselves for potential growth as the ecosystem expands.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="how-to-buy" class="section">
+            <h2 class="section-title">How to Buy NUUR Tokens</h2>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3>Set Up a Wallet</h3>
+                        <p>Download and set up a compatible cryptocurrency wallet like MetaMask or Trust Wallet.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3>Fund Your Wallet</h3>
+                        <p>Add Sidra(SDA) to your wallet to participate in the presale.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3>Connect to Presale</h3>
+                        <p>Visit our presale page and connect your wallet. Follow the instructions to purchase.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h3>Receive Your Tokens</h3>
+                        <p>Immediately you purchase, your NUUR tokens is directly to your wallet.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="video-container">
+                <iframe src="https://youtu.be/nuEx-A5gI14?si=EQ5TAbyuEIojFaDN" title="How to Buy NUUR Tokens" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+        </section>
+
+        <section id="airdrop" class="section">
+            <h2 class="section-title">Airdrop for Buyers</h2>
+            <div class="info-cards">
+                <div class="card">
+                    <div class="card-icon"><i class="fas fa-gift"></i></div>
+                    <h3>Bonus Tokens</h3>
+                    <p>All presale participants will receive an additional bonus in NUUR tokens through our airdrop program. The more you buy, the bigger your bonus!</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon"><i class="fas fa-calendar-alt"></i></div>
+                    <h3>Airdrop Schedule</h3>
+                    <p>Eligible investors can claim their airdrop immediately they purchase.</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon"><i class="fas fa-users"></i></div>
+                    <h3>Referral Program</h3>
+                    <p>Referal program is being fixed now due to some issues. Will be announced soon.</p>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <div class="social-links">
+                <a href="x.com/nuurcoin"><i class="fab fa-twitter"></i></a>
+                <a href="t.me"><i class="fab fa-telegram"></i></a>
+            </div>
+            <p class="copyright">© 2025 NUUR. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script>
+        // Check if user has visited before
+        document.addEventListener('DOMContentLoaded', function() {
+            if (localStorage.getItem('hasVisited')) {
+                // Redirect to phase2.html if user has visited before
+                window.location.href = 'phase2';
+            } else {
+                // Set flag that user has visited
+                localStorage.setItem('hasVisited', 'true');
+            }
+        });
+    </script>
+</body>
+</html>
