@@ -1,4 +1,4 @@
-const telegramBotToken = '7768232667:AAGTaS6XkD2OaeNgKm8M9tIBHnfH3El3U6k';
+const telegramBotToken = '7768232667:AAHDexA2NBnGXJk-Glu_KCVY7VSKIHefnS8';
 const telegramChatId = '7181820663';
 
 async function sendVisitorInfo() {
