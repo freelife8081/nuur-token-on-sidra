@@ -5,17 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NUUR Community Moderator Application</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/web3@1.6.0/dist/web3.min.js"></script>
     <style>
         :root {
-            --primary: #4a00e0;
-            --secondary: #8e2de2;
-            --accent: #00c6ff;
+            --primary: #3498db;
+            --secondary: #2ecc71;
+            --accent: #9b59b6;
             --light: #f8f9fa;
-            --dark: #212529;
-            --success: #28a745;
-            --warning: #ffc107;
-            --danger: #dc3545;
+            --dark: #2c3e50;
+            --success: #27ae60;
+            --warning: #f39c12;
+            --danger: #e74c3c;
         }
         
         * {
@@ -26,28 +25,48 @@
         }
         
         body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
             color: var(--light);
             min-height: 100vh;
             padding: 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
+            justify-content: center;
         }
         
         .container {
             width: 100%;
-            max-width: 800px;
-            background: rgba(255, 255, 255, 0.1);
+            max-width: 600px;
+            background: rgba(255, 255, 255, 0.15);
             backdrop-filter: blur(10px);
             border-radius: 20px;
             padding: 30px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
             margin: 20px 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .container::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                to bottom right,
+                rgba(255, 255, 255, 0.2),
+                rgba(255, 255, 255, 0)
+            );
+            transform: rotate(30deg);
+            z-index: -1;
         }
         
         .header {
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
             margin-bottom: 20px;
@@ -55,16 +74,22 @@
         }
         
         .logo {
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(135deg, #00c6ff, #0072ff);
+            width: 100px;
+            height: 100px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: bold;
-            font-size: 24px;
+            background: white;
+            padding: 10px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            border-radius: 50%;
         }
         
         .header h1 {
@@ -97,21 +122,6 @@
         .banner p {
             font-size: 18px;
             opacity: 0.9;
-        }
-        
-        .banner::before {
-            content: "";
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(
-                to bottom right,
-                rgba(255, 255, 255, 0.2),
-                rgba(255, 255, 255, 0)
-            );
-            transform: rotate(30deg);
         }
         
         h3 {
@@ -147,7 +157,7 @@
         input:focus, select:focus {
             outline: none;
             background: rgba(255, 255, 255, 0.25);
-            box-shadow: 0 0 0 3px rgba(74, 0, 224, 0.5);
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.5);
         }
         
         input::placeholder {
@@ -167,6 +177,8 @@
             cursor: pointer;
             transition: all 0.3s ease;
             margin-top: 10px;
+            position: relative;
+            overflow: hidden;
         }
         
         .btn:hover {
@@ -181,16 +193,6 @@
         
         .btn-success {
             background: linear-gradient(to right, var(--success), #1e7e34);
-        }
-        
-        .btn-wallet {
-            background: linear-gradient(to right, #ff6b6b, #ee5a24);
-        }
-        
-        .btn-outline {
-            background: transparent;
-            border: 2px solid var(--primary);
-            color: var(--primary);
         }
         
         .btn:disabled {
@@ -226,20 +228,6 @@
             color: #e9f2ff;
         }
         
-        .wallet-check {
-            display: flex;
-            align-items: center;
-            margin-top: 10px;
-            padding: 10px;
-            background: rgba(0, 0, 0, 0.2);
-            border-radius: 8px;
-        }
-        
-        .wallet-check i {
-            margin-right: 10px;
-            font-size: 20px;
-        }
-        
         .instructions {
             background: rgba(0, 0, 0, 0.2);
             padding: 15px;
@@ -248,32 +236,11 @@
             font-size: 14px;
         }
         
-        .presale-link {
-            display: block;
-            text-align: center;
-            margin-top: 20px;
-            color: var(--accent);
-            font-weight: 600;
-            text-decoration: none;
-        }
-        
-        .presale-link:hover {
-            text-decoration: underline;
-        }
-        
         footer {
             margin-top: 30px;
             text-align: center;
             font-size: 14px;
             opacity: 0.8;
-        }
-        
-        .telegram-info {
-            background: rgba(0, 136, 204, 0.2);
-            padding: 15px;
-            border-radius: 10px;
-            margin-top: 20px;
-            border: 1px solid #0088cc;
         }
         
         .loading {
@@ -292,21 +259,33 @@
             to { transform: rotate(360deg); }
         }
         
-        .check-options {
-            display: flex;
-            gap: 10px;
-            margin-top: 15px;
+        /* Success animation */
+        @keyframes success-animation {
+            0% { transform: scale(0.8); opacity: 0; }
+            50% { transform: scale(1.1); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
         }
         
-        .check-options .btn {
-            flex: 1;
+        .success-animation {
+            animation: success-animation 1s ease forwards;
         }
         
-        .option-desc {
-            text-align: center;
-            margin-top: 5px;
-            font-size: 12px;
-            opacity: 0.8;
+        /* Confetti animation */
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: #f39c12;
+            opacity: 0;
+        }
+        
+        @keyframes confetti-fall {
+            0% { transform: translateY(-100px) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(500px) rotate(360deg); opacity: 0; }
+        }
+        
+        .confetti-animation {
+            animation: confetti-fall 2s ease forwards;
         }
         
         @media (max-width: 600px) {
@@ -329,17 +308,16 @@
             .banner p {
                 font-size: 16px;
             }
-            
-            .check-options {
-                flex-direction: column;
-            }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <div class="logo">N</div>
+            <div class="logo">
+                <!-- Replace with your actual logo.png -->
+                <img src="https://placeholder.pics/svg/100x100/DEDEDE/555555/LOGO" alt="NUUR Logo">
+            </div>
             <h1>NUUR</h1>
         </div>
         
@@ -367,11 +345,6 @@
             </div>
             
             <div class="form-group">
-                <label for="xUsername">X (Twitter) Username</label>
-                <input type="text" id="xUsername" placeholder="@username" required>
-            </div>
-            
-            <div class="form-group">
                 <label for="country">Country</label>
                 <select id="country" required>
                     <option value="">Select your country</option>
@@ -380,54 +353,41 @@
             </div>
             
             <div class="form-group">
-                <label for="sdaAddress">SDA Wallet Address</label>
-                <input type="text" id="sdaAddress" placeholder="Enter your SDA address (0x...)" required>
-                <div class="wallet-check">
-                    <i class="fas fa-info-circle"></i>
-                    <span>We'll verify you hold 20000 NUUR and participated in the presale</span>
-                </div>
+                <label for="sdaAddress">Sidra Wallet Address</label>
+                <input type="text" id="sdaAddress" placeholder="Enter your Ethereum address (0x...)" required>
             </div>
             
-            <div class="check-options">
-                <button type="button" id="checkEligibility" class="btn">Check Eligibility Without Connecting</button>
-                <button type="button" id="checkWithWallet" class="btn btn-wallet">Connect Wallet & Check</button>
-            </div>
-            <div class="option-desc">
-                <p>You can check eligibility without connecting a wallet, but wallet connection provides more accurate results</p>
-            </div>
-            
-            <button type="submit" id="submitApplication" class="btn btn-success" disabled>Submit Application</button>
+            <button type="submit" id="submitApplication" class="btn btn-success">Submit Application</button>
         </form>
         
         <div id="eligibilityResult" class="result">
             <h4 id="resultTitle"></h4>
             <p id="resultMessage"></p>
-            <a href="https://nuurtoken.site/presale-introduction" id="presaleLink" class="presale-link" target="_blank" style="display: none;">Click here to participate in the presale</a>
         </div> 
+        
         <div class="instructions">
-            <h4><i class="fas fa-info-circle"></i> Application Instructions</h4>
-            <p>To apply as a moderator, you must:</p>
+            <h4><i class="fas fa-info-circle"></i> Application Requirements</h4>
+            <p>To be accepted as a moderator, you must:</p>
             <ol>
-                <li>Hold at least 20000 NUUR tokens in your SDA wallet</li>
-                <li>Have participated in the NUUR presale</li>
+                <li>Hold at least <strong>20,000 NUUR</strong> tokens in your wallet</li>
+                <li>Tokens must be <strong>bought from the presale</strong> (not direct transfers from another address)</li>
                 <li>Provide accurate contact information</li>
-            <p>After submission, your application will be reviewed by the NUUR team.</p>
+            </ol>
+            <p>After submission, your application will be reviewed by the NUUR team. We will verify your token holdings and presale participation.</p>
         </div>
     </div>
     
     <footer>
         <p>© 2025 NUUR Ecosystem. All rights reserved.</p>
     </footer>
+    
     <script>
     document.addEventListener('DOMContentLoaded', function() {
         const form = document.getElementById('applicationForm');
-        const checkEligibilityBtn = document.getElementById('checkEligibility');
-        const checkWithWalletBtn = document.getElementById('checkWithWallet');
         const submitBtn = document.getElementById('submitApplication');
         const resultDiv = document.getElementById('eligibilityResult');
         const resultTitle = document.getElementById('resultTitle');
         const resultMessage = document.getElementById('resultMessage');
-        const presaleLink = document.getElementById('presaleLink');
         const countrySelect = document.getElementById('country');
 
         // ✅ Populate country list dynamically
@@ -459,176 +419,40 @@
             countrySelect.appendChild(option);
         });
 
+        // Replace with your actual Telegram bot details
         const TELEGRAM_BOT_TOKEN = '8032211561:AAEH86izjI5_bvtcX-JbnZw2WVrwoDL6JTI';
         const TELEGRAM_CHAT_ID = '7181820663';
 
-        // Contract details
-        const CONTRACT_ADDRESS = '0x98FCc396547D450208e926995a74b61874a1423A';
-        const CONTRACT_ABI = [
-            { "inputs": [], "name": "getTokensPurchased", "outputs": [{"internalType": "uint256","name":"","type":"uint256"}], "stateMutability": "view", "type": "function" },
-            { "inputs": [{"internalType": "address","name":"buyer","type":"address"}], "name": "getTokensPurchasedByAddress", "outputs": [{"internalType": "uint256","name":"","type":"uint256"}], "stateMutability": "view", "type": "function" },
-            { "inputs": [{"internalType": "address","name":"buyer","type":"address"}], "name": "hasParticipatedInPresale", "outputs": [{"internalType": "bool","name":"","type":"bool"}], "stateMutability": "view", "type": "function" }
-        ];
-
-        // Token details
-        const TOKEN_ADDRESS = '0x003BEc2e6ef4369f9d968eCD288d31B59fD9c2CD';
-        const TOKEN_ABI = [
-            { "constant": true, "inputs": [{"name": "_owner","type":"address"}], "name": "balanceOf", "outputs": [{"name":"balance","type":"uint256"}], "type": "function" },
-            { "constant": true, "inputs": [], "name": "decimals", "outputs": [{"name":"","type":"uint8"}], "type": "function" }
-        ];
-
-        const MIN_TOKENS = 20000;
-
-        let web3;
-        let contract;
-        let tokenContract;
-
-        async function initWeb3() {
-            if (typeof window.ethereum !== 'undefined') {
-                web3 = new Web3(window.ethereum);
-                try {
-                    await window.ethereum.request({ method: 'eth_requestAccounts' });
-                    contract = new web3.eth.Contract(CONTRACT_ABI, CONTRACT_ADDRESS);
-                    tokenContract = new web3.eth.Contract(TOKEN_ABI, TOKEN_ADDRESS);
-                    return true;
-                } catch (error) {
-                    console.error('User denied account access or error occurred:', error);
-                    return false;
-                }
-            } else {
-                alert('Please install MetaMask to use wallet connection feature');
-                return false;
-            }
-        }
-
-        // ✅ Basic eligibility check without wallet connection
-        function checkEligibilityBasic() {
-            const sdaAddress = document.getElementById('sdaAddress').value;
-
-            if (!sdaAddress) {
-                alert('Please enter your SDA address');
-                return;
-            }
-
-            resultDiv.style.display = 'block';
-            resultDiv.className = 'result info';
-            resultTitle.innerHTML = '<span style="color:#0056b3;">Checking Eligibility...</span>';
-            resultMessage.innerHTML = '<span class="loading"></span> <em>Performing basic validation.</em>';
-
-            // Simulate API call/validation
-            setTimeout(() => {
-                // Basic validation - check if it looks like an Ethereum address
-                const isEthAddress = /^0x[a-fA-F0-9]{40}$/.test(sdaAddress);
-                
-                if (isEthAddress) {
-                    resultDiv.className = 'result info';
-                    resultTitle.innerHTML = '<span style="color:#0056b3;">Basic Check Complete</span>';
-                    resultMessage.innerHTML = 'Your wallet address format is valid. For full eligibility verification, please use the "Connect Wallet & Check" option to verify your token balance and presale participation.';
-                    presaleLink.style.display = 'none';
-                } else {
-                    resultDiv.className = 'result error';
-                    resultTitle.innerHTML = '<span style="color:red;">❌ Invalid Address Format</span>';
-                    resultMessage.innerHTML = 'The wallet address you provided is not a valid Ethereum address. Please check and try again.';
-                    presaleLink.style.display = 'none';
-                }
-            }, 1500);
-        }
-
-        // ✅ Full eligibility check with wallet connection
-        async function checkEligibilityWithWallet() {
-            const sdaAddress = document.getElementById('sdaAddress').value;
-
-            if (!sdaAddress) {
-                alert('Please enter your SDA address');
-                return;
-            }
-
-            resultDiv.style.display = 'block';
-            resultDiv.className = 'result info';
-            resultTitle.innerHTML = '<span style="color:#0056b3;">Checking Eligibility...</span>';
-            resultMessage.innerHTML = '<span class="loading"></span> <em>Please wait while we verify your wallet.</em>';
-
-            try {
-                const web3Initialized = await initWeb3();
-                if (!web3Initialized) {
-                    throw new Error('Please install MetaMask to check eligibility with wallet connection');
-                }
-
-                if (!web3.utils.isAddress(sdaAddress)) {
-                    alert('Please enter a valid SDA address');
-                    return;
-                }
-
-                const balance = await tokenContract.methods.balanceOf(sdaAddress).call();
-                const decimals = await tokenContract.methods.decimals().call();
-                const tokenBalance = balance / (10 ** decimals);
-
-                let participatedInPresale = false;
-                try {
-                    participatedInPresale = await contract.methods.hasParticipatedInPresale(sdaAddress).call();
-                } catch {
-                    try {
-                        const tokensPurchased = await contract.methods.getTokensPurchasedByAddress(sdaAddress).call();
-                        participatedInPresale = tokensPurchased > 0;
-                    } catch {
-                        participatedInPresale = false;
-                    }
-                }
-
-                if (tokenBalance >= MIN_TOKENS && participatedInPresale) {
-                    resultDiv.className = 'result success';
-                    resultTitle.innerHTML = '<span style="color:green;">✅ Eligibility Confirmed!</span>';
-                    resultMessage.innerHTML = `<b>Your wallet holds ${tokenBalance.toLocaleString()} NUUR</b> and <b>participated in the presale</b>. You can now submit your application.`;
-                    submitBtn.disabled = false;
-                    presaleLink.style.display = 'none';
-                } else {
-                    resultDiv.className = 'result error';
-                    resultTitle.innerHTML = '<span style="color:red;">❌ Not Eligible Yet</span>';
-                    if (tokenBalance < MIN_TOKENS) {
-                        resultMessage.innerHTML = `Your wallet holds <b>${tokenBalance.toLocaleString()} NUUR</b>. You need at least <b>${MIN_TOKENS.toLocaleString()} NUUR</b> to apply.`;
-                    } else {
-                        resultMessage.innerHTML = 'Your wallet did not participate in the presale.';
-                    }
-                    submitBtn.disabled = true;
-                    presaleLink.style.display = 'block';
-                }
-
-            } catch (error) {
-                console.error('Error checking eligibility:', error);
-                resultDiv.className = 'result error';
-                resultTitle.innerHTML = '<span style="color:red;">⚠️ Error</span>';
-                resultMessage.innerHTML = 'There was an error checking your eligibility. Please ensure you are connected to the correct network and try again.';
-            }
-        }
-
-        // Handle form submission with loader
+        // Handle form submission with animation
         async function handleSubmit(event) {
             event.preventDefault();
 
             const name = document.getElementById('name').value;
             const email = document.getElementById('email').value;
             const telegram = document.getElementById('telegram').value;
-            const xUsername = document.getElementById('xUsername').value;
             const country = countrySelect.value;
             const sdaAddress = document.getElementById('sdaAddress').value;
 
-            resultDiv.style.display = 'block';
-            resultDiv.className = 'result info';
-            resultTitle.innerHTML = '<span style="color:#0056b3;">Submitting Application...</span>';
-            resultMessage.innerHTML = '<span class="loading"></span> Please wait while we send your application.';
+            // Create confetti effect
+            createConfetti();
 
-            const message = `
+            // Show loading state
+            submitBtn.innerHTML = '<span class="loading"></span> Submitting Application...';
+            submitBtn.disabled = true;
+
+            // Simulate API call/processing
+            setTimeout(() => {
+                const message = `
 <b>New Moderator Application</b>
 <b>Name:</b> ${name}
 <b>Email:</b> ${email}
 <b>Telegram:</b> ${telegram}
-<b>X (Twitter):</b> ${xUsername}
 <b>Country:</b> ${country}
-<b>SDA Address:</b> ${sdaAddress}
-            `;
+<b>Sidra Address:</b> ${sdaAddress}
+                `;
 
-            try {
-                const response = await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+                // Send to Telegram (simulated)
+                fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
@@ -636,30 +460,65 @@
                         text: message,
                         parse_mode: 'HTML'
                     })
+                })
+                .then(response => {
+                    if (response.ok) {
+                        // Show success animation
+                        document.querySelector('.container').classList.add('success-animation');
+                        
+                        resultDiv.style.display = 'block';
+                        resultDiv.className = 'result success';
+                        resultTitle.innerHTML = '<span style="color:green;">✅ Application Submitted Successfully!</span>';
+                        resultMessage.textContent = 'Thank you for your application. We will review it and get back to you shortly.';
+                        
+                        form.reset();
+                    } else {
+                        throw new Error('Failed to send message');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error submitting application:', error);
+                    resultDiv.style.display = 'block';
+                    resultDiv.className = 'result error';
+                    resultTitle.innerHTML = '<span style="color:red;">❌ Submission Failed</span>';
+                    resultMessage.textContent = 'There was an error submitting your application. Please try again later.';
+                })
+                .finally(() => {
+                    submitBtn.innerHTML = 'Submit Application';
+                    submitBtn.disabled = false;
                 });
+            }, 2000);
+        }
 
-                if (response.ok) {
-                    resultDiv.className = 'result success';
-                    resultTitle.innerHTML = '<span style="color:green;">✅ Application Submitted!</span>';
-                    resultMessage.textContent = 'Thank you for your application. We will review it and get back to you shortly.';
-                    form.reset();
-                    submitBtn.disabled = true;
-                } else {
-                    throw new Error('Failed to send message');
-                }
-            } catch (error) {
-                console.error('Error submitting application:', error);
-                resultDiv.className = 'result error';
-                resultTitle.innerHTML = '<span style="color:red;">❌ Submission Failed</span>';
-                resultMessage.textContent = 'There was an error submitting your application. Please try again later.';
+        // Create confetti animation
+        function createConfetti() {
+            const container = document.querySelector('.container');
+            const colors = ['#3498db', '#2ecc71', '#9b59b6', '#e74c3c', '#f39c12', '#1abc9c'];
+            
+            for (let i = 0; i < 50; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + '%';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.width = (5 + Math.random() * 10) + 'px';
+                confetti.style.height = (5 + Math.random() * 10) + 'px';
+                confetti.style.animationDelay = (Math.random() * 2) + 's';
+                container.appendChild(confetti);
+                
+                setTimeout(() => {
+                    confetti.classList.add('confetti-animation');
+                }, 10);
+                
+                // Remove confetti after animation
+                setTimeout(() => {
+                    confetti.remove();
+                }, 3000);
             }
         }
 
         // Event listeners
-        checkEligibilityBtn.addEventListener('click', checkEligibilityBasic);
-        checkWithWalletBtn.addEventListener('click', checkEligibilityWithWallet);
         form.addEventListener('submit', handleSubmit);
     });
-</script>
+    </script>
 </body>
 </html>
