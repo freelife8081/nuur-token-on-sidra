@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" >
     <title>Nuur Coin - Vesting Portal</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
@@ -757,17 +757,11 @@
         </div>
         
         <div class="external-links">
-            <a href="#" class="ext-link">
+            <a href="presale-introduction" class="ext-link">
                 <i class="fas fa-shopping-cart"></i> Presale
             </a>
             <a href="#" class="ext-link">
-                <i class="fas fa-bug"></i> Report Issue
-            </a>
-            <a href="#" class="ext-link">
-                <i class="fas fa-file-contract"></i> Contract
-            </a>
-            <a href="#" class="ext-link">
-                <i class="fas fa-question-circle"></i> Help
+                <i class="fas fa-bug"></i> Help
             </a>
         </div>
     </div>
@@ -1078,7 +1072,7 @@
                     monthsPassedEl.textContent = "0/12";
                     vestingProgressEl.style.width = "0%";
                     claimBtn.disabled = true;
-                    claimTooltip.textContent = "Vesting has not started yet";
+                    claimTooltip.textContent = "Wait for vesting to start.";
                 }
                 
             } catch (error) {
@@ -1093,7 +1087,7 @@
             
             if (!isUserVerified) {
                 claimBtn.disabled = true;
-                claimTooltip.textContent = "Complete KYC verification to enable claiming";
+                claimTooltip.textContent = "Complete KYC to claim";
                 return;
             }
             
