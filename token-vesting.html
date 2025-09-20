@@ -17,639 +17,138 @@
             --danger: #dc3545;
             --warning: #ffc107;
             --info: #17a2b8;
-            --card-bg: rgba(26, 26, 46, 0.8);
-            --glow: 0 0 10px rgba(74, 0, 224, 0.5);
-        }
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
-        body {
-            background: linear-gradient(135deg, var(--dark) 0%, #16213e 100%);
-            color: var(--light);
-            min-height: 100vh;
-            background-attachment: fixed;
-            padding: 20px;
-        }
-        
-        .container {
-            width: 100%;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px;
-            border-radius: 20px;
-            background: var(--card-bg);
-            backdrop-filter: blur(10px);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            margin-bottom: 30px;
+            --card-bg: rgba(26, 26, 46, 0.85);
+            --glow: 0 0 12px rgba(74, 0, 224, 0.5);
+            --muted: rgba(255,255,255,0.14);
         }
 
-        .logo-container {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-        
-        .logo {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            box-shadow: var(--glow);
-            animation: pulse 2s infinite;
-            border: 2px solid rgba(255, 255, 255, 0.1);
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-        }
-        
-        .logo img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            filter: brightness(0) invert(1);
-        }
-        
-        .logo-text {
-            font-size: 28px;
-            font-weight: 700;
-            background: linear-gradient(to right, var(--accent), var(--primary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
-        }
-        
-        @keyframes pulse {
-            0% { transform: scale(1); box-shadow: 0 0 10px rgba(74, 0, 224, 0.5); }
-            50% { transform: scale(1.05); box-shadow: 0 0 20px rgba(74, 0, 224, 0.8); }
-            100% { transform: scale(1); box-shadow: 0 0 10px rgba(74, 0, 224, 0.5); }
-        }        
-        nav {
-            display: flex;
-            gap: 20px;
-        }
-        
-        .nav-link {
-            color: var(--light);
-            text-decoration: none;
-            padding: 8px 16px;
-            border-radius: 50px;
-            transition: all 0.3s ease;
-            font-weight: 500;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .nav-link:before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
-            transition: all 0.4s ease;
-        }
-        
-        .nav-link:hover:before {
-            left: 100%;
-        }
-        
-        .nav-link:hover, .nav-link.active {
-            background: rgba(255, 255, 255, 0.1);
-            transform: translateY(-2px);
-        }
-        
-        .connect-btn {
-            background: linear-gradient(to right, var(--primary), var(--secondary));
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 50px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: var(--glow);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .connect-btn:before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            transition: all 0.4s ease;
-        }
-        
-        .connect-btn:hover:before {
-            left: 100%;
-        }
-        
-        .connect-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(74, 0, 224, 0.6);
-        }
-        
-        .main-content {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 30px;
-            margin-top: 40px;
-        }
-        
-        .card {
-            background: var(--card-bg);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 25px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .card:before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 5px;
-            background: linear-gradient(to right, var(--primary), var(--accent));
-        }
-        
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
-        }
-        
-        .card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        .card-title {
-            font-size: 20px;
-            font-weight: 600;
-            color: var(--accent);
-            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
-        }
-        
-        .wallet-info {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-        
-        .info-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        }
-        
-        .info-item:last-child {
-            border-bottom: none;
-        }
-        
-        .info-label {
-            font-size: 16px;
-            color: #aaa;
-        }
-        
-        .info-value {
-            font-size: 18px;
-            font-weight: 600;
-        }
-        
-        .kyc-status {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .status-badge {
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            display: inline-block;
-        }
-        
-        .verified {
-            background-color: var(--success);
-            box-shadow: 0 0 10px rgba(40, 167, 69, 0.5);
-        }
-        
-        .not-verified {
-            background-color: var(--danger);
-            box-shadow: 0 0 10px rgba(220, 53, 69, 0.5);
-        }
-        
-        .claim-section {
-            grid-column: span 2;
-        }
-        
-        .progress-container {
-            width: 100%;
-            height: 12px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            overflow: hidden;
-            margin: 15px 0;
-            box-shadow: inset 0 2px 5px rgba(0,0,0,0.2);
-        }
-        
-        .progress-bar {
-            height: 100%;
-            background: linear-gradient(to right, var(--primary), var(--accent));
-            border-radius: 10px;
-            width: 30%;
-            transition: width 1s ease;
-            box-shadow: 0 0 10px rgba(0, 198, 255, 0.5);
-        }
-        
-        .amounts {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            margin: 20px 0;
-        }
-        
-        .amount-box {
-            background: rgba(255, 255, 255, 0.03);
-            padding: 20px;
-            border-radius: 15px;
-            text-align: center;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            transition: all 0.3s ease;
-        }
-        
-        .amount-box:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-        }
-        
-        .amount-label {
-            font-size: 14px;
-            color: #aaa;
-            margin-bottom: 10px;
-        }
-        
-        .amount-value {
-            font-size: 24px;
-            font-weight: 700;
-            color: var(--accent);
-            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
-        }
-        
-        .timer {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin: 30px 0;
-        }
-        
-        .time-unit {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            background: rgba(255, 255, 255, 0.05);
-            padding: 15px;
-            border-radius: 10px;
-            min-width: 80px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
-        }
-        
-        .time-unit:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-        }
-        
-        .time-value {
-            font-size: 28px;
-            font-weight: 700;
-            color: var(--accent);
-            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
-        }
-        
-        .time-label {
-            font-size: 12px;
-            color: #aaa;
-            margin-top: 5px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-        
-        .action-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin-top: 20px;
-            position: relative;
-        }
-        
-        .btn {
-            padding: 14px 35px;
-            border-radius: 50px;
-            border: none;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .btn:before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            transition: all 0.4s ease;
-        }
-        
-        .btn:hover:before {
-            left: 100%;
-        }
-        
-        .btn-primary {
-            background: linear-gradient(to right, var(--primary), var(--secondary));
-            color: white;
-            box-shadow: var(--glow);
-        }
-        
-        .btn-secondary {
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-        }
-        
-        .btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(74, 0, 224, 0.6);
-        }
-        
-        .btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
-        }
-        
-        .btn:disabled:hover:before {
-            left: -100%;
-        }
-        
-        .btn-tooltip {
-            position: absolute;
-            bottom: -40px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(0, 0, 0, 0.8);
-            color: white;
-            padding: 8px 12px;
-            border-radius: 6px;
-            font-size: 14px;
-            white-space: nowrap;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s ease;
-            z-index: 100;
-        }
-        
-        .btn-tooltip:after {
-            content: '';
-            position: absolute;
-            top: -5px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 0;
-            height: 0;
-            border-left: 5px solid transparent;
-            border-right: 5px solid transparent;
-            border-bottom: 5px solid rgba(0, 0, 0, 0.8);
-        }
-        
-        .btn:disabled:hover + .btn-tooltip {
-            opacity: 1;
-            visibility: visible;
-        }
-        
-        .external-links {
-            display: flex;
-            justify-content: center;
-            gap: 30px;
-            margin-top: 50px;
-            padding-top: 30px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        .ext-link {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            color: var(--accent);
-            text-decoration: none;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            padding: 10px 15px;
-            border-radius: 8px;
-        }
-        
-        .ext-link:hover {
-            color: var(--primary);
-            transform: translateY(-2px);
-            background: rgba(255, 255, 255, 0.05);
-        }
-        
-        .notification {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 15px 25px;
-            border-radius: 10px;
-            background: var(--dark);
-            color: white;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            transform: translateX(100%);
-            transition: transform 0.3s ease;
-            z-index: 1000;
-            border-left: 4px solid var(--success);
-        }
-        
-        .notification.show {
-            transform: translateX(0);
-        }
-        
-        .notification.success {
-            border-left-color: var(--success);
-        }
-        
-        .notification.error {
-            border-left-color: var(--danger);
-        }
-        
-        .notification.warning {
-            border-left-color: var(--warning);
-        }
-        
-        .loading {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid rgba(255,255,255,.3);
-            border-radius: 50%;
-            border-top-color: #fff;
-            animation: spin 1s ease-in-out infinite;
-        }
-        
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-        
-        .loading-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-            color: white;
-            gap: 20px;
-        }
-        
-        .loading-overlay.hidden {
-            display: none;
-        }
-        
-        .particles {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: -1;
-        }
-        
-        .particle {
-            position: absolute;
-            width: 2px;
-            height: 2px;
-            background: rgba(74, 0, 224, 0.5);
-            border-radius: 50%;
-            animation: float 15s infinite linear;
-        }
-        
-        @keyframes float {
-            0% {
-                transform: translateY(0) translateX(0);
-                opacity: 0;
-            }
-            10% {
-                opacity: 1;
-            }
-            90% {
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(-100vh) translateX(100vw);
-                opacity: 0;
-            }
-        }
-        
-        @media (max-width: 768px) {
-            .main-content {
-                grid-template-columns: 1fr;
-            }
-            
-            .claim-section {
-                grid-column: span 1;
-            }
-            
-            .amounts {
-                grid-template-columns: 1fr;
-            }
-            
-            .timer {
-                flex-wrap: wrap;
-            }
-            
-            header {
-                flex-direction: column;
-                gap: 15px;
-            }
-            
-            .action-buttons {
-                flex-direction: column;
-            }
+        * { margin:0; padding:0; box-sizing:border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background: linear-gradient(135deg, var(--dark) 0%, #16213e 100%); color:var(--light); min-height:100vh; padding:20px; background-attachment: fixed; }
+        .container { width:100%; max-width:1200px; margin:0 auto; }
+
+        header { display:flex; justify-content:space-between; align-items:center; padding:20px; border-radius:20px; background:var(--card-bg); backdrop-filter: blur(10px); box-shadow:0 10px 30px rgba(0,0,0,0.35); border:1px solid rgba(255,255,255,0.06); margin-bottom:30px; }
+        .logo-container { display:flex; align-items:center; gap:15px; }
+        .logo { width:60px; height:60px; border-radius:50%; display:flex; align-items:center; justify-content:center; overflow:hidden; box-shadow:var(--glow); animation:pulse 2s infinite; border:2px solid rgba(255,255,255,0.08); background:linear-gradient(135deg,var(--primary),var(--secondary)); }
+        .logo img { width:100%; height:100%; object-fit:contain; filter:brightness(0) invert(1); }
+        .logo-text { font-size:28px; font-weight:700; background: linear-gradient(to right, var(--accent), var(--primary)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+
+        @keyframes pulse { 0%{transform:scale(1)}50%{transform:scale(1.05)}100%{transform:scale(1)} }
+        nav { display:flex; gap:20px; }
+        .nav-link { color:var(--light); text-decoration:none; padding:8px 16px; border-radius:50px; font-weight:500; position:relative; overflow:hidden; }
+        .connect-btn { background: linear-gradient(to right,var(--primary),var(--secondary)); color:white; border:none; padding:12px 24px; border-radius:50px; font-weight:600; cursor:pointer; transition:all .3s; box-shadow:var(--glow); position:relative; overflow:hidden; }
+        .connect-btn.small { padding:8px 12px; font-size:14px; border-radius:12px; box-shadow:none; }
+
+        .main-content { display:grid; grid-template-columns:1fr 1fr; gap:30px; margin-top:40px; }
+        .card { background:var(--card-bg); border-radius:20px; padding:25px; box-shadow:0 10px 30px rgba(0,0,0,0.3); border:1px solid rgba(255,255,255,0.06); position:relative; overflow:hidden; }
+        .card:before { content:''; position:absolute; top:0; left:0; width:100%; height:5px; background:linear-gradient(to right,var(--primary),var(--accent)); }
+        .card-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; padding-bottom:15px; border-bottom:1px solid rgba(255,255,255,0.04); }
+        .card-title { font-size:20px; font-weight:600; color:var(--accent); }
+        .wallet-info { display:flex; flex-direction:column; gap:15px; }
+        .info-item { display:flex; justify-content:space-between; align-items:center; padding:12px 0; border-bottom:1px solid rgba(255,255,255,0.05); }
+        .info-item:last-child{border-bottom:none;}
+        .info-label{font-size:16px;color:#bbb;}
+        .info-value{font-size:18px;font-weight:600;}
+        .status-badge{width:20px;height:20px;border-radius:50%;display:inline-block;}
+        .verified{background-color:var(--success);box-shadow:0 0 10px rgba(40,167,69,0.45);}
+        .not-verified{background-color:var(--danger);box-shadow:0 0 10px rgba(220,53,69,0.45);}
+
+        .claim-section { grid-column: span 2; }
+        .progress-container{width:100%;height:12px;background:rgba(255,255,255,0.06);border-radius:10px;overflow:hidden;margin:15px 0;box-shadow:inset 0 2px 5px rgba(0,0,0,0.2);}
+        .progress-bar{height:100%;background:linear-gradient(to right,var(--primary),var(--accent));border-radius:10px;width:0%;transition:width 1s ease;box-shadow:0 0 12px rgba(0,198,255,0.45);}
+
+        .amounts{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin:20px 0;}
+        .amount-box{background:rgba(255,255,255,0.03);padding:20px;border-radius:15px;text-align:center;border:1px solid rgba(255,255,255,0.04);}
+        .amount-label{font-size:14px;color:#aaa;margin-bottom:10px;}
+        .amount-value{font-size:24px;font-weight:700;color:var(--accent);}
+
+        .timer{display:flex;justify-content:center;gap:15px;margin:30px 0;}
+        .time-unit{display:flex;flex-direction:column;align-items:center;background:rgba(255,255,255,0.03);padding:15px;border-radius:10px;min-width:80px;border:1px solid rgba(255,255,255,0.04);}
+        .time-value{font-size:28px;font-weight:700;color:var(--accent);}
+        .time-label{font-size:12px;color:#aaa;margin-top:5px;text-transform:uppercase;}
+
+        .action-buttons{display:flex;justify-content:center;gap:15px;margin-top:20px;position:relative;}
+        .btn{padding:12px 28px;border-radius:50px;border:none;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:8px;}
+        .btn-primary{background:linear-gradient(to right,var(--primary),var(--secondary));color:white;}
+        .btn-secondary{background:rgba(255,255,255,0.06);color:white;}
+        .btn:disabled{opacity:0.6;cursor:not-allowed;}
+
+        .btn-tooltip{position:absolute;bottom:-40px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.8);color:white;padding:8px 12px;border-radius:6px;font-size:14px;white-space:nowrap;opacity:0;visibility:hidden;transition:all 0.3s;}
+        .btn:disabled:hover + .btn-tooltip{opacity:1;visibility:visible;}
+
+        .external-links{display:flex;justify-content:center;gap:30px;margin-top:50px;padding-top:30px;border-top:1px solid rgba(255,255,255,0.06);}
+        .ext-link{display:flex;align-items:center;gap:10px;color:var(--accent);text-decoration:none;font-weight:500;padding:10px 15px;border-radius:8px;}
+
+        .notification{position:fixed;top:20px;right:20px;padding:15px 25px;border-radius:10px;background:var(--dark);color:white;box-shadow:0 5px 15px rgba(0,0,0,0.3);display:flex;align-items:center;gap:10px;transform:translateX(100%);transition:transform .3s ease;z-index:1000;border-left:4px solid var(--success);}
+        .notification.show{transform:translateX(0);}
+        .notification.success{border-left-color:var(--success);}
+        .notification.error{border-left-color:var(--danger);}
+        .notification.warning{border-left-color:var(--warning);}
+
+        .loading{display:inline-block;width:20px;height:20px;border:3px solid rgba(255,255,255,.25);border-radius:50%;border-top-color:#fff;animation:spin 1s linear infinite;}
+        @keyframes spin{to{transform:rotate(360deg);}}
+
+        .loading-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);display:flex;flex-direction:column;justify-content:center;align-items:center;z-index:9999;color:white;gap:20px;}
+        .loading-overlay.hidden{display:none;}
+
+        .particles{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:-1;}
+        .particle{position:absolute;width:2px;height:2px;background:rgba(74,0,224,0.5);border-radius:50%;animation:float 15s infinite linear;}
+        @keyframes float{0%{transform:translateY(0) translateX(0);opacity:0}10%{opacity:1}90%{opacity:1}100%{transform:translateY(-100vh) translateX(100vw);opacity:0}}
+
+        /* Admin modal styles */
+        .admin-open-btn { margin-left: 12px; padding:8px 12px; border-radius:12px; font-size:14px; background:rgba(255,255,255,0.06); border:none; color:var(--light); cursor:pointer; display:none; }
+        .modal { position:fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.6); display:flex; align-items:center; justify-content:center; z-index:2000; }
+        .modal.hidden { display:none; }
+        .modal-card { width:90%; max-width:980px; background:var(--card-bg); border-radius:16px; padding:20px; border:1px solid rgba(255,255,255,0.06); box-shadow:0 20px 60px rgba(0,0,0,0.6); color:var(--light); }
+        .modal-card .modal-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; }
+        .modal-close { background:transparent; border:1px solid rgba(255,255,255,0.06); padding:6px 10px; border-radius:8px; cursor:pointer; color:var(--light); }
+        .admin-controls { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:8px; }
+        .admin-controls .control { display:flex; flex-direction:column; gap:8px; }
+        .admin-controls input[type="text"], .admin-controls textarea { background: rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.04); padding:10px 12px; color:var(--light); border-radius:8px; font-size:14px; width:100%; }
+        .admin-controls textarea { min-height:60px; max-height:160px; resize:vertical; }
+        .presale-list { margin-top:12px; max-height:160px; overflow:auto; padding:12px; border-radius:8px; background:rgba(0,0,0,0.15); border:1px solid rgba(255,255,255,0.03); }
+        .presale-item { display:flex; justify-content:space-between; align-items:center; gap:12px; padding:8px; border-bottom:1px dashed rgba(255,255,255,0.02); font-size:14px; }
+        .presale-item:last-child{border-bottom:none;}
+        .small-muted { font-size:13px; color:rgba(255,255,255,0.6); }
+
+        @media (max-width:768px) {
+            .main-content { grid-template-columns:1fr; }
+            .claim-section { grid-column:span 1; }
+            .amounts { grid-template-columns:1fr; }
+            .timer { flex-wrap:wrap; }
+            header { flex-direction:column; gap:15px; }
+            .action-buttons { flex-direction:column; }
+            .admin-controls { grid-template-columns:1fr; }
         }
     </style>
 </head>
 <body>
     <div class="particles" id="particles"></div>
-    
+
     <div class="loading-overlay" id="loadingOverlay">
-        <div class="loading" style="width: 50px; height: 50px;"></div>
+        <div class="loading" style="width:50px;height:50px;"></div>
         <p id="loadingText">Loading Nuur Coin Vesting Portal</p>
     </div>
-    
+
     <div class="container">
         <header>
            <div class="logo-container">
-                <div class="logo">
-                    <img src="logo.jpg" alt="Nuur Coin Logo">
-                </div>
+                <div class="logo"><img src="logo.jpg" alt="Nuur Coin Logo" /></div>
                 <div class="logo-text">Nuur Coin</div>
             </div>
-            
+
             <nav>
                 <a href="#" class="nav-link active">Dashboard</a>
                 <a href="#" class="nav-link">Claim</a>
             </nav>
-            
-            <button class="connect-btn" id="connectWallet">
-                <i class="fas fa-wallet"></i> Connect Wallet
-            </button>
+
+            <div style="display:flex; align-items:center; gap:8px;">
+                <button class="admin-open-btn" id="adminOpenBtn" title="Open admin controls" style="display:none;">
+                    <i class="fas fa-user-shield"></i> Admin
+                </button>
+                <button class="connect-btn" id="connectWallet"><i class="fas fa-wallet"></i> Connect Wallet</button>
+            </div>
         </header>
-        
+
         <div class="main-content">
             <div class="card">
                 <div class="card-header">
@@ -671,49 +170,29 @@
                     </div>
                     <div class="info-item">
                         <span class="info-label">KYC Status:</span>
-                        <div class="kyc-status">
-                            <span class="status-badge not-verified" id="kycStatus"></span>
-                            <span class="info-value" id="kycText">Not Verified</span>
-                        </div>
+                        <div class="kyc-status"><span class="status-badge not-verified" id="kycStatus"></span><span class="info-value" id="kycText">Not Verified</span></div>
                     </div>
                 </div>
             </div>
-            
+
             <div class="card">
                 <div class="card-header">
                     <h2 class="card-title">Vesting Information</h2>
                     <i class="fas fa-chart-line"></i>
                 </div>
                 <div class="wallet-info">
-                    <div class="info-item">
-                        <span class="info-label">Vesting Status:</span>
-                        <span class="info-value" id="vestingStatus">Not Started</span>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">Total Allocated:</span>
-                        <span class="info-value" id="totalAllocated">0.00 NUUR</span>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">Total Claimed:</span>
-                        <span class="info-value" id="totalClaimed">0.00 NUUR</span>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">Months Passed:</span>
-                        <span class="info-value" id="monthsPassed">0/12</span>
-                    </div>
+                    <div class="info-item"><span class="info-label">Vesting Status:</span><span class="info-value" id="vestingStatus">Not Started</span></div>
+                    <div class="info-item"><span class="info-label">Total Allocated:</span><span class="info-value" id="totalAllocated">0.00 NUUR</span></div>
+                    <div class="info-item"><span class="info-label">Total Claimed:</span><span class="info-value" id="totalClaimed">0.00 NUUR</span></div>
+                    <div class="info-item"><span class="info-label">Months Passed:</span><span class="info-value" id="monthsPassed">0/12</span></div>
                 </div>
             </div>
-            
+
             <div class="card claim-section">
-                <div class="card-header">
-                    <h2 class="card-title">Claim Your Tokens</h2>
-                    <i class="fas fa-gift"></i>
-                </div>
-                
-                <div class="progress-container">
-                    <div class="progress-bar" id="vestingProgress"></div>
-                </div>
-                
+                <div class="card-header"><h2 class="card-title">Claim Your Tokens</h2><i class="fas fa-gift"></i></div>
+
+                <div class="progress-container"><div class="progress-bar" id="vestingProgress"></div></div>
+
                 <div class="amounts">
                     <div class="amount-box">
                         <div class="amount-label">Allocated Amount</div>
@@ -724,129 +203,153 @@
                         <div class="amount-value" id="claimableAmount">0.00 NUUR</div>
                     </div>
                 </div>
-                
+
                 <div class="timer">
-                    <div class="time-unit">
-                        <div class="time-value" id="days">00</div>
-                        <div class="time-label">Days</div>
-                    </div>
-                    <div class="time-unit">
-                        <div class="time-value" id="hours">00</div>
-                        <div class="time-label">Hours</div>
-                    </div>
-                    <div class="time-unit">
-                        <div class="time-value" id="minutes">00</div>
-                        <div class="time-label">Minutes</div>
-                    </div>
-                    <div class="time-unit">
-                        <div class="time-value" id="seconds">00</div>
-                        <div class="time-label">Seconds</div>
-                    </div>
+                    <div class="time-unit"><div class="time-value" id="days">--</div><div class="time-label">Days</div></div>
+                    <div class="time-unit"><div class="time-value" id="hours">--</div><div class="time-label">Hours</div></div>
+                    <div class="time-unit"><div class="time-value" id="minutes">--</div><div class="time-label">Minutes</div></div>
+                    <div class="time-unit"><div class="time-value" id="seconds">--</div><div class="time-label">Seconds</div></div>
                 </div>
-                
+
                 <div class="action-buttons">
-                    <button class="btn btn-primary" id="claimBtn" disabled>
-                        <i class="fas fa-download"></i> Claim Tokens
-                    </button>
+                    <button class="btn btn-primary" id="claimBtn" disabled><i class="fas fa-download"></i> Claim Tokens</button>
                     <span class="btn-tooltip" id="claimTooltip">Complete KYC verification to enable claiming</span>
-                    <button class="btn btn-secondary" id="refreshBtn">
-                        <i class="fas fa-sync-alt"></i> Refresh Data
-                    </button>
+                    <button class="btn btn-secondary" id="refreshBtn"><i class="fas fa-sync-alt"></i> Refresh Data</button>
                 </div>
             </div>
         </div>
-        
+
         <div class="external-links">
-            <a href="presale-introduction" class="ext-link">
-                <i class="fas fa-shopping-cart"></i> Presale
-            </a>
-            <a href="#" class="ext-link">
-                <i class="fas fa-bug"></i> Help
-            </a>
+            <a href="presale-introduction" class="ext-link"><i class="fas fa-shopping-cart"></i> Presale</a>
+            <a href="#" class="ext-link"><i class="fas fa-bug"></i> Help</a>
         </div>
     </div>
-    
-    <div class="notification" id="notification">
+
+    <!-- Admin Modal (hidden by default) -->
+    <div id="adminModal" class="modal hidden" aria-hidden="true">
+        <div class="modal-card" role="dialog" aria-modal="true">
+            <div class="modal-header" style="display:flex;justify-content:space-between;align-items:center;">
+                <h3 style="font-size:18px;color:var(--accent);">Admin Controls</h3>
+                <div>
+                    <button class="modal-close" id="adminCloseBtn"><i class="fas fa-times"></i> Close</button>
+                </div>
+            </div>
+
+            <div class="admin-controls">
+                <div class="control">
+                    <label class="small-muted">Add Single Presale Contract</label>
+                    <input type="text" id="singlePresaleInput" placeholder="0x..." />
+                    <div style="display:flex;gap:8px;">
+                        <button class="btn btn-primary" id="addPresaleBtn">Add Presale</button>
+                    </div>
+                </div>
+
+                <div class="control">
+                    <label class="small-muted">Add Multiple Presales (comma or newline separated)</label>
+                    <textarea id="batchPresalesInput" placeholder="0x..., 0x..."></textarea>
+                    <div style="display:flex;gap:8px;">
+                        <button class="btn btn-primary" id="addBatchPresalesBtn">Add Batch</button>
+                    </div>
+                </div>
+
+                <div class="control">
+                    <label class="small-muted">Set Single KYC</label>
+                    <input type="text" id="kycAddressInput" placeholder="0x..." />
+                    <div style="display:flex;gap:8px;align-items:center;">
+                        <select id="kycStatusSelect">
+                            <option value="true">Verified</option>
+                            <option value="false">Not Verified</option>
+                        </select>
+                        <button class="btn btn-primary" id="setKycBtn">Set KYC</button>
+                    </div>
+                </div>
+
+                <div class="control">
+                    <label class="small-muted">Set Batch KYC (addresses newline/comma separated) and statuses comma-separated</label>
+                    <textarea id="batchKycAddresses" placeholder="0x...,0x..."></textarea>
+                    <input type="text" id="batchKycStatuses" placeholder="true,false,true" />
+                    <div style="display:flex;gap:8px;">
+                        <button class="btn btn-primary" id="setKycBatchBtn">Set Batch KYC</button>
+                    </div>
+                </div>
+
+                <div class="control">
+                    <label class="small-muted">Vesting Controls</label>
+                    <div style="display:flex;gap:8px;">
+                        <button class="btn btn-primary" id="startVestingBtn">Start Vesting</button>
+                        <button class="btn btn-secondary" id="pauseBtn">Pause</button>
+                        <button class="btn btn-secondary" id="unpauseBtn">Unpause</button>
+                    </div>
+                </div>
+
+                <div class="control">
+                    <label class="small-muted">Existing Presale Contracts</label>
+                    <div class="presale-list" id="presaleList"><div class="small-muted">No presales loaded.</div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="notification" id="notification" style="pointer-events:auto;">
         <i class="fas fa-check-circle"></i>
         <div class="notification-content">Operation completed successfully!</div>
     </div>
 
     <script>
-        // Create background particles
+        /******************************************************************
+         * Admin modal + explorer links update
+         ******************************************************************/
+
+        // Particles
         function createParticles() {
             const particlesContainer = document.getElementById('particles');
             const particleCount = 50;
-            
             for (let i = 0; i < particleCount; i++) {
                 const particle = document.createElement('div');
                 particle.classList.add('particle');
-                
-                // Random position
                 const posX = Math.random() * 100;
                 const posY = Math.random() * 100;
-                
-                // Random size
                 const size = Math.random() * 3 + 1;
-                
-                // Random animation delay
                 const delay = Math.random() * 15;
-                
                 particle.style.left = `${posX}vw`;
                 particle.style.top = `${posY}vh`;
                 particle.style.width = `${size}px`;
                 particle.style.height = `${size}px`;
                 particle.style.animationDelay = `${delay}s`;
-                
                 particlesContainer.appendChild(particle);
             }
         }
-        
-        // Check if ethers is loaded, if not try alternative CDN
+
+        // ensure ethers
         function ensureEthersIsLoaded() {
             return new Promise((resolve, reject) => {
-                if (typeof ethers !== 'undefined') {
-                    resolve();
-                    return;
-                }
-                
-                // Try loading from alternative CDN
+                if (typeof ethers !== 'undefined') { resolve(); return; }
                 const script = document.createElement('script');
                 script.src = 'https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js';
-                script.onload = () => {
-                    if (typeof ethers !== 'undefined') {
-                        resolve();
-                    } else {
-                        reject(new Error('Could not load ethers.js'));
-                    }
-                };
+                script.onload = () => { if (typeof ethers !== 'undefined') resolve(); else reject(new Error('Could not load ethers')); };
                 script.onerror = reject;
                 document.head.appendChild(script);
             });
         }
 
-        // Contract ABI - Replace with your actual contract ABI
-        const contractABI = [{"inputs":[{"internalType":"address","name":"tokenAddress","type":"address"}],"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address[]","name":"users","type":"address[]"},{"indexed":false,"internalType":"bool[]","name":"statuses","type":"bool[]"}],"name":"KYCBatchUpdated","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"bool","name":"verified","type":"bool"}],"name":"KYCUpdated","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"oldOwner","type":"address"},{"indexed":true,"internalType":"address","name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"by","type":"address"}],"name":"Paused","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"presale","type":"address"}],"name":"PresaleContractSet","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"beneficiary","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"TokensClaimed","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"sender","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"TokensFunded","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"to","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"TokensWithdrawn","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"by","type":"address"}],"name":"Unpaused","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"beneficiary","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"VestingRegistered","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"startTime","type":"uint256"}],"name":"VestingStarted","type":"event"},{"inputs":[],"name":"MONTH","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"TOTAL_MONTHS","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"beneficiary","type":"address"}],"name":"calculateClaimable","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"claim","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"fundVesting","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"beneficiary","type":"address"}],"name":"getVestingInfo","outputs":[{"internalType":"uint256","name":"initialAmount","type":"uint256"},{"internalType":"uint256","name":"claimedAmount","type":"uint256"},{"internalType":"uint256","name":"claimableNow","type":"uint256"},{"internalType":"bool","name":"kyc","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"globalStartTime","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"kycVerified","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"pause","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"paused","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"presaleContract","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"beneficiary","type":"address"},{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"registerVesting","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"user","type":"address"},{"internalType":"bool","name":"status","type":"bool"}],"name":"setKYC","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address[]","name":"users","type":"address[]"},{"internalType":"bool[]","name":"statuses","type":"bool[]"}],"name":"setKYCForBatch","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"_presale","type":"address"}],"name":"setPresaleContract","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"startVesting","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"token","outputs":[{"internalType":"contract IERC20","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"totalAllocated","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"totalClaimed","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"unpause","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"vestingSchedule","outputs":[{"internalType":"uint256","name":"initialAmount","type":"uint256"},{"internalType":"uint256","name":"claimedAmount","type":"uint256"},{"internalType":"bool","name":"exists","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"vestingStarted","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"withdrawUnallocated","outputs":[],"stateMutability":"nonpayable","type":"function"}];
-        // Contract address - Replace with your actual contract address
-        const contractAddress = "0xEE907CEdF6566140DA17C1196D9B9C5AE8d54f1a";
-        
-        // NUUR Token address - Replace with your actual token address
-        const nuurTokenAddress = "0xd9F17EDf816A9404385aE1c35df7F401a1Ee41a5";
-        
-        // Chain configuration for Sidra Chain (97429 / 0x17CAD)
+        // --- ABI, config ---
+        const VESTING_ABI = [{"inputs":[{"internalType":"address","name":"_newToken","type":"address"},{"internalType":"address","name":"_oldToken","type":"address"}],"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address[]","name":"users","type":"address[]"},{"indexed":false,"internalType":"bool[]","name":"statuses","type":"bool[]"}],"name":"KYCBatchUpdated","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"bool","name":"verified","type":"bool"}],"name":"KYCUpdated","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"oldToken","type":"address"}],"name":"OldTokenSet","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"previousOwner","type":"address"},{"indexed":true,"internalType":"address","name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"},{"anonymous":false,"inputs":[],"name":"Paused","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"presale","type":"address"}],"name":"PresaleContractAdded","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"beneficiary","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"TokensClaimed","type":"event"},{"anonymous":false,"inputs":[],"name":"Unpaused","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"startTime","type":"uint256"}],"name":"VestingStarted","type":"event"},{"inputs":[],"name":"MONTH_DURATION","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"VESTING_MONTHS","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"presale","type":"address"}],"name":"addOldPresaleContract","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"user","type":"address"}],"name":"calculateClaimable","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"claim","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"user","type":"address"}],"name":"getClaimableAmount","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getOldPresaleContracts","outputs":[{"internalType":"address[]","name":"","type":"address[]"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"user","type":"address"}],"name":"getTotalPurchase","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"user","type":"address"}],"name":"getUserTotalPurchase","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"kycVerified","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"newToken","outputs":[{"internalType":"contract INuurCoin","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"","type":"uint256"}],"name":"oldPresaleContracts","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"oldToken","outputs":[{"internalType":"contract IOldToken","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"pause","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"paused","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"user","type":"address"},{"internalType":"bool","name":"status","type":"bool"}],"name":"setKYC","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address[]","name":"users","type":"address[]"},{"internalType":"bool[]","name":"statuses","type":"bool[]"}],"name":"setKYCForBatch","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"startVesting","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"unpause","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"vestingInfo","outputs":[{"internalType":"uint256","name":"totalAmount","type":"uint256"},{"internalType":"uint256","name":"claimedAmount","type":"uint256"},{"internalType":"bool","name":"exists","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"vestingStartTime","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"vestingStarted","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"}];
+
+        const contractAddress = "0xF300235899b647bea68122B18Ff7d757e71BE2a2";
+        const nuurTokenAddress = "0x135800ac1DB3Ba26af6c4A95c49b1Ed00F851E57";
         const sidraChain = {
             chainId: "0x17CAD",
             chainName: "Sidra Chain",
-            nativeCurrency: {
-                name: "Sidra",
-                symbol: "SDA",
-                decimals: 18
-            },
-            rpcUrls: ["https://node.sidrachain.com"],
-            blockExplorerUrls: ["https://ledger.sidrachain.com"]
+            nativeCurrency: { name:"Sidra", symbol:"SDA", decimals:18 },
+            rpcUrls:["https://node.sidrachain.com"],
+            blockExplorerUrls:["https://ledger.sidrachain.com"]
         };
-        
-        // DOM Elements
+
+        // DOM
         const connectWalletBtn = document.getElementById('connectWallet');
+        const adminOpenBtn = document.getElementById('adminOpenBtn');
+        const adminModal = document.getElementById('adminModal');
+        const adminCloseBtn = document.getElementById('adminCloseBtn');
         const walletAddressEl = document.getElementById('walletAddress');
         const nuurBalanceEl = document.getElementById('nuurBalance');
         const sdaBalanceEl = document.getElementById('sdaBalance');
@@ -869,348 +372,477 @@
         const notificationEl = document.getElementById('notification');
         const loadingOverlay = document.getElementById('loadingOverlay');
         const loadingText = document.getElementById('loadingText');
-        
-        // State
+
+        // admin modal elements
+        const singlePresaleInput = document.getElementById('singlePresaleInput');
+        const addPresaleBtn = document.getElementById('addPresaleBtn');
+        const batchPresalesInput = document.getElementById('batchPresalesInput');
+        const addBatchPresalesBtn = document.getElementById('addBatchPresalesBtn');
+        const presaleList = document.getElementById('presaleList');
+        const kycAddressInput = document.getElementById('kycAddressInput');
+        const kycStatusSelect = document.getElementById('kycStatusSelect');
+        const setKycBtn = document.getElementById('setKycBtn');
+        const batchKycAddresses = document.getElementById('batchKycAddresses');
+        const batchKycStatuses = document.getElementById('batchKycStatuses');
+        const setKycBatchBtn = document.getElementById('setKycBatchBtn');
+        const startVestingBtn = document.getElementById('startVestingBtn');
+        const pauseBtn = document.getElementById('pauseBtn');
+        const unpauseBtn = document.getElementById('unpauseBtn');
+
+        // state
         let connectedAccount = null;
         let provider = null;
         let signer = null;
         let contract = null;
         let tokenContract = null;
-        let vestingStartTime = null;
+        let vestingStartTimeSec = null;
+        let nextVestingTimeMs = null;
         let timeRemaining = 0;
         let isUserVerified = false;
-        
-        // Initialize
+        let isOwnerAccount = false;
+        let lastClaimableBN = ethers.BigNumber.from(0);
+        let decimals = 18;
+        const POLL_INTERVAL_MS = 15000; // 15s
+
+        // explorer base
+        const explorerBase = (sidraChain.blockExplorerUrls && sidraChain.blockExplorerUrls[0]) ? sidraChain.blockExplorerUrls[0].replace(/\/$/, '') : '';
+
+        // init
         window.addEventListener('load', async () => {
             try {
                 createParticles();
-                
                 loadingText.textContent = "Loading blockchain libraries...";
                 await ensureEthersIsLoaded();
-                
                 loadingText.textContent = "Initializing application...";
                 await initApplication();
-                
-                // Hide loading overlay
                 loadingOverlay.classList.add('hidden');
-            } catch (error) {
-                console.error("Failed to initialize application:", error);
-                loadingText.textContent = "Failed to load required libraries. Please refresh the page.";
-                showNotification("Failed to load blockchain libraries", "error");
+            } catch (e) {
+                console.error("Init failed", e);
+                loadingText.textContent = "Failed to load required libraries. Refresh the page.";
+                showNotification("Failed to load libraries", "error");
             }
         });
-        
+
         async function initApplication() {
             initEthers();
-            checkWalletConnection();
-            updateTimer(); // Start the countdown timer
+            await checkWalletConnection();
+            setInterval(pollForUpdates, POLL_INTERVAL_MS);
+            updateTimer();
             setInterval(updateTimer, 1000);
         }
-        
-        // Initialize ethers.js
+
         function initEthers() {
             if (typeof window.ethereum !== 'undefined') {
                 provider = new ethers.providers.Web3Provider(window.ethereum);
                 signer = provider.getSigner();
-                
-                // Initialize contracts
-                contract = new ethers.Contract(contractAddress, contractABI, signer);
-                
-                // Simple ERC20 ABI for balance checking
-                const tokenABI = [
-                    "function balanceOf(address) view returns (uint256)",
-                    "function decimals() view returns (uint8)"
-                ];
+                contract = new ethers.Contract(contractAddress, VESTING_ABI, signer);
+                const tokenABI = ["function balanceOf(address) view returns (uint256)", "function decimals() view returns (uint8)"];
                 tokenContract = new ethers.Contract(nuurTokenAddress, tokenABI, signer);
             }
         }
-        
-        // Connect Wallet
+
+        // wallet/connect handlers
         connectWalletBtn.addEventListener('click', connectWallet);
-        
-        // Claim Tokens
         claimBtn.addEventListener('click', claimTokens);
-        
-        // Refresh Data
         refreshBtn.addEventListener('click', refreshData);
-        
-        // Functions
+
+        // admin modal open/close
+        adminOpenBtn.addEventListener('click', () => { adminModal.classList.remove('hidden'); adminModal.setAttribute('aria-hidden', 'false'); });
+        adminCloseBtn.addEventListener('click', () => { adminModal.classList.add('hidden'); adminModal.setAttribute('aria-hidden', 'true'); });
+        // close when clicking backdrop
+        adminModal.addEventListener('click', (e) => { if (e.target === adminModal) { adminModal.classList.add('hidden'); adminModal.setAttribute('aria-hidden', 'true'); } });
+
+        // admin event listeners
+        addPresaleBtn.addEventListener('click', adminAddPresale);
+        addBatchPresalesBtn.addEventListener('click', adminAddPresalesBatch);
+        setKycBtn.addEventListener('click', adminSetKyc);
+        setKycBatchBtn.addEventListener('click', adminSetKycBatch);
+        startVestingBtn.addEventListener('click', adminStartVesting);
+        pauseBtn.addEventListener('click', adminPause);
+        unpauseBtn.addEventListener('click', adminUnpause);
+
         async function connectWallet() {
-            if (typeof window.ethereum !== 'undefined') {
-                try {
-                    // Request account access
-                    const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-                    connectedAccount = accounts[0];
-                    
-                    // Check if connected to Sidra Chain
-                    const chainId = await window.ethereum.request({ method: 'eth_chainId' });
-                    
-                    if (chainId !== sidraChain.chainId) {
-                        // Try to switch to Sidra Chain
-                        try {
-                            await window.ethereum.request({
-                                method: 'wallet_switchEthereumChain',
-                                params: [{ chainId: sidraChain.chainId }],
-                            });
-                        } catch (switchError) {
-                            // This error code indicates that the chain has not been added to MetaMask
-                            if (switchError.code === 4902) {
-                                await window.ethereum.request({
-                                    method: 'wallet_addEthereumChain',
-                                    params: [sidraChain],
-                                });
-                            } else {
-                                throw switchError;
-                            }
-                        }
+            if (!window.ethereum) { showNotification("Please install MetaMask", "error"); return; }
+            try {
+                const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+                connectedAccount = accounts[0];
+                const chainId = await window.ethereum.request({ method: 'eth_chainId' });
+                if (chainId !== sidraChain.chainId) {
+                    try {
+                        await window.ethereum.request({ method: 'wallet_switchEthereumChain', params: [{ chainId: sidraChain.chainId }] });
+                    } catch (switchError) {
+                        if (switchError.code === 4902) {
+                            await window.ethereum.request({ method: 'wallet_addEthereumChain', params: [sidraChain] });
+                        } else throw switchError;
                     }
-                    
-                    // Update UI
-                    walletAddressEl.textContent = `${connectedAccount.substring(0, 6)}...${connectedAccount.substring(38)}`;
-                    connectWalletBtn.innerHTML = "<i class='fas fa-check'></i> Connected";
-                    connectWalletBtn.disabled = true;
-                    
-                    // Initialize ethers with the new connection
-                    initEthers();
-                    
-                    // Load data
-                    await loadWalletData();
-                    showNotification("Wallet connected successfully!", "success");
-                    
-                } catch (error) {
-                    console.error("Error connecting wallet:", error);
-                    showNotification("Failed to connect wallet", "error");
                 }
-            } else {
-                showNotification("Please install MetaMask to claim", "error");
+                walletAddressEl.textContent = `${connectedAccount.substring(0,6)}...${connectedAccount.substring(38)}`;
+                connectWalletBtn.innerHTML = "<i class='fas fa-check'></i> Connected";
+                connectWalletBtn.disabled = true;
+                initEthers();
+                await loadWalletData();
+                showNotification("Wallet connected!", "success");
+            } catch (e) {
+                console.error("Connect failed", e);
+                showNotification("Failed to connect wallet", "error");
             }
         }
-        
+
         async function checkWalletConnection() {
-            if (typeof window.ethereum !== 'undefined') {
-                const accounts = await window.ethereum.request({ method: 'eth_accounts' });
-                if (accounts.length > 0) {
-                    connectedAccount = accounts[0];
-                    walletAddressEl.textContent = `${connectedAccount.substring(0, 6)}...${connectedAccount.substring(38)}`;
-                    connectWalletBtn.innerHTML = "<i class='fas fa-check'></i> Connected";
-                    connectWalletBtn.disabled = true;
-                    
-                    // Initialize ethers with the existing connection
-                    initEthers();
-                    
-                    await loadWalletData();
-                }
+            if (!window.ethereum) return;
+            const accounts = await window.ethereum.request({ method: 'eth_accounts' });
+            if (accounts.length > 0) {
+                connectedAccount = accounts[0];
+                walletAddressEl.textContent = `${connectedAccount.substring(0,6)}...${connectedAccount.substring(38)}`;
+                connectWalletBtn.innerHTML = "<i class='fas fa-check'></i> Connected";
+                connectWalletBtn.disabled = true;
+                initEthers();
+                await loadWalletData();
             }
         }
-        
+
         async function loadWalletData() {
             if (!connectedAccount || !contract) return;
-            
             try {
-                // Show loading states
+                // loading placeholders
                 nuurBalanceEl.innerHTML = "<span class='loading'></span>";
                 sdaBalanceEl.innerHTML = "<span class='loading'></span>";
                 totalAllocatedEl.innerHTML = "<span class='loading'></span>";
                 totalClaimedEl.innerHTML = "<span class='loading'></span>";
                 allocatedAmountEl.innerHTML = "<span class='loading'></span>";
                 claimableAmountEl.innerHTML = "<span class='loading'></span>";
-                
-                // Fetch KYC status
+
+                // kyc
                 isUserVerified = await contract.kycVerified(connectedAccount);
                 kycStatusEl.className = isUserVerified ? "status-badge verified" : "status-badge not-verified";
                 kycTextEl.textContent = isUserVerified ? "Verified" : "Not Verified";
                 kycTextEl.style.color = isUserVerified ? "#28a745" : "#dc3545";
-                
-                // Fetch NUUR balance
+
+                // nuur balance
                 const nuurBalance = await tokenContract.balanceOf(connectedAccount);
-                nuurBalanceEl.textContent = ethers.utils.formatUnits(nuurBalance, 18);
-                
-                // Fetch SDA balance
+                try { decimals = await tokenContract.decimals(); } catch(e) { decimals = 18; }
+                nuurBalanceEl.textContent = ethers.utils.formatUnits(nuurBalance, decimals);
+
+                // sda balance
                 const sdaBalance = await provider.getBalance(connectedAccount);
                 sdaBalanceEl.textContent = ethers.utils.formatEther(sdaBalance);
-                
-                // Fetch vesting status
+
+                // vesting status
                 const vestingStarted = await contract.vestingStarted();
+                const paused = await contract.paused();
+                const vestingStartBN = await contract.vestingStartTime();
+                vestingStartTimeSec = vestingStartBN.toNumber();
+
                 vestingStatusEl.textContent = vestingStarted ? "Active" : "Not Started";
                 vestingStatusEl.style.color = vestingStarted ? "#28a745" : "#dc3545";
-                
-                // Fetch total allocated and claimed
-                const totalAllocated = await contract.totalAllocated();
-                const totalClaimed = await contract.totalClaimed();
-                totalAllocatedEl.textContent = `${ethers.utils.formatUnits(totalAllocated, 18)} NUUR`;
-                totalClaimedEl.textContent = `${ethers.utils.formatUnits(totalClaimed, 18)} NUUR`;
-                
-                // Fetch user's vesting info
-                const vestingInfo = await contract.getVestingInfo(connectedAccount);
-                const initialAmount = vestingInfo.initialAmount;
-                const claimedAmount = vestingInfo.claimedAmount;
-                const claimableNow = vestingInfo.claimableNow;
-                
-                allocatedAmountEl.textContent = `${ethers.utils.formatUnits(initialAmount, 18)} NUUR`;
-                claimableAmountEl.textContent = `${ethers.utils.formatUnits(claimableNow, 18)} NUUR`;
-                
-                // Calculate months passed
-                if (vestingStarted && initialAmount.gt(0)) {
-                    const globalStartTime = await contract.globalStartTime();
-                    const elapsed = Math.floor(Date.now() / 1000) - globalStartTime.toNumber();
-                    const monthsPassed = Math.min(Math.floor(elapsed / (30 * 24 * 60 * 60)), 12);
-                    
+
+                // purchases + claimable
+                const totalPurchase = await contract.getTotalPurchase(connectedAccount);
+                const claimableNow = await contract.getClaimableAmount(connectedAccount);
+
+                // vestingInfo
+                const vestingInfo = await contract.vestingInfo(connectedAccount);
+                const totalAmount = vestingInfo.totalAmount ? vestingInfo.totalAmount : vestingInfo[0];
+                const claimedAmount = vestingInfo.claimedAmount ? vestingInfo.claimedAmount : vestingInfo[1];
+
+                totalAllocatedEl.textContent = `${ethers.utils.formatUnits(totalPurchase, decimals)} NUUR`;
+                totalClaimedEl.textContent = `${ethers.utils.formatUnits(claimedAmount, decimals)} NUUR`;
+                allocatedAmountEl.textContent = `${ethers.utils.formatUnits(totalPurchase, decimals)} NUUR`;
+                claimableAmountEl.textContent = `${ethers.utils.formatUnits(claimableNow, decimals)} NUUR`;
+
+                // months passed
+                if (vestingStarted && vestingStartTimeSec > 0) {
+                    const nowSec = Math.floor(Date.now() / 1000);
+                    let monthsPassed = Math.floor((nowSec - vestingStartTimeSec) / (30 * 24 * 60 * 60));
+                    if (monthsPassed < 0) monthsPassed = 0;
+                    if (monthsPassed > 12) monthsPassed = 12;
                     monthsPassedEl.textContent = `${monthsPassed}/12`;
-                    
-                    // Update progress bar
                     const progressPercent = (monthsPassed / 12) * 100;
                     vestingProgressEl.style.width = `${progressPercent}%`;
-                    
-                    // Set next vesting time (next month)
-                    const nextVestingTime = globalStartTime.toNumber() + (monthsPassed + 1) * 30 * 24 * 60 * 60;
-                    vestingStartTime = nextVestingTime * 1000;
-                    
-                    // Update claim button state
-                    updateClaimButtonState(claimableNow, vestingStartTime);
+                    const nextVestingSec = vestingStartTimeSec + (monthsPassed + 1) * 30 * 24 * 60 * 60;
+                    nextVestingTimeMs = nextVestingSec * 1000;
                 } else {
-                    // Default to 0 progress if vesting hasn't started
-                    monthsPassedEl.textContent = "0/12";
-                    vestingProgressEl.style.width = "0%";
-                    claimBtn.disabled = true;
-                    claimTooltip.textContent = "Wait for vesting to start.";
+                    monthsPassedEl.textContent = `0/12`;
+                    vestingProgressEl.style.width = `0%`;
+                    nextVestingTimeMs = null;
                 }
-                
-            } catch (error) {
-                console.error("Error loading wallet data:", error);
+
+                updateClaimButtonState(claimableNow);
+                lastClaimableBN = claimableNow;
+
+                // owner check
+                await checkOwnerAndShowAdmin();
+
+                if (isOwnerAccount) await loadPresaleList();
+            } catch (e) {
+                console.error("loadWalletData failed", e);
                 showNotification("Failed to load data from blockchain", "error");
             }
         }
-        
-        function updateClaimButtonState(claimableNow, vestingStartTime) {
-            const now = Date.now();
-            timeRemaining = vestingStartTime - now;
-            
+
+        function updateClaimButtonState(claimableNow) {
             if (!isUserVerified) {
                 claimBtn.disabled = true;
                 claimTooltip.textContent = "Complete KYC to claim";
                 return;
             }
-            
-            if (claimableNow.isZero() || timeRemaining > 0) {
+            if (claimableNow.isZero()) {
                 claimBtn.disabled = true;
-                
-                // Format the time remaining for the tooltip
-                const days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
-                const hours = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                
-                claimTooltip.textContent = `You can claim after ${days} days, ${hours} hours`;
+                claimTooltip.textContent = "Nothing to claim right now";
             } else {
                 claimBtn.disabled = false;
                 claimTooltip.textContent = "Click to claim your tokens";
             }
         }
-        
+
         function updateTimer() {
-            if (!vestingStartTime || !isUserVerified) {
-                // Don't show timer if user is not verified
+            if (!nextVestingTimeMs) {
                 daysEl.textContent = "--";
                 hoursEl.textContent = "--";
                 minutesEl.textContent = "--";
                 secondsEl.textContent = "--";
                 return;
             }
-            
             const now = Date.now();
-            timeRemaining = vestingStartTime - now;
-            
+            timeRemaining = nextVestingTimeMs - now;
             if (timeRemaining <= 0) {
-                daysEl.textContent = "00";
-                hoursEl.textContent = "00";
-                minutesEl.textContent = "00";
-                secondsEl.textContent = "00";
-                
-                // Enable claim button if time is up
-                if (claimableAmountEl.textContent !== "0.00 NUUR") {
-                    claimBtn.disabled = false;
-                    claimTooltip.textContent = "Click to claim your tokens";
-                }
+                daysEl.textContent = "00"; hoursEl.textContent = "00"; minutesEl.textContent = "00"; secondsEl.textContent = "00";
                 return;
             }
-            
-            const days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
-            
-            daysEl.textContent = days.toString().padStart(2, '0');
-            hoursEl.textContent = hours.toString().padStart(2, '0');
-            minutesEl.textContent = minutes.toString().padStart(2, '0');
-            secondsEl.textContent = seconds.toString().padStart(2, '0');
-            
-            // Update tooltip with remaining time
-            claimTooltip.textContent = `You can claim after ${days} days, ${hours} hours`;
+            const days = Math.floor(timeRemaining / (1000*60*60*24));
+            const hours = Math.floor((timeRemaining % (1000*60*60*24)) / (1000*60*60));
+            const minutes = Math.floor((timeRemaining % (1000*60*60)) / (1000*60));
+            const seconds = Math.floor((timeRemaining % (1000*60)) / 1000);
+            daysEl.textContent = String(days).padStart(2,'0');
+            hoursEl.textContent = String(hours).padStart(2,'0');
+            minutesEl.textContent = String(minutes).padStart(2,'0');
+            secondsEl.textContent = String(seconds).padStart(2,'0');
+            claimTooltip.textContent = `Next vesting slice in ${days}d ${hours}h ${minutes}m`;
         }
-        
+
         async function claimTokens() {
             if (!contract) return;
-            
-            // Check if user is verified
-            if (!isUserVerified) {
-                showNotification("Please complete KYC verification before claiming", "warning");
-                return;
-            }
-            
-            // Check if timer has ended
-            if (timeRemaining > 0) {
-                showNotification("Vesting period has not ended yet", "warning");
-                return;
-            }
-            
+            isUserVerified = await contract.kycVerified(connectedAccount);
+            if (!isUserVerified) { showNotification("Please complete KYC verification before claiming", "warning"); return; }
             try {
                 showNotification("Claiming tokens...", "success");
                 claimBtn.disabled = true;
                 claimBtn.innerHTML = "<span class='loading'></span> Processing...";
-                
-                // Call the claim function
                 const tx = await contract.claim();
-                
-                // Wait for transaction to be mined
-                await tx.wait();
-                
-                showNotification("Tokens claimed successfully!", "success");
-                
-                // Refresh data
+                const receipt = await tx.wait();
+                const txHash = receipt.transactionHash || tx.hash;
+                showNotification("Tokens claimed! View on explorer", "success", `${explorerBase}/tx/${txHash}`);
                 await refreshData();
-                
-            } catch (error) {
-                console.error("Error claiming tokens:", error);
+                claimBtn.innerHTML = "<i class='fas fa-download'></i> Claim Tokens";
+                claimBtn.disabled = false;
+            } catch (e) {
+                console.error("claim failed", e);
                 showNotification("Failed to claim tokens", "error");
                 claimBtn.disabled = false;
                 claimBtn.innerHTML = "<i class='fas fa-download'></i> Claim Tokens";
             }
         }
-        
+
         async function refreshData() {
             showNotification("Refreshing data...", "success");
-            refreshBtn.innerHTML = "<span class='loading'></span> Refreshing...";
-            refreshBtn.disabled = true;
-            
+            refreshBtn.disabled = true; refreshBtn.innerHTML = "<span class='loading'></span> Refreshing...";
             await loadWalletData();
-            
-            setTimeout(() => {
-                showNotification("Data updated successfully!", "success");
-                refreshBtn.innerHTML = "<i class='fas fa-sync-alt'></i> Refresh Data";
-                refreshBtn.disabled = false;
-            }, 1000);
+            setTimeout(()=>{ showNotification("Data updated", "success"); refreshBtn.disabled=false; refreshBtn.innerHTML = "<i class='fas fa-sync-alt'></i> Refresh Data"; }, 700);
         }
-        
-        function showNotification(message, type) {
-            const icon = type === "success" ? "fa-check-circle" : 
-                         type === "error" ? "fa-exclamation-circle" : "fa-exclamation-triangle";
-            notificationEl.innerHTML = `<i class="fas ${icon}"></i><div class="notification-content">${message}</div>`;
+
+        // ---------- Admin logic ----------
+        async function checkOwnerAndShowAdmin() {
+            try {
+                const ownerAddr = await contract.owner();
+                isOwnerAccount = ownerAddr.toLowerCase() === connectedAccount.toLowerCase();
+                adminOpenBtn.style.display = isOwnerAccount ? 'inline-block' : 'none';
+            } catch (e) {
+                console.error("owner check error", e);
+                adminOpenBtn.style.display = 'none';
+            }
+        }
+
+        async function loadPresaleList() {
+            try {
+                const arr = await contract.getOldPresaleContracts();
+                presaleList.innerHTML = '';
+                if (!arr || arr.length === 0) { presaleList.innerHTML = '<div class="small-muted">No presales added yet.</div>'; return; }
+                arr.forEach((addr, idx) => {
+                    const div = document.createElement('div'); div.className='presale-item';
+                    const link = document.createElement('a'); link.href = explorerBase ? `${explorerBase}/address/${addr}` : '#'; link.target='_blank'; link.rel='noopener'; link.textContent = `${idx}: ${addr}`; link.style.wordBreak='break-all'; link.style.color='var(--light)';
+                    const badge = document.createElement('div'); badge.textContent='Onchain'; badge.style.padding='4px 8px'; badge.style.borderRadius='8px'; badge.style.background='rgba(0,0,0,0.16)';
+                    div.appendChild(link); div.appendChild(badge); presaleList.appendChild(div);
+                });
+            } catch (e) {
+                console.error("load presales failed", e);
+                presaleList.innerHTML = '<div class="small-muted">Failed to load presales.</div>';
+            }
+        }
+
+        async function adminAddPresale() {
+            const addr = singlePresaleInput.value.trim();
+            if (!addr) { showNotification("Enter presale address", "warning"); return; }
+            try {
+                showNotification("Sending add presale tx...", "success");
+                const tx = await contract.addOldPresaleContract(addr);
+                const receipt = await tx.wait();
+                const txHash = receipt.transactionHash || tx.hash;
+                showNotification("Presale added", "success", `${explorerBase}/tx/${txHash}`);
+                singlePresaleInput.value = '';
+                await loadPresaleList();
+            } catch (e) {
+                console.error("add presale failed", e);
+                showNotification("Failed to add presale", "error");
+            }
+        }
+
+        async function adminAddPresalesBatch() {
+            const raw = batchPresalesInput.value.trim();
+            if (!raw) { showNotification("Enter presale addresses", "warning"); return; }
+            const arr = raw.split(/[\n,]+/).map(s=>s.trim()).filter(Boolean);
+            if (arr.length===0) { showNotification("No valid addresses", "warning"); return; }
+            if (!confirm(`Add ${arr.length} presale(s)? This will send ${arr.length>1?'a batch tx or multiple txs':''}. Proceed?`)) return;
+            try {
+                showNotification("Sending batch presales tx...", "success");
+                try {
+                    const tx = await contract.addOldPresaleContracts(arr);
+                    const receipt = await tx.wait();
+                    const txHash = receipt.transactionHash || tx.hash;
+                    showNotification("Batch presales added", "success", `${explorerBase}/tx/${txHash}`);
+                } catch (err) {
+                    // fallback sequential
+                    let lastHash = null;
+                    for (const a of arr) {
+                        const tx = await contract.addOldPresaleContract(a);
+                        const receipt = await tx.wait();
+                        lastHash = receipt.transactionHash || tx.hash;
+                    }
+                    showNotification("Batch presales added (sequential)", "success", `${explorerBase}/tx/${lastHash}`);
+                }
+                batchPresalesInput.value = '';
+                await loadPresaleList();
+            } catch (e) {
+                console.error("batch add failed", e);
+                showNotification("Failed to add batch presales", "error");
+            }
+        }
+
+        async function adminSetKyc() {
+            const addr = kycAddressInput.value.trim();
+            const status = kycStatusSelect.value === 'true';
+            if (!addr) { showNotification("Enter address for KYC", "warning"); return; }
+            try {
+                showNotification("Setting KYC...", "success");
+                const tx = await contract.setKYC(addr, status);
+                const receipt = await tx.wait();
+                const txHash = receipt.transactionHash || tx.hash;
+                showNotification("KYC updated", "success", `${explorerBase}/tx/${txHash}`);
+                kycAddressInput.value = '';
+                if (addr.toLowerCase() === connectedAccount.toLowerCase()) await loadWalletData();
+            } catch (e) {
+                console.error("set kyc failed", e);
+                showNotification("Failed to set KYC", "error");
+            }
+        }
+
+        async function adminSetKycBatch() {
+            const rawAddrs = batchKycAddresses.value.trim();
+            const rawStatuses = batchKycStatuses.value.trim();
+            if (!rawAddrs || !rawStatuses) { showNotification("Provide addresses and statuses", "warning"); return; }
+            const addrs = rawAddrs.split(/[\n,]+/).map(s=>s.trim()).filter(Boolean);
+            const statuses = rawStatuses.split(/[\n,]+/).map(s=>s.trim()).filter(Boolean).map(s => (s === 'true'));
+            if (addrs.length !== statuses.length) { showNotification("Addresses/statuses length mismatch", "warning"); return; }
+            if (!confirm(`Set KYC for ${addrs.length} address(es)? Proceed?`)) return;
+            try {
+                showNotification("Setting batch KYC...", "success");
+                const tx = await contract.setKYCForBatch(addrs, statuses);
+                const receipt = await tx.wait();
+                const txHash = receipt.transactionHash || tx.hash;
+                showNotification("Batch KYC updated", "success", `${explorerBase}/tx/${txHash}`);
+                batchKycAddresses.value = ''; batchKycStatuses.value = '';
+                await loadWalletData();
+            } catch (e) {
+                console.error("set kyc batch failed", e);
+                showNotification("Failed to set batch KYC", "error");
+            }
+        }
+
+        async function adminStartVesting() {
+            if (!confirm("Start vesting? This action is irreversible. Proceed?")) return;
+            try {
+                showNotification("Starting vesting...", "success");
+                const tx = await contract.startVesting();
+                const receipt = await tx.wait();
+                const txHash = receipt.transactionHash || tx.hash;
+                showNotification("Vesting started", "success", `${explorerBase}/tx/${txHash}`);
+                await loadWalletData();
+            } catch (e) {
+                console.error("start vesting failed", e);
+                showNotification("Failed to start vesting", "error");
+            }
+        }
+
+        async function adminPause() {
+            if (!confirm("Pause contract? Users won't be able to claim. Proceed?")) return;
+            try {
+                showNotification("Pausing contract...", "success");
+                const tx = await contract.pause();
+                const receipt = await tx.wait();
+                const txHash = receipt.transactionHash || tx.hash;
+                showNotification("Contract paused", "success", `${explorerBase}/tx/${txHash}`);
+                await loadWalletData();
+            } catch (e) {
+                console.error("pause failed", e);
+                showNotification("Failed to pause", "error");
+            }
+        }
+
+        async function adminUnpause() {
+            if (!confirm("Unpause contract? Proceed?")) return;
+            try {
+                showNotification("Unpausing contract...", "success");
+                const tx = await contract.unpause();
+                const receipt = await tx.wait();
+                const txHash = receipt.transactionHash || tx.hash;
+                showNotification("Contract unpaused", "success", `${explorerBase}/tx/${txHash}`);
+                await loadWalletData();
+            } catch (e) {
+                console.error("unpause failed", e);
+                showNotification("Failed to unpause", "error");
+            }
+        }
+
+        // polling
+        async function pollForUpdates() {
+            try {
+                if (!contract || !connectedAccount) return;
+                const claimableNow = await contract.getClaimableAmount(connectedAccount);
+                if (claimableNow.gt(lastClaimableBN)) {
+                    showNotification("New tokens unlocked — you can claim now", "success");
+                    lastClaimableBN = claimableNow;
+                    await loadWalletData();
+                } else {
+                    if (isOwnerAccount) await loadPresaleList();
+                }
+                if (nextVestingTimeMs && Date.now() >= nextVestingTimeMs) {
+                    await loadWalletData();
+                }
+            } catch (e) { console.error("poll failed", e); }
+        }
+
+        // notifications with optional link
+        function showNotification(message, type='success', link=null) {
+            const icon = type === "success" ? "fa-check-circle" : type === "error" ? "fa-exclamation-circle" : "fa-exclamation-triangle";
+            let html = `<i class="fas ${icon}"></i><div class="notification-content">${message}</div>`;
+            if (link) {
+                html += `<div style="margin-left:10px;"><a href="${link}" target="_blank" rel="noopener" style="color:var(--accent);text-decoration:underline;">View on explorer</a></div>`;
+            }
+            notificationEl.innerHTML = html;
             notificationEl.className = `notification ${type} show`;
-            
-            setTimeout(() => {
-                notificationEl.classList.remove('show');
-            }, 3000);
+            setTimeout(()=>{ notificationEl.classList.remove('show'); }, 4500);
         }
-        
-        // Handle chain changes
+
+        // chain/account listeners
         if (window.ethereum) {
             window.ethereum.on('chainChanged', (chainId) => {
                 if (chainId !== sidraChain.chainId) {
@@ -1218,25 +850,18 @@
                     connectWalletBtn.textContent = "Connect Wallet";
                     connectWalletBtn.disabled = false;
                 } else {
-                    initEthers();
-                    checkWalletConnection();
+                    initEthers(); checkWalletConnection();
                 }
             });
-            
-            // Handle account changes
             window.ethereum.on('accountsChanged', (accounts) => {
                 if (accounts.length === 0) {
-                    // User disconnected their wallet
                     connectedAccount = null;
                     walletAddressEl.textContent = "Not connected";
-                    connectWalletBtn.textContent = "Connect Wallet";
-                    connectWalletBtn.disabled = false;
+                    connectWalletBtn.textContent = "Connect Wallet"; connectWalletBtn.disabled = false;
                 } else {
-                    // User switched accounts
                     connectedAccount = accounts[0];
-                    walletAddressEl.textContent = `${connectedAccount.substring(0, 6)}...${connectedAccount.substring(38)}`;
-                    initEthers();
-                    loadWalletData();
+                    walletAddressEl.textContent = `${connectedAccount.substring(0,6)}...${connectedAccount.substring(38)}`;
+                    initEthers(); loadWalletData();
                 }
             });
         }
