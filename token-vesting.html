@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Redirecting — Claim Tokens</title>
+  <!-- Automatic redirect after 4 seconds as a safety fallback for JS-disabled browsers -->
+  <meta http-equiv="refresh" content="4;url=claim-tokens.html">
+  <style>
+    :root{
+      --bg1:#7b61ff;
+      --bg2:#4dd2ff;
+      --card:#0f1724;
+      --muted: #a8b3c7;
+    }
+    html,body{height:100%;margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial}
+    body{
+      background:linear-gradient(135deg,var(--bg1),var(--bg2));
+      display:grid;place-items:center;padding:24px;color:white;
+    }
+    .card{
+      width:min(680px,92%);
+      background:linear-gradient(180deg,rgba(255,255,255,0.04),rgba(255,255,255,0.02));
+      border-radius:16px;padding:28px;box-shadow:0 10px 30px rgba(2,6,23,0.5);backdrop-filter:blur(6px);
+      display:grid;grid-template-columns:72px 1fr;gap:18px;align-items:center
+    }
+    .logo{
+      width:72px;height:72px;border-radius:12px;background:rgba(255,255,255,0.06);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:18px;color:rgba(255,255,255,0.9)
+    }
+    .title{font-size:18px;margin:0 0 6px 0}
+    .desc{color:var(--muted);margin:0 0 14px 0}
+    .countdown{display:inline-block;padding:8px 12px;border-radius:999px;background:rgba(255,255,255,0.04);font-weight:600}
+    .links{margin-top:12px}
+    a.button{display:inline-block;padding:10px 14px;border-radius:10px;background:rgba(255,255,255,0.06);text-decoration:none;color:inherit;font-weight:600;margin-right:10px}
+    a.button.secondary{background:transparent;border:1px solid rgba(255,255,255,0.06)}
+    .spinner{width:18px;height:18px;border-radius:50%;border:3px solid rgba(255,255,255,0.12);border-top-color:white;animation:spin 1s linear infinite;margin-right:8px}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    footer{margin-top:12px;color:var(--muted);font-size:13px}
+    @media (max-width:540px){.card{grid-template-columns:1fr;grid-template-rows:auto auto}}
+  </style>
+</head>
+<body>
+  <div class="card" role="region" aria-label="Redirect to claim tokens">
+    <div class="logo" aria-hidden="true">NUUR</div>
+    <div>
+      <h1 class="title">Redirecting to <strong>claim-tokens.html</strong></h1>
+      <p class="desc">You're being sent to the token claim page. If the redirect doesn't happen automatically, use the button below.</p>
+
+      <div style="display:flex;align-items:center">
+        <div class="spinner" aria-hidden></div>
+        <div>Leaving this page in <span class="countdown" id="count">4</span> second(s)…</div>
+      </div>
+
+    
+
+      <footer>
+        <noscript>
+          JavaScript is disabled. The page will still redirect using a meta refresh. If it doesn't, <a href="claim-tokens">click here to go to claim-tokens.html</a>.
+        </noscript>
+      </footer>
+    </div>
+  </div>
+
+  <script>
+    // Countdown and JS redirect fallback. If JS is enabled we take over the redirect slightly before the meta-refresh.
+    (function(){
+      var seconds = 4;
+      var el = document.getElementById('count');
+      var timer = setInterval(function(){
+        seconds -= 1;
+        if (seconds <= 0){
+          clearInterval(timer);
+          // final safety: use location.replace so history doesn't keep the redirect page
+          window.location.replace('claim-tokens');
+          return;
+        }
+        el.textContent = seconds;
+      }, 1000);
+
+      // Optional: open immediately if user clicks the 'Go now' button — default anchor handles it
+      document.getElementById('openNow').addEventListener('click', function(){
+        // no-op: anchor will navigate. We still stop the timer to avoid double navigation.
+        clearInterval(timer);
+      });
+    })();
+  </script>
+</body>
+</html>
