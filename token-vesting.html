@@ -3,8 +3,9 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Nuur Vesting — Fixed</title>
+  <title>Nuur Vesting</title>
   <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+
   <style>
     :root{
       --bg:#0f1724;
@@ -22,50 +23,78 @@
     *{box-sizing:border-box}
     html,body{height:100%;margin:0;font-family:Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial}
     body{background:linear-gradient(180deg,var(--bg) 0%, #071022 100%); color:#e6eef8; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; display:flex; align-items:center; justify-content:center; padding:28px;}
+
     .app { width:100%; max-width:var(--maxw); display:grid; grid-template-columns: 280px 1fr; gap:24px; align-items:start; }
+
     .sidebar { background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); border-radius:var(--card-radius); padding:18px; box-shadow:var(--shadow); border:1px solid rgba(255,255,255,0.03); min-height:520px; }
-    .brand { display:flex; gap:12px; align-items:center; margin-bottom:18px; }
-    .brand .logo { width:46px;height:46px;border-radius:10px;background:linear-gradient(135deg,var(--accent),var(--accent-2));display:flex;align-items:center;justify-content:center;font-weight:700; box-shadow:0 6px 20px rgba(124,58,237,0.18); }
+    .brand { display:flex; gap:12px; align-items:center; margin-bottom:12px; }
+    .brand .logo { width:56px;height:56px;border-radius:10px; background:linear-gradient(135deg,var(--accent),var(--accent-2)); display:flex;align-items:center;justify-content:center;font-weight:700; box-shadow:0 6px 20px rgba(124,58,237,0.18); overflow:hidden; }
+    /* NEW: logo image styling */
+    .brand .logo img { width:100%; height:100%; object-fit:contain; display:block; }
+
     .brand h1{font-size:18px;margin:0}
     .connect-cta{margin-top:14px}
     .btn { display:inline-flex; align-items:center; gap:10px; padding:10px 14px; border-radius:10px; border:none; cursor:pointer; font-weight:600; }
     .btn-primary{ background:linear-gradient(90deg,var(--accent),var(--accent-2)); color:white; box-shadow:0 8px 28px rgba(7,11,26,0.6); }
     .btn-ghost{ background:transparent; border:1px solid rgba(255,255,255,0.04); color:var(--muted) }
+
     .small { font-size:13px; color:var(--muted) }
+
     .sidebar .section { margin-top:18px }
     .sidebar .card { background:var(--panel); border-radius:12px; padding:12px; margin-top:10px; border:1px solid rgba(255,255,255,0.02) }
+
     .main { min-height:520px; background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); border-radius:var(--card-radius); padding:20px; box-shadow:var(--shadow); border:1px solid rgba(255,255,255,0.03); display:flex; flex-direction:column; }
+
     .grid-2 { display:grid; grid-template-columns: 1fr 1fr; gap:14px; }
     .panel { background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005)); border-radius:12px; padding:16px; border:1px solid rgba(255,255,255,0.02); }
     .panel h3{margin:0 0 10px 0; font-size:14px; color:var(--muted)}
     .big-value{ font-size:22px; font-weight:700; color:linear-gradient(90deg,var(--accent),#fff); }
+
     .progress-wrap{height:14px;background:rgba(255,255,255,0.03); border-radius:10px; overflow:hidden; margin-top:12px}
     .progress-bar{height:100%; width:0%; background:linear-gradient(90deg,var(--accent),var(--accent-2)); box-shadow:0 8px 30px rgba(10,30,80,0.2); transition:width 650ms ease}
+
     .claim-area{ margin-top:18px; display:flex; gap:12px; align-items:center; justify-content:flex-start }
     .claim-amount{ font-size:20px; font-weight:800; color:var(--accent-2) }
+
     .countdown { display:flex; gap:8px; margin-top:12px }
     .countdown .unit { background:rgba(255,255,255,0.03); padding:8px 10px; border-radius:8px; min-width:58px; text-align:center }
     .unit .num { font-weight:800; font-size:16px; color:var(--accent) }
     .unit .lbl { font-size:11px; color:var(--muted); text-transform:uppercase; }
+
     .modal-backdrop{ position:fixed; inset:0; display:flex; align-items:center; justify-content:center; background:rgba(2,6,23,0.6); z-index:60; }
     .modal { width:calc(100% - 48px); max-width:880px; background:var(--panel); border-radius:12px; padding:18px; border:1px solid rgba(255,255,255,0.02) }
     .modal .row { display:flex; gap:12px; }
     .form-input{ width:100%; padding:8px 10px; border-radius:8px; border:1px solid rgba(255,255,255,0.03); background:transparent; color:inherit }
+
     .toast { position:fixed; right:26px; top:26px; background:#071025; padding:12px 16px; border-radius:10px; border-left:4px solid var(--success); box-shadow:0 10px 30px rgba(2,6,23,0.6); display:flex; gap:10px; align-items:center; z-index:80; color:#e6eef8 }
+
     .muted { color:var(--muted); font-size:13px }
     a.link { color:var(--accent-2); text-decoration:none; font-weight:600 }
     .hidden { display:none !important }
-    @media (max-width:950px){ .app{ grid-template-columns: 1fr; } .sidebar{ order:2 } .main{ order:1 } }
+
+    @media (max-width:950px){
+      .app{ grid-template-columns: 1fr; }
+      .sidebar{ order:2 }
+      .main{ order:1 }
+    }
   </style>
 </head>
 <body>
   <div class="app" role="application" aria-label="Nuur vesting app">
+
     <aside class="sidebar">
       <div class="brand">
-        <div class="logo">NU</div>
-        <div>
+        <div class="logo">
+          <img id="logoImg" src="logo.jpg" alt="Nuur Logo" crossorigin="anonymous" />
+        </div>
+        <div style="flex:1">
           <h1>Nuur Vesting</h1>
           <div class="small">Token migration & claims</div>
+          <div style="margin-top:8px">
+            <button id="uploadLogoBtn" class="btn btn-ghost" title="Upload a local logo image">Upload Logo</button>
+            <!-- hidden file input -->
+            <input id="logoFileInput" type="file" accept="image/*" class="hidden" />
+          </div>
         </div>
       </div>
 
@@ -115,14 +144,14 @@
 
       <div class="section">
         <div class="muted">Notes</div>
-        <div class="small" style="margin-top:8px">Presale contracts must be added before first claims. Admin controls are visible only to owner after connecting wallet.</div>
+        <div class="small" style="margin-top:8px">Please make sure you are KYC verified to claim.</div>
       </div>
     </aside>
 
     <main class="main" id="mainArea">
       <div id="welcome" style="display:flex; flex-direction:column; align-items:center; justify-content:center; gap:14px; padding:40px 20px;">
         <h2 style="margin:0;font-size:20px">Welcome to Nuur Vesting</h2>
-        <p class="muted" style="max-width:720px; text-align:center">Connect your wallet to view your allocation and claim vested tokens. Admin controls are available to the contract owner.</p>
+        <p class="muted" style="max-width:720px; text-align:center">Connect your wallet to view your allocation and claim vested tokens.</p>
         <div>
           <button class="btn btn-primary" id="connectBtn2">Connect Wallet</button>
         </div>
@@ -194,7 +223,6 @@
               <div class="muted">Quick actions</div>
               <div style="display:flex;gap:10px;margin-top:8px">
                 <button id="refreshBtnLarge" class="btn btn-ghost">Refresh</button>
-                <button id="showPresales" class="btn btn-ghost">Presale Contracts</button>
               </div>
             </div>
 
@@ -215,16 +243,7 @@
               </div>
             </div>
 
-            <div style="margin-top:16px" id="presaleContainer" class="hidden">
-              <div class="muted">Presale contracts</div>
-              <div id="presaleList" style="margin-top:8px"></div>
-            </div>
           </div>
-        </div>
-
-        <div style="margin-top:14px; display:flex; gap:12px; justify-content:flex-end">
-          <div class="muted">Deployed vesting</div>
-          <div id="contractAddr" style="font-weight:800"></div>
         </div>
 
       </div>
@@ -359,9 +378,14 @@
     const adminKycBatchStatuses = document.getElementById('adminKycBatchStatuses');
     const adminSetKycBatchBtn = document.getElementById('adminSetKycBatch');
     const adminStart = document.getElementById('adminStart');
-    const adminPause = document.getElementById('adminPause');       // element
-    const adminUnpause = document.getElementById('adminUnpause');   // element
+    const adminPause = document.getElementById('adminPause');
+    const adminUnpause = document.getElementById('adminUnpause');
     const adminPresaleList = document.getElementById('adminPresaleList');
+
+    // Logo elements (NEW)
+    const logoImg = document.getElementById('logoImg');
+    const uploadLogoBtn = document.getElementById('uploadLogoBtn');
+    const logoFileInput = document.getElementById('logoFileInput');
 
     const toast = document.getElementById('toast');
     const explorerTx = document.getElementById('explorerTx');
@@ -396,6 +420,57 @@
       return addr.slice(0,6)+'…'+addr.slice(-4);
     }
 
+    // -------- Logo persistence handlers --------
+    function loadLogoFromStorage(){
+      try{
+        const data = localStorage.getItem('nuurLogo');
+        if(data){
+          logoImg.src = data;
+        } else {
+          // keep default src (logo.jpg) which should exist in same folder
+        }
+      }catch(e){
+        console.warn('logo load failed', e);
+      }
+    }
+
+    uploadLogoBtn.addEventListener('click', ()=> logoFileInput.click());
+
+    logoFileInput.addEventListener('change', (ev)=>{
+      const f = ev.target.files && ev.target.files[0];
+      if(!f) return;
+      // limit size to 2MB to avoid localStorage bloat
+      if(f.size > 2*1024*1024){
+        toastShow('Logo too large (max 2MB)', 'error');
+        return;
+      }
+      const reader = new FileReader();
+      reader.onload = () => {
+        try {
+          const dataUrl = reader.result;
+          logoImg.src = dataUrl;
+          localStorage.setItem('nuurLogo', dataUrl);
+          toastShow('Logo updated', 'success');
+        } catch(e) {
+          console.error('store logo', e);
+          toastShow('Failed to store logo', 'error');
+        }
+      };
+      reader.onerror = () => toastShow('Failed to read file', 'error');
+      reader.readAsDataURL(f);
+    });
+
+    // optional: if logo fails to load (missing logo.jpg), show a plain background with initials
+    logoImg.addEventListener('error', () => {
+      // fallback: replace with a small inline SVG as data URL
+      const svg = `<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><rect width='100%' height='100%' rx='12' fill='#7c3aed'/><text x='50%' y='54%' font-size='42' fill='white' font-family='Inter,Arial' text-anchor='middle' alignment-baseline='middle'>NU</text></svg>`;
+      logoImg.src = 'data:image/svg+xml;base64,' + btoa(svg);
+    });
+
+    // load stored logo immediately
+    loadLogoFromStorage();
+
+    // ----------- Wallet / contract logic (unchanged) -----------
     async function connectWallet(){
       if(!window.ethereum){ toastShow('Please install MetaMask or compatible wallet','error'); return; }
       provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -601,8 +676,6 @@
     }
 
     async function adminStartVesting(){ if(!confirm('Start vesting? This is irreversible.')) return; try{ const tx=await contract.startVesting(); const r = await tx.wait(); toastShow('Vesting started','success', EXPLORER?`${EXPLORER}/tx/${r.transactionHash}`:null); await loadAll(); } catch(e){ console.error(e); toastShow('Failed to start','error'); } }
-
-    // Renamed handlers to avoid name collision with DOM elements
     async function adminPauseHandler(){ if(!confirm('Pause contract?')) return; try{ const tx=await contract.pause(); const r=await tx.wait(); toastShow('Paused','success', EXPLORER?`${EXPLORER}/tx/${r.transactionHash}`:null); await loadAll(); } catch(e){ console.error(e); toastShow('Failed to pause','error'); } }
     async function adminUnpauseHandler(){ if(!confirm('Unpause contract?')) return; try{ const tx=await contract.unpause(); const r=await tx.wait(); toastShow('Unpaused','success', EXPLORER?`${EXPLORER}/tx/${r.transactionHash}`:null); await loadAll(); } catch(e){ console.error(e); toastShow('Failed to unpause','error'); } }
 
@@ -646,7 +719,7 @@
     refreshBtnSmall.addEventListener('click', loadAll);
     refreshBtnLarge.addEventListener('click', loadAll);
 
-    // admin wiring (note handlers renamed for pause/unpause)
+    // admin wiring
     document.getElementById('adminBtnSmall').addEventListener('click', openAdminModal);
     openAdmin.addEventListener('click', openAdminModal);
     closeAdmin.addEventListener('click', closeAdminModal);
@@ -655,8 +728,12 @@
     adminSetKyc.addEventListener('click', adminSetKycSingle);
     adminSetKycBatchBtn.addEventListener('click', adminSetKycBatchHandler);
     adminStart.addEventListener('click', adminStartVesting);
-    adminPause.addEventListener('click', adminPauseHandler);       // updated listener
-    adminUnpause.addEventListener('click', adminUnpauseHandler);   // updated listener
+    adminPause.addEventListener('click', adminPauseHandler);
+    adminUnpause.addEventListener('click', adminUnpauseHandler);
+
+    // logo wiring (no name collisions)
+    uploadLogoBtn.addEventListener('click', ()=> logoFileInput.click());
+    // logoFileInput handler already set above
 
     startCountdown();
     contractLink.addEventListener('click', (e)=>{
