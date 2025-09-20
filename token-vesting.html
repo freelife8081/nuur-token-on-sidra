@@ -3,13 +3,9 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Nuur Vesting — New UI</title>
-
-  <!-- Ethers v5 -->
+  <title>Nuur Vesting — Fixed</title>
   <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
-
   <style>
-    /* ---------- Basic reset ---------- */
     :root{
       --bg:#0f1724;
       --panel:#0b1220;
@@ -26,118 +22,53 @@
     *{box-sizing:border-box}
     html,body{height:100%;margin:0;font-family:Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial}
     body{background:linear-gradient(180deg,var(--bg) 0%, #071022 100%); color:#e6eef8; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; display:flex; align-items:center; justify-content:center; padding:28px;}
-
-    /* ---------- App container ---------- */
-    .app {
-      width:100%;
-      max-width:var(--maxw);
-      display:grid;
-      grid-template-columns: 280px 1fr;
-      gap:24px;
-      align-items:start;
-    }
-
-    /* ---------- Sidebar ---------- */
-    .sidebar {
-      background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-      border-radius:var(--card-radius);
-      padding:18px;
-      box-shadow:var(--shadow);
-      border:1px solid rgba(255,255,255,0.03);
-      min-height:520px;
-    }
-    .brand {
-      display:flex; gap:12px; align-items:center; margin-bottom:18px;
-    }
-    .brand .logo {
-      width:46px;height:46px;border-radius:10px;background:linear-gradient(135deg,var(--accent),var(--accent-2));display:flex;align-items:center;justify-content:center;font-weight:700;
-      box-shadow:0 6px 20px rgba(124,58,237,0.18);
-    }
+    .app { width:100%; max-width:var(--maxw); display:grid; grid-template-columns: 280px 1fr; gap:24px; align-items:start; }
+    .sidebar { background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); border-radius:var(--card-radius); padding:18px; box-shadow:var(--shadow); border:1px solid rgba(255,255,255,0.03); min-height:520px; }
+    .brand { display:flex; gap:12px; align-items:center; margin-bottom:18px; }
+    .brand .logo { width:46px;height:46px;border-radius:10px;background:linear-gradient(135deg,var(--accent),var(--accent-2));display:flex;align-items:center;justify-content:center;font-weight:700; box-shadow:0 6px 20px rgba(124,58,237,0.18); }
     .brand h1{font-size:18px;margin:0}
     .connect-cta{margin-top:14px}
-    .btn {
-      display:inline-flex; align-items:center; gap:10px; padding:10px 14px; border-radius:10px; border:none; cursor:pointer; font-weight:600;
-    }
+    .btn { display:inline-flex; align-items:center; gap:10px; padding:10px 14px; border-radius:10px; border:none; cursor:pointer; font-weight:600; }
     .btn-primary{ background:linear-gradient(90deg,var(--accent),var(--accent-2)); color:white; box-shadow:0 8px 28px rgba(7,11,26,0.6); }
     .btn-ghost{ background:transparent; border:1px solid rgba(255,255,255,0.04); color:var(--muted) }
-
     .small { font-size:13px; color:var(--muted) }
-
     .sidebar .section { margin-top:18px }
-    .sidebar .card {
-      background:var(--panel);
-      border-radius:12px; padding:12px; margin-top:10px; border:1px solid rgba(255,255,255,0.02)
-    }
-
-    /* ---------- Main ---------- */
-    .main {
-      min-height:520px;
-      background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-      border-radius:var(--card-radius);
-      padding:20px;
-      box-shadow:var(--shadow);
-      border:1px solid rgba(255,255,255,0.03);
-      display:flex; flex-direction:column;
-    }
-
+    .sidebar .card { background:var(--panel); border-radius:12px; padding:12px; margin-top:10px; border:1px solid rgba(255,255,255,0.02) }
+    .main { min-height:520px; background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); border-radius:var(--card-radius); padding:20px; box-shadow:var(--shadow); border:1px solid rgba(255,255,255,0.03); display:flex; flex-direction:column; }
     .grid-2 { display:grid; grid-template-columns: 1fr 1fr; gap:14px; }
-    .panel {
-      background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005));
-      border-radius:12px; padding:16px; border:1px solid rgba(255,255,255,0.02);
-    }
+    .panel { background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005)); border-radius:12px; padding:16px; border:1px solid rgba(255,255,255,0.02); }
     .panel h3{margin:0 0 10px 0; font-size:14px; color:var(--muted)}
     .big-value{ font-size:22px; font-weight:700; color:linear-gradient(90deg,var(--accent),#fff); }
-
-    /* progress */
     .progress-wrap{height:14px;background:rgba(255,255,255,0.03); border-radius:10px; overflow:hidden; margin-top:12px}
     .progress-bar{height:100%; width:0%; background:linear-gradient(90deg,var(--accent),var(--accent-2)); box-shadow:0 8px 30px rgba(10,30,80,0.2); transition:width 650ms ease}
-
-    /* Claim area */
     .claim-area{ margin-top:18px; display:flex; gap:12px; align-items:center; justify-content:flex-start }
     .claim-amount{ font-size:20px; font-weight:800; color:var(--accent-2) }
-
-    /* Timer */
     .countdown { display:flex; gap:8px; margin-top:12px }
     .countdown .unit { background:rgba(255,255,255,0.03); padding:8px 10px; border-radius:8px; min-width:58px; text-align:center }
     .unit .num { font-weight:800; font-size:16px; color:var(--accent) }
     .unit .lbl { font-size:11px; color:var(--muted); text-transform:uppercase; }
-
-    /* Admin modal */
     .modal-backdrop{ position:fixed; inset:0; display:flex; align-items:center; justify-content:center; background:rgba(2,6,23,0.6); z-index:60; }
     .modal { width:calc(100% - 48px); max-width:880px; background:var(--panel); border-radius:12px; padding:18px; border:1px solid rgba(255,255,255,0.02) }
     .modal .row { display:flex; gap:12px; }
     .form-input{ width:100%; padding:8px 10px; border-radius:8px; border:1px solid rgba(255,255,255,0.03); background:transparent; color:inherit }
-
-    /* notifications */
     .toast { position:fixed; right:26px; top:26px; background:#071025; padding:12px 16px; border-radius:10px; border-left:4px solid var(--success); box-shadow:0 10px 30px rgba(2,6,23,0.6); display:flex; gap:10px; align-items:center; z-index:80; color:#e6eef8 }
-
-    /* tiny helpers */
     .muted { color:var(--muted); font-size:13px }
     a.link { color:var(--accent-2); text-decoration:none; font-weight:600 }
     .hidden { display:none !important }
-
-    /* responsive */
-    @media (max-width:950px){
-      .app{ grid-template-columns: 1fr; }
-      .sidebar{ order:2 }
-      .main{ order:1 }
-    }
+    @media (max-width:950px){ .app{ grid-template-columns: 1fr; } .sidebar{ order:2 } .main{ order:1 } }
   </style>
 </head>
 <body>
   <div class="app" role="application" aria-label="Nuur vesting app">
-
-    <!-- SIDEBAR -->
     <aside class="sidebar">
       <div class="brand">
-        <div class="logo">NUUR</div>
+        <div class="logo">NU</div>
         <div>
           <h1>Nuur Vesting</h1>
           <div class="small">Token migration & claims</div>
         </div>
       </div>
 
-      <!-- Connect CTA (visible always) -->
       <div class="connect-cta" id="ctaContainer">
         <div class="small muted">To start, connect your wallet</div>
         <div style="margin-top:12px;">
@@ -145,7 +76,6 @@
         </div>
       </div>
 
-      <!-- Account quick info (hidden until connected) -->
       <div id="accountBox" class="hidden">
         <div style="display:flex;justify-content:space-between;align-items:center">
           <div>
@@ -185,22 +115,19 @@
 
       <div class="section">
         <div class="muted">Notes</div>
-        <div class="small" style="margin-top:8px"> Please make sure you participated in presale and KYC verified.</div>
+        <div class="small" style="margin-top:8px">Presale contracts must be added before first claims. Admin controls are visible only to owner after connecting wallet.</div>
       </div>
     </aside>
 
-    <!-- MAIN -->
     <main class="main" id="mainArea">
-      <!-- Before connect -->
       <div id="welcome" style="display:flex; flex-direction:column; align-items:center; justify-content:center; gap:14px; padding:40px 20px;">
         <h2 style="margin:0;font-size:20px">Welcome to Nuur Vesting</h2>
-        <p class="muted" style="max-width:720px; text-align:center">Connect your wallet to view your allocation and claim vested tokens.</p>
+        <p class="muted" style="max-width:720px; text-align:center">Connect your wallet to view your allocation and claim vested tokens. Admin controls are available to the contract owner.</p>
         <div>
           <button class="btn btn-primary" id="connectBtn2">Connect Wallet</button>
         </div>
       </div>
 
-      <!-- App content (hidden until connected) -->
       <div id="appContent" class="hidden" aria-hidden="true" style="width:100%">
         <div style="display:flex;justify-content:space-between;align-items:center;gap:12px">
           <div>
@@ -304,7 +231,6 @@
     </main>
   </div>
 
-  <!-- ADMIN MODAL (hidden) -->
   <div id="adminModal" class="modal-backdrop hidden" aria-hidden="true">
     <div class="modal" role="dialog" aria-modal="true">
       <div style="display:flex;justify-content:space-between;align-items:center">
@@ -369,12 +295,10 @@
     </div>
   </div>
 
-  <!-- notification area -->
   <div id="toast" class="hidden" role="status" aria-live="polite"></div>
 
   <script>
   (function(){
-    /* ---------- Config (use your addresses) ---------- */
     const CONTRACT_ADDR = "0xF300235899b647bea68122B18Ff7d757e71BE2a2";
     const NUUR_TOKEN = "0x135800ac1DB3Ba26af6c4A95c49b1Ed00F851E57";
     const SIDRA_CHAIN = { chainId: "0x17CAD", blockExplorerUrls:["https://ledger.sidrachain.com"] };
@@ -382,7 +306,7 @@
 
     const VESTING_ABI = [{"inputs":[{"internalType":"address","name":"_newToken","type":"address"},{"internalType":"address","name":"_oldToken","type":"address"}],"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address[]","name":"users","type":"address[]"},{"indexed":false,"internalType":"bool[]","name":"statuses","type":"bool[]"}],"name":"KYCBatchUpdated","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"bool","name":"verified","type":"bool"}],"name":"KYCUpdated","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"oldToken","type":"address"}],"name":"OldTokenSet","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"previousOwner","type":"address"},{"indexed":true,"internalType":"address","name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"},{"anonymous":false,"inputs":[],"name":"Paused","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"presale","type":"address"}],"name":"PresaleContractAdded","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"beneficiary","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"TokensClaimed","type":"event"},{"anonymous":false,"inputs":[],"name":"Unpaused","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"startTime","type":"uint256"}],"name":"VestingStarted","type":"event"},{"inputs":[],"name":"MONTH_DURATION","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"VESTING_MONTHS","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"presale","type":"address"}],"name":"addOldPresaleContract","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"user","type":"address"}],"name":"calculateClaimable","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"claim","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"user","type":"address"}],"name":"getClaimableAmount","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getOldPresaleContracts","outputs":[{"internalType":"address[]","name":"","type":"address[]"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"user","type":"address"}],"name":"getTotalPurchase","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"user","type":"address"}],"name":"getUserTotalPurchase","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"kycVerified","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"newToken","outputs":[{"internalType":"contract INuurCoin","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"","type":"uint256"}],"name":"oldPresaleContracts","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"oldToken","outputs":[{"internalType":"contract IOldToken","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"pause","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"paused","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"user","type":"address"},{"internalType":"bool","name":"status","type":"bool"}],"name":"setKYC","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address[]","name":"users","type":"address[]"},{"internalType":"bool[]","name":"statuses","type":"bool[]"}],"name":"setKYCForBatch","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"startVesting","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"unpause","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"vestingInfo","outputs":[{"internalType":"uint256","name":"totalAmount","type":"uint256"},{"internalType":"uint256","name":"claimedAmount","type":"uint256"},{"internalType":"bool","name":"exists","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"vestingStartTime","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"vestingStarted","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"}];
 
-    /* ---------- DOM ---------- */
+    /* DOM */
     const connectBtn = document.getElementById('connectBtn');
     const connectBtn2 = document.getElementById('connectBtn2');
     const disconnectBtn = document.getElementById('disconnectBtn');
@@ -433,16 +357,16 @@
     const adminSetKyc = document.getElementById('adminSetKyc');
     const adminKycBatchAddrs = document.getElementById('adminKycBatchAddrs');
     const adminKycBatchStatuses = document.getElementById('adminKycBatchStatuses');
-    const adminSetKycBatch = document.getElementById('adminSetKycBatch');
+    const adminSetKycBatchBtn = document.getElementById('adminSetKycBatch');
     const adminStart = document.getElementById('adminStart');
-    const adminPause = document.getElementById('adminPause');
-    const adminUnpause = document.getElementById('adminUnpause');
+    const adminPause = document.getElementById('adminPause');       // element
+    const adminUnpause = document.getElementById('adminUnpause');   // element
     const adminPresaleList = document.getElementById('adminPresaleList');
 
     const toast = document.getElementById('toast');
     const explorerTx = document.getElementById('explorerTx');
 
-    /* ---------- State ---------- */
+    /* State */
     let provider = null;
     let signer = null;
     let account = null;
@@ -453,9 +377,8 @@
     let nextVestingTimeMs = null;
     let lastClaimable = ethers.BigNumber.from(0);
     let isOwner = false;
-    const POLL_INTERVAL = 15000; // 15s
+    const POLL_INTERVAL = 15000;
 
-    /* ---------- util helpers ---------- */
     function toastShow(msg, type='info', link=null){
       toast.className = 'toast';
       toast.innerHTML = `<div>${msg}</div>`;
@@ -482,18 +405,15 @@
         account = await signer.getAddress();
         contract = new ethers.Contract(CONTRACT_ADDR, VESTING_ABI, signer);
         tokenContract = new ethers.Contract(NUUR_TOKEN, ["function balanceOf(address) view returns (uint256)","function decimals() view returns (uint8)"], signer);
-        // show UI
         ctaContainer.classList.add('hidden');
         accountBox.classList.remove('hidden');
         welcome.style.display='none';
         appContent.classList.remove('hidden'); appContent.setAttribute('aria-hidden','false');
-        // set short addr
         addrShort.textContent = short(account);
         try { decimals = await tokenContract.decimals(); } catch(e){ decimals = 18; }
         contractAddr.textContent = CONTRACT_ADDR;
         contractLink.href = EXPLORER ? `${EXPLORER}/address/${CONTRACT_ADDR}` : '#';
         explorerTx.href = EXPLORER ? `${EXPLORER}` : '#';
-        // initial load
         await loadAll();
         startPoll();
       } catch (e) {
@@ -502,7 +422,6 @@
     }
 
     async function disconnect(){
-      // simple disconnect: clear UI and state (wallet providers usually don't allow programmatic disconnect)
       account = null; signer = null; provider = null; contract = null; tokenContract=null;
       ctaContainer.classList.remove('hidden');
       accountBox.classList.add('hidden');
@@ -515,23 +434,19 @@
     async function loadAll(){
       if(!contract || !account) return;
       try {
-        // balances
         const [bNu, bSda] = await Promise.all([ tokenContract.balanceOf(account), provider.getBalance(account) ]);
         nuurBal.textContent = ethers.utils.formatUnits(bNu, decimals);
         sdaBal.textContent = ethers.utils.formatEther(bSda);
 
-        // kyc
         const k = await contract.kycVerified(account);
         kycText.textContent = k ? 'Verified' : 'Not verified';
         kycDot.style.background = k ? 'var(--success)' : 'var(--danger)';
 
-        // vesting status
         const [vStarted, paused, vestStartBN] = await Promise.all([ contract.vestingStarted(), contract.paused(), contract.vestingStartTime() ]);
         vestingStartTimeSec = vestStartBN.toNumber();
         vestingStatus.textContent = vStarted ? 'Active' : 'Not started';
         pausedStatus.textContent = paused ? 'Yes' : 'No';
 
-        // purchases/vesting info
         const [totalPurchase, claimable] = await Promise.all([ contract.getTotalPurchase(account), contract.getClaimableAmount(account) ]);
         const vestInfo = await contract.vestingInfo(account);
         const claimed = vestInfo.claimedAmount ? vestInfo.claimedAmount : vestInfo[1];
@@ -541,14 +456,12 @@
         claimableDisplay.textContent = `${ethers.utils.formatUnits(claimable, decimals)} NUUR`;
         lastClaimable = claimable;
 
-        // months passed & progress
         if(vStarted && vestingStartTimeSec > 0){
           const now = Math.floor(Date.now()/1000);
           let months = Math.floor((now - vestingStartTimeSec) / (30*24*60*60));
           if(months < 0) months=0; if(months>12) months=12;
           monthsPassedEl.textContent = `${months} / 12`;
           progressBar.style.width = `${(months/12)*100}%`;
-          // next slice
           const nextSec = vestingStartTimeSec + (months+1)*30*24*60*60;
           nextVestingTimeMs = nextSec*1000;
         } else {
@@ -557,16 +470,13 @@
           nextVestingTimeMs = null;
         }
 
-        // enable claim button only if KYC true and claimable > 0
         if(k && claimable.gt(0) && !paused) { claimBtn.disabled=false } else { claimBtn.disabled=true }
 
-        // owner check -> show admin
         const owner = await contract.owner().catch(()=>null);
         isOwner = owner && owner.toLowerCase() === account.toLowerCase();
         document.getElementById('adminBtnSmall').style.display = isOwner ? 'inline-block' : 'none';
         document.getElementById('openAdmin').style.display = isOwner ? 'inline-block' : 'none';
 
-        // presales list hidden by default, will show when clicking 'Presale Contracts' or if owner (admin panel shows them)
         presaleContainer.classList.add('hidden');
       } catch (e){
         console.error('loadAll error',e);
@@ -583,7 +493,6 @@
         const receipt = await tx.wait();
         const txh = receipt.transactionHash || tx.hash;
         toastShow('Claim successful','success', EXPLORER ? `${EXPLORER}/tx/${txh}` : null);
-        // refresh
         await loadAll();
         claimBtn.textContent='Claim';
       } catch (e){
@@ -611,11 +520,9 @@
       } catch(e){ console.error('presales load',e); toastShow('Failed to load presales','error'); }
     }
 
-    /* ---------- Admin handlers ---------- */
     async function openAdminModal(){
       if(!isOwner) { toastShow('Owner required','error'); return; }
       adminModal.classList.remove('hidden'); adminModal.setAttribute('aria-hidden','false');
-      // populate presales
       try {
         const arr = await contract.getOldPresaleContracts();
         adminPresaleList.innerHTML='';
@@ -628,7 +535,7 @@
         });
       } catch(e){ console.error(e); }
     }
-    async function closeAdminModal(){ adminModal.classList.add('hidden'); adminModal.setAttribute('aria-hidden','true'); }
+    function closeAdminModal(){ adminModal.classList.add('hidden'); adminModal.setAttribute('aria-hidden','true'); }
 
     async function adminAddSingle(){
       const a = adminPresale.value.trim();
@@ -650,13 +557,11 @@
       if(arr.length===0){ toastShow('No valid addresses','warning'); return; }
       if(!confirm(`Add ${arr.length} presales?`)) return;
       try {
-        // try batch
         try {
           const tx = await contract.addOldPresaleContracts(arr);
           const receipt = await tx.wait();
           toastShow('Batch added (single tx)','success', EXPLORER?`${EXPLORER}/tx/${receipt.transactionHash}`:null);
         } catch(e){
-          // fallback sequential
           let lastHash=null;
           for(const a of arr){ const tx = await contract.addOldPresaleContract(a); const r = await tx.wait(); lastHash = r.transactionHash || tx.hash; }
           toastShow('Batch added (multiple txs)','success', EXPLORER?`${EXPLORER}/tx/${lastHash}`:null);
@@ -678,7 +583,7 @@
       } catch(e){ console.error(e); toastShow('Failed to set KYC','error'); }
     }
 
-    async function adminSetKycBatch(){
+    async function adminSetKycBatchHandler(){
       const rawAddrs = adminKycBatchAddrs.value.trim();
       const rawStats = adminKycBatchStatuses.value.trim();
       if(!rawAddrs || !rawStats){ toastShow('Provide both addresses and statuses','warning'); return; }
@@ -696,10 +601,11 @@
     }
 
     async function adminStartVesting(){ if(!confirm('Start vesting? This is irreversible.')) return; try{ const tx=await contract.startVesting(); const r = await tx.wait(); toastShow('Vesting started','success', EXPLORER?`${EXPLORER}/tx/${r.transactionHash}`:null); await loadAll(); } catch(e){ console.error(e); toastShow('Failed to start','error'); } }
-    async function adminPause(){ if(!confirm('Pause contract?')) return; try{ const tx=await contract.pause(); const r=await tx.wait(); toastShow('Paused','success', EXPLORER?`${EXPLORER}/tx/${r.transactionHash}`:null); await loadAll(); } catch(e){ console.error(e); toastShow('Failed to pause','error'); } }
-    async function adminUnpause(){ if(!confirm('Unpause contract?')) return; try{ const tx=await contract.unpause(); const r=await tx.wait(); toastShow('Unpaused','success', EXPLORER?`${EXPLORER}/tx/${r.transactionHash}`:null); await loadAll(); } catch(e){ console.error(e); toastShow('Failed to unpause','error'); } }
 
-    /* ---------- Polling / Timer ---------- */
+    // Renamed handlers to avoid name collision with DOM elements
+    async function adminPauseHandler(){ if(!confirm('Pause contract?')) return; try{ const tx=await contract.pause(); const r=await tx.wait(); toastShow('Paused','success', EXPLORER?`${EXPLORER}/tx/${r.transactionHash}`:null); await loadAll(); } catch(e){ console.error(e); toastShow('Failed to pause','error'); } }
+    async function adminUnpauseHandler(){ if(!confirm('Unpause contract?')) return; try{ const tx=await contract.unpause(); const r=await tx.wait(); toastShow('Unpaused','success', EXPLORER?`${EXPLORER}/tx/${r.transactionHash}`:null); await loadAll(); } catch(e){ console.error(e); toastShow('Failed to unpause','error'); } }
+
     let pollHandle = null;
     function startPoll(){ if(pollHandle) clearInterval(pollHandle); pollHandle = setInterval(pollTick, POLL_INTERVAL); }
     async function pollTick(){
@@ -711,7 +617,6 @@
           lastClaimable = claimable;
           await loadAll();
         }
-        // if next vesting passed
         if(nextVestingTimeMs && Date.now() >= nextVestingTimeMs){ await loadAll(); }
       } catch(e){ console.error('pollTick',e); }
     }
@@ -732,7 +637,7 @@
       }, 1000);
     }
 
-    /* ---------- UI wiring ---------- */
+    /* UI wiring */
     connectBtn.addEventListener('click', connectWallet);
     connectBtn2.addEventListener('click', connectWallet);
     disconnectBtn.addEventListener('click', disconnect);
@@ -741,27 +646,23 @@
     refreshBtnSmall.addEventListener('click', loadAll);
     refreshBtnLarge.addEventListener('click', loadAll);
 
-    // admin
+    // admin wiring (note handlers renamed for pause/unpause)
     document.getElementById('adminBtnSmall').addEventListener('click', openAdminModal);
     openAdmin.addEventListener('click', openAdminModal);
     closeAdmin.addEventListener('click', closeAdminModal);
     adminAddPresale.addEventListener('click', adminAddSingle);
     adminBatchAdd.addEventListener('click', adminAddBatch);
     adminSetKyc.addEventListener('click', adminSetKycSingle);
-    adminSetKycBatch.addEventListener('click', adminSetKycBatch);
+    adminSetKycBatchBtn.addEventListener('click', adminSetKycBatchHandler);
     adminStart.addEventListener('click', adminStartVesting);
-    adminPause.addEventListener('click', adminPause);
-    adminUnpause.addEventListener('click', adminUnpause);
+    adminPause.addEventListener('click', adminPauseHandler);       // updated listener
+    adminUnpause.addEventListener('click', adminUnpauseHandler);   // updated listener
 
-    // start countdown loop
     startCountdown();
-
-    // small UX: clicking contract link copies address if no explorer
     contractLink.addEventListener('click', (e)=>{
       if(!EXPLORER){ e.preventDefault(); navigator.clipboard && navigator.clipboard.writeText(CONTRACT_ADDR).then(()=> toastShow('Contract address copied','success')); }
     });
 
-    // expose basic error logging
     window.addEventListener('error', (ev)=> console.warn('page error', ev.error));
   })();
   </script>
