@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <title>Nuur Vesting</title>
   <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <style>
     /*
@@ -48,15 +49,6 @@
       --shadow: 0 8px 20px rgba(11,14,19,0.04);
     }
 
-    /* Swap color mapping */
-    body[data-swap="true"] {
-      --color-primary: #5b21b6;   /* indigo becomes primary */
-      --color-accent: #d4af37;    /* gold becomes accent */
-      --color-warn: #fb6f6f;
-      --color-strong: #14b8a6;
-      --color-success: #10b981;
-    }
-
     /* Smooth animated transitions for theme changes */
     html, body {
       transition: background-color 360ms ease, color 360ms ease;
@@ -97,7 +89,7 @@
     .btn:active { transform: translateY(1px); }
     .btn-primary { background: linear-gradient(90deg, var(--color-accent), var(--color-success)); color: #fff; box-shadow: 0 8px 22px rgba(0,0,0,0.12); }
     .btn-ghost { background: transparent; border: 1px solid rgba(0,0,0,0.06); color: var(--muted); padding: 10px; border-radius: 10px; }
-    .btn-swap { background: linear-gradient(90deg, var(--color-primary), #fff2c9); color: #071022; }
+    .btn-theme { background: transparent; border: 1px solid rgba(0,0,0,0.06); color: var(--muted); padding: 10px; border-radius: 10px; }
 
     .small { font-size:13px; color: var(--muted); }
 
@@ -173,17 +165,17 @@
       .lbl { font-size: 9px; }
     }
 
-    /* Initially hide theme & swap toggles until wallet connect */
-    #themeToggle, #swapToggle { display: none; }
+    /* Initially hide theme toggle until wallet connect */
+    #themeToggle { display: none; }
   </style>
 </head>
-<body data-theme="dark" data-swap="false">
+<body data-theme="dark">
   <div class="app" role="application" aria-label="Nuur vesting app">
     <!-- SIDEBAR -->
     <aside class="sidebar" aria-label="sidebar">
       <div class="brand" aria-hidden="false">
         <div class="logo" title="Nuur Logo">
-          <img id="logoImg" src="logo.jpg" alt="Nuur Logo" />
+          <img id="logoImg" src="logoo.jpg" alt="Nuur Logo" />
         </div>
         <div style="flex:1">
           <h1>Nuur Vesting</h1>
@@ -194,8 +186,9 @@
       <div class="controls" id="sidebarControls" role="toolbar" aria-label="controls">
         <button id="connectBtn" class="btn btn-primary" aria-live="polite">Connect Wallet</button>
         <!-- hidden until wallet is connected -->
-        <button id="themeToggle" class="btn btn-ghost" title="Toggle light / dark">Toggle Theme</button>
-        <button id="swapToggle" class="btn btn-swap" title="Swap color roles">Swap Colors</button>
+        <button id="themeToggle" class="btn btn-theme" title="Toggle light / dark">
+          <i class="fas fa-moon"></i> Mode
+        </button>
       </div>
 
       <div class="card" id="accountBox" style="display:none">
@@ -223,7 +216,7 @@
 
         <div style="margin-top:10px;">
           <div class="muted small">KYC</div>
-          <div style="margin-top:6px"><span id="kycDot" style="display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--danger);margin-right:8px"></span><span id="kycText">Not verified</span></div>
+          <div style="margin-top:6px"><span id="kycDot" style="display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--color-warn);margin-right:8px"></span><span id="kycText">Not verified</span></div>
         </div>
 
         <div style="margin-top:12px; display:flex; gap:8px; flex-wrap:wrap;">
@@ -395,11 +388,9 @@
   const EXPLORER = (SIDRA_CHAIN.blockExplorerUrls && SIDRA_CHAIN.blockExplorerUrls[0]) ? SIDRA_CHAIN.blockExplorerUrls[0].replace(/\/$/,'') : '';
 
   const VESTING_ABI = [{"inputs":[{"internalType":"address","name":"_newToken","type":"address"},{"internalType":"address","name":"_oldToken","type":"address"}],"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address[]","name":"users","type":"address[]"},{"indexed":false,"internalType":"bool[]","name":"statuses","type":"bool[]"}],"name":"KYCBatchUpdated","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"bool","name":"verified","type":"bool"}],"name":"KYCUpdated","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"oldToken","type":"address"}],"name":"OldTokenSet","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"previousOwner","type":"address"},{"indexed":true,"internalType":"address","name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"},{"anonymous":false,"inputs":[],"name":"Paused","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"presale","type":"address"}],"name":"PresaleContractAdded","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"beneficiary","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"TokensClaimed","type":"event"},{"anonymous":false,"inputs":[],"name":"Unpaused","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"startTime","type":"uint256"}],"name":"VestingStarted","type":"event"},{"inputs":[],"name":"MONTH_DURATION","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"VESTING_MONTHS","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"presale","type":"address"}],"name":"addOldPresaleContract","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"user","type":"address"}],"name":"calculateClaimable","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"claim","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"user","type":"address"}],"name":"getClaimableAmount","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getOldPresaleContracts","outputs":[{"internalType":"address[]","name":"","type":"address[]"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"user","type":"address"}],"name":"getTotalPurchase","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"user","type":"address"}],"name":"getUserTotalPurchase","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"kycVerified","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"newToken","outputs":[{"internalType":"contract INuurCoin","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"","type":"uint256"}],"name":"oldPresaleContracts","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"oldToken","outputs":[{"internalType":"contract IOldToken","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"pause","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"paused","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"user","type":"address"},{"internalType":"bool","name":"status","type":"bool"}],"name":"setKYC","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address[]","name":"users","type":"address[]"},{"internalType":"bool[]","name":"statuses","type":"bool[]"}],"name":"setKYCForBatch","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"startVesting","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"unpause","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"vestingInfo","outputs":[{"internalType":"uint256","name":"totalAmount","type":"uint256"},{"internalType":"uint256","name":"claimedAmount","type":"uint256"},{"internalType":"bool","name":"exists","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"vestingStartTime","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"vestingStarted","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"}];
-
   /* ------------------- DOM -------------------- */
   const connectBtn = document.getElementById('connectBtn');
   const themeToggle = document.getElementById('themeToggle');
-  const swapToggle = document.getElementById('swapToggle');
 
   const ctaAccountBox = document.getElementById('accountBox');
   const addrShort = document.getElementById('addrShort');
@@ -475,44 +466,47 @@
     clearTimeout(toastShow._t); toastShow._t = setTimeout(()=>{ toastEl.style.display = 'none'; toastEl.textContent = ''; }, 3800);
   }
   function short(addr){ return addr ? `${addr.slice(0,6)}…${addr.slice(-4)}` : '0x--'; }
+  
+  // Format SDA balance to 2 decimal places
+  function formatSdaBalance(balance) {
+    const num = parseFloat(ethers.utils.formatEther(balance));
+    return num.toFixed(2);
+  }
 
-  /* ----------------- Theme / Swap handling ------------------ */
+  /* ----------------- Theme handling ------------------ */
   const body = document.body;
   function applyStoredTheme(){
     const theme = localStorage.getItem('nuur:theme') || 'dark';
-    const swap = localStorage.getItem('nuur:swap') === 'true';
     body.setAttribute('data-theme', theme === 'light' ? 'light' : 'dark');
-    body.setAttribute('data-swap', swap ? 'true' : 'false');
+    updateThemeIcon(theme);
   }
+  
+  function updateThemeIcon(theme) {
+    const themeIcon = themeToggle.querySelector('i');
+    if (theme === 'light') {
+      themeIcon.className = 'fas fa-sun';
+    } else {
+      themeIcon.className = 'fas fa-moon';
+    }
+  }
+  
   applyStoredTheme();
 
-  // show both theme + swap toggles after wallet connect
-  function showThemeAndSwapToggles() {
+  // show theme toggle after wallet connect
+  function showThemeToggle() {
     const t = document.getElementById('themeToggle');
-    const s = document.getElementById('swapToggle');
     if (t) t.style.display = 'inline-block';
-    if (s) s.style.display = 'inline-block';
   }
 
-  // UI toggle handlers
-  const themeToggleBtn = document.getElementById('themeToggle');
-  if (themeToggleBtn) {
-    themeToggleBtn.addEventListener('click', ()=>{
+  // UI toggle handler
+  if (themeToggle) {
+    themeToggle.addEventListener('click', ()=>{
       const current = body.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
       const next = current === 'light' ? 'dark' : 'light';
       body.setAttribute('data-theme', next);
       localStorage.setItem('nuur:theme', next);
+      updateThemeIcon(next);
       toastShow(`Switched to ${next} theme`);
-    });
-  }
-
-  const swapBtn = document.getElementById('swapToggle');
-  if(swapBtn){
-    swapBtn.addEventListener('click', ()=>{
-      const current = body.getAttribute('data-swap') === 'true';
-      body.setAttribute('data-swap', !current ? 'true' : 'false');
-      localStorage.setItem('nuur:swap', (!current).toString());
-      toastShow(!current ? 'Colors swapped' : 'Colors restored');
     });
   }
 
@@ -537,8 +531,8 @@
       if (contractLink) contractLink.href = EXPLORER ? `${EXPLORER}/address/${CONTRACT_ADDR}` : '#';
       if (explorerTx) explorerTx.href = EXPLORER ? `${EXPLORER}` : '#';
 
-      // show toggles now wallet connected (and persist)
-      showThemeAndSwapToggles();
+      // show theme toggle now wallet connected
+      showThemeToggle();
 
       await loadAll();
       startPoll();
@@ -554,6 +548,7 @@
     if (ctaAccountBox) ctaAccountBox.style.display = 'none';
     if (openAdmin) openAdmin.style.display = 'none';
     if (disconnectBtn) disconnectBtn.style.display = 'none';
+    if (themeToggle) themeToggle.style.display = 'none';
     toastShow('Disconnected');
   }
 
@@ -562,7 +557,7 @@
     try {
       const [bNu, bSda] = await Promise.all([ tokenContract.balanceOf(account), provider.getBalance(account) ]);
       if (nuurBal) nuurBal.textContent = ethers.utils.formatUnits(bNu, decimals);
-      if (sdaBal) sdaBal.textContent = ethers.utils.formatEther(bSda);
+      if (sdaBal) sdaBal.textContent = formatSdaBalance(bSda); // Format SDA to 2 decimals
 
       const k = await contract.kycVerified(account);
       if (kycText) kycText.textContent = k ? 'Verified' : 'Not verified';
@@ -793,7 +788,7 @@
     });
   }
 
-  // load stored theme/swap at start
+  // load stored theme at start
   (function initTheme(){ applyStoredTheme(); })();
 
   // start countdown
