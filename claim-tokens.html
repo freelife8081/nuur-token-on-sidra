@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Nuur Vesting</title>
   <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -121,6 +121,141 @@
     .modal-backdrop { position: fixed; inset:0; display:none; align-items:center; justify-content:center; background: rgba(2,6,23,0.6); z-index:80; }
     .modal-backdrop.show { display:flex; }
     .modal { width: min(96%, 880px); background: var(--panel); border-radius: 12px; padding:16px; border:1px solid rgba(0,0,0,0.06); }
+    /* Base responsive improvements */
+.app {
+  box-sizing: border-box;
+  min-width: 320px;
+  padding: min(18px, 4vw);
+}
+
+.btn {
+  min-height: 44px; /* Better touch targets */
+  white-space: nowrap;
+}
+
+.form-input {
+  min-height: 44px; /* Better touch targets */
+}
+
+/* Update existing media queries */
+@media (max-width: 900px) {
+  .app { 
+    grid-template-columns: 1fr; 
+    padding: min(12px, 3vw);
+    gap: 12px;
+  }
+  
+  .sidebar {
+    padding: 16px;
+  }
+  
+  .main {
+    padding: 16px;
+  }
+  
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  
+  .panel {
+    padding: 16px;
+  }
+  
+  .claim-area {
+    flex-direction: column;
+    gap: 16px;
+    align-items: stretch;
+  }
+  
+  .claim-area .btn {
+    width: 100%;
+  }
+}
+
+@media (max-width: 600px) {
+  .app {
+    padding: min(8px, 2vw);
+  }
+  
+  .brand h1 {
+    font-size: 1.25rem;
+  }
+  
+  .controls {
+    flex-wrap: wrap;
+  }
+  
+  .btn {
+    padding: 10px 16px;
+    font-size: 0.9rem;
+    width: 100%;
+  }
+  
+  .countdown {
+    gap: 8px;
+  }
+  
+  .unit {
+    flex: 1;
+    min-width: 60px;
+    padding: 8px;
+  }
+  
+  .big-value {
+    font-size: 1.25rem;
+  }
+  
+  .modal {
+    width: 90%;
+    padding: 16px;
+  }
+  
+  .form-input {
+    font-size: 16px; /* Prevent iOS zoom */
+  }
+}
+
+@media (max-width: 420px) {
+  .app {
+    padding: min(6px, 1.5vw);
+  }
+  
+  .controls {
+    gap: 8px;
+  }
+  
+  .panel, .card {
+    padding: 12px;
+  }
+  
+  .countdown {
+    gap: 4px;
+  }
+  
+  .unit {
+    min-width: 50px;
+    padding: 6px;
+  }
+  
+  .num {
+    font-size: 0.9rem;
+  }
+  
+  .lbl {
+    font-size: 0.7rem;
+  }
+  
+  /* Improve admin modal on mobile */
+  .modal {
+    padding: 12px;
+  }
+  
+  .modal .grid-2 {
+    grid-template-columns: 1fr;
+  }
+}
 
     /* responsive */
     @media (max-width: 900px) {
@@ -800,4 +935,4 @@
 })();
 </script>
 </body>
-</html>
+            </html>
