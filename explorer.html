@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0 user-scalable=no"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0 "/>
   <title>NUUR Coin Ledger</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -559,11 +559,36 @@
       display: flex;
       justify-content: space-between;
       margin-bottom: 10px;
+      align-items: center;
     }
 
     .mobile-card-label {
       font-weight: 600;
       color: var(--text-light);
+      min-width: 100px;
+    }
+
+    .mobile-card-value {
+      flex: 1;
+      text-align: right;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+
+    .mobile-txn-link {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.9rem;
+    }
+
+    .mobile-txn-link i {
+      font-size: 0.8rem;
     }
 
     /* Load More */
@@ -767,6 +792,17 @@
       
       .footer-btn {
         justify-content: center;
+      }
+      
+      .mobile-card-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+      }
+      
+      .mobile-card-value {
+        justify-content: flex-start;
+        width: 100%;
       }
     }
   </style>
@@ -1559,21 +1595,32 @@
           </div>
           <div class="mobile-card-row">
             <span class="mobile-card-label">From:</span>
-            <span>${tx.fromDisplay} <i class="fas fa-copy copy-icon" onclick="copyToClipboard('${tx.from}')"></i></span>
+            <div class="mobile-card-value">
+              <span>${tx.fromDisplay}</span>
+              <i class="fas fa-copy copy-icon" onclick="copyToClipboard('${tx.from}')"></i>
+            </div>
           </div>
           <div class="mobile-card-row">
             <span class="mobile-card-label">To:</span>
-            <span>${tx.toDisplay} <i class="fas fa-copy copy-icon" onclick="copyToClipboard('${tx.to}')"></i></span>
+            <div class="mobile-card-value">
+              <span>${tx.toDisplay}</span>
+              <i class="fas fa-copy copy-icon" onclick="copyToClipboard('${tx.to}')"></i>
+            </div>
           </div>
           <div class="mobile-card-row">
             <span class="mobile-card-label">Amount:</span>
-            <span class="${getAmountClass(tx.from, tx.to)}">${tx.amount.toFixed(2)} NUUR</span>
+            <div class="mobile-card-value">
+              <span class="${getAmountClass(tx.from, tx.to)}">${tx.amount.toFixed(2)} NUUR</span>
+            </div>
           </div>
           <div class="mobile-card-row">
             <span class="mobile-card-label">Transaction:</span>
-            <a class="txn-link" href="https://ledger.sidrachain.com/tx/${tx.hash}" target="_blank" rel="noopener noreferrer">
-              View <i class="fas fa-external-link-alt"></i>
-            </a>
+            <div class="mobile-card-value">
+              <a class="mobile-txn-link" href="https://ledger.sidrachain.com/tx/${tx.hash}" target="_blank" rel="noopener noreferrer">
+                ${tx.hash.slice(0, 10)}... <i class="fas fa-external-link-alt"></i>
+              </a>
+              <i class="fas fa-copy copy-icon" onclick="copyToClipboard('${tx.hash}')"></i>
+            </div>
           </div>
         `;
         mobileLedger.appendChild(card);
