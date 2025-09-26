@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0 "/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0 user-scalable=no"/>
   <title>NUUR Coin Ledger</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -230,10 +230,97 @@
       color: var(--text-light);
     }
 
+    .wallet-tabs {
+      display: flex;
+      margin-bottom: 20px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .wallet-tab {
+      padding: 12px 24px;
+      background: none;
+      border: none;
+      color: var(--text-light);
+      font-weight: 500;
+      cursor: pointer;
+      transition: var(--transition);
+      border-bottom: 3px solid transparent;
+    }
+
+    .wallet-tab.active {
+      color: var(--primary);
+      border-bottom-color: var(--primary);
+    }
+
+    .wallet-tab:hover {
+      color: var(--primary);
+    }
+
+    .wallet-transactions {
+      max-height: 400px;
+      overflow-y: auto;
+    }
+
+    .wallet-txn-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px;
+      border-bottom: 1px solid var(--border);
+      transition: var(--transition);
+    }
+
+    .wallet-txn-item:hover {
+      background: var(--bg-hover);
+    }
+
+    .wallet-txn-item:last-child {
+      border-bottom: none;
+    }
+
+    .wallet-txn-details {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .wallet-txn-amount {
+      font-weight: 600;
+      font-size: 1.1rem;
+    }
+
+    .wallet-txn-amount.received {
+      color: var(--incoming);
+    }
+
+    .wallet-txn-amount.sent {
+      color: var(--outgoing);
+    }
+
+    .wallet-txn-date {
+      font-size: 0.85rem;
+      color: var(--text-light);
+    }
+
+    .wallet-txn-address {
+      font-size: 0.9rem;
+      color: var(--text-light);
+    }
+
+    .wallet-txn-link {
+      color: var(--primary);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.9rem;
+    }
+
     .wallet-charts {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 20px;
+      margin-top: 20px;
     }
 
     .chart-container {
@@ -585,6 +672,10 @@
       align-items: center;
       gap: 5px;
       font-size: 0.9rem;
+      padding: 5px 10px;
+      background: rgba(139, 95, 191, 0.1);
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--primary);
     }
 
     .mobile-txn-link i {
@@ -775,6 +866,11 @@
         flex-direction: column;
         text-align: center;
       }
+      
+      .mobile-txn-link {
+        padding: 8px 12px;
+        font-size: 0.85rem;
+      }
     }
 
     @media (max-width: 480px) {
@@ -803,6 +899,28 @@
       .mobile-card-value {
         justify-content: flex-start;
         width: 100%;
+        margin-top: 5px;
+      }
+      
+      .mobile-txn-link {
+        width: 100%;
+        justify-content: center;
+        margin-top: 10px;
+      }
+      
+      .wallet-tabs {
+        flex-direction: column;
+      }
+      
+      .wallet-tab {
+        text-align: center;
+        border-bottom: 1px solid var(--border);
+        border-left: 3px solid transparent;
+      }
+      
+      .wallet-tab.active {
+        border-left-color: var(--primary);
+        border-bottom-color: var(--border);
       }
     }
   </style>
@@ -853,6 +971,16 @@
             <div class="wallet-stat-value" id="total-txns">0</div>
             <div class="wallet-stat-label">Total Transactions</div>
           </div>
+        </div>
+        
+        <div class="wallet-tabs">
+          <button class="wallet-tab active" data-tab="received">Received</button>
+          <button class="wallet-tab" data-tab="sent">Sent</button>
+          <button class="wallet-tab" data-tab="all">All Transactions</button>
+        </div>
+        
+        <div class="wallet-transactions" id="wallet-transactions">
+          <!-- Wallet transactions will be populated here -->
         </div>
         
         <div class="wallet-charts">
@@ -1011,6 +1139,8 @@
     const firstTxn = document.getElementById('first-txn');
     const lastTxn = document.getElementById('last-txn');
     const totalTxns = document.getElementById('total-txns');
+    const walletTransactions = document.getElementById('wallet-transactions');
+    const walletTabs = document.querySelectorAll('.wallet-tab');
 
     // State
     let allTransactions = [];
@@ -1020,6 +1150,8 @@
     let userAddress = null;
     let walletActivityChart = null;
     let txnTimelineChart = null;
+    let currentWalletTransactions = [];
+    let currentActiveTab = 'received';
 
     // Caches
     const txCache = new Map();
@@ -1151,19 +1283,19 @@
         return;
       }
       
-      const walletTransactions = allTransactions.filter(tx => 
+      currentWalletTransactions = allTransactions.filter(tx => 
         tx.from.toLowerCase() === address.toLowerCase() || 
         tx.to.toLowerCase() === address.toLowerCase()
       );
       
-      if (walletTransactions.length === 0) {
+      if (currentWalletTransactions.length === 0) {
         showTooltip('No transactions found for this wallet');
         return;
       }
       
       // Calculate wallet balance
       let balance = 0;
-      walletTransactions.forEach(tx => {
+      currentWalletTransactions.forEach(tx => {
         if (tx.to.toLowerCase() === address.toLowerCase()) {
           balance += tx.amount;
         } else if (tx.from.toLowerCase() === address.toLowerCase()) {
@@ -1172,7 +1304,7 @@
       });
       
       // Find first and last transaction
-      const sortedByTime = walletTransactions.sort((a, b) => a.timestamp - b.timestamp);
+      const sortedByTime = currentWalletTransactions.sort((a, b) => a.timestamp - b.timestamp);
       const firstTransaction = sortedByTime[0];
       const lastTransaction = sortedByTime[sortedByTime.length - 1];
       
@@ -1180,13 +1312,67 @@
       walletBalance.textContent = balance.toFixed(2);
       firstTxn.textContent = firstTransaction ? formatDateShort(firstTransaction.timestamp) : 'N/A';
       lastTxn.textContent = lastTransaction ? formatDateShort(lastTransaction.timestamp) : 'N/A';
-      totalTxns.textContent = walletTransactions.length;
+      totalTxns.textContent = currentWalletTransactions.length;
       
       // Show wallet info
       walletInfo.style.display = 'block';
       
+      // Render transactions for current tab
+      renderWalletTransactions(address);
+      
       // Create charts
-      createWalletCharts(walletTransactions, address);
+      createWalletCharts(currentWalletTransactions, address);
+    }
+
+    function renderWalletTransactions(walletAddress) {
+      let filteredTransactions = [];
+      
+      switch(currentActiveTab) {
+        case 'received':
+          filteredTransactions = currentWalletTransactions.filter(tx => 
+            tx.to.toLowerCase() === walletAddress.toLowerCase()
+          );
+          break;
+        case 'sent':
+          filteredTransactions = currentWalletTransactions.filter(tx => 
+            tx.from.toLowerCase() === walletAddress.toLowerCase()
+          );
+          break;
+        case 'all':
+          filteredTransactions = currentWalletTransactions;
+          break;
+      }
+      
+      // Sort by timestamp (newest first)
+      filteredTransactions.sort((a, b) => b.timestamp - a.timestamp);
+      
+      walletTransactions.innerHTML = '';
+      
+      if (filteredTransactions.length === 0) {
+        walletTransactions.innerHTML = '<div style="text-align: center; padding: 20px; color: var(--text-light)">No transactions found</div>';
+        return;
+      }
+      
+      filteredTransactions.forEach(tx => {
+        const isReceived = tx.to.toLowerCase() === walletAddress.toLowerCase();
+        const txnItem = document.createElement('div');
+        txnItem.className = 'wallet-txn-item';
+        txnItem.innerHTML = `
+          <div class="wallet-txn-details">
+            <div class="wallet-txn-amount ${isReceived ? 'received' : 'sent'}">
+              ${isReceived ? '+' : '-'} ${tx.amount.toFixed(2)} NUUR
+            </div>
+            <div class="wallet-txn-date">${formatTimestamp(tx.timestamp)}</div>
+            <div class="wallet-txn-address">
+              ${isReceived ? 'From: ' + getLabelForAddress(tx.from) : 'To: ' + getLabelForAddress(tx.to)}
+            </div>
+          </div>
+          <a class="wallet-txn-link" href="https://ledger.sidrachain.com/tx/${tx.hash}" target="_blank" rel="noopener noreferrer">
+            View <i class="fas fa-external-link-alt"></i>
+          </a>
+        `;
+        walletTransactions.appendChild(txnItem);
+      });
     }
 
     function createWalletCharts(transactions, address) {
@@ -1617,7 +1803,7 @@
             <span class="mobile-card-label">Transaction:</span>
             <div class="mobile-card-value">
               <a class="mobile-txn-link" href="https://ledger.sidrachain.com/tx/${tx.hash}" target="_blank" rel="noopener noreferrer">
-                ${tx.hash.slice(0, 10)}... <i class="fas fa-external-link-alt"></i>
+                View Transaction <i class="fas fa-external-link-alt"></i>
               </a>
               <i class="fas fa-copy copy-icon" onclick="copyToClipboard('${tx.hash}')"></i>
             </div>
@@ -1806,6 +1992,22 @@
         }
       });
       
+      // Wallet tabs
+      walletTabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          // Remove active class from all tabs
+          walletTabs.forEach(t => t.classList.remove('active'));
+          // Add active class to clicked tab
+          tab.classList.add('active');
+          // Update current active tab
+          currentActiveTab = tab.dataset.tab;
+          // Re-render transactions for the selected tab
+          if (walletAddressInput.value.trim()) {
+            renderWalletTransactions(walletAddressInput.value.trim());
+          }
+        });
+      });
+      
       // Table sorting
       document.querySelectorAll('th[data-sort]').forEach(th => {
         th.addEventListener('click', () => {
@@ -1865,4 +2067,4 @@
     init();
   </script>
 </body>
-</html>
+              </html>
