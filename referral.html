@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NUUR Referral</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      color: #fff;
+      overflow-x: hidden;
+      padding: 20px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 420px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.08);
+      padding: 2.5rem 2rem;
+      border-radius: 24px;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+      width: 100%;
+      text-align: center;
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      animation: slideIn 0.8s ease forwards;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #00d4ff, #00aacc);
+    }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .logo {
+      width: 100px;
+      margin-bottom: 1.5rem;
+      filter: brightness(0) invert(1);
+    }
+
+    h2 {
+      margin-bottom: 1.5rem;
+      font-weight: 600;
+      font-size: 1.5rem;
+      color: #fff;
+    }
+
+    .input-group {
+      margin-bottom: 1rem;
+      text-align: left;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-size: 0.9rem;
+      color: #ccefff;
+      font-weight: 500;
+    }
+
+    input {
+      width: 100%;
+      padding: 1rem;
+      margin: 0.25rem 0;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      outline: none;
+      font-size: 1rem;
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+      transition: all 0.3s;
+    }
+
+    input::placeholder {
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    input:focus {
+      box-shadow: 0 0 0 2px rgba(0, 212, 255, 0.5);
+      border-color: #00d4ff;
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    .button-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      margin-top: 1.5rem;
+    }
+
+    button {
+      padding: 1rem;
+      border: none;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+    }
+
+    button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    button.primary {
+      background: linear-gradient(135deg, #00d4ff, #00aacc);
+      color: #000;
+    }
+
+    button.primary:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 15px rgba(0, 212, 255, 0.4);
+    }
+
+    button.secondary {
+      background: transparent;
+      border: 1px solid rgba(0, 212, 255, 0.5);
+      color: #00d4ff;
+    }
+
+    button.secondary:hover {
+      background: rgba(0, 212, 255, 0.1);
+      transform: translateY(-2px);
+    }
+
+    .info {
+      font-size: 0.85rem;
+      margin-top: 1.5rem;
+      color: #ccefff;
+      opacity: 0.8;
+      line-height: 1.5;
+    }
+
+    .success {
+      display: none;
+      text-align: center;
+      animation: fadeIn 0.5s ease forwards;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .checkmark {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      display: inline-block;
+      border: 4px solid #00d4ff;
+      position: relative;
+      margin-bottom: 1.5rem;
+      animation: pop 0.5s ease forwards;
+    }
+
+    .checkmark:after {
+      content: '';
+      position: absolute;
+      left: 22px;
+      top: 10px;
+      width: 20px;
+      height: 40px;
+      border-right: 4px solid #00d4ff;
+      border-bottom: 4px solid #00d4ff;
+      transform: rotate(45deg);
+      animation: draw 0.5s ease 0.3s forwards;
+      opacity: 0;
+    }
+
+    @keyframes pop {
+      from { transform: scale(0.5); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    @keyframes draw {
+      to { opacity: 1; }
+    }
+
+    .loading {
+      display: none;
+      width: 24px;
+      height: 24px;
+      border: 3px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      border-top-color: #fff;
+      animation: spin 1s ease-in-out infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .error-message {
+      color: #ff6b6b;
+      font-size: 0.85rem;
+      margin-top: 0.5rem;
+      text-align: left;
+      display: none;
+    }
+
+    .address-helper {
+      font-size: 0.75rem;
+      color: rgba(255, 255, 255, 0.6);
+      margin-top: 0.25rem;
+      text-align: left;
+    }
+
+    .powered-by {
+      margin-top: 1.5rem;
+      font-size: 0.8rem;
+      color: rgba(255, 255, 255, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+    }
+
+    .powered-by img {
+      height: 16px;
+      filter: brightness(0) invert(1);
+    }
+
+    @media (max-width: 480px) {
+      .card {
+        padding: 2rem 1.5rem;
+      }
+      
+      h2 {
+        font-size: 1.3rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="card" id="referralCard">
+      <img src="logo.png" alt="NUUR Logo" class="logo">
+      <h2>Who referred you?</h2>
+      
+      <div class="input-group">
+        <label for="referrerInput">Referrer's Sidra Address</label>
+        <input type="text" id="referrerInput" placeholder="0x..." autocomplete="off">
+        <div class="error-message" id="errorMessage"></div>
+        <div class="address-helper">Enter the wallet address of the person who referred you</div>
+      </div>
+      
+      <div class="button-group">
+        <button class="primary" id="submitReferral">
+          <span>Submit Referral</span>
+          <div class="loading" id="submitLoading"></div>
+        </button>
+        <button class="secondary" id="skipReferral">Skip for now</button>
+      </div>
+      
+      <p class="info">You'll be asked to connect your wallet to confirm your referral.</p>
+      
+      <div class="powered-by">
+        <span>Powered by</span>
+        <img src="sidra.pnf" alt="Sidra Chain">
+        <span>Sidra Chain</span>
+      </div>
+    </div>
+
+    <div class="card success" id="successScreen">
+      <div class="checkmark"></div>
+      <h2>Thanks! Referral saved.</h2>
+      <p>Redirecting to presale...</p>
+      <div class="powered-by">
+        <span>Powered by</span>
+        <img src="sidra.png" alt="Sidra chain">
+        <span>Sidra Chain</span>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/ethers@6.6.0/dist/ethers.umd.min.js"></script>
+  <script>
+    const referralCard = document.getElementById('referralCard');
+    const successScreen = document.getElementById('successScreen');
+    const referrerInput = document.getElementById('referrerInput');
+    const errorMessage = document.getElementById('errorMessage');
+    const submitButton = document.getElementById('submitReferral');
+    const submitLoading = document.getElementById('submitLoading');
+
+    const contractAddress = "0xd0BAd194173A2C58088ADB4c5f0f450Cc5e797BD"; // Replace with deployed contract
+    const contractABI = [
+      "function registerReferral(address referrer) external"
+    ];
+
+    // Validate Ethereum address format
+    function isValidAddress(address) {
+      return /^0x[a-fA-F0-9]{40}$/.test(address);
+    }
+
+    // Show error message
+    function showError(message) {
+      errorMessage.textContent = message;
+      errorMessage.style.display = 'block';
+      referrerInput.style.borderColor = '#ff6b6b';
+    }
+
+    // Hide error message
+    function hideError() {
+      errorMessage.style.display = 'none';
+      referrerInput.style.borderColor = 'rgba(255, 255, 255, 0.2)';
+    }
+
+    // Validate input on change
+    referrerInput.addEventListener('input', function() {
+      const value = this.value.trim();
+      if (value && !isValidAddress(value)) {
+        showError('Please enter a valid Ethereum address');
+      } else {
+        hideError();
+      }
+    });
+
+    async function submitReferral() {
+      const referrer = referrerInput.value.trim();
+      
+      if (!referrer) {
+        showError('Please enter a referral address');
+        return;
+      }
+
+      if (!isValidAddress(referrer)) {
+        showError('Please enter a valid Ethereum address');
+        return;
+      }
+
+      if (!window.ethereum) {
+        showError('MetaMask not found. Please install MetaMask to continue.');
+        return;
+      }
+
+      try {
+        // Show loading state
+        submitButton.disabled = true;
+        submitLoading.style.display = 'block';
+        submitButton.querySelector('span').textContent = 'Processing...';
+
+        const provider = new ethers.BrowserProvider(window.ethereum);
+        await provider.send("eth_requestAccounts", []);
+        const signer = await provider.getSigner();
+        const contract = new ethers.Contract(contractAddress, contractABI, signer);
+
+        const tx = await contract.registerReferral(referrer);
+        await tx.wait();
+
+        referralCard.style.display = "none";
+        successScreen.style.display = "block";
+        
+        setTimeout(() => {
+          window.location.href = "home";
+        }, 3000);
+      } catch (err) {
+        console.error(err);
+        if (err.code === 4001) {
+          showError('Transaction was rejected by user');
+        } else if (err.message.includes('user rejected')) {
+          showError('Transaction was rejected by user');
+        } else {
+          showError('Transaction failed: ' + err.message);
+        }
+        
+        // Reset button state
+        submitButton.disabled = false;
+        submitLoading.style.display = 'none';
+        submitButton.querySelector('span').textContent = 'Submit Referral';
+      }
+    }
+
+    document.getElementById('submitReferral').addEventListener('click', submitReferral);
+    document.getElementById('skipReferral').addEventListener('click', () => {
+      window.location.href = "home";
+    });
+  </script>
+</body>
+</html>
