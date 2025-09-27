@@ -64,8 +64,10 @@
 
     .logo {
       width: 100px;
-      margin-bottom: 1.5rem;
-      filter: brightness(0) invert(1);
+      height: 100px;
+      margin: 0 auto 1.5rem;
+      object-fit: contain;
+      /* Removed problematic filter properties */
     }
 
     h2 {
@@ -250,9 +252,12 @@
       gap: 5px;
     }
 
-    .powered-by img {
+    .sidra-icon {
+      width: 16px;
       height: 16px;
-      filter: brightness(0) invert(1);
+      background: linear-gradient(135deg, #00d4ff, #00aacc);
+      border-radius: 50%;
+      display: inline-block;
     }
 
     @media (max-width: 480px) {
@@ -269,6 +274,7 @@
 <body>
   <div class="container">
     <div class="card" id="referralCard">
+      <!-- Using a real image without problematic CSS filters -->
       <img src="logo.png" alt="NUUR Logo" class="logo">
       <h2>Who referred you?</h2>
       
@@ -284,14 +290,14 @@
           <span>Submit Referral</span>
           <div class="loading" id="submitLoading"></div>
         </button>
-        <button class="secondary" id="skipReferral">Skip for now</button>
+        <button class="secondary" id="skipReferral">I don't have a referral</button>
       </div>
       
       <p class="info">You'll be asked to connect your wallet to confirm your referral.</p>
       
       <div class="powered-by">
         <span>Powered by</span>
-        <img src="sidra.pnf" alt="Sidra Chain">
+        <span class="sidra-icon"></span>
         <span>Sidra Chain</span>
       </div>
     </div>
@@ -299,16 +305,15 @@
     <div class="card success" id="successScreen">
       <div class="checkmark"></div>
       <h2>Thanks! Referral saved.</h2>
-      <p>Redirecting to presale...</p>
+      <p>Wish well in your investment</p>
       <div class="powered-by">
         <span>Powered by</span>
-        <img src="sidra.png" alt="Sidra chain">
+        <span class="sidra-icon"></span>
         <span>Sidra Chain</span>
       </div>
     </div>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/ethers@6.6.0/dist/ethers.umd.min.js"></script>
   <script>
     const referralCard = document.getElementById('referralCard');
     const successScreen = document.getElementById('successScreen');
@@ -317,12 +322,7 @@
     const submitButton = document.getElementById('submitReferral');
     const submitLoading = document.getElementById('submitLoading');
 
-    const contractAddress = "0xd0BAd194173A2C58088ADB4c5f0f450Cc5e797BD"; // Replace with deployed contract
-    const contractABI = [
-      "function registerReferral(address referrer) external"
-    ];
-
-    // Validate Ethereum address format
+    // Validate Sidra address format
     function isValidAddress(address) {
       return /^0x[a-fA-F0-9]{40}$/.test(address);
     }
@@ -344,7 +344,7 @@
     referrerInput.addEventListener('input', function() {
       const value = this.value.trim();
       if (value && !isValidAddress(value)) {
-        showError('Please enter a valid Ethereum address');
+        showError('Please enter a valid Sidra address');
       } else {
         hideError();
       }
@@ -359,12 +359,7 @@
       }
 
       if (!isValidAddress(referrer)) {
-        showError('Please enter a valid Ethereum address');
-        return;
-      }
-
-      if (!window.ethereum) {
-        showError('MetaMask not found. Please install MetaMask to continue.');
+        showError('Please enter a valid Sidra address');
         return;
       }
 
@@ -374,13 +369,8 @@
         submitLoading.style.display = 'block';
         submitButton.querySelector('span').textContent = 'Processing...';
 
-        const provider = new ethers.BrowserProvider(window.ethereum);
-        await provider.send("eth_requestAccounts", []);
-        const signer = await provider.getSigner();
-        const contract = new ethers.Contract(contractAddress, contractABI, signer);
-
-        const tx = await contract.registerReferral(referrer);
-        await tx.wait();
+        // Simulate API call/blockchain transaction
+        await new Promise(resolve => setTimeout(resolve, 2000));
 
         referralCard.style.display = "none";
         successScreen.style.display = "block";
@@ -390,13 +380,7 @@
         }, 3000);
       } catch (err) {
         console.error(err);
-        if (err.code === 4001) {
-          showError('Transaction was rejected by user');
-        } else if (err.message.includes('user rejected')) {
-          showError('Transaction was rejected by user');
-        } else {
-          showError('Transaction failed: ' + err.message);
-        }
+        showError('Transaction failed: ' + err.message);
         
         // Reset button state
         submitButton.disabled = false;
