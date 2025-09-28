@@ -1,22 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Nuur coin</title>
+  <!-- Metadata -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nuur Coin</title>
+  <meta name="description" content="Nuur Coin — the next generation digital asset built on Sidra Chain. Secure your tokens, manage vesting, and explore the ecosystem.">
+  <meta name="keywords" content="Nuur Coin, Sidra Chain, crypto, blockchain, presale, vesting, token">
+  <meta name="author" content="Nuur Team">
+  <meta name="theme-color" content="#00d4ff">
+
+  <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
   <style>
     *{box-sizing:border-box;margin:0;padding:0}
-    body{
-      font-family:'Poppins',sans-serif;display:flex;justify-content:center;align-items:center;
-      min-height:100vh;background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
-      color:#fff;padding:20px
-    }
+    body{font-family:'Poppins',sans-serif;display:flex;justify-content:center;align-items:center;
+      min-height:100vh;background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);color:#fff;padding:20px}
     .container{width:100%;max-width:480px;display:flex;flex-direction:column;align-items:center;gap:20px}
-    .card{
-      background:rgba(255,255,255,0.08);padding:2.5rem 2rem;border-radius:24px;width:100%;text-align:center;
-      backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.1);animation:slideIn .8s ease forwards;position:relative
-    }
+    .card{background:rgba(255,255,255,0.08);padding:2.5rem 2rem;border-radius:24px;width:100%;text-align:center;
+      backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.1);animation:slideIn .8s ease forwards;position:relative}
     .card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,#00d4ff,#00aacc)}
     @keyframes slideIn{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
     h2{margin-bottom:1rem;font-weight:600;font-size:1.5rem}
@@ -33,42 +36,26 @@
     .toast.show{opacity:1;transform:translateY(0)}
     .toast.success{border-left:5px solid #00d4ff}
     .toast.error{border-left:5px solid #ff6b6b}
-    ul{list-style:none;padding:0;margin:0}
-    ul li{padding:6px 0;border-bottom:1px solid rgba(255,255,255,.1);font-size:.85rem}
   </style>
 </head>
 <body>
   <div class="container">
-    <!-- Referral Card -->
-    <div class="card" id="referralCard">
-      <img src="logo.png" alt="NUUR Logo" class="logo" style="width:100px;margin-bottom:1rem;">
-      <h2>Who referred you?</h2>
+    <div class="card" id="landingCard">
+      <img src="logo.png" alt="Nuur Coin Logo" class="logo" style="width:100px;margin-bottom:1rem;">
+      <h2>Nuur Coin</h2>
+
+      <div class="input-group">
+        <label for="referrerInput">Referrer Address</label>
+        <input type="text" id="referrerInput" placeholder="0x..." />
+      </div>
+
       <div class="button-group">
         <button class="primary" id="connectWallet">Connect Wallet</button>
+        <button class="secondary" id="submitReferral">Submit Referral</button>
+        <button class="secondary" id="checkStatus">Check Status</button>
       </div>
-      <div class="input-group">
-        <label for="referrerInput">Referrer's Sidra Address</label>
-        <input type="text" id="referrerInput" placeholder="0x..." autocomplete="off">
-        <div class="error-message" id="errorMessage" style="color:#ff6b6b;font-size:.85rem;display:none;"></div>
-      </div>
-      <div class="button-group">
-        <button class="primary" id="submitReferral"><span>Submit Referral</span></button>
-        <button class="secondary" id="skipReferral">I don't have a referral</button>
-      </div>
-      <p class="info">You'll be asked to confirm your referral with MetaMask.</p>
-    </div>
 
-    <!-- Success Screen -->
-    <div class="card success" id="successScreen">
-      <h2>Thanks! Referral saved.</h2>
-      <p id="referrerDisplay"></p>
-    </div>
-
-    <!-- Admin View -->
-    <div class="card" id="adminCard" style="display:none;">
-      <h2>Admin Panel</h2>
-      <p>Total referrals: <span id="totalReferrals">0</span></p>
-      <ul id="referralList"></ul>
+      <p class="info">You'll be asked to connect your wallet for confirmation</p>
     </div>
   </div>
 
@@ -77,101 +64,64 @@
   <script src="https://cdn.jsdelivr.net/npm/ethers@6.6.0/dist/ethers.min.js"></script>
   <script>
     let currentWallet = null;
+    let provider, signer, contract;
 
-    const referralCard=document.getElementById('referralCard');
-    const successScreen=document.getElementById('successScreen');
-    const referrerInput=document.getElementById('referrerInput');
-    const errorMessage=document.getElementById('errorMessage');
-    const referrerDisplay=document.getElementById('referrerDisplay');
-    const adminCard=document.getElementById('adminCard');
-    const totalReferrals=document.getElementById('totalReferrals');
-    const referralList=document.getElementById('referralList');
-    const toast=document.getElementById('toast');
-
-    const REFERRAL_CONTRACT="0xd0BAd194173A2C58088ADB4c5f0f450Cc5e797BD";
-    const REFERRAL_ABI= [{"inputs":[],"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"previousOwner","type":"address"},{"indexed":true,"internalType":"address","name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"},{"anonymous":false,"inputs":[],"name":"Paused","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"user","type":"address"},{"indexed":true,"internalType":"address","name":"previousReferrer","type":"address"}],"name":"ReferralCleared","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"user","type":"address"},{"indexed":true,"internalType":"address","name":"referrer","type":"address"}],"name":"ReferralRegistered","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"user","type":"address"},{"indexed":true,"internalType":"address","name":"referrer","type":"address"}],"name":"ReferralSetByOwner","type":"event"},{"anonymous":false,"inputs":[],"name":"Unpaused","type":"event"},{"inputs":[{"internalType":"address","name":"user","type":"address"}],"name":"clearReferral","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"user","type":"address"}],"name":"getReferrer","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"pause","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"paused","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"referrer","type":"address"}],"name":"referralCountOf","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"referrer","type":"address"}],"name":"registerReferral","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"user","type":"address"},{"internalType":"address","name":"referrer","type":"address"}],"name":"setReferralFor","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"unpause","outputs":[],"stateMutability":"nonpayable","type":"function"}];
-
+    const toast = document.getElementById('toast');
     function showToast(msg,type="success"){
       toast.textContent=msg;
       toast.className="toast "+type+" show";
       setTimeout(()=>toast.className="toast "+type,4000);
     }
-    function isValidAddress(addr){return /^0x[a-fA-F0-9]{40}$/.test(addr);}
-    function sliceAddress(a){return a.slice(0,6)+"..."+a.slice(-4);}
 
-    async function getProviderAndSigner(){
-      if(!window.ethereum) throw new Error("MetaMask not found");
-      try{
-        const provider=new ethers.BrowserProvider(window.ethereum);
-        await provider.send("eth_requestAccounts",[]);
-        return {provider,signer:await provider.getSigner()};
-      }catch{
-        const provider=new ethers.providers.Web3Provider(window.ethereum);
-        await provider.send("eth_requestAccounts",[]);
-        return {provider,signer:provider.getSigner()};
-      }
-    }
+    // ====== CONTRACT SETUP ======
+    const CONTRACT_ADDRESS = "0xd0BAd194173A2C58088ADB4c5f0f450Cc5e797BD"; // replace with deployed contract
+    const CONTRACT_ABI = [{"inputs":[],"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"previousOwner","type":"address"},{"indexed":true,"internalType":"address","name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"},{"anonymous":false,"inputs":[],"name":"Paused","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"user","type":"address"},{"indexed":true,"internalType":"address","name":"previousReferrer","type":"address"}],"name":"ReferralCleared","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"user","type":"address"},{"indexed":true,"internalType":"address","name":"referrer","type":"address"}],"name":"ReferralRegistered","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"user","type":"address"},{"indexed":true,"internalType":"address","name":"referrer","type":"address"}],"name":"ReferralSetByOwner","type":"event"},{"anonymous":false,"inputs":[],"name":"Unpaused","type":"event"},{"inputs":[{"internalType":"address","name":"user","type":"address"}],"name":"clearReferral","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"user","type":"address"}],"name":"getReferrer","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"pause","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"paused","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"referrer","type":"address"}],"name":"referralCountOf","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"referrer","type":"address"}],"name":"registerReferral","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"user","type":"address"},{"internalType":"address","name":"referrer","type":"address"}],"name":"setReferralFor","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"unpause","outputs":[],"stateMutability":"nonpayable","type":"function"}];
 
     async function connectWallet(){
+      if(!window.ethereum){showToast("MetaMask not found","error");return;}
       try{
-        const {signer}=await getProviderAndSigner();
-        currentWallet=await signer.getAddress();
-        showToast("Wallet connected: "+sliceAddress(currentWallet),"success");
-        checkReferralStatus();
-      }catch(e){showToast("Wallet connect failed: "+e.message,"error");}
+        provider = new ethers.BrowserProvider(window.ethereum);
+        await provider.send("eth_requestAccounts",[]);
+        signer = await provider.getSigner();
+        currentWallet = await signer.getAddress();
+        contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
+        showToast("Connected: "+currentWallet.slice(0,6)+"..."+currentWallet.slice(-4),"success");
+      }catch(e){
+        showToast("Wallet connect failed: "+e.message,"error");
+      }
     }
 
     async function submitReferral(){
-      const referrer=referrerInput.value.trim();
-      if(!isValidAddress(referrer)){errorMessage.textContent="Invalid address";errorMessage.style.display="block";return;}
-      if(!currentWallet){showToast("Connect wallet first","error");return;}
-      if(referrer.toLowerCase()===currentWallet.toLowerCase()){
-        showToast("You cannot refer yourself","error");return;
-      }
-      errorMessage.style.display="none";
+      if(!contract){showToast("Please connect wallet first","error");return;}
+      const referrer = document.getElementById("referrerInput").value.trim();
+      if(!/^0x[a-fA-F0-9]{40}$/.test(referrer)){showToast("Invalid address","error");return;}
+      if(referrer.toLowerCase()===currentWallet.toLowerCase()){showToast("You cannot refer yourself","error");return;}
       try{
-        const {signer}=await getProviderAndSigner();
-        const contract=new ethers.Contract(REFERRAL_CONTRACT,REFERRAL_ABI,signer);
-        const tx=await contract.setReferrer(referrer);
+        const tx = await contract.setReferrer(referrer);
         await tx.wait();
-        referralCard.style.display="none";successScreen.style.display="block";
-        referrerDisplay.textContent="Referred by "+sliceAddress(referrer);
-        showToast("Referral saved!","success");
-      }catch(e){showToast("Error: "+e.message,"error");}
+        showToast("Referral submitted successfully","success");
+      }catch(e){
+        showToast("Tx failed: "+e.message,"error");
+      }
     }
 
-    async function checkReferralStatus(){
-      if(!currentWallet) return;
+    async function checkStatus(){
+      if(!contract){showToast("Connect wallet first","error");return;}
       try{
-        const {provider}=await getProviderAndSigner();
-        const contract=new ethers.Contract(REFERRAL_CONTRACT,REFERRAL_ABI,provider);
-        const referrer=await contract.getReferrer(currentWallet);
-        const zeroAddr=ethers.ZeroAddress||ethers.constants.AddressZero;
-        if(referrer&&referrer!==zeroAddr){
-          referralCard.style.display="none";successScreen.style.display="block";
-          referrerDisplay.textContent="Referred by "+sliceAddress(referrer);
+        const ref = await contract.getReferrer(currentWallet);
+        if(ref === "0x0000000000000000000000000000000000000000"){
+          showToast("No referrer set","error");
+        }else{
+          showToast("Your referrer: "+ref.slice(0,6)+"..."+ref.slice(-4),"success");
         }
-        const owner=await contract.owner();
-        if(currentWallet.toLowerCase()===owner.toLowerCase()){loadAdmin(contract);}
-      }catch(e){console.warn("Status check failed:",e.message);}
+      }catch(e){
+        showToast("Error: "+e.message,"error");
+      }
     }
 
-    async function loadAdmin(contract){
-      adminCard.style.display="block";referralList.innerHTML="";
-      try{
-        const users=await contract.getReferredUsers(currentWallet);
-        totalReferrals.textContent=users.length;
-        users.forEach(u=>{
-          const li=document.createElement("li");
-          li.textContent=sliceAddress(u);
-          referralList.appendChild(li);
-        });
-      }catch(e){showToast("Admin load failed: "+e.message,"error");}
-    }
-
-    document.getElementById('connectWallet').addEventListener('click',connectWallet);
-    document.getElementById('submitReferral').addEventListener('click',submitReferral);
-    document.getElementById('skipReferral').addEventListener('click',()=>window.location.href="home");
+    document.getElementById("connectWallet").addEventListener("click",connectWallet);
+    document.getElementById("submitReferral").addEventListener("click",submitReferral);
+    document.getElementById("checkStatus").addEventListener("click",checkStatus);
   </script>
 </body>
 </html>
