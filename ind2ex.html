@@ -35,10 +35,16 @@
     .success{display:none;text-align:center}
     .toast{position:fixed;bottom:30px;right:30px;background:rgba(0,0,0,.85);color:#fff;padding:14px 20px;border-radius:12px;font-size:.9rem;opacity:0;transform:translateY(20px);transition:all .4s ease;z-index:9999}
     .toast.show{opacity:1;transform:translateY(0)}
-    .toast.success{border-left:5px solid #00d4ff}
-    .toast.error{border-left:5px solid #ff6b6b}
+    .toast.success-toast{border-left:5px solid #00d4ff}
+    .toast.error-toast{border-left:5px solid #ff6b6b}
     .wallet-info{margin-top:1rem;padding:.75rem;background:rgba(0,212,255,.1);border-radius:12px;font-size:.85rem;display:none}
     .no-referral-option{margin-top:.5rem;font-size:.85rem;color:#ccefff;cursor:pointer;text-decoration:underline}
+    .referral-status{margin-top:1rem;padding:.75rem;border-radius:12px;font-size:.85rem;display:none}
+    .referral-status.has-referral{background:rgba(0,255,0,.1);border:1px solid rgba(0,255,0,.3)}
+    .referral-status.no-referral{background:rgba(255,255,0,.1);border:1px solid rgba(255,255,0,.3)}
+    .loading{display:none;text-align:center;margin-top:1rem}
+    .spinner{border:3px solid rgba(255,255,255,.3);border-radius:50%;border-top:3px solid #00d4ff;width:30px;height:30px;animation:spin 1s linear infinite;margin:0 auto}
+    @keyframes spin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
   </style>
 </head>
 <body>
@@ -51,8 +57,12 @@
         Connected: <span id="walletAddress"></span>
       </div>
 
+      <div class="referral-status" id="referralStatus">
+        Referral Status: <span id="referralStatusText"></span>
+      </div>
+
       <div class="input-group">
-        <label for="referrerInput">Referrer Address</label>
+        <label for="referrerInput">Referrer Address (optional)</label>
         <input type="text" id="referrerInput" placeholder="0x..." />
         <div class="no-referral-option" id="noReferral">I don't have a referral</div>
       </div>
@@ -63,13 +73,19 @@
         <button class="tertiary" id="checkStatus">Check Status</button>
       </div>
 
+      <div class="loading" id="loading">
+        <div class="spinner"></div>
+        <p style="margin-top: 10px;">Processing... Please wait</p>
+      </div>
+
       <p class="info">You'll be asked to connect your wallet for confirmation</p>
     </div>
   </div>
 
   <div id="toast" class="toast"></div>
 
-  <script src="https://cdn.jsdelivr.net/npm/ethers@6.6.0/dist/ethers.min.js"></script>
+  <!-- FIX: Using UMD version instead of ES modules -->
+  <script src="https://cdn.jsdelivr.net/npm/ethers@6.6.0/dist/ethers.umd.min.js"></script>
   <script>
     let currentWallet = null;
     let provider, signer, contract;
@@ -77,12 +93,25 @@
     const toast = document.getElementById('toast');
     function showToast(msg, type="success"){
       toast.textContent = msg;
-      toast.className = "toast " + type + " show";
-      setTimeout(() => toast.className = "toast " + type, 4000);
+      toast.className = `toast ${type}-toast show`;
+      setTimeout(() => {
+        toast.className = `toast ${type}-toast`;
+      }, 4000);
+    }
+
+    function showLoading(show) {
+      document.getElementById('loading').style.display = show ? 'block' : 'none';
+    }
+
+    function redirectToHome() {
+      // Redirect to home page after a brief delay to show success message
+      setTimeout(() => {
+        window.location.href = 'home.html';
+      }, 2000);
     }
 
     // ====== CONTRACT SETUP ======
-    const CONTRACT_ADDRESS = "0xd0BAd194173A2C58088ADB4c5f0f450Cc5e797BD"; // replace with deployed contract
+    const CONTRACT_ADDRESS = "0xd0BAd194173A2C58088ADB4c5f0f450Cc5e797BD";
     const CONTRACT_ABI = [
       {"inputs":[],"stateMutability":"nonpayable","type":"constructor"},
       {"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"previousOwner","type":"address"},{"indexed":true,"internalType":"address","name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"},
@@ -110,9 +139,11 @@
       }
       
       try{
-        provider = new ethers.BrowserProvider(window.ethereum);
+        showLoading(true);
+        // FIX: Using the correct ethers syntax
+        provider = new ethers.providers.Web3Provider(window.ethereum);
         await provider.send("eth_requestAccounts", []);
-        signer = await provider.getSigner();
+        signer = provider.getSigner();
         currentWallet = await signer.getAddress();
         contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
         
@@ -121,10 +152,15 @@
           currentWallet.slice(0,6) + "..." + currentWallet.slice(-4);
         document.getElementById("walletInfo").style.display = "block";
         
+        // Check referral status automatically after connecting
+        await checkReferralStatus();
+        
         showToast("Wallet connected successfully!", "success");
       } catch(e){
         console.error("Wallet connection error:", e);
         showToast("Wallet connection failed: " + (e.message || "Unknown error"), "error");
+      } finally {
+        showLoading(false);
       }
     }
 
@@ -136,13 +172,15 @@
       
       const referrer = document.getElementById("referrerInput").value.trim();
       
-      // Check if the user selected "I don't have a referral"
+      // Handle no referral case - redirect immediately
       if(!referrer){
-        showToast("Please enter a referral address or select 'I don't have a referral'", "error");
+        showToast("Proceeding without referral. Redirecting...", "success");
+        redirectToHome();
         return;
       }
       
-      if(!/^0x[a-fA-F0-9]{40}$/.test(referrer)){
+      // Validate address format if provided
+      if(referrer && !/^0x[a-fA-F0-9]{40}$/.test(referrer)){
         showToast("Invalid Sidra address format", "error");
         return;
       }
@@ -153,25 +191,49 @@
       }
       
       try{
-        // Check if the contract has the setReferrer function
-        // If not, try registerReferral or setReferralFor
+        showLoading(true);
         let tx;
-        if (typeof contract.setReferrer === 'function') {
-          tx = await contract.setReferrer(referrer);
-        } else if (typeof contract.registerReferral === 'function') {
+        // Use the correct function name from the ABI
+        if (typeof contract.registerReferral === 'function') {
           tx = await contract.registerReferral(referrer);
-        } else if (typeof contract.setReferralFor === 'function') {
-          tx = await contract.setReferralFor(currentWallet, referrer);
         } else {
-          showToast("Contract function not found", "error");
+          showToast("Referral function not available in contract", "error");
           return;
         }
         
+        showToast("Transaction submitted. Waiting for confirmation...", "success");
         await tx.wait();
-        showToast("Referral submitted successfully!", "success");
+        showToast("Referral submitted successfully! Redirecting...", "success");
+        
+        // Update status display and redirect
+        await checkReferralStatus();
+        redirectToHome();
       } catch(e){
         console.error("Transaction error:", e);
         showToast("Transaction failed: " + (e.message || "Unknown error"), "error");
+      } finally {
+        showLoading(false);
+      }
+    }
+
+    async function checkReferralStatus(){
+      if(!contract || !currentWallet) return;
+      
+      try{
+        const ref = await contract.getReferrer(currentWallet);
+        const statusElement = document.getElementById("referralStatus");
+        const statusTextElement = document.getElementById("referralStatusText");
+        
+        if(ref === "0x0000000000000000000000000000000000000000"){
+          statusTextElement.textContent = "No referrer set";
+          statusElement.className = "referral-status no-referral";
+        } else {
+          statusTextElement.textContent = ref.slice(0,6) + "..." + ref.slice(-4);
+          statusElement.className = "referral-status has-referral";
+        }
+        statusElement.style.display = "block";
+      } catch(e){
+        console.error("Status check error:", e);
       }
     }
 
@@ -181,22 +243,21 @@
         return;
       }
       
-      try{
-        const ref = await contract.getReferrer(currentWallet);
-        if(ref === "0x0000000000000000000000000000000000000000"){
-          showToast("No referrer set for your address", "error");
-        } else {
-          showToast("Your referrer: " + ref.slice(0,6) + "..." + ref.slice(-4), "success");
-        }
-      } catch(e){
-        console.error("Status check error:", e);
-        showToast("Error checking status: " + (e.message || "Unknown error"), "error");
+      try {
+        showLoading(true);
+        await checkReferralStatus();
+        showToast("Status updated!", "success");
+      } catch(e) {
+        showToast("Error checking status", "error");
+      } finally {
+        showLoading(false);
       }
     }
 
     function handleNoReferral(){
       document.getElementById("referrerInput").value = "";
-      showToast("You've selected 'No referral'. You can proceed without a referral.", "success");
+      showToast("Proceeding without referral. Redirecting...", "success");
+      redirectToHome();
     }
 
     // Event listeners
