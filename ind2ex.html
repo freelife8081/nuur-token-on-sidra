@@ -84,7 +84,7 @@
 
   <div id="toast" class="toast"></div>
 
-  <!-- FIX: Using UMD version instead of ES modules -->
+  <!-- Using the correct ethers v6 UMD bundle -->
   <script src="https://cdn.jsdelivr.net/npm/ethers@6.6.0/dist/ethers.umd.min.js"></script>
   <script>
     let currentWallet = null;
@@ -140,10 +140,10 @@
       
       try{
         showLoading(true);
-        // FIX: Using the correct ethers syntax
-        provider = new ethers.providers.Web3Provider(window.ethereum);
+        // FIX: Correct ethers v6 syntax
+        provider = new ethers.BrowserProvider(window.ethereum);
         await provider.send("eth_requestAccounts", []);
-        signer = provider.getSigner();
+        signer = await provider.getSigner();
         currentWallet = await signer.getAddress();
         contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
         
