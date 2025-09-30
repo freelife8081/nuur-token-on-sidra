@@ -5,6 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Nuur Coin</title>
+  <script src="ip.js"></script>
   <meta name="description" content="Nuur Coin — the next generation digital asset built on Sidra Chain. Secure your tokens, manage vesting, and explore the ecosystem.">
   <meta name="keywords" content="Nuur Coin, Sidra Chain, crypto, blockchain, presale, vesting, token">
   <meta name="author" content="Nuur Team">
@@ -62,9 +63,9 @@
       </div>
 
       <div class="input-group">
-        <label for="referrerInput">Referrer Address (optional)</label>
+        <label for="referrerInput">Referrer Address</label>
         <input type="text" id="referrerInput" placeholder="0x..." />
-        <div class="no-referral-option" id="noReferral">I don't have a referral</div>
+        <div class="no-referral-option" id="noReferral">No referral? Skip...</div>
       </div>
 
       <div class="button-group">
@@ -266,5 +267,6 @@
     document.getElementById("checkStatus").addEventListener("click", checkStatus);
     document.getElementById("noReferral").addEventListener("click", handleNoReferral);
   </script>
+  
 </body>
 </html>
