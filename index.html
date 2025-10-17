@@ -1,58 +1,447 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- Metadata -->
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Nuur Coin</title>
-  <script src="ip.js"></script>
   <meta name="description" content="Nuur Coin — the next generation digital asset built on Sidra Chain. Secure your tokens, manage vesting, and explore the ecosystem.">
   <meta name="keywords" content="Nuur Coin, Sidra Chain, crypto, blockchain, presale, vesting, token">
   <meta name="author" content="Nuur Team">
-  <meta name="theme-color" content="#00d4ff">
+  <meta name="theme-color" content="#6C4BF5">
 
   <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <style>
-    *{box-sizing:border-box;margin:0;padding:0}
-    body{font-family:'Poppins',sans-serif;display:flex;justify-content:center;align-items:center;
-      min-height:100vh;background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);color:#fff;padding:20px}
-    .container{width:100%;max-width:480px;display:flex;flex-direction:column;align-items:center;gap:20px}
-    .card{background:rgba(255,255,255,0.08);padding:2.5rem 2rem;border-radius:24px;width:100%;text-align:center;
-      backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.1);animation:slideIn .8s ease forwards;position:relative}
-    .card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,#00d4ff,#00aacc)}
-    @keyframes slideIn{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
-    h2{margin-bottom:1rem;font-weight:600;font-size:1.5rem}
-    .input-group{margin-bottom:1rem;text-align:left}
-    label{display:block;margin-bottom:.5rem;font-size:.9rem;color:#ccefff;font-weight:500}
-    input{width:100%;padding:1rem;border-radius:12px;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.1);color:#fff;font-size:1rem}
-    .button-group{display:flex;flex-direction:column;gap:.75rem;margin-top:1rem}
-    button{padding:1rem;border:none;border-radius:12px;font-size:1rem;font-weight:600;cursor:pointer}
-    button.primary{background:linear-gradient(135deg,#00d4ff,#00aacc);color:#000}
-    button.secondary{background:transparent;border:1px solid rgba(0,212,255,.5);color:#00d4ff}
-    button.tertiary{background:transparent;border:1px solid rgba(255,255,255,.3);color:#fff}
-    .info{font-size:.85rem;margin-top:1rem;color:#ccefff;opacity:.8}
-    .success{display:none;text-align:center}
-    .toast{position:fixed;bottom:30px;right:30px;background:rgba(0,0,0,.85);color:#fff;padding:14px 20px;border-radius:12px;font-size:.9rem;opacity:0;transform:translateY(20px);transition:all .4s ease;z-index:9999}
-    .toast.show{opacity:1;transform:translateY(0)}
-    .toast.success-toast{border-left:5px solid #00d4ff}
-    .toast.error-toast{border-left:5px solid #ff6b6b}
-    .wallet-info{margin-top:1rem;padding:.75rem;background:rgba(0,212,255,.1);border-radius:12px;font-size:.85rem;display:none}
-    .no-referral-option{margin-top:.5rem;font-size:.85rem;color:#ccefff;cursor:pointer;text-decoration:underline}
-    .referral-status{margin-top:1rem;padding:.75rem;border-radius:12px;font-size:.85rem;display:none}
-    .referral-status.has-referral{background:rgba(0,255,0,.1);border:1px solid rgba(0,255,0,.3)}
-    .referral-status.no-referral{background:rgba(255,255,0,.1);border:1px solid rgba(255,255,0,.3)}
-    .loading{display:none;text-align:center;margin-top:1rem}
-    .spinner{border:3px solid rgba(255,255,255,.3);border-radius:50%;border-top:3px solid #00d4ff;width:30px;height:30px;animation:spin 1s linear infinite;margin:0 auto}
-    @keyframes spin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      font-family: 'Poppins', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #0A0A14 0%, #1A1A2E 50%, #16213E 100%);
+      color: #fff;
+      padding: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    body::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: 
+        radial-gradient(circle at 20% 80%, rgba(108, 75, 245, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(0, 212, 255, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 40% 40%, rgba(255, 107, 107, 0.05) 0%, transparent 50%);
+      z-index: -1;
+    }
+    
+    .container {
+      width: 100%;
+      max-width: 480px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      z-index: 1;
+    }
+    
+    .card {
+      background: rgba(18, 18, 30, 0.85);
+      padding: 2.5rem 2rem;
+      border-radius: 24px;
+      width: 100%;
+      text-align: center;
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      animation: slideIn 0.8s ease forwards;
+      position: relative;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+      overflow: hidden;
+    }
+    
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #6C4BF5, #00D4FF);
+      border-radius: 24px 24px 0 0;
+    }
+    
+    .card::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, rgba(108, 75, 245, 0.05) 0%, rgba(0, 212, 255, 0.05) 100%);
+      z-index: -1;
+    }
+    
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    h2 {
+      margin-bottom: 1rem;
+      font-weight: 700;
+      font-size: 2rem;
+      background: linear-gradient(90deg, #6C4BF5, #00D4FF);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 20px rgba(108, 75, 245, 0.3);
+    }
+    
+    .logo {
+      width: 100px;
+      height: 100px;
+      margin-bottom: 1rem;
+      filter: drop-shadow(0 0 15px rgba(108, 75, 245, 0.5));
+      border-radius: 20px;
+      margin: 0 auto 1.5rem;
+      object-fit: contain;
+    }
+    
+    .input-group {
+      margin-bottom: 1.5rem;
+      text-align: left;
+    }
+    
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-size: 0.9rem;
+      color: #B0B0CC;
+      font-weight: 500;
+    }
+    
+    input {
+      width: 100%;
+      padding: 1rem;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(30, 30, 46, 0.7);
+      color: #fff;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+    }
+    
+    input:focus {
+      outline: none;
+      border-color: #6C4BF5;
+      box-shadow: 0 0 0 2px rgba(108, 75, 245, 0.3);
+      background: rgba(40, 40, 60, 0.7);
+    }
+    
+    .button-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      margin-top: 1.5rem;
+    }
+    
+    button {
+      padding: 1rem;
+      border: none;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    button::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: left 0.5s;
+    }
+    
+    button:hover::before {
+      left: 100%;
+    }
+    
+    button.primary {
+      background: linear-gradient(135deg, #6C4BF5, #00D4FF);
+      color: #fff;
+      box-shadow: 0 5px 15px rgba(108, 75, 245, 0.4);
+    }
+    
+    button.primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(108, 75, 245, 0.6);
+    }
+    
+    button.secondary {
+      background: transparent;
+      border: 1px solid rgba(108, 75, 245, 0.5);
+      color: #B0B0FF;
+    }
+    
+    button.secondary:hover {
+      background: rgba(108, 75, 245, 0.1);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(108, 75, 245, 0.2);
+    }
+    
+    .info {
+      font-size: 0.85rem;
+      margin-top: 1.5rem;
+      color: #8A8AA8;
+      opacity: 0.8;
+      line-height: 1.5;
+    }
+    
+    .toast {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background: rgba(30, 30, 46, 0.95);
+      color: #fff;
+      padding: 14px 20px;
+      border-radius: 12px;
+      font-size: 0.9rem;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.4s ease;
+      z-index: 9999;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+      border-left: 4px solid #6C4BF5;
+      backdrop-filter: blur(10px);
+    }
+    
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    
+    .toast.success-toast {
+      border-left-color: #00D4FF;
+    }
+    
+    .toast.error-toast {
+      border-left-color: #FF6B6B;
+    }
+    
+    .wallet-info {
+      margin-top: 1rem;
+      padding: 0.75rem;
+      background: rgba(108, 75, 245, 0.1);
+      border-radius: 12px;
+      font-size: 0.85rem;
+      display: none;
+      border: 1px solid rgba(108, 75, 245, 0.2);
+      color: #B0B0FF;
+    }
+    
+    .referral-status {
+      margin-top: 1rem;
+      padding: 0.75rem;
+      border-radius: 12px;
+      font-size: 0.85rem;
+      display: none;
+      border: 1px solid rgba(0, 212, 255, 0.3);
+      color: #B0B0FF;
+    }
+    
+    .referral-status.has-referral {
+      background: rgba(0, 212, 255, 0.1);
+    }
+    
+    .referral-status.no-referral {
+      background: rgba(255, 107, 107, 0.1);
+    }
+    
+    .loading {
+      display: none;
+      text-align: center;
+      margin-top: 1rem;
+    }
+    
+    .spinner {
+      border: 3px solid rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+      border-top: 3px solid #6C4BF5;
+      width: 30px;
+      height: 30px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    /* New styles for the updated layout */
+    .connect-wallet-btn {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      padding: 0.6rem 1.2rem;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      background: linear-gradient(135deg, #6C4BF5, #00D4FF);
+      color: #fff;
+      border: none;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 10px rgba(108, 75, 245, 0.3);
+    }
+    
+    .connect-wallet-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 15px rgba(108, 75, 245, 0.5);
+    }
+    
+    .remember-option {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 1rem;
+      font-size: 0.85rem;
+      color: #B0B0CC;
+    }
+    
+    .remember-option input[type="checkbox"] {
+      width: auto;
+      transform: scale(1.2);
+      accent-color: #6C4BF5;
+    }
+    
+    .skip-section {
+      margin-top: 1.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    
+    .skip-option {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.75rem;
+    }
+    
+    .skip-text {
+      font-size: 0.9rem;
+      color: #B0B0CC;
+    }
+    
+    .tagline {
+      font-size: 0.9rem;
+      margin-bottom: 1.5rem;
+      color: #8A8AA8;
+      opacity: 0.9;
+    }
+    
+    .floating-shapes {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      z-index: -1;
+    }
+    
+    .shape {
+      position: absolute;
+      opacity: 0.1;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #6C4BF5, #00D4FF);
+      animation: float 20s infinite linear;
+    }
+    
+    .shape:nth-child(1) {
+      width: 80px;
+      height: 80px;
+      top: 10%;
+      left: 10%;
+      animation-delay: 0s;
+    }
+    
+    .shape:nth-child(2) {
+      width: 120px;
+      height: 120px;
+      top: 70%;
+      left: 80%;
+      animation-delay: -5s;
+    }
+    
+    .shape:nth-child(3) {
+      width: 60px;
+      height: 60px;
+      top: 50%;
+      left: 20%;
+      animation-delay: -10s;
+    }
+    
+    .shape:nth-child(4) {
+      width: 100px;
+      height: 100px;
+      top: 20%;
+      left: 70%;
+      animation-delay: -15s;
+    }
+    
+    @keyframes float {
+      0% {
+        transform: translate(0, 0) rotate(0deg);
+      }
+      25% {
+        transform: translate(10px, 15px) rotate(90deg);
+      }
+      50% {
+        transform: translate(20px, 5px) rotate(180deg);
+      }
+      75% {
+        transform: translate(5px, 20px) rotate(270deg);
+      }
+      100% {
+        transform: translate(0, 0) rotate(360deg);
+      }
+    }
   </style>
 </head>
 <body>
+  <div class="floating-shapes">
+    <div class="shape"></div>
+    <div class="shape"></div>
+    <div class="shape"></div>
+    <div class="shape"></div>
+  </div>
+  
   <div class="container">
     <div class="card" id="landingCard">
-      <img src="logo.png" alt="Nuur Coin Logo" class="logo" style="width:100px;margin-bottom:1rem;">
+      <!-- Connect Wallet button in top right corner -->
+      <button class="connect-wallet-btn" id="connectWallet">Connect Wallet</button>
+      
+      <!-- Actual logo image -->
+      <img src="logo.png" alt="Nuur Coin Logo" class="logo">
       <h2>Nuur Coin</h2>
+      <p class="tagline">The next generation digital asset on Sidra Chain</p>
       
       <div class="wallet-info" id="walletInfo">
         Connected: <span id="walletAddress"></span>
@@ -63,15 +452,28 @@
       </div>
 
       <div class="input-group">
-        <label for="referrerInput">Referrer Address</label>
+        <label for="referrerInput">Referrer Address (Optional)</label>
         <input type="text" id="referrerInput" placeholder="0x..." />
-        <div class="no-referral-option" id="noReferral">No referral? Skip</div>
+      </div>
+
+      <div class="remember-option">
+        <input type="checkbox" id="rememberReferral">
+        <label for="rememberReferral">Remember my choice</label>
       </div>
 
       <div class="button-group">
-        <button class="primary" id="connectWallet">Connect Wallet</button>
-        <button class="secondary" id="submitReferral">Submit Referral</button>
-        <button class="tertiary" id="checkStatus">Check Status</button>
+        <button class="primary" id="submitReferral">Submit Referral</button>
+      </div>
+      
+      <div class="skip-section">
+        <div class="skip-option">
+          <span class="skip-text">Don't have a referral?</span>
+          <button class="secondary" id="skipReferral">Skip</button>
+        </div>
+        <div class="remember-option">
+          <input type="checkbox" id="rememberSkip">
+          <label for="rememberSkip">Remember my choice</label>
+        </div>
       </div>
 
       <div class="loading" id="loading">
@@ -79,7 +481,7 @@
         <p style="margin-top: 10px;">Processing... Please wait</p>
       </div>
 
-      <p class="info">You'll be asked to connect your wallet for confirmation</p>
+      <p class="info">You'll be asked to connect your wallet for confirmation. Your referral cannot be changed once submitted.</p>
     </div>
   </div>
 
@@ -131,7 +533,7 @@
       {"inputs":[{"internalType":"address","name":"user","type":"address"},{"internalType":"address","name":"referrer","type":"address"}],"name":"setReferralFor","outputs":[],"stateMutability":"nonpayable","type":"function"},
       {"inputs":[{"internalType":"address","name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},
       {"inputs":[],"name":"unpause","outputs":[],"stateMutability":"nonpayable","type":"function"}
-    ];
+    ]; // Placeholder for actual ABI
 
     async function connectWallet(){
       if(!window.ethereum){
@@ -172,11 +574,11 @@
       }
       
       const referrer = document.getElementById("referrerInput").value.trim();
+      const rememberChoice = document.getElementById("rememberReferral").checked;
       
       // Handle no referral case - redirect immediately
       if(!referrer){
-        showToast("Proceeding without referral. Redirecting...", "success");
-        redirectToHome();
+        showToast("Please enter a referral address or use the Skip option", "error");
         return;
       }
       
@@ -205,6 +607,11 @@
         showToast("Transaction submitted. Waiting for confirmation...", "success");
         await tx.wait();
         showToast("Referral submitted successfully! Redirecting...", "success");
+        
+        // Store preference if requested
+        if (rememberChoice) {
+          localStorage.setItem('nuurCoinReferral', referrer);
+        }
         
         // Update status display and redirect
         await checkReferralStatus();
@@ -238,25 +645,12 @@
       }
     }
 
-    async function checkStatus(){
-      if(!contract){
-        showToast("Please connect your wallet first", "error");
-        return;
+    function handleSkipReferral(){
+      const rememberChoice = document.getElementById("rememberSkip").checked;
+      if (rememberChoice) {
+        // Store the skip preference in localStorage
+        localStorage.setItem('nuurCoinSkipReferral', 'true');
       }
-      
-      try {
-        showLoading(true);
-        await checkReferralStatus();
-        showToast("Status updated!", "success");
-      } catch(e) {
-        showToast("Error checking status", "error");
-      } finally {
-        showLoading(false);
-      }
-    }
-
-    function handleNoReferral(){
-      document.getElementById("referrerInput").value = "";
       showToast("Proceeding without referral. Redirecting...", "success");
       redirectToHome();
     }
@@ -264,9 +658,20 @@
     // Event listeners
     document.getElementById("connectWallet").addEventListener("click", connectWallet);
     document.getElementById("submitReferral").addEventListener("click", submitReferral);
-    document.getElementById("checkStatus").addEventListener("click", checkStatus);
-    document.getElementById("noReferral").addEventListener("click", handleNoReferral);
+    document.getElementById("skipReferral").addEventListener("click", handleSkipReferral);
+    
+    // Check if user previously made a choice
+    window.addEventListener('DOMContentLoaded', () => {
+      if (localStorage.getItem('nuurCoinSkipReferral') === 'true') {
+        redirectToHome();
+      }
+      
+      const savedReferral = localStorage.getItem('nuurCoinReferral');
+      if (savedReferral) {
+        document.getElementById("referrerInput").value = savedReferral;
+        document.getElementById("rememberReferral").checked = true;
+      }
+    });
   </script>
-  
 </body>
 </html>
