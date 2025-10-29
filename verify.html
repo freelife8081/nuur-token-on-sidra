@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Verifying...</title>
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      height: 100vh;
+      background: #f5f5f5;
+      font-family: system-ui, sans-serif;
+    }
+    .loading {
+      font-size: 1.1rem;
+      color: #555;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="cf-turnstile" 
+       data-sitekey="0x4AAAAAAB9aqNySewB1F2XC"
+       data-callback="onVerified"
+       data-theme="auto"
+       data-size="invisible">
+  </div>
+
+  <div class="loading">Checking browser security...</div>
+
+  <script>
+    function onVerified(token) {
+      // Redirect to home after successful verification
+      window.location.href = "/";
+    }
+  </script>
+</body>
+</html>
