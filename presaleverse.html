@@ -824,6 +824,345 @@
       transform: translateY(-2px);
     }
     
+    /* Inactivity Notification */
+    .inactivity-notification {
+      position: fixed;
+      bottom: 100px;
+      right: 20px;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      z-index: 10005;
+      max-width: 300px;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      pointer-events: none;
+    }
+    
+    .inactivity-notification.active {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: all;
+    }
+    
+    .inactivity-header {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      margin-bottom: 1rem;
+    }
+    
+    .inactivity-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.2rem;
+    }
+    
+    .inactivity-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+    
+    .inactivity-message {
+      color: var(--text-secondary);
+      margin-bottom: 1.5rem;
+      line-height: 1.5;
+      font-size: 0.9rem;
+    }
+    
+    .inactivity-buttons {
+      display: flex;
+      gap: 0.8rem;
+      justify-content: flex-end;
+    }
+    
+    .inactivity-btn {
+      padding: 0.6rem 1.2rem;
+      border-radius: var(--radius-sm);
+      font-weight: 600;
+      transition: var(--transition);
+      border: none;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+    
+    .inactivity-btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+    
+    .inactivity-btn-outline {
+      background: transparent;
+      color: var(--text-secondary);
+      border: 1px solid var(--card-border);
+    }
+    
+    .inactivity-btn:hover {
+      transform: translateY(-2px);
+    }
+    
+    .inactivity-pulse {
+      animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+      0% {
+        box-shadow: 0 0 0 0 rgba(0, 122, 255, 0.7);
+      }
+      70% {
+        box-shadow: 0 0 0 10px rgba(0, 122, 255, 0);
+      }
+      100% {
+        box-shadow: 0 0 0 0 rgba(0, 122, 255, 0);
+      }
+    }
+    
+    /* Tutorial Styles */
+    .tutorial-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      z-index: 10002;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+    }
+    
+    .tutorial-overlay.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+    
+    .tutorial-popup {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0.9);
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      padding: 2rem;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      z-index: 10003;
+      max-width: 500px;
+      width: 90%;
+      opacity: 0;
+      transition: all 0.3s ease;
+      pointer-events: none;
+    }
+    
+    .tutorial-popup.active {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
+      pointer-events: all;
+    }
+    
+    .tutorial-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+    
+    .tutorial-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+    
+    .tutorial-close {
+      background: none;
+      border: none;
+      color: var(--text-secondary);
+      font-size: 1.5rem;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    
+    .tutorial-close:hover {
+      color: var(--text-primary);
+      transform: scale(1.1);
+    }
+    
+    .tutorial-content {
+      margin-bottom: 2rem;
+    }
+    
+    .tutorial-step {
+      display: none;
+    }
+    
+    .tutorial-step.active {
+      display: block;
+    }
+    
+    .tutorial-step-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      color: var(--text-primary);
+    }
+    
+    .tutorial-step-description {
+      color: var(--text-secondary);
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
+    }
+    
+    .tutorial-step-image {
+      width: 100%;
+      border-radius: var(--radius-sm);
+      margin-bottom: 1.5rem;
+      border: 1px solid var(--card-border);
+    }
+    
+    .tutorial-navigation {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .tutorial-progress {
+      display: flex;
+      gap: 0.5rem;
+    }
+    
+    .tutorial-progress-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--text-secondary);
+      opacity: 0.3;
+      transition: var(--transition);
+    }
+    
+    .tutorial-progress-dot.active {
+      opacity: 1;
+      background: var(--primary);
+    }
+    
+    .tutorial-buttons {
+      display: flex;
+      gap: 1rem;
+    }
+    
+    .tutorial-btn {
+      padding: 0.7rem 1.5rem;
+      border-radius: var(--radius-sm);
+      font-weight: 600;
+      transition: var(--transition);
+      border: none;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+    
+    .tutorial-btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+    
+    .tutorial-btn-outline {
+      background: transparent;
+      color: var(--primary);
+      border: 1px solid var(--primary);
+    }
+    
+    .tutorial-btn:hover {
+      transform: translateY(-2px);
+    }
+    
+    /* Tutorial Arrow */
+    .tutorial-arrow {
+      position: absolute;
+      width: 0;
+      height: 0;
+      border-style: solid;
+      z-index: 10004;
+      animation: bounce 2s infinite;
+    }
+    
+    .tutorial-arrow-top {
+      border-width: 0 15px 20px 15px;
+      border-color: transparent transparent var(--primary) transparent;
+    }
+    
+    .tutorial-arrow-bottom {
+      border-width: 20px 15px 0 15px;
+      border-color: var(--primary) transparent transparent transparent;
+    }
+    
+    .tutorial-arrow-left {
+      border-width: 15px 20px 15px 0;
+      border-color: transparent var(--primary) transparent transparent;
+    }
+    
+    .tutorial-arrow-right {
+      border-width: 15px 0 15px 20px;
+      border-color: transparent transparent transparent var(--primary);
+    }
+    
+    .tutorial-highlight {
+      position: relative;
+      z-index: 10004;
+      box-shadow: 0 0 0 4px var(--primary), 0 0 20px rgba(0, 122, 255, 0.5) !important;
+      border-radius: var(--radius-sm);
+      transition: all 0.3s ease;
+    }
+    
+    .tutorial-start-btn {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: white;
+      border: none;
+      box-shadow: 0 4px 15px rgba(0, 122, 255, 0.3);
+      cursor: pointer;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition);
+    }
+    
+    .tutorial-start-btn:hover {
+      transform: scale(1.1);
+      background: var(--primary-dark);
+      box-shadow: 0 8px 25px rgba(0, 122, 255, 0.4);
+    }
+    
+    @keyframes bounce {
+      0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+      }
+      40% {
+        transform: translateY(-10px);
+      }
+      60% {
+        transform: translateY(-5px);
+      }
+    }
+    
     /* Responsive */
     @media (max-width: 768px) {
       .main-container {
@@ -843,9 +1182,23 @@
         font-size: 1rem;
       }
       
-      .success-notification, .alert-popup {
+      .success-notification, .alert-popup, .tutorial-popup {
         padding: 1.5rem;
         max-width: 90%;
+      }
+      
+      .tutorial-start-btn {
+        bottom: 1rem;
+        right: 1rem;
+        width: 50px;
+        height: 50px;
+      }
+      
+      .inactivity-notification {
+        bottom: 80px;
+        right: 15px;
+        left: 15px;
+        max-width: none;
       }
     }
     
@@ -872,10 +1225,167 @@
       .flow-step-circle {
         margin-bottom: 0;
       }
+      
+      .tutorial-popup {
+        padding: 1.5rem 1rem;
+      }
+      
+      .tutorial-buttons {
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+      
+      .tutorial-btn {
+        width: 100%;
+      }
+      
+      .inactivity-buttons {
+        flex-direction: column;
+      }
+      
+      .inactivity-btn {
+        width: 100%;
+      }
     }
   </style>
 </head>
 <body>
+  <!-- Inactivity Notification -->
+  <div class="inactivity-notification" id="inactivityNotification">
+    <div class="inactivity-header">
+      <div class="inactivity-icon">
+        <i class="fas fa-question-circle"></i>
+      </div>
+      <h3 class="inactivity-title">Need Help?</h3>
+    </div>
+    <p class="inactivity-message">It looks like you might be new here. Would you like to take a quick tutorial to learn how to use the NUUR presale interface?</p>
+    <div class="inactivity-buttons">
+      <button class="inactivity-btn inactivity-btn-outline" id="inactivityDismiss">No Thanks</button>
+      <button class="inactivity-btn inactivity-btn-primary" id="inactivityStartTutorial">Start Tutorial</button>
+    </div>
+  </div>
+
+  <!-- Tutorial Elements -->
+  <button class="tutorial-start-btn inactivity-pulse" id="tutorialStartBtn" aria-label="Start Tutorial">
+    <i class="fas fa-question"></i>
+  </button>
+  
+  <div class="tutorial-overlay" id="tutorialOverlay"></div>
+  
+  <div class="tutorial-popup" id="tutorialPopup">
+    <div class="tutorial-header">
+      <h2 class="tutorial-title">NUUR Presale Tutorial</h2>
+      <button class="tutorial-close" id="tutorialClose">&times;</button>
+    </div>
+    
+    <div class="tutorial-content">
+      <!-- Step 1: Welcome -->
+      <div class="tutorial-step active" id="tutorialStep1">
+        <h3 class="tutorial-step-title">Welcome to NUUR Presale</h3>
+        <p class="tutorial-step-description">
+          This tutorial will guide you through the process of purchasing NUUR tokens during the presale phase. 
+          You'll learn how to connect your wallet, check your balance, and complete your purchase.
+        </p>
+        <p class="tutorial-step-description">
+          The tutorial has 6 steps and will take about 3 minutes to complete.
+        </p>
+      </div>
+      
+      <!-- Step 2: Theme Toggle -->
+      <div class="tutorial-step" id="tutorialStep2">
+        <h3 class="tutorial-step-title">Customize Your Experience</h3>
+        <p class="tutorial-step-description">
+          Use the theme toggle button to switch between light and dark modes based on your preference.
+        </p>
+        <p class="tutorial-step-description">
+          The interface will remember your choice for future visits.
+        </p>
+      </div>
+      
+      <!-- Step 3: Wallet Connection -->
+      <div class="tutorial-step" id="tutorialStep3">
+        <h3 class="tutorial-step-title">Connect Your Wallet</h3>
+        <p class="tutorial-step-description">
+          Click the "Connect Wallet" button to link your MetaMask wallet to the application.
+        </p>
+        <p class="tutorial-step-description">
+          Make sure you're connected to the Sidra Chain network for successful transactions.
+        </p>
+      </div>
+      
+      <!-- Step 4: Network Check -->
+      <div class="tutorial-step" id="tutorialStep4">
+        <h3 class="tutorial-step-title">Check Your Network</h3>
+        <p class="tutorial-step-description">
+          The network indicator shows whether you're connected to the correct network (Sidra Chain).
+        </p>
+        <p class="tutorial-step-description">
+          If it shows "Wrong Network", the application will guide you through switching to the correct one.
+        </p>
+      </div>
+      
+      <!-- Step 5: Purchase Process -->
+      <div class="tutorial-step" id="tutorialStep5">
+        <h3 class="tutorial-step-title">Making a Purchase</h3>
+        <p class="tutorial-step-description">
+          Enter the amount of SDA you want to spend in the "You Pay" field. The "You Receive" field will automatically update with the equivalent NUUR amount.
+        </p>
+        <p class="tutorial-step-description">
+          The current exchange rate is 1 SDA = 20 NUUR tokens.
+        </p>
+      </div>
+      
+      <!-- Step 6: Transaction Flow -->
+      <div class="tutorial-step" id="tutorialStep6">
+        <h3 class="tutorial-step-title">Transaction Process</h3>
+        <p class="tutorial-step-description">
+          The progress indicator shows the four steps of the purchase process:
+        </p>
+        <ul class="tutorial-step-description" style="margin-left: 1.5rem;">
+          <li>Connect Wallet</li>
+          <li>Approve Transaction</li>
+          <li>Purchase Tokens</li>
+          <li>Complete Transaction</li>
+        </ul>
+        <p class="tutorial-step-description">
+          You can track your progress through these steps during your purchase.
+        </p>
+      </div>
+      
+      <!-- Step 7: Completion -->
+      <div class="tutorial-step" id="tutorialStep7">
+        <h3 class="tutorial-step-title">You're All Set!</h3>
+        <p class="tutorial-step-description">
+          You've completed the tutorial and are ready to purchase NUUR tokens.
+        </p>
+        <p class="tutorial-step-description">
+          If you need to review this tutorial again, click the question mark button in the bottom right corner.
+        </p>
+        <p class="tutorial-step-description" style="font-weight: 600; color: var(--primary);">
+          Thank you for participating in the NUUR presale!
+        </p>
+      </div>
+    </div>
+    
+    <div class="tutorial-navigation">
+      <div class="tutorial-progress" id="tutorialProgress">
+        <div class="tutorial-progress-dot active" data-step="1"></div>
+        <div class="tutorial-progress-dot" data-step="2"></div>
+        <div class="tutorial-progress-dot" data-step="3"></div>
+        <div class="tutorial-progress-dot" data-step="4"></div>
+        <div class="tutorial-progress-dot" data-step="5"></div>
+        <div class="tutorial-progress-dot" data-step="6"></div>
+        <div class="tutorial-progress-dot" data-step="7"></div>
+      </div>
+      
+      <div class="tutorial-buttons">
+        <button class="tutorial-btn tutorial-btn-outline" id="tutorialSkipBtn">Skip Tutorial</button>
+        <button class="tutorial-btn tutorial-btn-outline hidden" id="tutorialPrevBtn">Previous</button>
+        <button class="tutorial-btn tutorial-btn-primary" id="tutorialNextBtn">Next</button>
+      </div>
+    </div>
+  </div>
+
   <!-- Success Notification -->
   <div class="notification-overlay" id="notificationOverlay"></div>
   <div class="success-notification" id="successNotification">
@@ -1031,6 +1541,285 @@
   </div>
 
   <script>
+    // Global variables for tutorial and inactivity detection
+    let userHasInteracted = false;
+    let inactivityTimer = null;
+    let inactivityNotificationShown = false;
+    let currentTutorialStep = 1;
+    const totalTutorialSteps = 7;
+    let tutorialActive = false;
+    let tutorialArrow = null;
+
+    // Inactivity detection and notification
+    document.addEventListener('DOMContentLoaded', function() {
+      // Inactivity DOM elements
+      const inactivityNotification = document.getElementById('inactivityNotification');
+      const inactivityDismiss = document.getElementById('inactivityDismiss');
+      const inactivityStartTutorial = document.getElementById('inactivityStartTutorial');
+      const tutorialStartBtn = document.getElementById('tutorialStartBtn');
+      
+      // Reset inactivity timer on user interaction
+      function resetInactivityTimer() {
+        userHasInteracted = true;
+        
+        // Clear existing timer
+        if (inactivityTimer) {
+          clearTimeout(inactivityTimer);
+        }
+        
+        // Hide notification if it's shown
+        if (inactivityNotificationShown) {
+          hideInactivityNotification();
+        }
+        
+        // Set new timer (10 seconds)
+        inactivityTimer = setTimeout(showInactivityNotification, 10000);
+      }
+      
+      // Show inactivity notification
+      function showInactivityNotification() {
+        // Only show if user hasn't completed tutorial and notification hasn't been shown yet
+        if (!localStorage.getItem('nuurTutorialCompleted') && !inactivityNotificationShown) {
+          inactivityNotificationShown = true;
+          inactivityNotification.classList.add('active');
+          
+          // Add pulsing animation to tutorial button
+          tutorialStartBtn.classList.add('inactivity-pulse');
+          
+          // Position arrow to point at tutorial button
+          positionTutorialArrow(tutorialStartBtn, 'left');
+        }
+      }
+      
+      // Hide inactivity notification
+      function hideInactivityNotification() {
+        inactivityNotification.classList.remove('active');
+        tutorialStartBtn.classList.remove('inactivity-pulse');
+        hideTutorialArrow();
+      }
+      
+      // Start tutorial from inactivity notification
+      function startTutorialFromInactivity() {
+        hideInactivityNotification();
+        startTutorial();
+      }
+      
+      // Event listeners for inactivity detection
+      document.addEventListener('click', resetInactivityTimer);
+      document.addEventListener('keydown', resetInactivityTimer);
+      document.addEventListener('mousemove', resetInactivityTimer);
+      document.addEventListener('scroll', resetInactivityTimer);
+      
+      // Inactivity notification buttons
+      inactivityDismiss.addEventListener('click', hideInactivityNotification);
+      inactivityStartTutorial.addEventListener('click', startTutorialFromInactivity);
+      
+      // Start inactivity timer on page load
+      resetInactivityTimer();
+    });
+
+    // Tutorial functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      // Tutorial DOM elements
+      const tutorialStartBtn = document.getElementById('tutorialStartBtn');
+      const tutorialOverlay = document.getElementById('tutorialOverlay');
+      const tutorialPopup = document.getElementById('tutorialPopup');
+      const tutorialClose = document.getElementById('tutorialClose');
+      const tutorialSkipBtn = document.getElementById('tutorialSkipBtn');
+      const tutorialPrevBtn = document.getElementById('tutorialPrevBtn');
+      const tutorialNextBtn = document.getElementById('tutorialNextBtn');
+      const tutorialProgress = document.getElementById('tutorialProgress');
+      
+      // Elements to highlight during tutorial
+      const themeToggle = document.getElementById('themeToggle');
+      const connectWalletBtn = document.getElementById('connectWalletButton');
+      const networkIndicator = document.getElementById('networkIndicator');
+      const sdaInput = document.getElementById('sdaAmount');
+      const transactionFlow = document.querySelector('.transaction-flow');
+      
+      // Create tutorial arrow
+      function createTutorialArrow() {
+        tutorialArrow = document.createElement('div');
+        tutorialArrow.className = 'tutorial-arrow';
+        document.body.appendChild(tutorialArrow);
+        return tutorialArrow;
+      }
+      
+      // Position tutorial arrow
+      function positionTutorialArrow(targetElement, position = 'top') {
+        if (!tutorialArrow) createTutorialArrow();
+        
+        const targetRect = targetElement.getBoundingClientRect();
+        const arrowSize = 20;
+        
+        // Remove all arrow classes
+        tutorialArrow.className = 'tutorial-arrow';
+        
+        // Position arrow based on specified position
+        switch(position) {
+          case 'top':
+            tutorialArrow.classList.add('tutorial-arrow-top');
+            tutorialArrow.style.left = `${targetRect.left + targetRect.width/2 - arrowSize}px`;
+            tutorialArrow.style.top = `${targetRect.top - arrowSize - 10}px`;
+            break;
+          case 'bottom':
+            tutorialArrow.classList.add('tutorial-arrow-bottom');
+            tutorialArrow.style.left = `${targetRect.left + targetRect.width/2 - arrowSize}px`;
+            tutorialArrow.style.top = `${targetRect.bottom + 10}px`;
+            break;
+          case 'left':
+            tutorialArrow.classList.add('tutorial-arrow-left');
+            tutorialArrow.style.left = `${targetRect.left - arrowSize - 10}px`;
+            tutorialArrow.style.top = `${targetRect.top + targetRect.height/2 - arrowSize}px`;
+            break;
+          case 'right':
+            tutorialArrow.classList.add('tutorial-arrow-right');
+            tutorialArrow.style.left = `${targetRect.right + 10}px`;
+            tutorialArrow.style.top = `${targetRect.top + targetRect.height/2 - arrowSize}px`;
+            break;
+        }
+        
+        tutorialArrow.style.display = 'block';
+      }
+      
+      // Hide tutorial arrow
+      function hideTutorialArrow() {
+        if (tutorialArrow) {
+          tutorialArrow.style.display = 'none';
+        }
+      }
+      
+      // Start tutorial
+      function startTutorial() {
+        tutorialActive = true;
+        currentTutorialStep = 1;
+        updateTutorialStep();
+        tutorialOverlay.classList.add('active');
+        tutorialPopup.classList.add('active');
+      }
+      
+      // Close tutorial
+      function closeTutorial() {
+        tutorialActive = false;
+        tutorialOverlay.classList.remove('active');
+        tutorialPopup.classList.remove('active');
+        removeAllHighlights();
+        hideTutorialArrow();
+        
+        // Mark tutorial as completed
+        localStorage.setItem('nuurTutorialCompleted', 'true');
+      }
+      
+      // Update tutorial step
+      function updateTutorialStep() {
+        // Hide all steps
+        document.querySelectorAll('.tutorial-step').forEach(step => {
+          step.classList.remove('active');
+        });
+        
+        // Show current step
+        document.getElementById(`tutorialStep${currentTutorialStep}`).classList.add('active');
+        
+        // Update progress dots
+        document.querySelectorAll('.tutorial-progress-dot').forEach((dot, index) => {
+          if (index < currentTutorialStep) {
+            dot.classList.add('active');
+          } else {
+            dot.classList.remove('active');
+          }
+        });
+        
+        // Update navigation buttons
+        tutorialPrevBtn.classList.toggle('hidden', currentTutorialStep === 1);
+        tutorialNextBtn.textContent = currentTutorialStep === totalTutorialSteps ? 'Finish' : 'Next';
+        
+        // Highlight relevant elements and position arrow
+        removeAllHighlights();
+        highlightStepElements();
+      }
+      
+      // Remove all highlights
+      function removeAllHighlights() {
+        document.querySelectorAll('.tutorial-highlight').forEach(el => {
+          el.classList.remove('tutorial-highlight');
+        });
+      }
+      
+      // Highlight elements for current step
+      function highlightStepElements() {
+        hideTutorialArrow();
+        
+        switch(currentTutorialStep) {
+          case 2:
+            themeToggle.classList.add('tutorial-highlight');
+            positionTutorialArrow(themeToggle, 'top');
+            break;
+          case 3:
+            connectWalletBtn.classList.add('tutorial-highlight');
+            positionTutorialArrow(connectWalletBtn, 'top');
+            break;
+          case 4:
+            networkIndicator.classList.add('tutorial-highlight');
+            positionTutorialArrow(networkIndicator, 'top');
+            break;
+          case 5:
+            sdaInput.parentElement.classList.add('tutorial-highlight');
+            positionTutorialArrow(sdaInput.parentElement, 'left');
+            break;
+          case 6:
+            transactionFlow.classList.add('tutorial-highlight');
+            positionTutorialArrow(transactionFlow, 'top');
+            break;
+          default:
+            hideTutorialArrow();
+        }
+      }
+      
+      // Next tutorial step
+      function nextTutorialStep() {
+        if (currentTutorialStep < totalTutorialSteps) {
+          currentTutorialStep++;
+          updateTutorialStep();
+        } else {
+          closeTutorial();
+        }
+      }
+      
+      // Previous tutorial step
+      function prevTutorialStep() {
+        if (currentTutorialStep > 1) {
+          currentTutorialStep--;
+          updateTutorialStep();
+        }
+      }
+      
+      // Event listeners for tutorial
+      tutorialStartBtn.addEventListener('click', startTutorial);
+      tutorialClose.addEventListener('click', closeTutorial);
+      tutorialSkipBtn.addEventListener('click', closeTutorial);
+      tutorialPrevBtn.addEventListener('click', prevTutorialStep);
+      tutorialNextBtn.addEventListener('click', nextTutorialStep);
+      
+      // Close tutorial when clicking outside
+      tutorialOverlay.addEventListener('click', closeTutorial);
+      
+      // Prevent closing when clicking inside the popup
+      tutorialPopup.addEventListener('click', (e) => {
+        e.stopPropagation();
+      });
+      
+      // Auto-start tutorial for first-time users
+      if (!localStorage.getItem('nuurTutorialCompleted')) {
+        setTimeout(() => {
+          // Only auto-start if user hasn't interacted yet
+          if (!userHasInteracted) {
+            startTutorial();
+          }
+        }, 1500);
+      }
+    });
+
+    // Original application code
     document.addEventListener('DOMContentLoaded', function() {
       // Constants - PHASE 3
       const presaleAddress = "0x98FCc396547D450208e926995a74b61874a1423A";
@@ -1647,4 +2436,4 @@
     }
   </script>
 </body>
-              </html>
+  </html>
